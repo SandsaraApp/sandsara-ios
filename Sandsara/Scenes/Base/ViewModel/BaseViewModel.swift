@@ -7,7 +7,29 @@
 
 import RxSwift
 import RxCocoa
-import Action
+
+// MARK: Base Protocol for binding with ViewModel from View
+protocol ViewModelBindable: class {
+    associatedtype ViewModel
+
+    var viewModel: ViewModel! { get set }
+    func bindViewModel()
+}
+
+extension ViewModelBindable where Self: UIViewController {
+    func bind(to viewModel: Self.ViewModel) {
+        self.viewModel = viewModel
+        loadViewIfNeeded()
+        bindViewModel()
+    }
+}
+
+extension ViewModelBindable where Self: UIView {
+    func bind(to viewModel: Self.ViewModel) {
+        self.viewModel = viewModel
+        bindViewModel()
+    }
+}
 
 // MARK: Base protocol for ViewModel
 protocol ViewModelType {
@@ -40,7 +62,6 @@ class BaseViewModel<VMInput: InputType, VMOutput: OutputType>: ViewModelType {
 
     let inputs: Input
     private(set) var outputs: Output!
-    let dependencies: Dependency
     let disposeBag = DisposeBag()
 
     // MARK: Methods

@@ -17,7 +17,7 @@ protocol OutputParamView {}
 struct NoInputParam: InputParamView {}
 struct NoOutputParam: OutputParamView {}
 
-class BaseViewController: UIViewController {
+class BaseViewController<Input: InputParamView>: UIViewController {
 
     private let _disposeBag = DisposeBag()
     var disposeBag: DisposeBag! {
