@@ -15,6 +15,11 @@
 		9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */; };
 		9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */; };
 		9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C71B2556AFA10092FBB6 /* AppError.swift */; };
+		9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */; };
+		9228C7412556B1C80092FBB6 /* ScanDevicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7402556B1C80092FBB6 /* ScanDevicesViewModel.swift */; };
+		9228C7492556B5760092FBB6 /* RxBluetoothKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7482556B5760092FBB6 /* RxBluetoothKitService.swift */; };
+		9228C74F2556B61D0092FBB6 /* RxBluetoothKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C74E2556B61D0092FBB6 /* RxBluetoothKit.swift */; };
+		9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */; };
 		924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF4725565F850013CC71 /* AppDelegate.swift */; };
 		924EDF4F25565F850013CC71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF4D25565F850013CC71 /* Main.storyboard */; };
 		924EDF5125565F880013CC71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5025565F880013CC71 /* Assets.xcassets */; };
@@ -54,6 +59,11 @@
 		9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorView.swift; sourceTree = "<group>"; };
 		9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		9228C71B2556AFA10092FBB6 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVMViewController.swift; sourceTree = "<group>"; };
+		9228C7402556B1C80092FBB6 /* ScanDevicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanDevicesViewModel.swift; sourceTree = "<group>"; };
+		9228C7482556B5760092FBB6 /* RxBluetoothKitService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxBluetoothKitService.swift; sourceTree = "<group>"; };
+		9228C74E2556B61D0092FBB6 /* RxBluetoothKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBluetoothKit.swift; sourceTree = "<group>"; };
+		9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Rx+Shortcuts.swift"; sourceTree = "<group>"; };
 		924EDF4425565F850013CC71 /* Sandsara.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandsara.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF4725565F850013CC71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		924EDF4E25565F850013CC71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -162,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				9228C6D125569EFB0092FBB6 /* DataTypes */,
+				9228C74D2556B6090092FBB6 /* Rx */,
 				9228C6C825569DF60092FBB6 /* View */,
 			);
 			path = Extensions;
@@ -195,6 +206,7 @@
 		9228C6F72556A0380092FBB6 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				9228C7402556B1C80092FBB6 /* ScanDevicesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -212,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				9228C6FF2556A3870092FBB6 /* BaseViewController.swift */,
+				9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -230,6 +243,23 @@
 				9228C71B2556AFA10092FBB6 /* AppError.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		9228C73F2556B19B0092FBB6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9228C7482556B5760092FBB6 /* RxBluetoothKitService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9228C74D2556B6090092FBB6 /* Rx */ = {
+			isa = PBXGroup;
+			children = (
+				9228C74E2556B61D0092FBB6 /* RxBluetoothKit.swift */,
+				9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */,
+			);
+			path = Rx;
 			sourceTree = "<group>";
 		};
 		924EDF3B25565F850013CC71 = {
@@ -261,6 +291,7 @@
 				9228C6C725569DEF0092FBB6 /* Extensions */,
 				9228C71A2556AF4A0092FBB6 /* Model */,
 				9228C6C225569D020092FBB6 /* Scenes */,
+				9228C73F2556B19B0092FBB6 /* Services */,
 				9228C6C125569CF30092FBB6 /* Storyboard */,
 				9228C67F25569B410092FBB6 /* Resources */,
 			);
@@ -535,9 +566,14 @@
 			files = (
 				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
+				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
+				9228C74F2556B61D0092FBB6 /* RxBluetoothKit.swift in Sources */,
+				9228C7492556B5760092FBB6 /* RxBluetoothKitService.swift in Sources */,
+				9228C7412556B1C80092FBB6 /* ScanDevicesViewModel.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
 				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,
+				9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */,
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
