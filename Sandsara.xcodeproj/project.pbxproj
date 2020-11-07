@@ -3,14 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		5E3D81A53159EAAD325D7302 /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC7F5AF5C7A69E8B4573FD6 /* Pods_SandsaraTests.framework */; };
+		9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6C925569E050092FBB6 /* UIAlertController.swift */; };
+		9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6D225569F0A0092FBB6 /* Codable.swift */; };
+		9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6DA25569F5D0092FBB6 /* Dictionary.swift */; };
+		9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6FF2556A3870092FBB6 /* BaseViewController.swift */; };
+		9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */; };
+		9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */; };
+		9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C71B2556AFA10092FBB6 /* AppError.swift */; };
 		924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF4725565F850013CC71 /* AppDelegate.swift */; };
-		924EDF4A25565F850013CC71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF4925565F850013CC71 /* SceneDelegate.swift */; };
-		924EDF4C25565F850013CC71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF4B25565F850013CC71 /* ViewController.swift */; };
 		924EDF4F25565F850013CC71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF4D25565F850013CC71 /* Main.storyboard */; };
 		924EDF5125565F880013CC71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5025565F880013CC71 /* Assets.xcassets */; };
 		924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5225565F880013CC71 /* LaunchScreen.storyboard */; };
@@ -42,10 +47,15 @@
 		1AFD9A013C77B43E7A76162B /* Pods_Sandsara.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42417A47164AE302BB1B21BD /* Pods-SandsaraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.debug.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.debug.xcconfig"; sourceTree = "<group>"; };
 		617A5ADFD5FB77BA071A38AB /* Pods_Sandsara_SandsaraUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara_SandsaraUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9228C6C925569E050092FBB6 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
+		9228C6D225569F0A0092FBB6 /* Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codable.swift; sourceTree = "<group>"; };
+		9228C6DA25569F5D0092FBB6 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		9228C6FF2556A3870092FBB6 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorView.swift; sourceTree = "<group>"; };
+		9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		9228C71B2556AFA10092FBB6 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		924EDF4425565F850013CC71 /* Sandsara.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandsara.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF4725565F850013CC71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		924EDF4925565F850013CC71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		924EDF4B25565F850013CC71 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		924EDF4E25565F850013CC71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		924EDF5025565F880013CC71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		924EDF5325565F880013CC71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -101,8 +111,125 @@
 				42417A47164AE302BB1B21BD /* Pods-SandsaraTests.debug.xcconfig */,
 				E691606A1A2E031E098CF3FB /* Pods-SandsaraTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		9228C67F25569B410092FBB6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				924EDF5025565F880013CC71 /* Assets.xcassets */,
+				924EDF5525565F880013CC71 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9228C68425569B740092FBB6 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				924EDF4725565F850013CC71 /* AppDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		9228C6C125569CF30092FBB6 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				924EDF4D25565F850013CC71 /* Main.storyboard */,
+				924EDF5225565F880013CC71 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		9228C6C225569D020092FBB6 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6FE2556A36B0092FBB6 /* Base */,
+				9228C6C625569DB80092FBB6 /* BluetoothConnectionScreens */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		9228C6C625569DB80092FBB6 /* BluetoothConnectionScreens */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6F72556A0380092FBB6 /* ViewModel */,
+				9228C6F62556A02F0092FBB6 /* ViewController */,
+			);
+			path = BluetoothConnectionScreens;
+			sourceTree = "<group>";
+		};
+		9228C6C725569DEF0092FBB6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6D125569EFB0092FBB6 /* DataTypes */,
+				9228C6C825569DF60092FBB6 /* View */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9228C6C825569DF60092FBB6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6C925569E050092FBB6 /* UIAlertController.swift */,
+				9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9228C6D125569EFB0092FBB6 /* DataTypes */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6D225569F0A0092FBB6 /* Codable.swift */,
+				9228C6DA25569F5D0092FBB6 /* Dictionary.swift */,
+			);
+			path = DataTypes;
+			sourceTree = "<group>";
+		};
+		9228C6F62556A02F0092FBB6 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		9228C6F72556A0380092FBB6 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9228C6FE2556A36B0092FBB6 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				9228C7112556AD830092FBB6 /* ViewModel */,
+				9228C70D2556A4FE0092FBB6 /* View */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		9228C70D2556A4FE0092FBB6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9228C6FF2556A3870092FBB6 /* BaseViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9228C7112556AD830092FBB6 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9228C71A2556AF4A0092FBB6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9228C71B2556AFA10092FBB6 /* AppError.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		924EDF3B25565F850013CC71 = {
@@ -130,13 +257,12 @@
 		924EDF4625565F850013CC71 /* Sandsara */ = {
 			isa = PBXGroup;
 			children = (
-				924EDF4725565F850013CC71 /* AppDelegate.swift */,
-				924EDF4925565F850013CC71 /* SceneDelegate.swift */,
-				924EDF4B25565F850013CC71 /* ViewController.swift */,
-				924EDF4D25565F850013CC71 /* Main.storyboard */,
-				924EDF5025565F880013CC71 /* Assets.xcassets */,
-				924EDF5225565F880013CC71 /* LaunchScreen.storyboard */,
-				924EDF5525565F880013CC71 /* Info.plist */,
+				9228C68425569B740092FBB6 /* Application */,
+				9228C6C725569DEF0092FBB6 /* Extensions */,
+				9228C71A2556AF4A0092FBB6 /* Model */,
+				9228C6C225569D020092FBB6 /* Scenes */,
+				9228C6C125569CF30092FBB6 /* Storyboard */,
+				9228C67F25569B410092FBB6 /* Resources */,
 			);
 			path = Sandsara;
 			sourceTree = "<group>";
@@ -407,9 +533,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				924EDF4C25565F850013CC71 /* ViewController.swift in Sources */,
+				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
+				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
+				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
+				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
+				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,
+				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
-				924EDF4A25565F850013CC71 /* SceneDelegate.swift in Sources */,
+				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,7 +718,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Sandsara/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -607,7 +738,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Sandsara/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
