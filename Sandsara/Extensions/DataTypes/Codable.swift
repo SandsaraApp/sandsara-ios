@@ -52,3 +52,20 @@ extension Decodable {
         }
     }
 }
+
+extension KeyedDecodingContainer {
+    /// Decodes a value of the given type for the given key, if present.
+    ///
+    /// This method assigns this decoded value to variable.
+    /// It will help to reduce alot of if statement in your code.
+    ///
+    /// - parameter type: The type of value to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - parameter variable: variable will be assign when the key present with a value.
+    /// - returns: No return.
+    public func decodeIfPresent<T>(_ type: T.Type, forKey key: KeyedDecodingContainer<K>.Key, assignTo variable: inout T) where T: Decodable {
+        if let value = try? decodeIfPresent(type.self, forKey: key) {
+            variable = value
+        }
+    }
+}
