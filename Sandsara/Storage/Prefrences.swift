@@ -70,8 +70,6 @@ struct Preferences {
     }
 
     struct PlaylistsDomain {
-        @UserDefault(Keys.topListId.key, defaultValue: nil)
-        static var topListId: String?
         @UserDefault(Keys.featuredList.key, defaultValue: nil)
         static var featuredList: [GenreItem]?
 
@@ -116,24 +114,20 @@ struct DataItem: Decodable {
     var features = [GenreItem]()
     var categories = [GenreItem]()
 
-    var top: GenreItem?
-
     enum CodingKeys: String, CodingKey {
-        case features = "featured"
-        case categories
-        case top
+        case features = "playlists"
+        case categories = "recommended_playlist"
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         container.decodeIfPresent([GenreItem].self, forKey: .features, assignTo: &features)
         container.decodeIfPresent([GenreItem].self, forKey: .categories, assignTo: &categories)
-        top = try container.decodeIfPresent(GenreItem.self, forKey: .top)
     }
 }
 
 class GenreItem: Codable {
-    var id = ""
+    var id = 0
     var title = ""
     var thumbnail = ""
 
@@ -145,7 +139,7 @@ class GenreItem: Codable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent(String.self, forKey: .id, assignTo: &id)
+        container.decodeIfPresent(Int.self, forKey: .id, assignTo: &id)
         container.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
         container.decodeIfPresent(String.self, forKey: .thumbnail, assignTo: &thumbnail)
     }
