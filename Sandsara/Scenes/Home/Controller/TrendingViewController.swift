@@ -45,7 +45,11 @@ class TrendingViewController: UIViewController {
         activityIndicatorView.startAnimating()
         viewModel.apiCall()
 
-        configureNavigationBar(largeTitleColor: UIColor.appColor(.unselectedColor), backgoundColor: UIColor.appColor(.tabBar), tintColor: UIColor.appColor(.selectedColor), title: "Home", preferredLargeTitle: true)
+        configureNavigationBar(largeTitleColor: UIColor.appColor(.unselectedColor),
+                               backgoundColor: UIColor.appColor(.tabBar),
+                               tintColor: UIColor.appColor(.unselectedColor),
+                               title: "Home",
+                               preferredLargeTitle: true)
     }
 }
 
