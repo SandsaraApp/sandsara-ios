@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        setTabBarAppearance()
         return true
     }
 
@@ -36,6 +38,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+
+    private func setTabBarAppearance() {
+        UITabBarItem.appearance()
+            .setTitleTextAttributes(
+                [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)], for: .selected)
+        UITabBarItem.appearance()
+            .setTitleTextAttributes(
+                [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)], for: .normal)
+        UITabBar.appearance().tintColor = UIColor.appColor(.selectedColor)
+        UITabBar.appearance().backgroundColor =  UIColor.appColor(.tabBar)
+    }
+
+    func checkConfig() {
+        AF.request("http://api.musicplus.io/data/ios.tube.minimize.json") { urlRequest in
+            urlRequest.timeoutInterval = 15.0
+            urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        }.responseDecodable(of: Config.self) { [weak self] response in
+            guard let self = self else { return }
+            switch response.result {
+            case .success(let config):
+                Preferences.PlaylistsDomain.topListId = config.data?.top?.id
+                Preferences.PlaylistsDomain.featuredList = config.data?.features
+                Preferences.PlaylistsDomain.categories = config.data?.categories
+            case .failure(let err):
+                print(err.localizedDescription)
+            }
+        }
     }
 }
 

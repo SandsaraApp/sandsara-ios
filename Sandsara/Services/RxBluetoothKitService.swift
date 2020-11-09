@@ -97,7 +97,7 @@ final class RxBluetoothKitService {
             $0 == .poweredOn
         }
         .subscribeOn(MainScheduler.instance)
-        .timeout(4.0, scheduler: scheduler)
+        .debounce(RxTimeInterval.milliseconds(400), scheduler: scheduler)
         .flatMap { [weak self] _ -> Observable<ScannedPeripheral> in
             guard let `self` = self else {
                 return Observable.empty()

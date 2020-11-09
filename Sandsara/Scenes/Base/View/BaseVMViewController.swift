@@ -14,7 +14,7 @@ class BaseVMViewController<VMElement: ViewModelType, Input: InputParamView>:
     typealias ViewModel = VMElement
     var viewModel: ViewModel!
 
-    final override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
         setupViewModel()

@@ -14,7 +14,6 @@ enum ScanDevicesViewModelContract {
     struct Input: InputType {
         var scanAction: PublishRelay<()>
         var stopAction: PublishRelay<()>
-        var isScanning: BehaviorRelay<Bool>
     }
 
     struct Output: OutputType {
@@ -46,20 +45,6 @@ class ScanDevicesViewModel: BaseViewModel<ScanDevicesViewModelContract.Input, Sc
                 self.service.stopScanning()
         }.disposed(by: disposeBag)
 
-        inputs.isScanning
-            .subscribeNext { [weak self] isScanning in
-                guard let self = self else { return }
-                if isScanning {
-                    self.service.stopScanning()
-                } else {
-                    self.service.startScanning()
-                }
-        }.disposed(by: disposeBag)
-
         setOutput(Output(scanningOutput: service.scanningOutput))
-    }
-
-    override func viewModelDidBind() {
-
     }
 }

@@ -11,9 +11,8 @@ target 'Sandsara' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
   pod 'RxSwiftExt', '~> 5.2.0'
-  pod 'RxAlamofire', '~> 5.1.0'
+  pod 'Alamofire', '~> 5.1'
   pod 'Action', '4.0.0'
-  pod 'Moya', '13.0.1'
   pod 'RxDataSources', '~> 4.0'
   pod 'RxBluetoothKit'
   
