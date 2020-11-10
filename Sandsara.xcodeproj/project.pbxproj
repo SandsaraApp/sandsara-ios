@@ -44,6 +44,7 @@
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
 		92D66328255AE3B200CE3F8E /* FeatureCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */; };
 		92D66329255AE3B200CE3F8E /* FeaturedListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */; };
+		92D6632A255AE3B200CE3F8E /* FeatureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */; };
 		92D6632B255AE3B200CE3F8E /* FeaturedListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66327255AE3B200CE3F8E /* FeaturedListTableViewCell.swift */; };
 		92D66336255AE3FE00CE3F8E /* AllGenresTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66332255AE3FE00CE3F8E /* AllGenresTableViewCell.swift */; };
 		92D66337255AE3FE00CE3F8E /* GenreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66333255AE3FE00CE3F8E /* GenreCollectionViewCell.swift */; };
