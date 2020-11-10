@@ -118,7 +118,7 @@
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeatureCollectionViewCell.xib; sourceTree = "<group>"; };
 		92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeaturedListTableViewCell.xib; sourceTree = "<group>"; };
-		92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeatureCollectionViewCell.swift; path = "/Users/tinphan/sandsara-ios/../yt-ios/MiniYoutubePlayer/ViewControllers/Native/Trending/Cell/Featured/FeatureCollectionViewCell.swift"; sourceTree = "<absolute>"; };
+		92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureCollectionViewCell.swift; sourceTree = "<group>"; };
 		92D66327255AE3B200CE3F8E /* FeaturedListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedListTableViewCell.swift; sourceTree = "<group>"; };
 		92D66332255AE3FE00CE3F8E /* AllGenresTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllGenresTableViewCell.swift; sourceTree = "<group>"; };
 		92D66333255AE3FE00CE3F8E /* GenreCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -205,8 +205,6 @@
 				9228C6FE2556A36B0092FBB6 /* Base */,
 				9228C6C625569DB80092FBB6 /* BluetoothConnectionScreens */,
 				9228C7CA255810280092FBB6 /* Home */,
-				9228C7D4255814750092FBB6 /* Library */,
-				9228C7D5255814830092FBB6 /* Settings */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -364,20 +362,6 @@
 				9228C7CF255812530092FBB6 /* AssetsColor.swift */,
 			);
 			path = Color;
-			sourceTree = "<group>";
-		};
-		9228C7D4255814750092FBB6 /* Library */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Library;
-			sourceTree = "<group>";
-		};
-		9228C7D5255814830092FBB6 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 		9228C7D9255817950092FBB6 /* Storage */ = {
