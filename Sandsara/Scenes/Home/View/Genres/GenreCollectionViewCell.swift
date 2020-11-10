@@ -1,6 +1,6 @@
 //
 //  GenreCollectionViewCell.swift
-//  MiniYoutubePlayer
+//
 //
 //  Created by tin on 5/18/20.
 //  Copyright © 2020 tin. All rights reserved.
