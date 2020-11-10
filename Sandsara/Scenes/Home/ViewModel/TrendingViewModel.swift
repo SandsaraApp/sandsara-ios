@@ -21,27 +21,19 @@ protocol TrendingViewModelDelegate: class {
 
 enum DiscoverSections: CaseIterable {
     case topMusic
-    case topPlaylist
     case genres
 
     var title: String {
         switch self {
         case .topMusic:
-            return "Music"
-        case .genres:
-            return "All Playlist"
-        default:
             return "Recommend Playlist"
+        default:
+            return "All Playlist"
         }
     }
 
     var sectionHeight: CGFloat {
-        switch self {
-        case .topPlaylist:
-            return .zero
-        default:
-            return 50.0
-        }
+        return 50.0
     }
 }
 
