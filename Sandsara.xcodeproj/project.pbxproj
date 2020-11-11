@@ -42,6 +42,20 @@
 		924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5225565F880013CC71 /* LaunchScreen.storyboard */; };
 		924EDF5F25565F880013CC71 /* SandsaraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF5E25565F880013CC71 /* SandsaraTests.swift */; };
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
+		92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04624255BE0CF0086FFFE /* SettingsViewController.swift */; };
+		92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */; };
+		92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */; };
+		92B04632255BE1F00086FFFE /* ViewModelBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04631255BE1F00086FFFE /* ViewModelBindable.swift */; };
+		92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */; };
+		92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */; };
+		92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */; };
+		92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */; };
+		92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */; };
+		92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04654255BF7800086FFFE /* SettingsViewModel.swift */; };
+		92B0465A255BF81E0086FFFE /* SettingsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */; };
+		92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */; };
+		92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64771255BFDDB00856900 /* TwoTableViewCell.swift */; };
+		92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64772255BFDDB00856900 /* TwoTableViewCell.xib */; };
 		92D66328255AE3B200CE3F8E /* FeatureCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */; };
 		92D66329255AE3B200CE3F8E /* FeaturedListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */; };
 		92D6632A255AE3B200CE3F8E /* FeatureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */; };
@@ -50,7 +64,6 @@
 		92D66337255AE3FE00CE3F8E /* GenreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66333255AE3FE00CE3F8E /* GenreCollectionViewCell.swift */; };
 		92D66338255AE3FE00CE3F8E /* AllGenresTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66334255AE3FE00CE3F8E /* AllGenresTableViewCell.xib */; };
 		92D66339255AE3FE00CE3F8E /* GenreCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66335255AE3FE00CE3F8E /* GenreCollectionViewCell.xib */; };
-		92D6633E255AE55A00CE3F8E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D6633D255AE55A00CE3F8E /* Info.plist */; };
 		A00D6099193169721F316A3F /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFD9A013C77B43E7A76162B /* Pods_Sandsara.framework */; };
 		FA8AED25D40C0F88C66398D7 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 617A5ADFD5FB77BA071A38AB /* Pods_Sandsara_SandsaraUITests.framework */; };
 /* End PBXBuildFile section */
@@ -116,6 +129,20 @@
 		924EDF6525565F880013CC71 /* SandsaraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SandsaraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF6925565F880013CC71 /* SandsaraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraUITests.swift; sourceTree = "<group>"; };
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92B04624255BE0CF0086FFFE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
+		92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressTableViewCell.xib; sourceTree = "<group>"; };
+		92B04631255BE1F00086FFFE /* ViewModelBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelBindable.swift; sourceTree = "<group>"; };
+		92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
+		92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
+		92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuTableViewCell.xib; sourceTree = "<group>"; };
+		92B04654255BF7800086FFFE /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellViewModel.swift; sourceTree = "<group>"; };
+		92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCellViewModel.swift; sourceTree = "<group>"; };
+		92D64771255BFDDB00856900 /* TwoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoTableViewCell.swift; sourceTree = "<group>"; };
+		92D64772255BFDDB00856900 /* TwoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoTableViewCell.xib; sourceTree = "<group>"; };
 		92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeatureCollectionViewCell.xib; sourceTree = "<group>"; };
 		92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeaturedListTableViewCell.xib; sourceTree = "<group>"; };
 		92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -205,6 +232,7 @@
 				9228C6FE2556A36B0092FBB6 /* Base */,
 				9228C6C625569DB80092FBB6 /* BluetoothConnectionScreens */,
 				9228C7CA255810280092FBB6 /* Home */,
+				92D6634B255AE93B00CE3F8E /* Setting */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -278,6 +306,7 @@
 		9228C70D2556A4FE0092FBB6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */,
 				9228C6FF2556A3870092FBB6 /* BaseViewController.swift */,
 				9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */,
 			);
@@ -288,6 +317,8 @@
 			isa = PBXGroup;
 			children = (
 				9228C7122556AD8F0092FBB6 /* BaseViewModel.swift */,
+				92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */,
+				92B04631255BE1F00086FFFE /* ViewModelBindable.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -502,6 +533,56 @@
 			path = SandsaraUITests;
 			sourceTree = "<group>";
 		};
+		92B04629255BE1860086FFFE /* ProgressCell */ = {
+			isa = PBXGroup;
+			children = (
+				92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */,
+				92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */,
+				92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */,
+				92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */,
+				92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */,
+				92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */,
+				92D64771255BFDDB00856900 /* TwoTableViewCell.swift */,
+				92D64772255BFDDB00856900 /* TwoTableViewCell.xib */,
+			);
+			path = ProgressCell;
+			sourceTree = "<group>";
+		};
+		92D6634B255AE93B00CE3F8E /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				92D6634E255AE95500CE3F8E /* ViewModel */,
+				92D6634D255AE95000CE3F8E /* View */,
+				92D6634C255AE94800CE3F8E /* Controller */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		92D6634C255AE94800CE3F8E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				92B04624255BE0CF0086FFFE /* SettingsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		92D6634D255AE95000CE3F8E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92B04629255BE1860086FFFE /* ProgressCell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		92D6634E255AE95500CE3F8E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				92B04654255BF7800086FFFE /* SettingsViewModel.swift */,
+				92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		A0C708C98EA6FAAC54A149DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -622,13 +703,16 @@
 			files = (
 				92D66329255AE3B200CE3F8E /* FeaturedListTableViewCell.xib in Resources */,
 				924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */,
+				92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */,
 				924EDF5125565F880013CC71 /* Assets.xcassets in Resources */,
 				92D66338255AE3FE00CE3F8E /* AllGenresTableViewCell.xib in Resources */,
 				924EDF4F25565F850013CC71 /* Main.storyboard in Resources */,
+				92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */,
 				9228C81A255819310092FBB6 /* HeaderView.xib in Resources */,
 				9228C7782557EAE30092FBB6 /* DeviceTableViewCell.xib in Resources */,
 				92D66339255AE3FE00CE3F8E /* GenreCollectionViewCell.xib in Resources */,
-				92D6633E255AE55A00CE3F8E /* Info.plist in Resources */,
+				92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */,
+				92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */,
 				92D66328255AE3B200CE3F8E /* FeatureCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,8 +846,11 @@
 				9228C79C2557EF3F0092FBB6 /* ScanDevicesViewController.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
 				92D66337255AE3FE00CE3F8E /* GenreCollectionViewCell.swift in Sources */,
+				92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */,
 				9228C7832557EC330092FBB6 /* TableViewDataSource.swift in Sources */,
 				9228C7E0255818330092FBB6 /* GenreItemDatasource.swift in Sources */,
+				92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */,
+				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
 				9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */,
 				9228C7F4255818B00092FBB6 /* TrendingViewController.swift in Sources */,
 				9228C7D0255812530092FBB6 /* AssetsColor.swift in Sources */,
@@ -772,8 +859,10 @@
 				92D66336255AE3FE00CE3F8E /* AllGenresTableViewCell.swift in Sources */,
 				92D6632B255AE3B200CE3F8E /* FeaturedListTableViewCell.swift in Sources */,
 				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
+				92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
 				9228C74F2556B61D0092FBB6 /* RxBluetoothKit.swift in Sources */,
+				92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */,
 				9228C7492556B5760092FBB6 /* RxBluetoothKitService.swift in Sources */,
 				9228C7412556B1C80092FBB6 /* ScanDevicesViewModel.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
@@ -782,12 +871,17 @@
 				9228C7DB255817A60092FBB6 /* Prefrences.swift in Sources */,
 				9228C7772557EAE30092FBB6 /* DeviceTableViewCell.swift in Sources */,
 				92D6632A255AE3B200CE3F8E /* FeatureCollectionViewCell.swift in Sources */,
+				92B0465A255BF81E0086FFFE /* SettingsCellViewModel.swift in Sources */,
 				9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */,
+				92B04632255BE1F00086FFFE /* ViewModelBindable.swift in Sources */,
 				9228C81B255819310092FBB6 /* HeaderView.swift in Sources */,
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
+				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,
 				9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
+				92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
+				92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -82,14 +82,29 @@
         <!--Setting-->
         <scene sceneID="cqG-iK-z6y">
             <objects>
-                <viewController id="pVm-Nw-GJ4" sceneMemberID="viewController">
+                <viewController id="pVm-Nw-GJ4" customClass="SettingsViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wpq-Az-JBL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N7p-Uv-Vsd">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" red="0.24313725489999999" green="0.24313725489999999" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Dfl-rW-Co1"/>
                         <color key="backgroundColor" name="backgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="N7p-Uv-Vsd" firstAttribute="leading" secondItem="Dfl-rW-Co1" secondAttribute="leading" id="CWj-jJ-iu3"/>
+                            <constraint firstItem="N7p-Uv-Vsd" firstAttribute="top" secondItem="Dfl-rW-Co1" secondAttribute="top" id="VWa-zS-5Ob"/>
+                            <constraint firstItem="Dfl-rW-Co1" firstAttribute="trailing" secondItem="N7p-Uv-Vsd" secondAttribute="trailing" id="Z2d-BZ-rfO"/>
+                            <constraint firstItem="Dfl-rW-Co1" firstAttribute="bottom" secondItem="N7p-Uv-Vsd" secondAttribute="bottom" id="Zsj-Tv-RaB"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Setting" id="KZc-Da-Fku"/>
+                    <connections>
+                        <outlet property="tableView" destination="N7p-Uv-Vsd" id="ABg-zq-e6A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pqc-Am-xq5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
