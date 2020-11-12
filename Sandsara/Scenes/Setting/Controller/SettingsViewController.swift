@@ -24,7 +24,9 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func setupViewModel() {
+        setupTableView()
         viewModel = SettingViewModel(inputs: SettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {

@@ -56,6 +56,16 @@
 		92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */; };
 		92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64771255BFDDB00856900 /* TwoTableViewCell.swift */; };
 		92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64772255BFDDB00856900 /* TwoTableViewCell.xib */; };
+		92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */; };
+		92D64789255CAC2400856900 /* PlaylistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */; };
+		92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64791255CAE0400856900 /* PlaylistViewModel.swift */; };
+		92D6479B255CB26800856900 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D6479A255CB26800856900 /* PlaylistViewController.swift */; };
+		92D647AC255CB52300856900 /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D647AA255CB52300856900 /* TrackTableViewCell.swift */; };
+		92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D647AB255CB52300856900 /* TrackTableViewCell.xib */; };
+		92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D647B4255CB53C00856900 /* TrackListViewModel.swift */; };
+		92D647BA255CB6E000856900 /* TrackListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D647B9255CB6E000856900 /* TrackListViewController.swift */; };
+		92D647C2255CB83B00856900 /* TrackDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D647C1255CB83B00856900 /* TrackDetailViewController.swift */; };
+		92D647CC255CB93A00856900 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D647CB255CB93A00856900 /* PlayerViewController.swift */; };
 		92D66328255AE3B200CE3F8E /* FeatureCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */; };
 		92D66329255AE3B200CE3F8E /* FeaturedListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */; };
 		92D6632A255AE3B200CE3F8E /* FeatureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */; };
@@ -143,6 +153,16 @@
 		92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCellViewModel.swift; sourceTree = "<group>"; };
 		92D64771255BFDDB00856900 /* TwoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoTableViewCell.swift; sourceTree = "<group>"; };
 		92D64772255BFDDB00856900 /* TwoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoTableViewCell.xib; sourceTree = "<group>"; };
+		92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
+		92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistTableViewCell.xib; sourceTree = "<group>"; };
+		92D64791255CAE0400856900 /* PlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
+		92D6479A255CB26800856900 /* PlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
+		92D647AA255CB52300856900 /* TrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
+		92D647AB255CB52300856900 /* TrackTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewCell.xib; sourceTree = "<group>"; };
+		92D647B4255CB53C00856900 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
+		92D647B9255CB6E000856900 /* TrackListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewController.swift; sourceTree = "<group>"; };
+		92D647C1255CB83B00856900 /* TrackDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDetailViewController.swift; sourceTree = "<group>"; };
+		92D647CB255CB93A00856900 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		92D66324255AE3B200CE3F8E /* FeatureCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeatureCollectionViewCell.xib; sourceTree = "<group>"; };
 		92D66325255AE3B200CE3F8E /* FeaturedListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeaturedListTableViewCell.xib; sourceTree = "<group>"; };
 		92D66326255AE3B200CE3F8E /* FeatureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -233,6 +253,10 @@
 				9228C6C625569DB80092FBB6 /* BluetoothConnectionScreens */,
 				9228C7CA255810280092FBB6 /* Home */,
 				92D6634B255AE93B00CE3F8E /* Setting */,
+				92D64781255CAB4C00856900 /* Library */,
+				92D647A3255CB4A600856900 /* TrackList */,
+				92D647A2255CB49B00856900 /* TrackDetail */,
+				92D6477A255CAB2900856900 /* Player */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -548,6 +572,100 @@
 			path = ProgressCell;
 			sourceTree = "<group>";
 		};
+		92D6477A255CAB2900856900 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				92D647CB255CB93A00856900 /* PlayerViewController.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		92D64781255CAB4C00856900 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				92D64799255CB25000856900 /* Controller */,
+				92D64790255CADD000856900 /* ViewModel */,
+				92D64785255CABF400856900 /* View */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		92D64785255CABF400856900 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */,
+				92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		92D64790255CADD000856900 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				92D64791255CAE0400856900 /* PlaylistViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		92D64799255CB25000856900 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				92D6479A255CB26800856900 /* PlaylistViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		92D647A2255CB49B00856900 /* TrackDetail */ = {
+			isa = PBXGroup;
+			children = (
+				92D647A8255CB4DA00856900 /* Controller */,
+			);
+			path = TrackDetail;
+			sourceTree = "<group>";
+		};
+		92D647A3255CB4A600856900 /* TrackList */ = {
+			isa = PBXGroup;
+			children = (
+				92D647A7255CB4D000856900 /* ViewModel */,
+				92D647A6255CB4CB00856900 /* Controller */,
+				92D647A5255CB4BD00856900 /* View */,
+			);
+			path = TrackList;
+			sourceTree = "<group>";
+		};
+		92D647A5255CB4BD00856900 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92D647AA255CB52300856900 /* TrackTableViewCell.swift */,
+				92D647AB255CB52300856900 /* TrackTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		92D647A6255CB4CB00856900 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				92D647B9255CB6E000856900 /* TrackListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		92D647A7255CB4D000856900 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				92D647B4255CB53C00856900 /* TrackListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		92D647A8255CB4DA00856900 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				92D647C1255CB83B00856900 /* TrackDetailViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		92D6634B255AE93B00CE3F8E /* Setting */ = {
 			isa = PBXGroup;
 			children = (
@@ -704,8 +822,10 @@
 				92D66329255AE3B200CE3F8E /* FeaturedListTableViewCell.xib in Resources */,
 				924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */,
 				92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */,
+				92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */,
 				924EDF5125565F880013CC71 /* Assets.xcassets in Resources */,
 				92D66338255AE3FE00CE3F8E /* AllGenresTableViewCell.xib in Resources */,
+				92D64789255CAC2400856900 /* PlaylistTableViewCell.xib in Resources */,
 				924EDF4F25565F850013CC71 /* Main.storyboard in Resources */,
 				92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */,
 				9228C81A255819310092FBB6 /* HeaderView.xib in Resources */,
@@ -850,12 +970,15 @@
 				9228C7832557EC330092FBB6 /* TableViewDataSource.swift in Sources */,
 				9228C7E0255818330092FBB6 /* GenreItemDatasource.swift in Sources */,
 				92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */,
+				92D647BA255CB6E000856900 /* TrackListViewController.swift in Sources */,
 				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
 				9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */,
 				9228C7F4255818B00092FBB6 /* TrendingViewController.swift in Sources */,
 				9228C7D0255812530092FBB6 /* AssetsColor.swift in Sources */,
 				9228C7842557EC330092FBB6 /* SectionModelItem.swift in Sources */,
+				92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */,
 				9228C78B2557ED1D0092FBB6 /* ScanResultViewModelItem.swift in Sources */,
+				92D647C2255CB83B00856900 /* TrackDetailViewController.swift in Sources */,
 				92D66336255AE3FE00CE3F8E /* AllGenresTableViewCell.swift in Sources */,
 				92D6632B255AE3B200CE3F8E /* FeaturedListTableViewCell.swift in Sources */,
 				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
@@ -864,6 +987,7 @@
 				9228C74F2556B61D0092FBB6 /* RxBluetoothKit.swift in Sources */,
 				92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */,
 				9228C7492556B5760092FBB6 /* RxBluetoothKitService.swift in Sources */,
+				92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */,
 				9228C7412556B1C80092FBB6 /* ScanDevicesViewModel.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
 				9228C7702557EA950092FBB6 /* CellUpdatable.swift in Sources */,
@@ -875,10 +999,14 @@
 				9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */,
 				92B04632255BE1F00086FFFE /* ViewModelBindable.swift in Sources */,
 				9228C81B255819310092FBB6 /* HeaderView.swift in Sources */,
+				92D647CC255CB93A00856900 /* PlayerViewController.swift in Sources */,
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,
+				92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */,
 				9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
+				92D647AC255CB52300856900 /* TrackTableViewCell.swift in Sources */,
+				92D6479B255CB26800856900 /* PlaylistViewController.swift in Sources */,
 				92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
 				92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */,
