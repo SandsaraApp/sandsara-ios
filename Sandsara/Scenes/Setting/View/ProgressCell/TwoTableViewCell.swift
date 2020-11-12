@@ -21,8 +21,8 @@ class TwoTableViewCell: BaseTableViewCell<ColorSettingsCellViewModel> {
             .disposed(by: disposeBag)
 
         viewModel.outputs.buttonTitles.driveNext { values in
-            buttonOne.setTitle(values.first, for: .normal)
-            buttonTwo.setTitle(values.last, for: .normal)
+            self.buttonOne.setTitle(values.first, for: .normal)
+            self.buttonTwo.setTitle(values.last, for: .normal)
         }.disposed(by: disposeBag)
     }
     

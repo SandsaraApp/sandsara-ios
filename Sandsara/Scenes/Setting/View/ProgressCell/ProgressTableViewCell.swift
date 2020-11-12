@@ -21,10 +21,10 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .drive(progressNameLabel.rx.text)
             .disposed(by: disposeBag)
 
-        progressSlider
-            .rx.value
-            .bind(to: viewModel.inputs.progress)
-            .disposed(by: disposeBag)
+//        progressSlider
+//            .rx.value
+//            .bind(to: viewModel.inputs.progress)
+//            .disposed(by: disposeBag)
     }
 
 }

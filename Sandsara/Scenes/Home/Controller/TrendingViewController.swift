@@ -92,11 +92,9 @@ extension TrendingViewController: HeaderViewDelegate, GenreDatasourceDelegate {
     }
 
     func selectedGenre(_ item: GenreItem) {
-//        let vc = storyboard?.instantiateViewController(withIdentifier: PlaylistDetailViewController.identifier) as! PlaylistDetailViewController
-//        vc.isLoadTopTrack = false
-//        vc.genreItem = item
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(vc, animated: true)
+        let trackList = storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
+        trackList.playlistTitle = item.title
+        self.navigationController?.pushViewController(trackList, animated: true)
     }
 }
 
