@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TrackTableViewCell" id="6yr-k6-2WS" customClass="TrackTableViewCell" customModule="Sandsara" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6yr-k6-2WS" id="vgH-as-Or2">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackPlaceHolder" translatesAutoresizingMaskIntoConstraints="NO" id="d3t-XW-DeX">
+                        <rect key="frame" x="16" y="16" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="Bo0-Ed-eg0"/>
+                            <constraint firstAttribute="width" constant="40" id="DVA-Cc-FSq"/>
+                        </constraints>
+                    </imageView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="r8b-Lp-4LX">
+                        <rect key="frame" x="72" y="8" width="232" height="49"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qb4-Bh-I32">
+                                <rect key="frame" x="0.0" y="0.0" width="232" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I8r-GL-8n7">
+                                <rect key="frame" x="0.0" y="28.5" width="232" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" name="backgroundColor"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="r8b-Lp-4LX" secondAttribute="trailing" constant="16" id="602-z7-PPY"/>
+                    <constraint firstItem="r8b-Lp-4LX" firstAttribute="leading" secondItem="d3t-XW-DeX" secondAttribute="trailing" constant="16" id="CjM-pz-0RW"/>
+                    <constraint firstItem="r8b-Lp-4LX" firstAttribute="top" secondItem="vgH-as-Or2" secondAttribute="top" constant="8" id="Czs-jI-KCH"/>
+                    <constraint firstItem="d3t-XW-DeX" firstAttribute="leading" secondItem="vgH-as-Or2" secondAttribute="leading" constant="16" id="Xvb-GW-Bjz"/>
+                    <constraint firstItem="d3t-XW-DeX" firstAttribute="top" secondItem="vgH-as-Or2" secondAttribute="top" constant="16" id="chA-bj-Fd9"/>
+                    <constraint firstAttribute="bottom" secondItem="d3t-XW-DeX" secondAttribute="bottom" constant="16" id="eAH-LK-ITr"/>
+                    <constraint firstAttribute="bottom" secondItem="r8b-Lp-4LX" secondAttribute="bottom" constant="8" id="sbi-36-KXV"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="4zv-L8-5iS"/>
+            <color key="backgroundColor" name="backgroundColor"/>
+            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="authorLabel" destination="I8r-GL-8n7" id="fvM-ot-oTN"/>
+                <outlet property="titleLabel" destination="Qb4-Bh-I32" id="NMQ-fq-Ohe"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="153"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="trackPlaceHolder" width="95" height="113"/>
+        <namedColor name="backgroundColor">
+            <color red="0.097999997437000275" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

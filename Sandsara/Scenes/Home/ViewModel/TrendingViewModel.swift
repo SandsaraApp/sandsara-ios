@@ -66,7 +66,7 @@ class TrendingViewModel {
 
         if let discoverPlaylist = Preferences.PlaylistsDomain.categories {
             genresSection = discoverPlaylist
-            displayGenresSection = Array(self.genresSection.prefix(prefix))
+            displayGenresSection = genresSection
         }
 
         delegate?.emitLoading(isLoading: true)
