@@ -24,10 +24,11 @@ class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel>
     typealias Section = SectionModel<String, RecommendCellViewModel>
     typealias DataSource = RxCollectionViewSectionedReloadDataSource<Section>
 
-    var selectedCell = PublishRelay<DisplayItem>()
+    var selectedCell = PublishRelay<(Int, DisplayItem)>()
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        selectionStyle = .none
         backgroundColor = Asset.background.color
         titleLabel.font = FontFamily.Tinos.regular.font(size: 20)
         titleLabel.textColor = Asset.primary.color
@@ -54,7 +55,7 @@ class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel>
             ).bind { [weak self] indexPath, model in
                 guard let self = self else { return }
                 self.collectionView.deselectItem(at: indexPath, animated: true)
-                self.selectedCell.accept(model.inputs.item)
+                self.selectedCell.accept((indexPath.row, model.inputs.item))
             }.disposed(by: disposeBag)
     }
 

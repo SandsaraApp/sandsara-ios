@@ -60,8 +60,12 @@ struct Preferences {
         @UserDefault(Keys.currentAppLanguage.key, defaultValue: nil)
         static var currentAppLanguage: String?
 
+        @UserDefault(Keys.connectedSandasa.key, defaultValue: nil)
+        static var connectedSandasa: [String]?
+
         enum Keys: String {
             case currentAppLanguage
+            case connectedSandasa
 
             var key: String {
                 return Preferences.prefixDomain + self.rawValue

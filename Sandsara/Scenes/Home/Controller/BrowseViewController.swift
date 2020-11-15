@@ -46,6 +46,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewWillAppearTrigger.accept(())
     }
 
     override func setupViewModel() {
@@ -119,8 +120,25 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendTableViewCell.identifier, for: indexPath) as? RecommendTableViewCell else { return UITableViewCell()}
                 cell.bind(to: viewModel)
+                cell.selectedCell.subscribeNext { [weak self] index, item in
+                    self?.goDetail(item: item, index: index, viewModel: viewModel)
+                }.disposed(by: cell.disposeBag)
                 return cell
             })
+    }
+
+    private func goDetail(item: DisplayItem, index: Int, viewModel: RecommendTableViewCellViewModel) {
+        if item.isPlaylist {
+            let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
+            trackList.playlistTitle = item.title
+            navigationController?.pushViewController(trackList, animated: true)
+        } else {
+            let trackDetail = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
+            trackDetail.track = item
+            trackDetail.tracks = viewModel.inputs.items
+            trackDetail.selecledIndex = index
+            navigationController?.pushViewController(trackDetail, animated: true)
+        }
     }
 }
 
