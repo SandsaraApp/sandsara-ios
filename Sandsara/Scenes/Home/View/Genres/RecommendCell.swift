@@ -12,7 +12,6 @@ import Kingfisher
 class GenreCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var genreImageView: UIImageView!
-    @IBOutlet weak var genreTitleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

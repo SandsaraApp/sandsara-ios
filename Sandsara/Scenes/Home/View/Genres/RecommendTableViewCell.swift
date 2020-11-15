@@ -1,5 +1,5 @@
 //
-//  FeaturedListTableViewCell.swift
+//  AllGenresTableViewCell.swift
 // 
 //
 //  Created by tin on 5/18/20.
@@ -8,7 +8,12 @@
 
 import UIKit
 
-class FeaturedListTableViewCell: UITableViewCell {
+private struct Constants {
+    static let cellHeight: CGFloat = 127.0
+    static let cellWidth: CGFloat = 127.0
+}
+
+class RecommendTableViewCell: UITableViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,5 +30,10 @@ class FeaturedListTableViewCell: UITableViewCell {
         super.layoutSubviews()
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
-    
+}
+
+extension RecommendTableViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: Constants.cellWidth, height: Constants.cellHeight)
+    }
 }
