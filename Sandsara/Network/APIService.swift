@@ -15,7 +15,7 @@ enum ServiceOption {
 }
 
 protocol APIServiceCall {
-    func getRecommendPlaylist() -> Single<[Track]>
+    func getRecommendPlaylist() -> Single<[Playlist]>
     func getRecommendTracks() -> Single<[Track]>
     func playlists() -> Single<[Playlist]>
     func playlistDetail() -> Single<[Track]>
@@ -35,11 +35,11 @@ class SandsaraAPIService: APIServiceCall {
             .map(TracksResponse.self).map { $0.tracks }
     }
 
-    func getRecommendPlaylist() -> Single<[Track]> {
+    func getRecommendPlaylist() -> Single<[Playlist]> {
         return apiProvider
             .rx.request(.recommendedplaylist)
-            .map(TracksResponse.self)
-            .map { $0.tracks }
+            .map(PlaylistsResponse.self)
+            .map { $0.playlists }
     }
 
     func playlistDetail() -> Single<[Track]> {

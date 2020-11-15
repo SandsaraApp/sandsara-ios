@@ -9,23 +9,12 @@
 import UIKit
 import Kingfisher
 
-class GenreCollectionViewCell: UICollectionViewCell {
+class RecommendCell: BaseCollectionViewCell<RecommendCellViewModel> {
 
     @IBOutlet weak var genreImageView: UIImageView!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func bindViewModel() {
+        genreImageView.kf.indicatorType = .activity
+        genreImageView.kf.setImage(with: viewModel.outputs.url)
     }
-
-//    func bind(_ genre: GenreItem) {
-//        genreTitleLabel.text = genre.title
-//        if let url = URL(string: genre.thumbnail) {
-//            genreImageView.kf.setImage(with: url)
-//        }
-//    }
-//
-//    func addBorder() {
-//        genreImageView.layer.borderColor = #colorLiteral(red: 0.2588235294, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
-//        genreImageView.layer.borderWidth = 1.0
-//    }
 }

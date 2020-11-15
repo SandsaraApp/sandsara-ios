@@ -22,7 +22,6 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     var playlistTitle: String?
 
-
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func setupViewModel() {

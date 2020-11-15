@@ -40,6 +40,8 @@ internal enum L10n {
   internal static let recommendedPlaylists = L10n.tr("Localizeable", "recommended_playlists")
   /// Recomended Tracks
   internal static let recommendedTracks = L10n.tr("Localizeable", "recommended_tracks")
+  /// Sandsara detected.
+  internal static let sandsaraDetected = L10n.tr("Localizeable", "sandsara_detected")
   /// Tracks
   internal static let tracks = L10n.tr("Localizeable", "tracks")
 }

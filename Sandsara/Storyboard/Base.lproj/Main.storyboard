@@ -144,11 +144,11 @@
             </objects>
             <point key="canvasLocation" x="-1787" y="1961"/>
         </scene>
-        <!--Home-->
+        <!--Browse-->
         <scene sceneID="XQ6-bO-L1L">
             <objects>
                 <navigationController id="Ebl-JT-yIH" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="yMV-N0-90i"/>
+                    <tabBarItem key="tabBarItem" title="Browse" image="search" id="yMV-N0-90i"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="cgQ-d3-fa5">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -167,7 +167,7 @@
         <scene sceneID="FuY-M1-gcb">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="k34-4n-256" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Library" image="list.bullet.indent" catalog="system" id="3ns-do-icY"/>
+                    <tabBarItem key="tabBarItem" title="Library" image="library" id="3ns-do-icY"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Vam-EK-Hyc">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -186,7 +186,7 @@
         <scene sceneID="UMP-Wf-PgK">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ka3-JF-e0y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Setting" image="setting" id="L0V-kN-dHa"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="settings" id="L0V-kN-dHa"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yOR-py-FBw">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -201,38 +201,31 @@
             </objects>
             <point key="canvasLocation" x="249" y="2820"/>
         </scene>
-        <!--Home-->
+        <!--Browse View Controller-->
         <scene sceneID="Ba3-qF-Lg4">
             <objects>
-                <viewController id="Ylz-lo-bQg" customClass="TrendingViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Ylz-lo-bQg" customClass="BrowseViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i4P-dj-Fr3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="lcR-Bj-K61">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="d8F-JR-7O0">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <color key="backgroundColor" name="backgroundColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="r8W-Iy-kkr">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
-                                <color key="color" name="selectedColor"/>
-                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="y9T-rf-fIF"/>
-                        <color key="backgroundColor" name="backgroundColor"/>
+                        <color key="backgroundColor" name="background"/>
                         <constraints>
-                            <constraint firstItem="lcR-Bj-K61" firstAttribute="top" secondItem="y9T-rf-fIF" secondAttribute="top" id="68J-0K-W1n"/>
-                            <constraint firstItem="y9T-rf-fIF" firstAttribute="trailing" secondItem="lcR-Bj-K61" secondAttribute="trailing" id="6hX-z0-f7d"/>
-                            <constraint firstItem="r8W-Iy-kkr" firstAttribute="centerX" secondItem="i4P-dj-Fr3" secondAttribute="centerX" id="AID-7V-qhb"/>
-                            <constraint firstItem="r8W-Iy-kkr" firstAttribute="centerY" secondItem="i4P-dj-Fr3" secondAttribute="centerY" id="NTo-FZ-dg9"/>
-                            <constraint firstItem="y9T-rf-fIF" firstAttribute="bottom" secondItem="lcR-Bj-K61" secondAttribute="bottom" id="QgM-cE-AZy"/>
-                            <constraint firstItem="lcR-Bj-K61" firstAttribute="leading" secondItem="y9T-rf-fIF" secondAttribute="leading" id="ehw-X5-krP"/>
+                            <constraint firstItem="y9T-rf-fIF" firstAttribute="trailing" secondItem="d8F-JR-7O0" secondAttribute="trailing" id="1LQ-9D-1df"/>
+                            <constraint firstItem="d8F-JR-7O0" firstAttribute="top" secondItem="y9T-rf-fIF" secondAttribute="top" id="2gb-MT-tae"/>
+                            <constraint firstItem="y9T-rf-fIF" firstAttribute="bottom" secondItem="d8F-JR-7O0" secondAttribute="bottom" id="DUo-AQ-h0M"/>
+                            <constraint firstItem="d8F-JR-7O0" firstAttribute="leading" secondItem="y9T-rf-fIF" secondAttribute="leading" id="wuT-Cv-69K"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Home" id="HPo-2r-f4t"/>
+                    <navigationItem key="navigationItem" id="HPo-2r-f4t"/>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="r8W-Iy-kkr" id="EhB-6h-YVm"/>
-                        <outlet property="tableView" destination="lcR-Bj-K61" id="82f-0K-rae"/>
+                        <outlet property="tableView" destination="d8F-JR-7O0" id="sNB-nI-QNr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pAR-Ea-jSg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -628,24 +621,24 @@
     <resources>
         <image name="bigimage" width="375" height="349"/>
         <image name="dismiss" width="25" height="25"/>
-        <image name="house" catalog="system" width="128" height="106"/>
-        <image name="list.bullet.indent" catalog="system" width="128" height="74"/>
+        <image name="library" width="20" height="21"/>
         <image name="next" width="42" height="42"/>
         <image name="pause" width="16" height="22"/>
         <image name="playerPlaceHolderImage" width="200" height="229"/>
         <image name="prev" width="42" height="42"/>
         <image name="repeat" width="36" height="28"/>
-        <image name="setting" width="25" height="25"/>
+        <image name="search" width="21" height="21"/>
+        <image name="settings" width="20" height="21"/>
         <image name="shuffle" width="46" height="29"/>
         <image name="trackPlaceHolder" width="95" height="113"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="backgroundColor">
             <color red="0.097999997437000275" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="selectedColor">
-            <color red="0.11400000005960464" green="0.72500002384185791" blue="0.32899999618530273" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

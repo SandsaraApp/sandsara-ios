@@ -31,7 +31,14 @@ internal enum FontFamily {
     internal static let lightItalic = FontConvertible(name: "OpenSansLight-Italic", family: "Open Sans", path: "OpenSans-LightItalic.ttf")
     internal static let all: [FontConvertible] = [regular, bold, boldItalic, extrabold, extraboldItalic, italic, light, semibold, semiboldItalic, lightItalic]
   }
-  internal static let allCustomFonts: [FontConvertible] = [OpenSans.all].flatMap { $0 }
+  internal enum Tinos {
+    internal static let bold = FontConvertible(name: "Tinos-Bold", family: "Tinos", path: "Tinos-Bold.ttf")
+    internal static let boldItalic = FontConvertible(name: "Tinos-BoldItalic", family: "Tinos", path: "Tinos-BoldItalic.ttf")
+    internal static let italic = FontConvertible(name: "Tinos-Italic", family: "Tinos", path: "Tinos-Italic.ttf")
+    internal static let regular = FontConvertible(name: "Tinos-Regular", family: "Tinos", path: "Tinos-Regular.ttf")
+    internal static let all: [FontConvertible] = [bold, boldItalic, italic, regular]
+  }
+  internal static let allCustomFonts: [FontConvertible] = [OpenSans.all, Tinos.all].flatMap { $0 }
   internal static func registerAllCustomFonts() {
     allCustomFonts.forEach { $0.register() }
   }
