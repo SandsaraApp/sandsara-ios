@@ -5,7 +5,6 @@
 //  Created by Tín Phan on 14/11/2020.
 //
 
-import RxAlamofire
 import RxSwift
 import Moya
 
@@ -31,18 +30,29 @@ class SandsaraAPIService: APIServiceCall {
     }
 
     func getRecommendTracks() -> Single<[Track]> {
-        return apiProvider.rx.request(.recommendedtracks).map([Track].self)
+        return apiProvider
+            .rx.request(.recommendedtracks)
+            .map(TracksResponse.self).map { $0.tracks }
     }
 
     func getRecommendPlaylist() -> Single<[Track]> {
-        return apiProvider.rx.request(.recommendedplaylist).map([Track].self)
+        return apiProvider
+            .rx.request(.recommendedplaylist)
+            .map(TracksResponse.self)
+            .map { $0.tracks }
     }
 
     func playlistDetail() -> Single<[Track]> {
-        return apiProvider.rx.request(.playlistDetail).map([Track].self)
+        return apiProvider
+            .rx.request(.playlistDetail)
+            .map(TracksResponse.self)
+            .map { $0.tracks }
     }
 
     func playlists() -> Single<[Playlist]> {
-        return apiProvider.rx.request(.playlists).map([Playlist].self)
+        return apiProvider
+            .rx.request(.playlists)
+            .map(PlaylistsResponse.self)
+            .map { $0.playlists }
     }
 }

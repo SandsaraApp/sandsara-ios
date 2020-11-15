@@ -8,6 +8,10 @@
 import Foundation
 import RealmSwift
 
+class TracksResponse: Decodable {
+    let tracks: [Track]
+}
+
 class Track: Decodable {
     let title: String
     let author: String

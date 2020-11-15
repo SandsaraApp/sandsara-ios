@@ -7,6 +7,10 @@
 
 import RealmSwift
 
+class PlaylistsResponse: Decodable {
+    let playlists: [Playlist]
+}
+
 class Playlist: Decodable {
     @objc dynamic var id = 0
     @objc dynamic var title = ""

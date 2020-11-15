@@ -80,6 +80,7 @@ class DataLayer {
     static func addDuplicateTrackToPlaylist(name: String, track: LocalTrack) -> Bool  {
         if let object = realm?.objects(LocalPlaylist.self).filter("playlistName == '\(name)'").first {
             write(realm: realm!, writeClosure: {
+                track.dateModified = Date()
                 object.tracks.append(track)
             })
             return true
@@ -148,5 +149,25 @@ class DataLayer {
             return false
         }
         return false
+    }
+
+    static func loadFavList() -> FavoritePlaylist? {
+        if let list = realm?.objects(FavoritePlaylist.self).first {
+            return list
+        }
+        return nil
+    }
+
+    static func loadFavTracks() -> [LocalTrack] {
+        var tracks = [LocalTrack]()
+        if let list = realm?.objects(FavoritePlaylist.self).first {
+            let sortedTracks = list.tracks.sorted(byKeyPath: "dateModified", ascending: false)
+            for track in sortedTracks {
+                if !track.isInvalidated {
+                    tracks.append(track)
+                }
+            }
+        }
+        return tracks
     }
 }
