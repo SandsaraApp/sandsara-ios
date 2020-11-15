@@ -13,6 +13,7 @@ enum SandsaraAPI: String {
     case recommendedtracks
     case playlists
     case playlistDetail
+    case alltrack = "tracks"
 }
 
 extension SandsaraAPI: TargetType {

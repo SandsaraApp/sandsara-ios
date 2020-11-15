@@ -19,6 +19,7 @@ protocol APIServiceCall {
     func getRecommendTracks() -> Single<[Track]>
     func playlists() -> Single<[Playlist]>
     func playlistDetail() -> Single<[Track]>
+    func getAllTracks() -> Single<[Track]>
 }
 
 class SandsaraAPIService: APIServiceCall {
@@ -54,5 +55,11 @@ class SandsaraAPIService: APIServiceCall {
             .rx.request(.playlists)
             .map(PlaylistsResponse.self)
             .map { $0.playlists }
+    }
+
+    func getAllTracks() -> Single<[Track]> {
+        return apiProvider
+            .rx.request(.alltrack)
+            .map(TracksResponse.self).map { $0.tracks }
     }
 }

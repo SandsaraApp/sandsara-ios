@@ -13,6 +13,7 @@ struct DisplayItem {
     let thumbnail: String
     let id: Int
     let isPlaylist: Bool
+    var isLocal: Bool = false
 
     init(track: Track, isPlaylist: Bool = false) {
         self.title = track.title
@@ -30,20 +31,34 @@ struct DisplayItem {
         self.isPlaylist = isPlaylist
     }
 
-    init(track: LocalTrack, isPlaylist: Bool = false) {
+    init(track: LocalTrack, isPlaylist: Bool = false, isLocal: Bool = true) {
         self.title = track.title
         self.author = track.author
         self.thumbnail = track.thumbnail
         self.id = track.id
         self.isPlaylist = isPlaylist
+        self.isLocal = isLocal
     }
 
-    init(playlist: LocalPlaylist, isPlaylist: Bool = true) {
+    init(playlist: LocalPlaylist, isPlaylist: Bool = true, isLocal: Bool = true) {
         self.title = playlist.playlistName
         self.author = playlist.author
         self.thumbnail = playlist.thumbnail
         self.id = playlist.tracks.first?.id ?? 0
         self.isPlaylist = isPlaylist
+        self.isLocal = isLocal
+    }
+
+    init(playlist: FavoritePlaylist, isPlaylist: Bool = true, isLocal: Bool = true) {
+        self.title = L10n.favorite
+        self.author = playlist.author
+        self.thumbnail = playlist.thumbnail
+        self.id = playlist.tracks.first?.id ?? 0
+        self.isPlaylist = isPlaylist
+    }
+
+    init(trackCellViewModel: TrackCellViewModel) {
+        self = trackCellViewModel.inputs.track
     }
 }
 

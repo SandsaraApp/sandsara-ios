@@ -16,6 +16,7 @@ target 'Sandsara' do
   pod 'Moya'
   pod 'RxRealm'
   pod 'SwiftGen', '~> 6.0'
+  pod 'BetterSegmentedControl', '~> 2.0'
   
   target 'SandsaraTests' do
     inherit! :search_paths

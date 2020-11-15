@@ -1,8 +1,8 @@
 //
-//  PlaylistViewController.swift
+//  AllTrackViewController.swift
 //  Sandsara
 //
-//  Created by Tín Phan on 11/12/20.
+//  Created by Tín Phan on 15/11/2020.
 //
 
 import UIKit
@@ -11,22 +11,22 @@ import RxDataSources
 import RxCocoa
 import Moya
 
-class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
+class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
 
     let viewWillAppearTrigger = PublishRelay<()>()
 
-    typealias Section = SectionModel<String, PlaylistCellViewModel>
+    typealias Section = SectionModel<String, TrackCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
-
-    private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
+    var playlistTitle: String?
 
     override func setupViewModel() {
+        //configureNavigationBar(largeTitleColor: .white, backgoundColor: .black, tintColor: .white, title: playlistTitle ?? "", preferredLargeTitle: true)
         setupTableView()
-        viewModel = PlaylistViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = AllTracksViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -37,26 +37,26 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-
         Observable
             .zip(
                 tableView.rx.itemSelected,
-                tableView.rx.modelSelected(PlaylistCellViewModel.self)
+                tableView.rx.modelSelected(TrackCellViewModel.self)
             ).bind { [weak self] indexPath, model in
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
-                trackList.playlistTitle = model.inputs.track.title
+                let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
+                trackList.track = model.inputs.track
+                trackList.tracks = self.viewModel.datas.value.map { $0.inputs.track }
+                trackList.selecledIndex = indexPath.row
                 self.navigationController?.pushViewController(trackList, animated: true)
             }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
+        tableView.backgroundColor = Asset.background.color
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
-
-        tableView.register(PlaylistTableViewCell.nib, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
-        tableView.backgroundColor = Asset.background.color
+        tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -64,16 +64,16 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
-            configureCell: { [weak self] (_, tableView, indexPath, viewModel) -> UITableViewCell in
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell else { return UITableViewCell()}
+            configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
                 cell.bind(to: viewModel)
                 return cell
-                })
+            })
     }
 
 }
 
-extension PlaylistViewController: UITableViewDelegate {
+extension AllTrackViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0
     }

@@ -170,4 +170,13 @@ class DataLayer {
         }
         return tracks
     }
+
+    static func loadPlaylists() -> [LocalPlaylist] {
+        var playlists = [LocalPlaylist]()
+        let object = realm?.objects(LocalPlaylist.self)
+        for playlist in object! {
+            playlists.append(playlist)
+        }
+        return playlists
+    }
 }
