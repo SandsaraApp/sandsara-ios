@@ -47,7 +47,7 @@ extension FeaturedListDatasource: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if items.count > 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeatureCollectionViewCell.identifier, for: indexPath) as! FeatureCollectionViewCell
-            cell.bind(items[indexPath.item])
+           // cell.bind(items[indexPath.item])
             return cell
         }
         return UICollectionViewCell()
@@ -73,7 +73,7 @@ extension GenreListDatasource: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if items.count > 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionViewCell.identifier, for: indexPath) as! GenreCollectionViewCell
-            cell.bind(items[indexPath.item])
+          //  cell.bind(items[indexPath.item])
             return cell
         }
         return UICollectionViewCell()

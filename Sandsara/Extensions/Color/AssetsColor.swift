@@ -8,10 +8,10 @@
 import UIKit
 
 enum AssetsColor: String {
-    case selectedColor
-    case unselectedColor
-    case deviceTextColor
-    case tabBar
+    case background
+    case primary
+    case secondary
+    case tertiary
 }
 
 extension UIColor {

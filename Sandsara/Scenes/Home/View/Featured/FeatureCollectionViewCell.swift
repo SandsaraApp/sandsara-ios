@@ -18,10 +18,10 @@ class FeatureCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
 
-    func bind(_ genre: GenreItem) {
-        genreTitleLabel.text = genre.title
-        if let url = URL(string: genre.thumbnail) {
-            genreImageView.kf.setImage(with: url)
-        }
-    }
+//    func bind(_ genre: GenreItem) {
+//        genreTitleLabel.text = genre.title
+//        if let url = URL(string: genre.thumbnail) {
+//            genreImageView.kf.setImage(with: url)
+//        }
+//    }
 }

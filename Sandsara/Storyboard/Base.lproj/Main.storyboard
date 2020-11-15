@@ -631,7 +631,7 @@
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="list.bullet.indent" catalog="system" width="128" height="74"/>
         <image name="next" width="42" height="42"/>
-        <image name="pause" width="68" height="68"/>
+        <image name="pause" width="16" height="22"/>
         <image name="playerPlaceHolderImage" width="200" height="229"/>
         <image name="prev" width="42" height="42"/>
         <image name="repeat" width="36" height="28"/>

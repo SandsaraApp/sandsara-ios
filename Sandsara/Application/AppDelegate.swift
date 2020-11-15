@@ -14,8 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        checkConfig()
-        setTabBarAppearance()
+        DataLayer.shareInstance.config()
+        AppApperance.setTheme()
         return true
     }
 
@@ -39,50 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-
-    private func setTabBarAppearance() {
-        if #available(iOS 13, *) {
-            let appearance = UITabBarAppearance()
-
-            appearance.backgroundColor = UIColor.appColor(.tabBar)
-            appearance.shadowImage = UIImage()
-            appearance.shadowColor = .white
-
-            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.appColor(.unselectedColor)
-            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)]
-            appearance.stackedLayoutAppearance.normal.badgeBackgroundColor = UIColor.appColor(.selectedColor)
-
-            appearance.stackedLayoutAppearance.selected.iconColor = UIColor.appColor(.selectedColor)
-            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)]
-
-            UITabBar.appearance().standardAppearance = appearance
-        } else {
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)], for: .selected)
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)], for: .normal)
-            UITabBar.appearance().tintColor = UIColor.appColor(.selectedColor)
-            UITabBar.appearance().backgroundColor =  UIColor.appColor(.tabBar)
-        }
-    }
-
-    func checkConfig() {
-        AF.request("http://uninterested-cows.surge.sh/recommend_playlist.json", method: .get) { urlRequest in
-            urlRequest.timeoutInterval = 15.0
-            urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        }.responseDecodable(of: DataItem.self) { [weak self] response in
-            guard let self = self else { return }
-            switch response.result {
-            case .success(let config):
-                Preferences.PlaylistsDomain.featuredList = config.features
-                Preferences.PlaylistsDomain.categories = config.categories
-            case .failure(let err):
-                print(err.localizedDescription)
-            }
-        }
     }
 }
 

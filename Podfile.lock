@@ -1,15 +1,26 @@
 PODS:
-  - Action (4.0.0):
-    - RxCocoa (~> 5.0)
-    - RxSwift (~> 5.0)
   - Alamofire (5.4.0)
   - Differentiator (4.0.1)
   - Kingfisher (5.15.7):
     - Kingfisher/Core (= 5.15.7)
   - Kingfisher/Core (5.15.7)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
   - NVActivityIndicatorView/Base (5.1.1)
+  - Realm (5.5.0):
+    - Realm/Headers (= 5.5.0)
+  - Realm/Headers (5.5.0)
+  - RealmSwift (5.5.0):
+    - Realm (= 5.5.0)
+  - RxAlamofire (5.6.2):
+    - RxAlamofire/Core (= 5.6.2)
+  - RxAlamofire/Core (5.6.2):
+    - Alamofire (~> 5.2)
+    - RxSwift (~> 5.1)
   - RxBluetoothKit (6.0.0):
     - RxSwift (~> 5.1)
   - RxCocoa (5.1.1):
@@ -18,6 +29,9 @@ PODS:
   - RxDataSources (4.0.1):
     - Differentiator (~> 4.0)
     - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRealm (3.1.0):
+    - RealmSwift (~> 5.2)
     - RxSwift (~> 5.0)
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
@@ -32,43 +46,52 @@ PODS:
     - RxSwiftExt/Core
 
 DEPENDENCIES:
-  - Action (= 4.0.0)
-  - Alamofire (~> 5.1)
   - Kingfisher (~> 5.0)
+  - Moya
   - NVActivityIndicatorView
+  - RxAlamofire
   - RxBluetoothKit
   - RxCocoa (~> 5)
   - RxDataSources (~> 4.0)
+  - RxRealm
   - RxSwift (~> 5)
   - RxSwiftExt (~> 5.2.0)
 
 SPEC REPOS:
   trunk:
-    - Action
     - Alamofire
     - Differentiator
     - Kingfisher
+    - Moya
     - NVActivityIndicatorView
+    - Realm
+    - RealmSwift
+    - RxAlamofire
     - RxBluetoothKit
     - RxCocoa
     - RxDataSources
+    - RxRealm
     - RxRelay
     - RxSwift
     - RxSwiftExt
 
 SPEC CHECKSUMS:
-  Action: 0d14986aad0f1330aa27ce65d0cdeaacbb63d91c
   Alamofire: 3b6a534a3df22db367e4dedeeca73d1ddfcf0e2f
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Kingfisher: 6e1a13523fcb1c86924ce53affe4ac957e544d59
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
+  Realm: fb399d76f44042e5cdfc630f33828fdb4d077345
+  RealmSwift: 3b7e62356207ef16d34de4e55d475163bd2062bb
+  RxAlamofire: aa949d345b1689eae02b7c7a217518878144f6df
   RxBluetoothKit: dad22912b15b74a40df8f60057f218d4e851746d
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRealm: 50e5fe5c1f22518205afbb313fbc5580d73bc586
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   RxSwiftExt: 4ca80336f43c28f11a2825cdd2fc61dd6c044697
 
-PODFILE CHECKSUM: f6d783eb5c353aa92156c417728f73fbb7228e09
+PODFILE CHECKSUM: 221ee74f371b38c2433c9ea8060566243f18e548
 
 COCOAPODS: 1.9.2

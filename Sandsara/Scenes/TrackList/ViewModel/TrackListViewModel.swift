@@ -33,18 +33,13 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
     private func buildCellVM() -> [TrackCellViewModel] {
         var datas = [TrackCellViewModel]()
 
-        let playlists: [Track] = Array(repeating: Track(title: "SongTitle", author: "Author"), count: 10)
+//        let playlists: [Track] = Array(repeating: Track(title: "SongTitle", author: "Author"), count: 10)
 
-        datas = playlists.map {
-            return TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0))
-        }
+//        datas = playlists.map {
+//            return TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0))
+//        }
         return datas
     }
-}
-
-struct Track {
-    let title: String
-    let author: String
 }
 
 enum TrackCellVMContract {
