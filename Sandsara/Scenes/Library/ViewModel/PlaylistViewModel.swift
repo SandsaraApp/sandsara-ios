@@ -20,42 +20,63 @@ enum PlaylistViewModelContract {
 
 final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output> {
 
+    private let apiService: SandsaraAPIService
+    let datas = BehaviorRelay<[PlaylistCellViewModel]>(value: [])
+
+    init(apiService: SandsaraAPIService, inputs: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output>.Input) {
+        self.apiService = apiService
+        super.init(inputs: inputs)
+    }
+
     override func transform() {
-        let datas = BehaviorRelay<[PlaylistCellViewModel]>(value: [])
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
-            datas.accept(self.buildCellVM())
+            self.buildCellVM()
         }.disposed(by: disposeBag)
 
         setOutput(Output(datasources: datas.asDriver()))
     }
 
-    private func buildCellVM() -> [PlaylistCellViewModel] {
-        var datas = [PlaylistCellViewModel]()
-
-        let playlists = ["default playlist".uppercased(), "Guest artist".uppercased(), "Demo".uppercased(), "favorites".uppercased(), "Create Playlist".uppercased()]
-
-        datas = playlists.map {
-            return PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(title: $0))
+    private func buildCellVM()  {
+        var items = [PlaylistCellViewModel]()
+        if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
+            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList))))
         }
-        return datas
+
+        if DataLayer.loadPlaylists().count > 0 {
+            let localList = DataLayer.loadPlaylists().map {
+                DisplayItem(playlist: $0)
+            }.map {
+                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0))
+            }
+            items.append(contentsOf: localList)
+        }
+
+        apiService.playlists().asObservable().subscribeNext { values in
+            items.append(contentsOf: values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0)) })
+            self.datas.accept(items)
+        }.disposed(by: disposeBag)
     }
 }
 
 
 enum PlaylistCellVMContract {
     struct Input: InputType {
-        let title: String
+        let track: DisplayItem
     }
 
     struct Output: OutputType {
         let title: Driver<String>
+        let authorTitle: Driver<String>
+        let thumbnailUrl: URL?
     }
 }
 
 class PlaylistCellViewModel: BaseCellViewModel<PlaylistCellVMContract.Input,
                                                PlaylistCellVMContract.Output> {
     override func transform() {
-        setOutput(Output(title: Driver.just(inputs.title)))
+        let url = URL(string: inputs.track.thumbnail)
+        setOutput(Output(title: Driver.just(inputs.track.title),
+                         authorTitle: Driver.just(L10n.authorBy(inputs.track.author)), thumbnailUrl: url))
     }
 }

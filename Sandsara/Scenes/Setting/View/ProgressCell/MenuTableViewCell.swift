@@ -18,5 +18,13 @@ class MenuTableViewCell: BaseTableViewCell<MenuCellViewModel> {
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
     }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        if viewModel.inputs.type == .disconnect {
+            bluejay.disconnect(immediate: true)
+        }
+    }
     
 }

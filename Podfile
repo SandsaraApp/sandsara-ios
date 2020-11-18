@@ -11,10 +11,13 @@ target 'Sandsara' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
   pod 'RxSwiftExt', '~> 5.2.0'
-  pod 'Alamofire', '~> 5.1'
-  pod 'Action', '4.0.0'
   pod 'RxDataSources', '~> 4.0'
   pod 'RxBluetoothKit'
+  pod 'Moya'
+  pod 'RxRealm'
+  pod 'SwiftGen', '~> 6.0'
+  pod 'BetterSegmentedControl', '~> 2.0'
+  pod 'Bluejay', '~> 0.8'
   
   target 'SandsaraTests' do
     inherit! :search_paths

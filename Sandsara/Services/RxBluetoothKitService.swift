@@ -2,6 +2,7 @@ import Foundation
 import RxBluetoothKit
 import RxSwift
 import RxCocoa
+import CoreBluetooth
 
 // RxBluetoothKitService is a class encapsulating logic for most operations you might want to perform
 // on a CentralManager object. Here you can see an example usage of such features as scanning for peripherals,
@@ -64,7 +65,7 @@ final class RxBluetoothKitService {
 
     // MARK: - Private fields
 
-    private let centralManager = CentralManager(queue: .main)
+    private var centralManager = CentralManager(queue: .main)
 
     private let scheduler: ConcurrentDispatchQueueScheduler
 
@@ -238,6 +239,8 @@ final class RxBluetoothKitService {
             self.disconnectionSubject.onNext(Result.error(error))
         }).disposed(by: disposeBag)
     }
+
+    
 }
 
 enum RxBluetoothServiceError: Error {

@@ -6,16 +6,61 @@
 //
 
 import UIKit
-import Alamofire
+import RxSwift
+import Bluejay
+
+let bluejay = Bluejay()
+
+let ledStripService = ServiceIdentifier(uuid: "fd31a2be-22e7-11eb-adc1-0242ac120002")
+
+let ledStripSpeed = CharacteristicIdentifier(uuid: "1a9a7b7e-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let selectPattle = CharacteristicIdentifier(uuid: "1a9a813c-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let ledStripCycleEnable = CharacteristicIdentifier(uuid: "1a9a7dea-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let ledStripDirection = CharacteristicIdentifier(uuid: "1a9a8042-2305-11eb-adc1-0242ac120002", service: ledStripService)
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+
+    var discoveredDevice: ScanDiscovery?
+
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        checkConfig()
-        setTabBarAppearance()
+        DataLayer.shareInstance.config()
+        AppApperance.setTheme()
+        let backgroundRestoreConfig = BackgroundRestoreConfig(
+            restoreIdentifier: "com.ios.sandsara",
+            backgroundRestorer: self,
+            listenRestorer: self,
+            launchOptions: launchOptions)
+
+        let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
+
+        let options = StartOptions(
+            enableBluetoothAlert: true,
+            backgroundRestore: backgroundRestoreMode)
+
+        bluejay.registerDisconnectHandler(handler: self)
+        bluejay.start(mode: .new(options))
+
+        bluejay.listen(to: ledStripSpeed, multipleListenOption: .replaceable)
+        { [weak self] (result: ReadResult<UInt8>) in
+            guard let weakSelf = self else {
+                return
+            }
+
+            switch result {
+            case .success(let heartRate):
+                debugPrint("Read from sensor location is successful: \(heartRate)")
+            case .failure(let error):
+                debugPrint("Failed to listen with error: \(error.localizedDescription)")
+            }
+        }
+
         return true
     }
 
@@ -27,6 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
+        // observe connection
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -41,48 +88,118 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    private func setTabBarAppearance() {
-        if #available(iOS 13, *) {
-            let appearance = UITabBarAppearance()
-
-            appearance.backgroundColor = UIColor.appColor(.tabBar)
-            appearance.shadowImage = UIImage()
-            appearance.shadowColor = .white
-
-            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.appColor(.unselectedColor)
-            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)]
-            appearance.stackedLayoutAppearance.normal.badgeBackgroundColor = UIColor.appColor(.selectedColor)
-
-            appearance.stackedLayoutAppearance.selected.iconColor = UIColor.appColor(.selectedColor)
-            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)]
-
-            UITabBar.appearance().standardAppearance = appearance
-        } else {
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)], for: .selected)
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)], for: .normal)
-            UITabBar.appearance().tintColor = UIColor.appColor(.selectedColor)
-            UITabBar.appearance().backgroundColor =  UIColor.appColor(.tabBar)
-        }
-    }
-
-    func checkConfig() {
-        AF.request("http://uninterested-cows.surge.sh/recommend_playlist.json", method: .get) { urlRequest in
-            urlRequest.timeoutInterval = 15.0
-            urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        }.responseDecodable(of: DataItem.self) { [weak self] response in
-            guard let self = self else { return }
-            switch response.result {
-            case .success(let config):
-                Preferences.PlaylistsDomain.featuredList = config.features
-                Preferences.PlaylistsDomain.categories = config.categories
-            case .failure(let err):
-                print(err.localizedDescription)
+    func pairing() {
+        // TODO: store uuid in this function
+        guard let device = discoveredDevice else { return }
+        bluejay.connect(device.peripheralIdentifier, timeout: .seconds(15)) { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                }
+                debugPrint("Connection attempt to: \(device.peripheralIdentifier.description) is successful")
+            case .failure(let error):
+                debugPrint("Failed to connect with error: \(error.localizedDescription)")
             }
         }
     }
+
+    func getConnected() {
+        bluejay.scan(
+            duration: 15,
+            allowDuplicates: false,
+            serviceIdentifiers: nil ,
+            discovery: { [weak self] (discovery, discoveries) -> ScanAction in
+                guard let weakSelf = self else {
+                    return .stop
+                }
+                if discovery.peripheralIdentifier.name == "Sandsara BLE" {
+                    weakSelf.discoveredDevice = discovery
+                    DispatchQueue.main.async {
+                        (weakSelf.window?.rootViewController?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                    }
+                    self?.pairing()
+                    Preferences.AppDomain.connectedSandasa = [discovery.peripheralIdentifier.uuid.uuidString]
+                }
+                return .continue
+            },
+            expired: { [weak self] (lostDiscovery, discoveries) -> ScanAction in
+                guard let weakSelf = self else {
+                    return .stop
+                }
+
+                debugPrint("Lost discovery: \(lostDiscovery)")
+
+
+                return .continue
+            }) { (discoveries, error) in
+            if let error = error {
+                debugPrint("Scan stopped with error: \(error.localizedDescription)")
+            }
+            else {
+                debugPrint("Scan stopped without error.")
+            }
+        }
+
+    }
 }
 
+extension AppDelegate: BackgroundRestorer {
+    func didRestoreConnection(
+        to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
+        // Opportunity to perform syncing related logic here.
+        DispatchQueue.main.async {
+            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+        }
+        return .continue
+    }
+
+    func didFailToRestoreConnection(
+        to peripheral: PeripheralIdentifier, error: Error) -> BackgroundRestoreCompletion {
+        // Opportunity to perform cleanup or error handling logic here.
+        return .continue
+    }
+}
+
+extension AppDelegate: ListenRestorer {
+    func didReceiveUnhandledListen(
+        from peripheral: PeripheralIdentifier,
+        on characteristic: CharacteristicIdentifier,
+        with value: Data?) -> ListenRestoreAction {
+        // Re-install or defer installing a callback to a notifying characteristic.
+        return .promiseRestoration
+    }
+}
+
+extension AppDelegate: DisconnectHandler {
+    func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
+//        DispatchQueue.main.async {
+//            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
+//        }
+
+        return .noChange
+    }
+}
+
+
+extension UIApplication {
+
+    class func topViewController(_ base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(nav.visibleViewController)
+        }
+
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(selected)
+            }
+        }
+
+        if let presented = base?.presentedViewController {
+            return topViewController(presented)
+        }
+
+        return base
+    }
+
+}
