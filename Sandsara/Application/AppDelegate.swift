@@ -6,16 +6,49 @@
 //
 
 import UIKit
-import Alamofire
+import RxSwift
+import RxBluetoothKit
+import CoreBluetooth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private let bag = DisposeBag()
+
+    var connectedPeperial: Peripheral? {
+        didSet {
+            if connectedPeperial != nil {
+                centralManager.observeConnect(for: connectedPeperial).subscribeNext {
+                    print($0.state)
+                }.disposed(by: bag)
+            }
+        }
+    }
+
+    // 1) - initialization of CentralManager
+    private let centralManager: CentralManager = {
+        let bluetoothCommunicationSerialQueue = DispatchQueue(label: "bluetoothCommunicationSerialQueue")
+        let centralManagerOptions = [
+            // The system uses this UID to identify a specific central manager.
+            // As a result, the UID must remain the same for subsequent executions of
+            // the app in order for the central manager to be successfully restored.
+            CBCentralManagerOptionRestoreIdentifierKey: "com.ios.sandsara",
+            // A Boolean value that specifies whether the system should display a warning dialog
+            // to the user if Bluetooth is powered off when the central manager is instantiated.
+            CBCentralManagerOptionShowPowerAlertKey: true
+        ] as [String: AnyObject]
+
+        return CentralManager(queue: bluetoothCommunicationSerialQueue, options: centralManagerOptions)
+    }()
+
+
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        checkConfig()
-        setTabBarAppearance()
+        DataLayer.shareInstance.config()
+        AppApperance.setTheme()
+
+        getConnected()
         return true
     }
 
@@ -27,6 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
+        // observe connection
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -41,48 +76,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    private func setTabBarAppearance() {
-        if #available(iOS 13, *) {
-            let appearance = UITabBarAppearance()
-
-            appearance.backgroundColor = UIColor.appColor(.tabBar)
-            appearance.shadowImage = UIImage()
-            appearance.shadowColor = .white
-
-            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.appColor(.unselectedColor)
-            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)]
-            appearance.stackedLayoutAppearance.normal.badgeBackgroundColor = UIColor.appColor(.selectedColor)
-
-            appearance.stackedLayoutAppearance.selected.iconColor = UIColor.appColor(.selectedColor)
-            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)]
-
-            UITabBar.appearance().standardAppearance = appearance
-        } else {
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.selectedColor)], for: .selected)
-            UITabBarItem.appearance()
-                .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: UIColor.appColor(.unselectedColor)], for: .normal)
-            UITabBar.appearance().tintColor = UIColor.appColor(.selectedColor)
-            UITabBar.appearance().backgroundColor =  UIColor.appColor(.tabBar)
-        }
+    func pairing() {
+        // TODO: store uuid in this function
+        let timerQueue = DispatchQueue(label: "com.ios.sandsara.timer")
+        let scheduler = ConcurrentDispatchQueueScheduler(queue: timerQueue)
+        centralManager.observeState()
+            .startWith(centralManager.state)
+            .filter {
+                $0 == .poweredOn
+            }
+            .subscribeOn(MainScheduler.instance)
+            .debounce(RxTimeInterval.milliseconds(400), scheduler: scheduler)
+            .flatMap { [weak self] _ -> Observable<ScannedPeripheral> in
+                guard let `self` = self else {
+                    return Observable.empty()
+                }
+                return self.centralManager.scanForPeripherals(withServices: nil)
+            }.subscribe(onNext: { [weak self] scannedPeripheral in
+                guard let self = self else { return }
+                if scannedPeripheral.peripheral.name == "Sandsara BLE" {
+                    self.centralManager.establishConnection(scannedPeripheral.peripheral).subscribe(onNext: { [weak self] device in
+                        guard let self = self else { return }
+                        self.connectedPeperial = device
+                        (self.window?.rootViewController?.tabBarController?.popupBar as? PlayerBarViewController)?.state = .connected
+                        print("connected")
+                    }, onError: { [weak self] error in
+                        print(error.localizedDescription)
+                    }).disposed(by: self.bag)
+                }
+            }, onError: { [weak self] error in
+                print(error)
+            }).disposed(by: bag)
     }
 
-    func checkConfig() {
-        AF.request("http://uninterested-cows.surge.sh/recommend_playlist.json", method: .get) { urlRequest in
-            urlRequest.timeoutInterval = 15.0
-            urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        }.responseDecodable(of: DataItem.self) { [weak self] response in
-            guard let self = self else { return }
-            switch response.result {
-            case .success(let config):
-                Preferences.PlaylistsDomain.featuredList = config.features
-                Preferences.PlaylistsDomain.categories = config.categories
-            case .failure(let err):
-                print(err.localizedDescription)
+    func getConnected() {
+        // TODO :get connected devices
+
+        if centralManager.retrieveConnectedPeripherals(withServices: []).isEmpty {
+            pairing()
+        } else {
+            if let item = centralManager.retrieveConnectedPeripherals(withServices: []).filter { $0.peripheral.name == "Sandsara BLE" }.first {
+                self.connectedPeperial = item
             }
         }
+
+        // TODO: connect to a connected , get characteristics
+
+        // TODO: not found then run pair function
+
     }
 }
 
