@@ -23,6 +23,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             tableView
                 .rx.setDelegate(self)
                 .disposed(by: disposeBag)
+
+            tableView.separatorStyle = .none
         }
     }
 
@@ -46,6 +48,19 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        let player = PlayerViewController.shared
+        player.modalPresentationStyle = .fullScreen
+        player.selecledIndex.accept(0)
+        player.tracks = []
+        player.popupContentView.popupCloseButtonStyle = .none
+
+        let customBar = self.storyboard?.instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
+        customBar.state = bluejay.isConnected ? .connected : .noConnect
+        tabBarController?.popupBar.customBarViewController = customBar
+        tabBarController?.popupBar.isHidden = false
+        tabBarController?.popupContentView.popupCloseButton.isHidden = true
+        tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
         viewWillAppearTrigger.accept(())
     }
 

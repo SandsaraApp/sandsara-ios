@@ -60,7 +60,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ProgressTableViewCell.identifier, for: indexPath) as? ProgressTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .pause(let viewModel):
+                case .pause(let viewModel), .lightMode(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ToogleTableViewCell.identifier, for: indexPath) as? ToogleTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
@@ -68,7 +68,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoTableViewCell.identifier, for: indexPath) as? TwoTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .draw(let viewModel), .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel), .sleep(let viewModel), .firmwareUpdate(let viewModel), .lightMode(let viewModel), .nightMode(let viewModel):
+                case .draw(let viewModel), .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel), .sleep(let viewModel), .firmwareUpdate(let viewModel), .nightMode(let viewModel), .disconnect(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell

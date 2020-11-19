@@ -13,21 +13,28 @@ import RxDataSources
 class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> {
 
 
+    static var shared: PlayerViewController = {
+        let playerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: PlayerViewController.identifier) as! PlayerViewController
+        return playerVC
+    }()
+
     @IBOutlet weak var songTitleLabel: UILabel!
     @IBOutlet weak var songAuthorLabel: UILabel!
     @IBOutlet weak var trackImageView: UIImageView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var backBtn: UIButton!
 
-    private(set) var selecledIndex = BehaviorRelay<Int>(value: 0)
+    var selecledIndex = BehaviorRelay<Int>(value: 0)
     var tracks = [DisplayItem]()
+
+    var isReloaded = BehaviorRelay<Bool>(value: false)
 
     typealias Section = SectionModel<String, TrackCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+
         setupTableView()
         songTitleLabel.textColor = Asset.primary.color
         songAuthorLabel.textColor = Asset.secondary.color
@@ -35,16 +42,26 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         songAuthorLabel.font = FontFamily.OpenSans.regular.font(size: 14)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupViewModel()
+        bindViewModel()
+        viewModel.viewModelDidBind()
+    }
+
     override func setupViewModel() {
-        viewModel = PlayerViewModel(inputs: PlayerViewModelContract.Input(selectedIndex: selecledIndex, tracks: tracks))
+        viewModel = PlayerViewModel(inputs: PlayerViewModelContract.Input(selectedIndex: selecledIndex, tracks: tracks, isReloaded: isReloaded))
     }
 
     override func bindViewModel() {
-        viewModel.outputs.datasources.map {
+        viewModel.outputs.datasources.filter { !$0.isEmpty }.map {
             [Section(model: "", items: $0)]
+        }.do {
+            self.tableView.dataSource = nil
+            self.tableView.delegate = nil
         }.drive(tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
 
-        viewModel.outputs.trackDisplay.driveNext { [weak self] track in
+        viewModel.outputs.trackDisplay.compactMap { $0 }.driveNext { [weak self] track in
             self?.songTitleLabel.text = track.title
             self?.songAuthorLabel.text = L10n.authorBy(track.author)
             self?.trackImageView.kf.setImage(with: URL(string: track.thumbnail))
