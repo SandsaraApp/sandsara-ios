@@ -37,6 +37,7 @@ extension Decodable {
                 let object = try JSONDecoder().decode(type, from: data)
                 return object
             } catch let error {
+                debugPrint(error.localizedDescription)
                 return nil
             }
         }

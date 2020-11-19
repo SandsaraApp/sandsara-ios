@@ -23,6 +23,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             tableView
                 .rx.setDelegate(self)
                 .disposed(by: disposeBag)
+
+            tableView.separatorStyle = .none
         }
     }
 
@@ -46,6 +48,12 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            once.run {
+                delegate.initPlayerBar()
+            }
+        }
         viewWillAppearTrigger.accept(())
     }
 
@@ -78,11 +86,6 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
     }
 
     override func bindViewModel() {
-//        viewModel
-//            .isLoading
-//            .drive(activityIndicatorView.rx.isAnimating)
-//            .disposed(by: disposeBag)
-
         viewModel
             .outputs
             .datasources

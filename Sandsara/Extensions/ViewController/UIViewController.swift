@@ -7,6 +7,17 @@
 
 import UIKit
 
+class Once {
+    var already: Bool = false
+
+    func run(block: () -> Void) {
+        guard !already else { return }
+
+        block()
+        already = true
+    }
+}
+
 extension UIViewController {
     static var identifier: String {
         get {
@@ -38,6 +49,14 @@ extension UIViewController {
             navigationController?.navigationBar.isTranslucent = false
             navigationItem.title = title
         }
+    }
+
+    func showAlertVC(message: String) {
+        let alertVC = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+
+        alertVC.addAction(UIAlertAction(title: "Try Again", style: .default, handler: nil))
+
+        present(alertVC, animated: true, completion: nil)
     }
 }
 

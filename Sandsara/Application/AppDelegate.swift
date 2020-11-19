@@ -7,48 +7,53 @@
 
 import UIKit
 import RxSwift
-import RxBluetoothKit
-import CoreBluetooth
+import Bluejay
+import AppCenter
+import AppCenterAnalytics
+import AppCenterCrashes
+
+let bluejay = Bluejay()
+
+let ledStripService = ServiceIdentifier(uuid: "fd31a2be-22e7-11eb-adc1-0242ac120002")
+
+let ledStripSpeed = CharacteristicIdentifier(uuid: "1a9a7b7e-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let selectPattle = CharacteristicIdentifier(uuid: "1a9a813c-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let ledStripCycleEnable = CharacteristicIdentifier(uuid: "1a9a7dea-2305-11eb-adc1-0242ac120002", service: ledStripService)
+
+let ledStripDirection = CharacteristicIdentifier(uuid: "1a9a8042-2305-11eb-adc1-0242ac120002", service: ledStripService)
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let bag = DisposeBag()
 
-    var connectedPeperial: Peripheral? {
-        didSet {
-            if connectedPeperial != nil {
-                centralManager.observeConnect(for: connectedPeperial).subscribeNext {
-                    print($0.state)
-                }.disposed(by: bag)
-            }
-        }
-    }
-
-    // 1) - initialization of CentralManager
-    private let centralManager: CentralManager = {
-        let bluetoothCommunicationSerialQueue = DispatchQueue(label: "bluetoothCommunicationSerialQueue")
-        let centralManagerOptions = [
-            // The system uses this UID to identify a specific central manager.
-            // As a result, the UID must remain the same for subsequent executions of
-            // the app in order for the central manager to be successfully restored.
-            CBCentralManagerOptionRestoreIdentifierKey: "com.ios.sandsara",
-            // A Boolean value that specifies whether the system should display a warning dialog
-            // to the user if Bluetooth is powered off when the central manager is instantiated.
-            CBCentralManagerOptionShowPowerAlertKey: true
-        ] as [String: AnyObject]
-
-        return CentralManager(queue: bluetoothCommunicationSerialQueue, options: centralManagerOptions)
-    }()
-
+    var discoveredDevice: ScanDiscovery?
 
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         DataLayer.shareInstance.config()
         AppApperance.setTheme()
+        let backgroundRestoreConfig = BackgroundRestoreConfig(
+            restoreIdentifier: "com.ios.sandsara",
+            backgroundRestorer: self,
+            listenRestorer: self,
+            launchOptions: launchOptions)
 
-        getConnected()
+        let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
+
+        let options = StartOptions(
+            enableBluetoothAlert: true,
+            backgroundRestore: backgroundRestoreMode)
+
+        bluejay.registerDisconnectHandler(handler: self)
+        bluejay.start(mode: .new(options))
+
+        AppCenter.start(withAppSecret: "c037a178-abc5-4a57-bb58-cc53c3fb43d6", services:[
+            Analytics.self,
+            Crashes.self
+        ])
         return true
     }
 
@@ -78,52 +83,128 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func pairing() {
         // TODO: store uuid in this function
-        let timerQueue = DispatchQueue(label: "com.ios.sandsara.timer")
-        let scheduler = ConcurrentDispatchQueueScheduler(queue: timerQueue)
-        centralManager.observeState()
-            .startWith(centralManager.state)
-            .filter {
-                $0 == .poweredOn
+        guard let device = discoveredDevice else { return }
+        bluejay.connect(device.peripheralIdentifier, timeout: .seconds(15)) { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                }
+                debugPrint("Connection attempt to: \(device.peripheralIdentifier.description) is successful")
+            case .failure(let error):
+                debugPrint("Failed to connect with error: \(error.localizedDescription)")
             }
-            .subscribeOn(MainScheduler.instance)
-            .debounce(RxTimeInterval.milliseconds(400), scheduler: scheduler)
-            .flatMap { [weak self] _ -> Observable<ScannedPeripheral> in
-                guard let `self` = self else {
-                    return Observable.empty()
-                }
-                return self.centralManager.scanForPeripherals(withServices: nil)
-            }.subscribe(onNext: { [weak self] scannedPeripheral in
-                guard let self = self else { return }
-                if scannedPeripheral.peripheral.name == "Sandsara BLE" {
-                    self.centralManager.establishConnection(scannedPeripheral.peripheral).subscribe(onNext: { [weak self] device in
-                        guard let self = self else { return }
-                        self.connectedPeperial = device
-                        (self.window?.rootViewController?.tabBarController?.popupBar as? PlayerBarViewController)?.state = .connected
-                        print("connected")
-                    }, onError: { [weak self] error in
-                        print(error.localizedDescription)
-                    }).disposed(by: self.bag)
-                }
-            }, onError: { [weak self] error in
-                print(error)
-            }).disposed(by: bag)
+        }
     }
 
     func getConnected() {
-        // TODO :get connected devices
-
-        if centralManager.retrieveConnectedPeripherals(withServices: []).isEmpty {
-            pairing()
-        } else {
-            if let item = centralManager.retrieveConnectedPeripherals(withServices: []).filter { $0.peripheral.name == "Sandsara BLE" }.first {
-                self.connectedPeperial = item
+        bluejay.scan(
+            duration: 15,
+            allowDuplicates: false,
+            serviceIdentifiers: nil ,
+            discovery: { [weak self] (discovery, discoveries) -> ScanAction in
+                guard let weakSelf = self else {
+                    return .stop
+                }
+                if discovery.peripheralIdentifier.name == "Sandsara BLE" {
+                    weakSelf.discoveredDevice = discovery
+                    DispatchQueue.main.async {
+                        (weakSelf.window?.rootViewController?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                    }
+                    self?.pairing()
+                    Preferences.AppDomain.connectedSandasa = [discovery.peripheralIdentifier.uuid.uuidString]
+                }
+                return .continue
+            },
+            expired: { [weak self] (lostDiscovery, discoveries) -> ScanAction in
+                guard let weakSelf = self else {
+                    return .stop
+                }
+                debugPrint("Lost discovery: \(lostDiscovery)")
+                return .continue
+            }) { (discoveries, error) in
+            if let error = error {
+                debugPrint("Scan stopped with error: \(error.localizedDescription)")
+            }
+            else {
+                debugPrint("Scan stopped without error.")
             }
         }
+    }
 
-        // TODO: connect to a connected , get characteristics
+    func initPlayerBar() {
+        let player = PlayerViewController.shared
+        player.modalPresentationStyle = .fullScreen
+        player.selecledIndex.accept(0)
+        player.tracks = []
+        player.popupContentView.popupCloseButtonStyle = .none
 
-        // TODO: not found then run pair function
-
+        if UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController == nil {
+            let customBar = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
+            customBar.state = bluejay.isConnected ? .connected : .noConnect
+            UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController = customBar
+        }
+        UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
+        UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
+        UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
     }
 }
 
+extension AppDelegate: BackgroundRestorer {
+    func didRestoreConnection(
+        to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
+        // Opportunity to perform syncing related logic here.
+        DispatchQueue.main.async {
+            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+        }
+        return .continue
+    }
+
+    func didFailToRestoreConnection(
+        to peripheral: PeripheralIdentifier, error: Error) -> BackgroundRestoreCompletion {
+        // Opportunity to perform cleanup or error handling logic here.
+        return .continue
+    }
+}
+
+extension AppDelegate: ListenRestorer {
+    func didReceiveUnhandledListen(
+        from peripheral: PeripheralIdentifier,
+        on characteristic: CharacteristicIdentifier,
+        with value: Data?) -> ListenRestoreAction {
+        // Re-install or defer installing a callback to a notifying characteristic.
+        return .promiseRestoration
+    }
+}
+
+extension AppDelegate: DisconnectHandler {
+    func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
+        DispatchQueue.main.async {
+            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
+        }
+        return .change(shouldAutoReconnect: false)
+    }
+}
+
+
+extension UIApplication {
+
+    class func topViewController(_ base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(nav.visibleViewController)
+        }
+
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(selected)
+            }
+        }
+
+        if let presented = base?.presentedViewController {
+            return topViewController(presented)
+        }
+
+        return base
+    }
+
+}

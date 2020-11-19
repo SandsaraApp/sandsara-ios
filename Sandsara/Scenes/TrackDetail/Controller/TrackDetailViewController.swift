@@ -68,20 +68,15 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     }
 
     private func showPlayer() {
-        let player = self.storyboard?.instantiateViewController(withIdentifier: PlayerViewController.identifier) as! PlayerViewController
+        let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
         player.selecledIndex.accept(self.selecledIndex)
         player.tracks = self.tracks
-        player.popupContentView.popupCloseButtonStyle = .none
-
-        let customBar = self.storyboard?.instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
-        if let delegate = UIApplication.shared.delegate as? AppDelegate {
-            customBar.state = delegate.connectedPeperial == nil ? .noConnect : .connected
-        }
-
-        tabBarController?.popupBar.customBarViewController = customBar
-        tabBarController?.presentPopupBar(withContentViewController: player, animated: true, completion: nil)
-
+        player.isReloaded.accept(true)
+        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: self.tracks[self.selecledIndex])
+        tabBarController?.popupBar.isHidden = false
+        tabBarController?.popupContentView.popupCloseButton.isHidden = true
+        tabBarController?.presentPopupBar(withContentViewController: player, openPopup: true, animated: false, completion: nil)
     }
 
 }

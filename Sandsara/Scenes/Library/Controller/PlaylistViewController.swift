@@ -64,7 +64,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
-            configureCell: { [weak self] (_, tableView, indexPath, viewModel) -> UITableViewCell in
+            configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell else { return UITableViewCell()}
                 cell.bind(to: viewModel)
                 return cell

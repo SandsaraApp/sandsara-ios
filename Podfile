@@ -17,7 +17,9 @@ target 'Sandsara' do
   pod 'RxRealm'
   pod 'SwiftGen', '~> 6.0'
   pod 'BetterSegmentedControl', '~> 2.0'
-  
+  pod 'Bluejay', '~> 0.8'
+  pod 'AppCenter'
+
   target 'SandsaraTests' do
     inherit! :search_paths
     # Pods for testing

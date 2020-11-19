@@ -43,21 +43,23 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
         datas.append(.speed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .brightness,
                                                                                        progress: BehaviorRelay(value: 0.2)))))
 
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .lightMode))))
-
-        datas.append(.colorSettings(ColorSettingsCellViewModel(inputs: ColorSettingsCellVMContract.Input(type: .colorSettings))))
-
-        datas.append(.speed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .lightTemp,
-                                                                                       progress: BehaviorRelay(value: 0.2)))))
-
-
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .nightMode))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .advanced))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .visitSandsara))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .help))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareUpdate))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .sleep))))
-        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .draw))))
+        datas.append(.lightMode(ToogleCellViewModel(inputs: ToogleCellVMContract.Input(type: .lightMode,
+                                                                                       toogle: BehaviorRelay(value: false)))))
+//
+//        datas.append(.colorSettings(ColorSettingsCellViewModel(inputs: ColorSettingsCellVMContract.Input(type: .colorSettings))))
+//
+//        datas.append(.speed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .lightTemp,
+//                                                                                       progress: BehaviorRelay(value: 0.2)))))
+//
+//
+//        datas.append(.nightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .nightMode))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .advanced))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .visitSandsara))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .help))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareUpdate))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .sleep))))
+//        datas.append(.lightMode(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .draw))))
+//        datas.append(.disconnect(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .disconnect))))
         return datas
     }
 }
