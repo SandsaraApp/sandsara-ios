@@ -43,6 +43,8 @@ struct AppApperance {
     }
 
     private static func setNavApperrance() {
+        UINavigationBar.appearance().tintColor = Asset.primary.color
+        UINavigationBar.appearance().barTintColor = Asset.primary.color
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes
             .updateValue(Asset.primary.color, forKey: NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue))
         UINavigationBar.appearance().isTranslucent = true
@@ -59,9 +61,9 @@ struct AppApperance {
             UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         } else {
             // Fallback on earlier versions
-            UINavigationBar.appearance().tintColor = Asset.primary.color
             UINavigationBar.appearance().backgroundColor = Asset.background.color
-            UINavigationBar.appearance().barTintColor = Asset.primary.color
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: Asset.primary.color]
+            UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: Asset.primary.color]
         }
     }
 }

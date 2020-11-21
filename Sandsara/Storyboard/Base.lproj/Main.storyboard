@@ -37,6 +37,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="backBtn" destination="MqV-gt-TMI" id="Flp-p5-Kgl"/>
                         <outlet property="tableView" destination="dkp-j9-4i8" id="jB6-g4-AnO"/>
                     </connections>
                 </viewController>
