@@ -19,6 +19,7 @@ struct NoOutputParam: OutputParamView {}
 
 class BaseViewController<Input: InputParamView>: UIViewController {
 
+    let once = Once()
     private let _disposeBag = DisposeBag()
     var disposeBag: DisposeBag! {
         return _disposeBag
@@ -42,6 +43,7 @@ class BaseViewController<Input: InputParamView>: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Asset.background.color
     }
 
     /// Setup layout navigation bar item

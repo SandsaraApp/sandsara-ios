@@ -1,0 +1,24 @@
+/* 
+  Localize.strings
+  Sandsara
+
+  Created by Tín Phan on 14/11/2020.
+  
+*/
+
+"recommended_playlists" = "Recomended Playlists";
+"recommended_tracks" = "Recomended Tracks";
+"no_sandsara_detected" = "No Sandsara detected.";
+"author_by" = "By %@";
+"tracks" = "Tracks";
+"playlists" = "Playlists";
+"play" = "Play";
+"favorite" = "Favorite";
+"favorited" = "Favorited";
+"add_to_playlist" = "Add to Playlist";
+"create_playlist" = "Create new playlist";
+"ok" = "Ok";
+"cancel" = "Cancel";
+"duplicate_found" = "Duplicate track found";
+"add_anyway" = "Add anyway";
+"sandsara_detected" = "Sandsara detected.";

@@ -7,14 +7,15 @@
 
 import UIKit
 import RxSwift
-import RxCocoa
 import RxDataSources
+import RxCocoa
+import Moya
 
 class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
 
-    private let viewWillAppearTrigger = PublishRelay<()>()
+    let viewWillAppearTrigger = PublishRelay<()>()
 
     typealias Section = SectionModel<String, PlaylistCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
@@ -25,7 +26,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     override func setupViewModel() {
         setupTableView()
-        viewModel = PlaylistViewModel(inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = PlaylistViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -45,7 +46,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
-                trackList.playlistTitle = model.inputs.title
+                trackList.playlistTitle = model.inputs.track.title
                 self.navigationController?.pushViewController(trackList, animated: true)
             }.disposed(by: disposeBag)
     }
@@ -55,7 +56,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         tableView.tableFooterView = UIView()
 
         tableView.register(PlaylistTableViewCell.nib, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
-
+        tableView.backgroundColor = Asset.background.color
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -63,7 +64,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
-            configureCell: { [weak self] (_, tableView, indexPath, viewModel) -> UITableViewCell in
+            configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell else { return UITableViewCell()}
                 cell.bind(to: viewModel)
                 return cell
@@ -73,11 +74,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 }
 
 extension PlaylistViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cellHeightsDictionary[indexPath] = cell.frame.size.height
-    }
-
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeightsDictionary[indexPath] ?? UITableView.automaticDimension
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 96.0
     }
 }

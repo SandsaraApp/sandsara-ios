@@ -14,7 +14,7 @@ enum SettingItemCellType {
     case speed(ProgressCellViewModel)
     case pause(ToogleCellViewModel)
     case brightness(ProgressCellViewModel)
-    case lightMode(MenuCellViewModel)
+    case lightMode(ToogleCellViewModel)
     case colorSettings(ColorSettingsCellViewModel)
     case lightTemp(ProgressCellViewModel)
     case nightMode(MenuCellViewModel)
@@ -24,6 +24,7 @@ enum SettingItemCellType {
     case firmwareUpdate(MenuCellViewModel)
     case sleep(MenuCellViewModel)
     case draw(MenuCellViewModel)
+    case disconnect(MenuCellViewModel)
 }
 
 enum SettingItemType {
@@ -40,17 +41,18 @@ enum SettingItemType {
     case firmwareUpdate
     case sleep
     case draw
+    case disconnect
 
     var title: String {
         switch self {
         case .speed:
             return "Speed"
         case .pause:
-            return "Pause between tracks"
+            return "Led strip direction"
         case .brightness:
-            return "Brightness"
+            return "Color Palette"
         case .lightMode:
-            return "Lighting Mode"
+            return "Led Strip Cycle Mode Enable/ Disable"
         case .colorSettings:
             return "Color Settings"
         case .lightTemp:
@@ -65,6 +67,7 @@ enum SettingItemType {
         case .firmwareUpdate: return "Firmware update"
         case .sleep: return "Sleep"
         case .draw: return "Draw"
+        case .disconnect: return "Disconnect"
         }
     }
 }
@@ -107,6 +110,16 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
 
     func sendCommand(command: String) {
         // TODO: support multi type here
+        if inputs.type == .speed {
+            bluejay.write(to: ledStripSpeed, value: command) { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }
 
