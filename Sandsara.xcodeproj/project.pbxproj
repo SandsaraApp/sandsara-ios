@@ -18,9 +18,6 @@
 		9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C71B2556AFA10092FBB6 /* AppError.swift */; };
 		9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */; };
 		9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */; };
-		9228C7702557EA950092FBB6 /* CellUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C76F2557EA950092FBB6 /* CellUpdatable.swift */; };
-		9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */; };
-		9228C7842557EC330092FBB6 /* SectionModelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7822557EC330092FBB6 /* SectionModelItem.swift */; };
 		9228C7DB255817A60092FBB6 /* Prefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7DA255817A60092FBB6 /* Prefrences.swift */; };
 		9228C7E62558185C0092FBB6 /* BrowseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */; };
 		9228C7F4255818B00092FBB6 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7F3255818B00092FBB6 /* BrowseViewController.swift */; };
@@ -31,6 +28,9 @@
 		924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5225565F880013CC71 /* LaunchScreen.storyboard */; };
 		924EDF5F25565F880013CC71 /* SandsaraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF5E25565F880013CC71 /* SandsaraTests.swift */; };
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
+		9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72A256A0C60004450CA /* SandsaraDataService.swift */; };
+		9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */; };
+		9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F737256A1527004450CA /* Cell+Extensions.swift */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -154,9 +154,6 @@
 		9228C71B2556AFA10092FBB6 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVMViewController.swift; sourceTree = "<group>"; };
 		9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Rx+Shortcuts.swift"; sourceTree = "<group>"; };
-		9228C76F2557EA950092FBB6 /* CellUpdatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellUpdatable.swift; sourceTree = "<group>"; };
-		9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifier.swift; sourceTree = "<group>"; };
-		9228C7822557EC330092FBB6 /* SectionModelItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionModelItem.swift; sourceTree = "<group>"; };
 		9228C7DA255817A60092FBB6 /* Prefrences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefrences.swift; sourceTree = "<group>"; };
 		9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewModel.swift; sourceTree = "<group>"; };
 		9228C7F3255818B00092FBB6 /* BrowseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +167,9 @@
 		924EDF6525565F880013CC71 /* SandsaraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SandsaraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF6925565F880013CC71 /* SandsaraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraUITests.swift; sourceTree = "<group>"; };
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9263F72A256A0C60004450CA /* SandsaraDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataService.swift; sourceTree = "<group>"; };
+		9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataAccess.swift; sourceTree = "<group>"; };
+		9263F737256A1527004450CA /* Cell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Extensions.swift"; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -360,6 +360,7 @@
 			children = (
 				9228C6C925569E050092FBB6 /* UIAlertController.swift */,
 				9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */,
+				9263F737256A1527004450CA /* Cell+Extensions.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -430,16 +431,6 @@
 			path = Rx;
 			sourceTree = "<group>";
 		};
-		9228C76E2557EA770092FBB6 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				9228C76F2557EA950092FBB6 /* CellUpdatable.swift */,
-				9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */,
-				9228C7822557EC330092FBB6 /* SectionModelItem.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		9228C7CA255810280092FBB6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,6 +446,7 @@
 			children = (
 				9228C7DA255817A60092FBB6 /* Prefrences.swift */,
 				92BA99E62560B6EF00564782 /* DataLayer.swift */,
+				9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -531,7 +523,6 @@
 				92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */,
 				92A284A62560D7F500739A94 /* Generated */,
 				9228C68425569B740092FBB6 /* Application */,
-				9228C76E2557EA770092FBB6 /* Common */,
 				9228C6C725569DEF0092FBB6 /* Extensions */,
 				9228C71A2556AF4A0092FBB6 /* Model */,
 				92698E87255FED95009F3A9F /* Network */,
@@ -567,6 +558,7 @@
 			children = (
 				92698E88255FEDA7009F3A9F /* Endpoint.swift */,
 				927C7F7C255FF294009F8898 /* APIService.swift */,
+				9263F72A256A0C60004450CA /* SandsaraDataService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1101,18 +1093,19 @@
 				92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */,
 				92D647BA255CB6E000856900 /* TrackListViewController.swift in Sources */,
 				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
-				9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */,
 				92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */,
 				9228C7F4255818B00092FBB6 /* BrowseViewController.swift in Sources */,
-				9228C7842557EC330092FBB6 /* SectionModelItem.swift in Sources */,
+				9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */,
 				92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */,
 				92BCE73425616E520029DD3F /* HeaderView.swift in Sources */,
 				92698EB2255FEFF1009F3A9F /* Single+Response.swift in Sources */,
 				92D647C2255CB83B00856900 /* TrackDetailViewController.swift in Sources */,
 				927C7F82255FF33A009F8898 /* Playlist.swift in Sources */,
 				92D66336255AE3FE00CE3F8E /* RecommendTableViewCell.swift in Sources */,
+				9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */,
 				92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */,
 				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
+				9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */,
 				92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
 				927C7F87255FF360009F8898 /* Track.swift in Sources */,
@@ -1121,7 +1114,6 @@
 				92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
 				92A284E92560E04400739A94 /* BaseCollectionViewCell.swift in Sources */,
-				9228C7702557EA950092FBB6 /* CellUpdatable.swift in Sources */,
 				927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */,
 				92BA99EC2560B9F500564782 /* ApperanceService.swift in Sources */,
 				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,

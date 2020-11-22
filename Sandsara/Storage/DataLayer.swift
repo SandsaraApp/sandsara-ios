@@ -9,6 +9,7 @@ import RealmSwift
 import RxRealm
 import RxSwift
 
+// MARK: - Realm Datalayer
 class DataLayer {
     static let shareInstance = DataLayer()
     static let realm = try? Realm()

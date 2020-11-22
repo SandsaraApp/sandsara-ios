@@ -12,11 +12,34 @@ class TracksResponse: Decodable {
     let tracks: [Track]
 }
 
-class Track: Decodable {
-    let title: String
-    let author: String
-    let thumbnail: String
-    let id: Int
+class Track: Codable {
+    var id = 0
+    var title = ""
+    var thumbnail = ""
+    var author = ""
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case thumbnail
+        case author
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        container.decodeIfPresent(Int.self, forKey: .id, assignTo: &id)
+        container.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
+        container.decodeIfPresent(String.self, forKey: .thumbnail, assignTo: &thumbnail)
+        container.decodeIfPresent(String.self, forKey: .author, assignTo: &author)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(title, forKey: .title)
+        try container.encode(thumbnail, forKey: .thumbnail)
+        try container.encode(author, forKey: .author)
+    }
 }
 
 class LocalTrack: Object {

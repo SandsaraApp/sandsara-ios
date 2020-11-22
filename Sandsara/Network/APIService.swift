@@ -24,7 +24,7 @@ protocol APIServiceCall {
 
 class SandsaraAPIService: APIServiceCall {
 
-    private let apiProvider: MoyaProvider<SandsaraAPI>
+    let apiProvider: MoyaProvider<SandsaraAPI>
 
     init(apiProvider: MoyaProvider<SandsaraAPI>) {
         self.apiProvider = apiProvider
