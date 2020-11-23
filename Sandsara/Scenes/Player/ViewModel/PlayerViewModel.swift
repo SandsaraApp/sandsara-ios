@@ -12,7 +12,6 @@ enum PlayerViewModelContract {
     struct Input: InputType {
         let selectedIndex: BehaviorRelay<Int>
         let tracks: [DisplayItem]
-        let isReloaded: BehaviorRelay<Bool>
     }
 
     struct Output: OutputType {
@@ -23,34 +22,24 @@ enum PlayerViewModelContract {
 
 class PlayerViewModel: BaseViewModel<PlayerViewModelContract.Input, PlayerViewModelContract.Output> {
 
+    let displayTrack = BehaviorRelay<DisplayItem?>(value: nil)
+    let datas = BehaviorRelay<[TrackCellViewModel]>(value: [])
+
     override func transform() {
-        inputs.isReloaded.subscribeNext { [weak self] in
-            if $0 {
-                self?.reloadData()
-            } else {
-                self?.placeHolderData()
-            }
-        }.disposed(by: disposeBag)
+        datas.accept(inputs.tracks.map {
+            TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0))
+        })
+        self.inputs.selectedIndex.subscribeNext { value in
+            guard !self.inputs.tracks.isEmpty else { return }
+            self.displayTrack.accept(self.inputs.tracks[value])
+        }.disposed(by: self.disposeBag)
+        self.setOutput(Output(trackDisplay: self.displayTrack.asDriver(onErrorJustReturn: nil),
+                              datasources: datas.asDriver()))
     }
 
     private func placeHolderData() {
-        self.setOutput(Output(trackDisplay: Driver.just(nil),
-                              datasources: Driver.just([])))
+        displayTrack.accept(nil)
+        datas.accept([])
     }
-
-    private func reloadData() {
-        let displayTrack = self.inputs.tracks.count > 0 ? self.inputs.tracks[self.inputs.selectedIndex.value] : nil
-        var updatedList = self.inputs.tracks
-        self.inputs.selectedIndex.subscribeNext { value in
-            if !updatedList.isEmpty {
-                updatedList.remove(at: self.inputs.selectedIndex.value)
-            }
-        }.disposed(by: self.disposeBag)
-
-        self.setOutput(Output(trackDisplay: Driver.just(displayTrack),
-                              datasources: Driver.just(updatedList.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) })))
-    }
-
-
 }
 

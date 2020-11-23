@@ -9,6 +9,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 import NVActivityIndicatorView
+import Reachability
+import SVProgressHUD
 
 // MARK: - Input & Ouput for View
 protocol InputParamView {}
@@ -32,10 +34,10 @@ class BaseViewController<Input: InputParamView>: UIViewController {
                                 y: indicatorY,
                                 width: 50,
                                 height: 50)
-        var  loadingActivity = NVActivityIndicatorView(frame: centerRect,
-                                                       type: .ballClipRotatePulse,
-                                                       color: .blue,
-                                                       padding: nil)
+        var loadingActivity = NVActivityIndicatorView(frame: centerRect,
+                                                      type: .ballClipRotatePulse,
+                                                      color: Asset.primary.color,
+                                                      padding: nil)
         view.addSubview(loadingActivity)
         view.bringSubviewToFront(loadingActivity)
         return loadingActivity
@@ -45,6 +47,18 @@ class BaseViewController<Input: InputParamView>: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Asset.background.color
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+
 
     /// Setup layout navigation bar item
     private func initBarButtonItem(isRight: Bool, image: UIImage?) -> UIBarButtonItem {
@@ -75,4 +89,33 @@ class BaseViewController<Input: InputParamView>: UIViewController {
     @objc func rightButtonClick() {}
 
     @objc func lefttButtonClick() {}
+
+    func triggerAPIAgain() {}
+
+    private func setHUDStyle() {
+        SVProgressHUD.setDefaultStyle(.custom)
+        SVProgressHUD.setMaximumDismissTimeInterval(0.8)
+        SVProgressHUD.setBackgroundColor(Asset.primary.color)
+        SVProgressHUD.setForegroundColor(Asset.background.color)
+    }
+
+    func showErrorHUD(message: String) {
+        setHUDStyle()
+        SVProgressHUD.showError(withStatus: message)
+    }
+
+    func showSuccessHUD(message: String) {
+        setHUDStyle()
+        SVProgressHUD.showSuccess(withStatus: message)
+    }
 }
+
+extension BaseViewController: NetworkStatusListener {
+    func networkStatusDidChange(status: Reachability.Connection) {
+        if status == .none {
+            self.triggerAPIAgain()
+        }
+    }
+}
+
+

@@ -12,11 +12,11 @@ import RxCocoa
 let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 
 class SandsaraDataServices {
-    private var recommendTracks = BehaviorRelay<[Track]>(value: [])
-    private var recommendPlaylists = BehaviorRelay<[Playlist]>(value: [])
-    private var allTracks = BehaviorRelay<[Track]>(value: [])
-    private var allPlaylist = BehaviorRelay<[Playlist]>(value: [])
-    private var playlistDetail = BehaviorRelay<[Track]>(value: [])
+    private var recommendTracks: [Track]?
+    private var recommendPlaylists: [Playlist]?
+    private var allTracks: [Track]?
+    private var allPlaylist: [Playlist]?
+    private var playlistDetail: [Track]?
 
     private let api: SandsaraAPIService
     private let dataAccess: SandsaraDataAccess
@@ -32,26 +32,29 @@ class SandsaraDataServices {
     func getServicesOption(for apiType: SandsaraAPI) -> ServiceOption {
         switch apiType {
         case .recommendedtracks:
-            if !recommendTracks.value.isEmpty {
-                return .server
+            if let tracks = recommendTracks {
+                return .both
             }
-            return .both
+            return .server
         case .alltrack:
-            if !allTracks.value.isEmpty {
-                return .server
+            if let tracks = allTracks {
+                return .both
             }
-            return .both
+            return .server
         case .recommendedplaylist:
-            if !recommendPlaylists.value.isEmpty {
-                return .server
+            if let tracks = recommendPlaylists {
+                return .both
             }
-            return .both
+            return .server
         case .playlists:
-            if !allPlaylist.value.isEmpty {
-                return .server
+            if let tracks = allPlaylist {
+                return .both
             }
-            return .both
-        default:
+            return .server
+        case .playlistDetail:
+            if let tracks = playlistDetail {
+                return .both
+            }
             return .server
         }
     }
@@ -61,7 +64,7 @@ class SandsaraDataServices {
             .getRecommendTracks()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
-                self.recommendTracks.accept(tracks)
+                self.recommendTracks = tracks
             })
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Track], Bool)> in
@@ -81,27 +84,27 @@ class SandsaraDataServices {
             .compactMap { $0 }
             .doOnNext({ [weak self] cache in
                 guard let self = self else { return }
-                self.recommendTracks.accept(cache)
+                self.recommendTracks = cache
             })
 
         switch option {
         case .server:
             return serverObservable
-                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+              //  .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
-            if recommendTracks.value.isEmpty {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.recommendTracks {
+                return Observable.of(cardList)
             } else {
-                return recommendTracks.asObservable()
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         default:
-            if recommendTracks.value.isEmpty {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.recommendTracks {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {
-                return Observable.concat(recommendTracks.asObservable(), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
     }
@@ -111,7 +114,7 @@ class SandsaraDataServices {
             .getAllTracks()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
-                self.allTracks.accept(tracks)
+                self.allTracks = tracks
             })
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Track], Bool)> in
@@ -130,7 +133,7 @@ class SandsaraDataServices {
             .compactMap { $0 }
             .doOnNext({ [weak self] cache in
                 guard let self = self else { return }
-                self.allTracks.accept(cache)
+                self.allTracks = cache
             })
 
         switch option {
@@ -138,19 +141,19 @@ class SandsaraDataServices {
             return serverObservable
                 .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
-            if allTracks.value.isEmpty {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.allTracks {
+                return Observable.of(cardList)
             } else {
-                return allTracks.asObservable()
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         default:
-            if allTracks.value.isEmpty {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.allTracks {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {
-                return Observable.concat(allTracks.asObservable(), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
     }
@@ -160,7 +163,7 @@ class SandsaraDataServices {
             .playlistDetail()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
-                self.playlistDetail.accept(tracks)
+                self.playlistDetail = tracks
             })
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Track], Bool)> in
@@ -180,7 +183,7 @@ class SandsaraDataServices {
             .compactMap { $0 }
             .doOnNext({ [weak self] cache in
                 guard let self = self else { return }
-                self.playlistDetail.accept(cache)
+                self.playlistDetail = cache
             })
 
         switch option {
@@ -188,19 +191,19 @@ class SandsaraDataServices {
             return serverObservable
                 .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
-            if playlistDetail.value.isEmpty {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.playlistDetail {
+                return Observable.of(cardList)
             } else {
-                return playlistDetail.asObservable()
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         default:
-            if playlistDetail.value.isEmpty {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.playlistDetail {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {
-                return Observable.concat(playlistDetail.asObservable(), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
     }
@@ -210,7 +213,7 @@ class SandsaraDataServices {
             .playlists()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
-                self.allPlaylist.accept(tracks)
+                self.allPlaylist = tracks
             })
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
@@ -229,7 +232,7 @@ class SandsaraDataServices {
             .compactMap { $0 }
             .doOnNext({ [weak self] cache in
                 guard let self = self else { return }
-                self.allPlaylist.accept(cache)
+                self.allPlaylist = cache
             })
 
         switch option {
@@ -237,19 +240,19 @@ class SandsaraDataServices {
             return serverObservable
                 .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
-            if allPlaylist.value.isEmpty {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.allPlaylist {
+                return Observable.of(cardList)
             } else {
-                return allPlaylist.asObservable()
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         default:
-            if allPlaylist.value.isEmpty {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.allPlaylist {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {
-                return Observable.concat(allPlaylist.asObservable(), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
     }
@@ -259,7 +262,7 @@ class SandsaraDataServices {
             .getRecommendPlaylist()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
-                self.allPlaylist.accept(tracks)
+                self.recommendPlaylists = tracks
             })
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
@@ -272,13 +275,13 @@ class SandsaraDataServices {
     }
 
     func getRecommendedPlaylists(option: ServiceOption) -> Observable<[Playlist]> {
-        let serverObservable = getAllPlaylistFromServer()
+        let serverObservable = getRecommendedPlaylistsFromServer()
         let localObservable = dataAccess
             .getRecommendedPlaylists()
             .compactMap { $0 }
             .doOnNext({ [weak self] cache in
                 guard let self = self else { return }
-                self.recommendPlaylists.accept(cache)
+                self.recommendPlaylists = cache
             })
 
         switch option {
@@ -286,19 +289,19 @@ class SandsaraDataServices {
             return serverObservable
                 .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
-            if recommendPlaylists.value.isEmpty {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.recommendPlaylists {
+                return Observable.of(cardList)
             } else {
-                return recommendPlaylists.asObservable()
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         default:
-            if recommendPlaylists.value.isEmpty {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+            if let cardList = self.recommendPlaylists {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {
-                return Observable.concat(recommendPlaylists.asObservable(), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
     }

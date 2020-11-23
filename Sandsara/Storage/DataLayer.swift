@@ -6,7 +6,6 @@
 //
 
 import RealmSwift
-import RxRealm
 import RxSwift
 
 // MARK: - Realm Datalayer
@@ -180,4 +179,17 @@ class DataLayer {
         }
         return playlists
     }
+
+    static func loadPlaylistTracks(name: String) -> [LocalTrack] {
+        var followUsers = [LocalTrack]()
+        if let list = realm?.objects(LocalPlaylist.self).filter("playlistName == '\(name)'").first {
+            for followUser in list.tracks {
+                if !followUser.isInvalidated {
+                    followUsers.append(followUser)
+                }
+            }
+        }
+        return followUsers
+    }
+
 }

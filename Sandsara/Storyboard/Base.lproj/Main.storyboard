@@ -323,7 +323,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ajR-Xa-Hek" customClass="CustomSegmentControl" customModule="Sandsara" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ajR-Xa-Hek" customClass="CustomSegmentControl" customModule="Sandsara" customModuleProvider="target">
                                 <rect key="frame" x="8" y="88" width="195" height="50"/>
                                 <color key="backgroundColor" name="background"/>
                                 <constraints>
@@ -502,16 +502,15 @@
                                     <color key="titleColor" name="primary"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vWJ-Pq-yXc">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vWJ-Pq-yXc">
                                 <rect key="frame" x="16" y="544" width="382" height="30"/>
                                 <color key="backgroundColor" name="background"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="MAA-Lm-HaU"/>
                                 </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="titleEdgeInsets" minX="21" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="FAVORITE" image="favorite">
-                                    <color key="titleColor" name="primary"/>
-                                </state>
+                                <state key="normal" title="FAVORITE" image="favorite"/>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Sg1-rG-rLk"/>
@@ -665,12 +664,44 @@
             </objects>
             <point key="canvasLocation" x="3213" y="2673"/>
         </scene>
+        <!--Add Playlist View Controller-->
+        <scene sceneID="hlD-5o-ycJ">
+            <objects>
+                <viewController storyboardIdentifier="AddPlaylistViewController" id="GSg-iS-osy" customClass="AddPlaylistViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sE3-gL-XTq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="duy-6u-aEm">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" name="background"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WIJ-bM-Lr5"/>
+                        <color key="backgroundColor" name="background"/>
+                        <constraints>
+                            <constraint firstItem="WIJ-bM-Lr5" firstAttribute="trailing" secondItem="duy-6u-aEm" secondAttribute="trailing" id="8rS-gc-j0T"/>
+                            <constraint firstItem="duy-6u-aEm" firstAttribute="leading" secondItem="WIJ-bM-Lr5" secondAttribute="leading" id="9mI-U4-5bQ"/>
+                            <constraint firstItem="duy-6u-aEm" firstAttribute="top" secondItem="WIJ-bM-Lr5" secondAttribute="top" id="oUb-p0-QLp"/>
+                            <constraint firstItem="WIJ-bM-Lr5" firstAttribute="bottom" secondItem="duy-6u-aEm" secondAttribute="bottom" id="zpY-mT-05m"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="alT-CZ-fG8">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="down" id="2Gh-3j-yTV"/>
+                        <barButtonItem key="rightBarButtonItem" image="add" id="u9z-B4-b2a"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="addBtn" destination="u9z-B4-b2a" id="JyS-G4-buA"/>
+                        <outlet property="backBtn" destination="2Gh-3j-yTV" id="dwg-4k-sZI"/>
+                        <outlet property="tableView" destination="duy-6u-aEm" id="UDe-4E-cWl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wx8-9Q-Gue" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-422" y="90"/>
+        </scene>
     </scenes>
-    <designables>
-        <designable name="ajR-Xa-Hek">
-            <size key="intrinsicContentSize" width="195" height="32"/>
-        </designable>
-    </designables>
     <resources>
         <image name="add" width="19" height="19.5"/>
         <image name="back" width="11" height="24"/>

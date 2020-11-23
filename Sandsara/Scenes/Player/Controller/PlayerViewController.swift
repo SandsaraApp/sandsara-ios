@@ -26,15 +26,13 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
 
     var selecledIndex = BehaviorRelay<Int>(value: 0)
     var tracks = [DisplayItem]()
-
-    var isReloaded = BehaviorRelay<Bool>(value: false)
+    var isReloaded = false
 
     typealias Section = SectionModel<String, TrackCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
     override func viewDidLoad() {
-
         setupTableView()
         songTitleLabel.textColor = Asset.primary.color
         songAuthorLabel.textColor = Asset.secondary.color
@@ -44,22 +42,30 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupViewModel()
-        bindViewModel()
-        viewModel.viewModelDidBind()
+        if isReloaded {
+            tableView.dataSource = nil
+            tableView.delegate = nil
+            setupViewModel()
+            bindViewModel()
+            viewModel.viewModelDidBind()
+            isReloaded = false
+        }
     }
 
     override func setupViewModel() {
-        viewModel = PlayerViewModel(inputs: PlayerViewModelContract.Input(selectedIndex: selecledIndex, tracks: tracks, isReloaded: isReloaded))
+        viewModel = PlayerViewModel(inputs: PlayerViewModelContract.Input(selectedIndex: selecledIndex, tracks: tracks))
     }
 
     override func bindViewModel() {
         viewModel.outputs.datasources.filter { !$0.isEmpty }.map {
             [Section(model: "", items: $0)]
-        }.do {
-            self.tableView.dataSource = nil
-            self.tableView.delegate = nil
-        }.drive(tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        }
+        .doOnNext { [weak self] in
+            if !$0.isEmpty {
+                self?.tableView.scrollsToTop = true
+            }
+        }
+        .drive(tableView.rx.items(dataSource: makeDataSource())).disposed(by: disposeBag)
 
         viewModel.outputs.trackDisplay.compactMap { $0 }.driveNext { [weak self] track in
             self?.songTitleLabel.text = track.title
@@ -68,7 +74,7 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         }.disposed(by: disposeBag)
 
         backBtn.rx.tap.asDriver().driveNext { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            self?.popupPresentationContainer?.closePopup(animated: true, completion: nil)
         }.disposed(by: disposeBag)
 
         Observable

@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxDataSources
 import RxCocoa
-import Moya
+
 
 class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
@@ -26,7 +26,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     override func setupViewModel() {
         setupTableView()
-        viewModel = PlaylistViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -46,9 +46,13 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
-                trackList.playlistTitle = model.inputs.track.title
+                trackList.playlistItem = model.inputs.track
                 self.navigationController?.pushViewController(trackList, animated: true)
             }.disposed(by: disposeBag)
+
+        viewModel.isLoading
+            .drive(loadingActivity.rx.isAnimating)
+            .disposed(by: disposeBag)
     }
 
     private func setupTableView() {

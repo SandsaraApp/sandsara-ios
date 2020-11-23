@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Moya
 
 class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputParam> {
 
@@ -17,16 +16,18 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     private let viewWillAppearTrigger = PublishRelay<()>()
 
-    typealias Section = SectionModel<String, TrackCellViewModel>
+    typealias Section = SectionModel<String, PlaylistDetailCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
-    var playlistTitle: String?
+    var playlistItem: DisplayItem?
+
+    private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func setupViewModel() {
         
         setupTableView()
-        viewModel = TrackListViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: TrackListViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = TrackListViewModel(apiService: SandsaraDataServices(), inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() , viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -38,7 +39,9 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
             .disposed(by: disposeBag)
         tableView.rx.itemSelected.subscribeNext { [weak self] indexPath in
                 guard let self = self else { return }
-            self.openTrackDetail(index: indexPath.row)
+            if indexPath.row != 0 {
+                self.openTrackDetail(index: indexPath.row)
+            }
             }.disposed(by: disposeBag)
     }
 
@@ -47,20 +50,32 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
+        tableView.register(PlaylistHeaderTableViewCell.nib, forCellReuseIdentifier: PlaylistHeaderTableViewCell.identifier)
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
-
-        tableView?.register(HeaderView.nib,
-                            forHeaderFooterViewReuseIdentifier: HeaderView.identifier)
     }
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
             configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
-                cell.bind(to: viewModel)
-                return cell
+                switch viewModel {
+                case .header(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistHeaderTableViewCell.identifier, for: indexPath) as? PlaylistHeaderTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    cell.playAction.asObservable().subscribeNext {
+                        self.openPlayer(index: 0)
+                    }.disposed(by: cell.disposeBag)
+                    cell.backAction.asObservable().subscribeNext {
+                        self.navigationController?.popViewController(animated: true)
+                    }.disposed(by: cell.disposeBag)
+                    return cell
+                case .track(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    return cell
+                }
+
             })
     }
 
@@ -76,39 +91,47 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     private func openTrackDetail(index: Int) {
         let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
-        trackList.track = DisplayItem.init(trackCellViewModel: viewModel.datas.value[index])
-        trackList.tracks = self.viewModel.datas.value.map { $0.inputs.track }
+        switch viewModel.datas.value[index] {
+        case .track(let viewModel):
+            trackList.track = viewModel.inputs.track
+            trackList.tracks = self.viewModel.datas.value.map {
+                switch $0 {
+                case .track(let vm): return vm.inputs.track
+                default: return nil
+                }
+            }.compactMap { $0 }
+        default:
+            break
+        }
+
         trackList.selecledIndex = index
         self.navigationController?.pushViewController(trackList, animated: true)
     }
 
     private func openPlayer(index: Int) {
-        let player = self.storyboard?.instantiateViewController(withIdentifier: PlayerViewController.identifier) as! PlayerViewController
+        let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
         player.selecledIndex.accept(index)
-        player.tracks = self.viewModel.datas.value.map { $0.inputs.track }
-        self.present(player, animated: true, completion: nil)
+        player.tracks = self.viewModel.datas.value.map {
+            switch $0 {
+            case .track(let vm): return vm.inputs.track
+            default: return nil
+            }
+        }.compactMap { $0 }
+        player.isReloaded = true
+        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: player.tracks[index])
+        tabBarController?.popupBar.isHidden = false
+        tabBarController?.popupContentView.popupCloseButton.isHidden = true
+        tabBarController?.presentPopupBar(withContentViewController: player, openPopup: true, animated: false, completion: nil)
     }
 }
 
 extension TrackListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 96.0
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeightsDictionary[indexPath] = cell.frame.size.height
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 390.0
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderView.identifier) as? HeaderView
-        headerView?.section = section
-        headerView?.playButton.rx.tap.asDriver().driveNext {
-            self.openPlayer(index: 0)
-        }.disposed(by: disposeBag)
-        headerView?.backButtton.rx.tap.asDriver().driveNext {
-            self.navigationController?.popViewController(animated: true)
-        }.disposed(by: disposeBag)
-        return headerView
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeightsDictionary[indexPath] ?? UITableView.automaticDimension
     }
 }

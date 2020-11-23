@@ -42,7 +42,7 @@ enum BrowseVMContract {
 
 class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output> {
 
-    private let apiService: SandsaraAPIService
+    private let apiService: SandsaraDataServices
 
     private let playlists = BehaviorRelay<[DisplayItem]>(value: [])
     private let tracks = BehaviorRelay<[DisplayItem]>(value: [])
@@ -52,7 +52,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     
     private var datasources: [RecommendTableViewCellViewModel]
 
-    init(apiService: SandsaraAPIService, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
+    init(apiService: SandsaraDataServices, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
         self.apiService = apiService
         self.datasources = [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract
                                                                 .Input(section: .recommendedPlaylists, items: [])),
@@ -79,10 +79,17 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
             guard let self = self else { return }
             self.emitEventLoading(true)
             Single
-                .zip(self.apiService.getRecommendPlaylist(),
-                     self.apiService.getRecommendTracks()).asObservable().subscribeNext {
+                .zip(self.apiService
+                        .getRecommendedPlaylists(option: self.apiService
+                                                    .getServicesOption(for: .recommendedplaylist))
+                        .asSingle(),
+                     self.apiService
+                        .getRecommendTracks(option: self.apiService.getServicesOption(for: .recommendedtracks))
+                        .asSingle())
+                .asObservable()
+                .subscribeNext {
                         self.handleDatas(response1: $0, response2: $1)
-                     }.disposed(by: self.disposeBag)
+            }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
 
         let datasources = Driver.combineLatest(self.playlists.asDriver(), self.tracks.asDriver()).map {
@@ -93,6 +100,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     }
 
     private func handleSearch(title: String) {
+        emitEventLoading(false)
         self.playlists.accept(self.cachedPlaylists.value.filter { $0.title.contains(title) })
         let playlistVM = RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: self.playlists.value))
         self.tracks.accept(self.cachedTracks.value.filter { $0.title.contains(title) })
@@ -107,6 +115,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
         self.tracks.accept(tracks)
         self.cachedPlaylists.accept(playlists)
         self.cachedTracks.accept(tracks)
+        emitEventLoading(false)
     }
 
     private func resetSearch() {

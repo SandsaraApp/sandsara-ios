@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxDataSources
 import RxCocoa
-import Moya
 
 class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputParam> {
 
@@ -26,7 +25,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
     override func setupViewModel() {
         //configureNavigationBar(largeTitleColor: .white, backgoundColor: .black, tintColor: .white, title: playlistTitle ?? "", preferredLargeTitle: true)
         setupTableView()
-        viewModel = AllTracksViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -50,6 +49,10 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
                 trackList.selecledIndex = indexPath.row
                 self.navigationController?.pushViewController(trackList, animated: true)
             }.disposed(by: disposeBag)
+
+        viewModel.isLoading
+            .drive(loadingActivity.rx.isAnimating)
+            .disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -70,7 +73,6 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
                 return cell
             })
     }
-
 }
 
 extension AllTrackViewController: UITableViewDelegate {

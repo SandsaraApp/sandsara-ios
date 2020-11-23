@@ -57,4 +57,13 @@ class LocalTrack: Object {
         self.id = track.id
         self.dateModified = Date()
     }
+
+    required convenience init(track: DisplayItem) {
+        self.init()
+        self.title = track.title
+        self.author = track.author
+        self.thumbnail = track.thumbnail
+        self.id = track.id
+        self.dateModified = Date()
+    }
 }

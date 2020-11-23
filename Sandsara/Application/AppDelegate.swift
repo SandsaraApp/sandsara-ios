@@ -8,9 +8,6 @@
 import UIKit
 import RxSwift
 import Bluejay
-import AppCenter
-import AppCenterAnalytics
-import AppCenterCrashes
 
 let bluejay = Bluejay()
 
@@ -49,11 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(options))
-
-        AppCenter.start(withAppSecret: "c037a178-abc5-4a57-bb58-cc53c3fb43d6", services:[
-            Analytics.self,
-            Crashes.self
-        ])
         return true
     }
 
@@ -67,17 +59,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
         // observe connection
+
+        ReachabilityManager.shared.stopMonitoring()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        ReachabilityManager.shared.stopMonitoring()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        ReachabilityManager.shared.startMonitoring()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        ReachabilityManager.shared.stopMonitoring()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 

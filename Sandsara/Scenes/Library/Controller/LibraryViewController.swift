@@ -85,4 +85,17 @@ class LibraryViewController: BaseViewController<NoInputParam> {
             playlistsVC?.viewWillAppearTrigger.accept(())
         }
     }
+
+    override func triggerAPIAgain() {
+        self.showAlert(title: "Alert", message: "No Internet Connection", preferredStyle: .alert, actions:
+                        UIAlertAction(title: "Try Again", style: .default, handler: { _ in
+                            if self.segmentControl.segmentSelected.value == 0 {
+                                self.allTrackVC?.viewWillAppearTrigger.accept(())
+                            } else {
+                                self.playlistsVC?.viewWillAppearTrigger.accept(())
+                            }
+                        }),
+                       UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        )
+    }
 }

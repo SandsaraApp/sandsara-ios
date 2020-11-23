@@ -15,6 +15,15 @@ struct DisplayItem {
     let isPlaylist: Bool
     var isLocal: Bool = false
 
+    init() {
+        title = ""
+        author = ""
+        thumbnail = ""
+        id = 0
+        isPlaylist = false
+        isLocal = false
+    }
+
     init(track: Track, isPlaylist: Bool = false) {
         self.title = track.title
         self.author = track.author
