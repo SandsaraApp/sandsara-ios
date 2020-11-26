@@ -14,6 +14,16 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @IBOutlet private weak var progressNameLabel: UILabel!
     @IBOutlet private weak var progressSlider: UISlider!
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 14)
+        progressNameLabel.textColor = Asset.primary.color
+
+        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+            progressSlider.setThumbImage(Asset.thumbs.image, for: state)
+        }
+    }
+
     override func bindViewModel() {
         viewModel
             .outputs

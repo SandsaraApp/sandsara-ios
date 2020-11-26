@@ -9,9 +9,7 @@ import Reachability
 import RxReachability
 import RxSwift
 import RxCocoa
-
-
-import Foundation
+import Alamofire
 import UIKit
 protocol NetworkStatusListener: class {
     func networkStatusDidChange(status: Reachability.Connection)
@@ -87,4 +85,42 @@ class ReachabilityManager: NSObject {
         listeners = listeners.filter{ $0 !== listener}
     }
 
+}
+
+protocol NetworkingService {
+    var isConnected: Bool { get }
+    var connected: BehaviorRelay<Bool> { get }
+    func startCheckingNetworkConnection()
+    func stopCheckingNetworkConnection()
+}
+
+final class NetworkingServiceImpl: NetworkingService {
+    private let sharedInstance = NetworkReachabilityManager()!
+    private let reachability: Reachability
+    private let disposeBag = DisposeBag()
+
+    var connected =  BehaviorRelay<Bool>(value: true)
+
+    init(reachability: Reachability = Reachability()!) {
+        self.reachability = reachability
+        self.reachability
+            .rx
+            .isReachable
+            .subscribeNext { [weak self] isConnected in
+                guard let self = self else { return }
+                self.connected.accept(isConnected)
+            }.disposed(by: disposeBag)
+    }
+
+    var isConnected: Bool {
+        return self.sharedInstance.isReachable
+    }
+
+    func startCheckingNetworkConnection() {
+        try? reachability.startNotifier()
+    }
+
+    func stopCheckingNetworkConnection() {
+        reachability.stopNotifier()
+    }
 }

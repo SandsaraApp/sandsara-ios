@@ -63,6 +63,8 @@
 		92A2850B256103D500739A94 /* Tinos-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284DE2560DECA00739A94 /* Tinos-Italic.ttf */; };
 		92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284E02560DECA00739A94 /* Tinos-Regular.ttf */; };
 		92AD7BBB256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */; };
+		92AD7BE9256D6CCC00F0D0E6 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */; };
+		92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */ = {isa = PBXBuildFile; fileRef = 92AD7BF2256D704300F0D0E6 /* proof.bin */; };
 		92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04624255BE0CF0086FFFE /* SettingsViewController.swift */; };
 		92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */; };
 		92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */; };
@@ -213,6 +215,8 @@
 		92A284F02560E25600739A94 /* RecommendCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendCellViewModel.swift; sourceTree = "<group>"; };
 		92A284F52560E40C00739A94 /* DisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayItem.swift; sourceTree = "<group>"; };
 		92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewModel.swift; sourceTree = "<group>"; };
+		92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		92AD7BF2256D704300F0D0E6 /* proof.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = proof.bin; sourceTree = "<group>"; };
 		92B04624255BE0CF0086FFFE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
 		92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressTableViewCell.xib; sourceTree = "<group>"; };
@@ -382,6 +386,7 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92AD7BE7256D6CBD00F0D0E6 /* DocumentPicker */,
 				9228C6D125569EFB0092FBB6 /* DataTypes */,
 				9228C74D2556B6090092FBB6 /* Rx */,
 				92698EA7255FEFF1009F3A9F /* RxMoya */,
@@ -556,6 +561,7 @@
 		924EDF4625565F850013CC71 /* Sandsara */ = {
 			isa = PBXGroup;
 			children = (
+				92AD7BF2256D704300F0D0E6 /* proof.bin */,
 				92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */,
 				92A284A62560D7F500739A94 /* Generated */,
 				9228C68425569B740092FBB6 /* Application */,
@@ -647,6 +653,14 @@
 				92A284D22560DAD200739A94 /* Strings.swift */,
 			);
 			path = Generated;
+			sourceTree = "<group>";
+		};
+		92AD7BE7256D6CBD00F0D0E6 /* DocumentPicker */ = {
+			isa = PBXGroup;
+			children = (
+				92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */,
+			);
+			path = DocumentPicker;
 			sourceTree = "<group>";
 		};
 		92B04629255BE1860086FFFE /* ProgressCell */ = {
@@ -958,6 +972,7 @@
 				92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */,
 				924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */,
 				92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */,
+				92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */,
 				92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */,
 				92A284C82560D9F100739A94 /* OpenSans-Semibold.ttf in Resources */,
 				92A284C52560D9F100739A94 /* OpenSans-Bold.ttf in Resources */,
@@ -1136,6 +1151,7 @@
 				92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */,
 				9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */,
 				9263F75C256A50E1004450CA /* NetworkService.swift in Sources */,
+				92AD7BE9256D6CCC00F0D0E6 /* DocumentPicker.swift in Sources */,
 				9228C7F4255818B00092FBB6 /* BrowseViewController.swift in Sources */,
 				9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */,
 				92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */,
@@ -1372,6 +1388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = AY63F88W3R;
@@ -1395,6 +1412,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = AY63F88W3R;

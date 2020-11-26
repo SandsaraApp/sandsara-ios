@@ -30,29 +30,31 @@ class SandsaraDataServices {
     }
 
     func getServicesOption(for apiType: SandsaraAPI) -> ServiceOption {
+        guard NetworkingServiceImpl().isConnected else { return .cache }
         switch apiType {
         case .recommendedtracks:
-            if let tracks = recommendTracks {
+            recommendTracks = Preferences.PlaylistsDomain.recommendTracks
+            if recommendTracks != nil {
                 return .both
             }
             return .server
         case .alltrack:
-            if let tracks = allTracks {
+            if allTracks != nil {
                 return .both
             }
             return .server
         case .recommendedplaylist:
-            if let tracks = recommendPlaylists {
+            if recommendPlaylists != nil {
                 return .both
             }
             return .server
         case .playlists:
-            if let tracks = allPlaylist {
+            if allPlaylist != nil {
                 return .both
             }
             return .server
         case .playlistDetail:
-            if let tracks = playlistDetail {
+            if playlistDetail != nil {
                 return .both
             }
             return .server
@@ -65,7 +67,7 @@ class SandsaraDataServices {
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
                 self.recommendTracks = tracks
-            })
+            }).debug()
             .asObservable()
             .flatMap { [weak self] result -> Observable<([Track], Bool)> in
                 guard let self = self else { return Observable.just((result, false)) }
@@ -90,7 +92,7 @@ class SandsaraDataServices {
         switch option {
         case .server:
             return serverObservable
-              //  .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
         case .cache:
             if let cardList = self.recommendTracks {
                 return Observable.of(cardList)
@@ -260,18 +262,19 @@ class SandsaraDataServices {
     private func getRecommendedPlaylistsFromServer() -> Observable<[Playlist]> {
         return api
             .getRecommendPlaylist()
-            .do(onSuccess: { [weak self] tracks in
-                guard let self = self else { return }
-                self.recommendPlaylists = tracks
+            .do(onSuccess: { playlists in
+                self.recommendPlaylists = playlists
+            }, onError: { error in
+                debugPrint(error.localizedDescription)
             })
             .asObservable()
-            .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
-                guard let self = self else { return Observable.just((result, false)) }
-                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveRecommendedPlaylists(playlists: result)) { ($0, $1) }
-            }
-            .map { (cards, _) -> [Playlist] in
-                return cards
-            }
+//            .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
+//                guard let self = self else { return Observable.just((result, false)) }
+//                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveRecommendedPlaylists(playlists: result)) { ($0, $1) }
+//            }
+//            .map { (cards, _) -> [Playlist] in
+//                return cards
+//            }
     }
 
     func getRecommendedPlaylists(option: ServiceOption) -> Observable<[Playlist]> {
@@ -284,25 +287,27 @@ class SandsaraDataServices {
                 self.recommendPlaylists = cache
             })
 
-        switch option {
-        case .server:
-            return serverObservable
-                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
-        case .cache:
-            if let cardList = self.recommendPlaylists {
-                return Observable.of(cardList)
-            } else {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            }
-        default:
-            if let cardList = self.recommendPlaylists {
-                return Observable.concat(Observable.of(cardList), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            } else {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            }
+        if let cardList = self.recommendPlaylists {
+            return Observable.of(cardList)
+        } else {
+            return localObservable
+                .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
         }
+
+//        switch option {
+//        case .server:
+//            return serverObservable
+//                //.subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+//        case .cache:
+//
+//        default:
+//            if let cardList = self.recommendPlaylists {
+//                return Observable.concat(Observable.of(cardList), serverObservable)
+//                 //   .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+//            } else {
+//                return Observable.concat(localObservable, serverObservable)
+//                  //  .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+//            }
+//        }
     }
 }

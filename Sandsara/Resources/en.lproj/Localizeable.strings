@@ -22,3 +22,24 @@
 "duplicate_found" = "Duplicate track found";
 "add_anyway" = "Add anyway";
 "sandsara_detected" = "Sandsara detected.";
+
+"settings" = "Settings";
+"basic_setting" = "Basic Settings";
+"speed" = "Speed";
+"brightness" = "Brightness";
+"lightmode" = "Light mode";
+"rotate" = "Rotate";
+"cycle" = "Cycle";
+"static" = "Static";
+"presets" = "Presets";
+"light_cycle_speed" = "Light Cycle Speed";
+"advance_setting" = "Advanced Settings";
+"website" = "Sandsara’s Website";
+"help" = "Help";
+"about" = "About this Sandsara";
+"firmware_version" = "Firmware version: %@";
+"device_name" = "Name: %@";
+"change_name" = "Change Name";
+"update_firmware" = "Update Firmware";
+"factory_reset" = "Factory Reset";
+

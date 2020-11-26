@@ -78,21 +78,24 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
             .subscribeNext { [weak self] in
             guard let self = self else { return }
             self.emitEventLoading(true)
-            Single
-                .zip(self.apiService
-                        .getRecommendedPlaylists(option: self.apiService
-                                                    .getServicesOption(for: .recommendedplaylist))
-                        .asSingle(),
-                     self.apiService
+            self.apiService
+                .getRecommendedPlaylists(option: self.apiService.getServicesOption(for: .recommendedplaylist))
+                .asObservable().subscribeNext { playlists in
+                    let playlists = playlists.map { DisplayItem(playlist: $0)}
+                    self.cachedPlaylists.accept(playlists)
+                    self.playlists.accept(playlists)
+                    self.apiService
                         .getRecommendTracks(option: self.apiService.getServicesOption(for: .recommendedtracks))
-                        .asSingle())
-                .asObservable()
-                .subscribeNext {
-                        self.handleDatas(response1: $0, response2: $1)
-            }.disposed(by: self.disposeBag)
+                        .asObservable().subscribeNext { tracks in
+                            let tracks = tracks.map { DisplayItem(track: $0) }
+                            self.tracks.accept(tracks)
+                            self.cachedTracks.accept(tracks)
+                            self.emitEventLoading(false)
+                        }.disposed(by: self.disposeBag)
+                }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
 
-        let datasources = Driver.combineLatest(self.playlists.asDriver(), self.tracks.asDriver()).map {
+        let datasources = Driver.combineLatest(self.playlists.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendedPlaylists ?? []).map { DisplayItem(playlist: $0)}), self.tracks.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendTracks ?? []).map { DisplayItem(track: $0)})).map {
             return [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: $0)), RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedTracks, items: $1))]
         }
 

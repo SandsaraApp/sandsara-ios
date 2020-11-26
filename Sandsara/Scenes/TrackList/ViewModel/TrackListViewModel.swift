@@ -45,7 +45,8 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
 
     private func buildCellVM()  {
         if inputs.playlistItem.isLocal {
-            let items = DataLayer.loadPlaylistTracks(name: inputs.playlistItem.title).map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }
+            let list = inputs.playlistItem.title == L10n.favorite ? DataLayer.loadFavTracks() : DataLayer.loadPlaylistTracks(name: inputs.playlistItem.title)
+            let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }
             self.datas.accept(
                 [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem)))] +
                     items.map {

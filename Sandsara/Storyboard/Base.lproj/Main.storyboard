@@ -54,16 +54,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tdb-5t-5HC">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
+                                <rect key="frame" x="0.0" y="44" width="430" height="818"/>
                                 <color key="backgroundColor" red="0.24313725489999999" green="0.24313725489999999" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Dba-4B-CXf"/>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <constraints>
-                            <constraint firstItem="tdb-5t-5HC" firstAttribute="top" secondItem="e45-Sa-vD7" secondAttribute="top" id="559-yP-GGb"/>
+                            <constraint firstItem="tdb-5t-5HC" firstAttribute="top" secondItem="Dba-4B-CXf" secondAttribute="top" id="9d1-Lc-SAl"/>
                             <constraint firstItem="tdb-5t-5HC" firstAttribute="leading" secondItem="Dba-4B-CXf" secondAttribute="leading" id="KZH-uh-nkU"/>
-                            <constraint firstItem="tdb-5t-5HC" firstAttribute="trailing" secondItem="Dba-4B-CXf" secondAttribute="trailing" id="pBi-zf-TLB"/>
+                            <constraint firstItem="tdb-5t-5HC" firstAttribute="trailing" secondItem="Dba-4B-CXf" secondAttribute="trailing" constant="16" id="pBi-zf-TLB"/>
                             <constraint firstItem="Dba-4B-CXf" firstAttribute="bottom" secondItem="tdb-5t-5HC" secondAttribute="bottom" id="zWF-TK-gSd"/>
                         </constraints>
                     </view>
@@ -74,7 +74,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rCv-UD-5hV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3141" y="1961"/>
+            <point key="canvasLocation" x="3140.579710144928" y="1960.7142857142856"/>
         </scene>
         <!--Setting-->
         <scene sceneID="cqG-iK-z6y">
@@ -98,9 +98,12 @@
                             <constraint firstItem="Dfl-rW-Co1" firstAttribute="bottom" secondItem="N7p-Uv-Vsd" secondAttribute="bottom" id="Zsj-Tv-RaB"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Setting" id="KZc-Da-Fku"/>
+                    <navigationItem key="navigationItem" title="Setting" id="KZc-Da-Fku">
+                        <barButtonItem key="rightBarButtonItem" title="Test" id="Wwr-5B-9zI"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="N7p-Uv-Vsd" id="ABg-zq-e6A"/>
+                        <outlet property="testButton" destination="Wwr-5B-9zI" id="ZDL-Ju-7W5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pqc-Am-xq5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -643,14 +646,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ghs-92-cLj">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="16" y="44" width="398" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5Rh-dH-YCw"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Ghs-92-cLj" firstAttribute="leading" secondItem="5Rh-dH-YCw" secondAttribute="leading" id="KQS-M4-Yao"/>
+                            <constraint firstItem="Ghs-92-cLj" firstAttribute="leading" secondItem="5Rh-dH-YCw" secondAttribute="leading" constant="16" id="KQS-M4-Yao"/>
                             <constraint firstItem="5Rh-dH-YCw" firstAttribute="trailing" secondItem="Ghs-92-cLj" secondAttribute="trailing" id="Zo9-Sv-QdL"/>
                             <constraint firstItem="5Rh-dH-YCw" firstAttribute="bottom" secondItem="Ghs-92-cLj" secondAttribute="bottom" id="tFg-yU-oLC"/>
                             <constraint firstItem="Ghs-92-cLj" firstAttribute="top" secondItem="5Rh-dH-YCw" secondAttribute="top" id="vxq-8g-Mfp"/>

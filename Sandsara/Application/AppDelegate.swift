@@ -21,6 +21,18 @@ let ledStripCycleEnable = CharacteristicIdentifier(uuid: "1a9a7dea-2305-11eb-adc
 
 let ledStripDirection = CharacteristicIdentifier(uuid: "1a9a8042-2305-11eb-adc1-0242ac120002", service: ledStripService)
 
+let fileService = ServiceIdentifier(uuid: "fd31abc4-22e7-11eb-adc1-0242ac120002")
+
+let sendFileFlag = CharacteristicIdentifier(uuid: "fcbff68e-2af1-11eb-adc1-0242ac120002", service: fileService)
+
+let sendBytes = CharacteristicIdentifier(uuid: "fcbffa44-2af1-11eb-adc1-0242ac120002", service: fileService)
+
+let checkFileExist = CharacteristicIdentifier(uuid: "fcbffb52-2af1-11eb-adc1-0242ac120002", service: fileService)
+
+let deleteFile = CharacteristicIdentifier(uuid: "fcbffc24-2af1-11eb-adc1-0242ac120002", service: fileService)
+
+let receiveFileRespone = CharacteristicIdentifier(uuid: "fcbffce2-2af1-11eb-adc1-0242ac120002", service: fileService)
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

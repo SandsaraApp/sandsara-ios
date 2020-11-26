@@ -40,13 +40,11 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSearchBar()
-
         viewWillAppearTrigger.accept(())
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
             once.run {
                 delegate.initPlayerBar()
@@ -60,7 +58,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             .text
             .orEmpty.doOnNext{ text in
                 if text.isEmpty {
-                    self.cancelSearchTrigger.accept(())
+                 //   self.cancelSearchTrigger.accept(())
                 }
             }
             .asObservable()
@@ -78,8 +76,6 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
                                     inputs: BrowseVMContract.Input(searchText: inputTrigger,
                                                                    cancelSearch: cancelSearchTrigger,
                                                                    viewWillAppearTrigger: viewWillAppearTrigger))
-
-        self.viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {
