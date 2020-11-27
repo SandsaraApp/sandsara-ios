@@ -104,7 +104,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
             break
         }
 
-        trackList.selecledIndex = index
+        trackList.selecledIndex = index - 1
         self.navigationController?.pushViewController(trackList, animated: true)
     }
 

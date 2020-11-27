@@ -31,7 +31,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .drive(progressNameLabel.rx.text)
             .disposed(by: disposeBag)
 
-        if viewModel.inputs.type == .speed {
+        if viewModel.inputs.type == .lightCycleSpeed {
             progressSlider.maximumValue = 500
             progressSlider.minimumValue = 10
             progressSlider
