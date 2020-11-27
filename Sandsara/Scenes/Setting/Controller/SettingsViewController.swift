@@ -33,14 +33,20 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
 
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
-    private var documentPicker: DocumentPicker?
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        configureNavigationBar(largeTitleColor: Asset.primary.color, backgoundColor: Asset.background.color, tintColor: Asset.primary.color, title: L10n.settings, preferredLargeTitle: true)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationController?.navigationBar.sizeToFit()
+        }
+    }
 
     override func setupViewModel() {
         setupTableView()
         viewModel = SettingViewModel(inputs: SettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
-
-        documentPicker = DocumentPicker(presentationController: self, delegate: self)
     }
 
     override func bindViewModel() {
@@ -60,36 +66,38 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         tableView.tableFooterView = UIView()
 
         tableView.register(ProgressTableViewCell.nib, forCellReuseIdentifier: ProgressTableViewCell.identifier)
-        tableView.register(ToogleTableViewCell.nib, forCellReuseIdentifier: ToogleTableViewCell.identifier)
         tableView.register(MenuTableViewCell.nib, forCellReuseIdentifier: MenuTableViewCell.identifier)
-        tableView.register(TwoTableViewCell.nib, forCellReuseIdentifier: TwoTableViewCell.identifier)
+        tableView.register(PresetsTableViewCell.nib, forCellReuseIdentifier: PresetsTableViewCell.identifier)
 
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
+
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = 73
+
+        tableView.register(SettingHeaderView.nib, forHeaderFooterViewReuseIdentifier: SettingHeaderView.identifier)
     }
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
             configureCell: { [weak self] (_, tableView, indexPath, modelType) -> UITableViewCell in
                 switch modelType {
-                case .speed(let viewModel), .brightness(let viewModel), .lightTemp(let viewModel):
+                case .speed(let viewModel), .brightness(let viewModel), .lightCycleSpeed(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ProgressTableViewCell.identifier, for: indexPath) as? ProgressTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .pause(let viewModel), .lightMode(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: ToogleTableViewCell.identifier, for: indexPath) as? ToogleTableViewCell else { return UITableViewCell()}
-                    cell.bind(to: viewModel)
-                    return cell
-                case .colorSettings(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoTableViewCell.identifier, for: indexPath) as? TwoTableViewCell else { return UITableViewCell()}
-                    cell.bind(to: viewModel)
-                    return cell
-                case .draw(let viewModel), .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel), .sleep(let viewModel), .firmwareUpdate(let viewModel), .nightMode(let viewModel), .disconnect(let viewModel):
+                case .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
+                case .presets(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: PresetsTableViewCell.identifier, for: indexPath) as? PresetsTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    return cell
+                default: return UITableViewCell()
                 }
+
             })
     }
 
@@ -103,17 +111,12 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                 do {
                     try sandsaraBoard.write(to: sendFileFlag, value: "proof")
                     for i in 0 ..< bytes.count {
-                        //let semaphore = DispatchSemaphore(value: i)
-                        
                         try sandsaraBoard.writeAndListen(writeTo: sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: sendBytes, completion: { (result: UInt8) -> ListenAction in
-                            // semaphore.signal()
                             let start1 = CFAbsoluteTimeGetCurrent()
                             let diff = CFAbsoluteTimeGetCurrent() - start1
                             print("Send chunks took \(diff) seconds")
                             return .done
                         })
-//                        semaphore.wait()
-//                        i = i + 1
                     }
                 } catch(let error) {
                     debugPrint(error.localizedDescription)
@@ -144,14 +147,8 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         }
     }
 
-    func measureTime(for closure: @autoclosure () -> Any) {
-        let start = CFAbsoluteTimeGetCurrent()
-        closure()
-        let diff = CFAbsoluteTimeGetCurrent() - start
-        print("Took \(diff) seconds")
-    }
-
-    func getFile(forResource resource: String, withExtension fileExt: String?) -> [[UInt8]]? {
+    func getFile(forResource resource: String,
+                 withExtension fileExt: String?) -> [[UInt8]]? {
         var chunks = [[UInt8]]()
         // See if the file exists.
         guard let filePath = Bundle.main.path(forResource: resource, ofType: fileExt) else {
@@ -181,10 +178,18 @@ extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeightsDictionary[indexPath] ?? UITableView.automaticDimension
     }
-}
 
-extension SettingsViewController: DocumentDelegate {
-    func didPickDocument(document: Document?) {
-        print(document?.fileSize)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SettingHeaderView.identifier) as? SettingHeaderView
+        headerView?.titleLabel.text = L10n.basicSetting
+        return headerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 73
     }
 }

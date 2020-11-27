@@ -268,13 +268,13 @@ class SandsaraDataServices {
                 debugPrint(error.localizedDescription)
             })
             .asObservable()
-//            .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
-//                guard let self = self else { return Observable.just((result, false)) }
-//                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveRecommendedPlaylists(playlists: result)) { ($0, $1) }
-//            }
-//            .map { (cards, _) -> [Playlist] in
-//                return cards
-//            }
+            .flatMap { [weak self] result -> Observable<([Playlist], Bool)> in
+                guard let self = self else { return Observable.just((result, false)) }
+                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveRecommendedPlaylists(playlists: result)) { ($0, $1) }
+            }
+            .map { (cards, _) -> [Playlist] in
+                return cards
+            }
     }
 
     func getRecommendedPlaylists(option: ServiceOption) -> Observable<[Playlist]> {
@@ -287,27 +287,25 @@ class SandsaraDataServices {
                 self.recommendPlaylists = cache
             })
 
-        if let cardList = self.recommendPlaylists {
-            return Observable.of(cardList)
-        } else {
-            return localObservable
-                .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+        switch option {
+        case .server:
+            return serverObservable
+                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+        case .cache:
+            if let cardList = self.recommendPlaylists {
+                return Observable.of(cardList)
+            } else {
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
+        default:
+            if let cardList = self.recommendPlaylists {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            } else {
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
         }
-
-//        switch option {
-//        case .server:
-//            return serverObservable
-//                //.subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
-//        case .cache:
-//
-//        default:
-//            if let cardList = self.recommendPlaylists {
-//                return Observable.concat(Observable.of(cardList), serverObservable)
-//                 //   .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-//            } else {
-//                return Observable.concat(localObservable, serverObservable)
-//                  //  .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-//            }
-//        }
     }
 }

@@ -70,8 +70,6 @@
 		92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */; };
 		92B04632255BE1F00086FFFE /* ViewModelBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04631255BE1F00086FFFE /* ViewModelBindable.swift */; };
 		92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */; };
-		92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */; };
-		92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */; };
 		92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */; };
 		92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */; };
 		92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04654255BF7800086FFFE /* SettingsViewModel.swift */; };
@@ -88,8 +86,6 @@
 		92BE9E722564965600081EEE /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; };
 		92BE9E732564965600081EEE /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */; };
-		92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64771255BFDDB00856900 /* TwoTableViewCell.swift */; };
-		92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64772255BFDDB00856900 /* TwoTableViewCell.xib */; };
 		92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */; };
 		92D64789255CAC2400856900 /* PlaylistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */; };
 		92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64791255CAE0400856900 /* PlaylistViewModel.swift */; };
@@ -104,6 +100,16 @@
 		92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66333255AE3FE00CE3F8E /* RecommendCell.swift */; };
 		92D66338255AE3FE00CE3F8E /* RecommendTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66334255AE3FE00CE3F8E /* RecommendTableViewCell.xib */; };
 		92D66339255AE3FE00CE3F8E /* RecommendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66335255AE3FE00CE3F8E /* RecommendCell.xib */; };
+		92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3ED5257076AF00D05326 /* ColorCell.swift */; };
+		92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3ED6257076AF00D05326 /* ColorCell.xib */; };
+		92FA3EDD257077B000D05326 /* PresetsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */; };
+		92FA3EDE257077B000D05326 /* PresetsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */; };
+		92FA3EE325707C1D00D05326 /* SettingHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */; };
+		92FA3EE425707C1D00D05326 /* SettingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */; };
+		92FA3EED25707F6500D05326 /* SegmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */; };
+		92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */; };
+		92FA3EF32570805300D05326 /* PlayerHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EF22570805300D05326 /* PlayerHeaderView.xib */; };
+		92FA3EF72570806700D05326 /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EF62570806700D05326 /* PlayerHeaderView.swift */; };
 		956ACD29842CA00F3103602F /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513BACB0A6679C6E2D4735C9 /* Pods_SandsaraTests.framework */; };
 		A326830BEF8E531E17094499 /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28036651D79EAF0AB954D8B7 /* Pods_Sandsara.framework */; };
 		D38FE9081C061A133686CAB4 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68EDD128410CCC0F62A209B8 /* Pods_Sandsara_SandsaraUITests.framework */; };
@@ -222,8 +228,6 @@
 		92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressTableViewCell.xib; sourceTree = "<group>"; };
 		92B04631255BE1F00086FFFE /* ViewModelBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelBindable.swift; sourceTree = "<group>"; };
 		92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
-		92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
-		92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
 		92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuTableViewCell.xib; sourceTree = "<group>"; };
 		92B04654255BF7800086FFFE /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -241,8 +245,6 @@
 		92BCE73325616E520029DD3F /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
 		92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LNPopupController.xcodeproj; path = LNPopupController/LNPopupController.xcodeproj; sourceTree = "<group>"; };
 		92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarViewController.swift; sourceTree = "<group>"; };
-		92D64771255BFDDB00856900 /* TwoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoTableViewCell.swift; sourceTree = "<group>"; };
-		92D64772255BFDDB00856900 /* TwoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoTableViewCell.xib; sourceTree = "<group>"; };
 		92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
 		92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistTableViewCell.xib; sourceTree = "<group>"; };
 		92D64791255CAE0400856900 /* PlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
@@ -258,6 +260,16 @@
 		92D66334255AE3FE00CE3F8E /* RecommendTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecommendTableViewCell.xib; sourceTree = "<group>"; };
 		92D66335255AE3FE00CE3F8E /* RecommendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecommendCell.xib; sourceTree = "<group>"; };
 		92D6633D255AE55A00CE3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92FA3ED5257076AF00D05326 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		92FA3ED6257076AF00D05326 /* ColorCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorCell.xib; sourceTree = "<group>"; };
+		92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsTableViewCell.swift; sourceTree = "<group>"; };
+		92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PresetsTableViewCell.xib; sourceTree = "<group>"; };
+		92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingHeaderView.xib; sourceTree = "<group>"; };
+		92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingHeaderView.swift; sourceTree = "<group>"; };
+		92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTableViewCell.swift; sourceTree = "<group>"; };
+		92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableViewCell.xib; sourceTree = "<group>"; };
+		92FA3EF22570805300D05326 /* PlayerHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerHeaderView.xib; sourceTree = "<group>"; };
+		92FA3EF62570806700D05326 /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
 		B97597A42A8A64009BAF5F27 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.release.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.release.xcconfig"; sourceTree = "<group>"; };
 		C577E2E7F52D0E498002DC1A /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -668,12 +680,16 @@
 			children = (
 				92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */,
 				92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */,
-				92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */,
-				92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */,
 				92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */,
 				92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */,
-				92D64771255BFDDB00856900 /* TwoTableViewCell.swift */,
-				92D64772255BFDDB00856900 /* TwoTableViewCell.xib */,
+				92FA3ED5257076AF00D05326 /* ColorCell.swift */,
+				92FA3ED6257076AF00D05326 /* ColorCell.xib */,
+				92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */,
+				92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */,
+				92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */,
+				92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */,
+				92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */,
+				92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */,
 			);
 			path = ProgressCell;
 			sourceTree = "<group>";
@@ -706,6 +722,7 @@
 		92D6477A255CAB2900856900 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				92FA3EF12570802900D05326 /* View */,
 				92BCE729256165170029DD3F /* ViewModel */,
 				92BCE725256165130029DD3F /* Controller */,
 			);
@@ -838,6 +855,15 @@
 				92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		92FA3EF12570802900D05326 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92FA3EF22570805300D05326 /* PlayerHeaderView.xib */,
+				92FA3EF62570806700D05326 /* PlayerHeaderView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -979,6 +1005,7 @@
 				92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */,
 				924EDF5125565F880013CC71 /* Assets.xcassets in Resources */,
 				92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */,
+				92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */,
 				92D66338255AE3FE00CE3F8E /* RecommendTableViewCell.xib in Resources */,
 				92A284C92560D9F100739A94 /* OpenSans-Regular.ttf in Resources */,
 				92A284CC2560D9F100739A94 /* OpenSans-ExtraBold.ttf in Resources */,
@@ -986,15 +1013,17 @@
 				924EDF4F25565F850013CC71 /* Main.storyboard in Resources */,
 				92A284CB2560D9F100739A94 /* OpenSans-SemiboldItalic.ttf in Resources */,
 				92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */,
+				92FA3EE325707C1D00D05326 /* SettingHeaderView.xib in Resources */,
+				92FA3EF32570805300D05326 /* PlayerHeaderView.xib in Resources */,
 				92A284CE2560D9F100739A94 /* OpenSans-Italic.ttf in Resources */,
 				92A284CD2560D9F100739A94 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				92A284CA2560D9F100739A94 /* OpenSans-LightItalic.ttf in Resources */,
 				92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */,
+				92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */,
 				92D66339255AE3FE00CE3F8E /* RecommendCell.xib in Resources */,
-				92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */,
-				92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */,
 				9263F763256A655D004450CA /* PlaylistHeaderTableViewCell.xib in Resources */,
 				92BCE73525616E520029DD3F /* HeaderView.xib in Resources */,
+				92FA3EDE257077B000D05326 /* PresetsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,10 +1170,12 @@
 			files = (
 				92BCE71E256155130029DD3F /* AllTrackViewModel.swift in Sources */,
 				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
+				92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */,
 				9228C7E62558185C0092FBB6 /* BrowseViewModel.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
 				92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */,
 				92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */,
+				92FA3EED25707F6500D05326 /* SegmentTableViewCell.swift in Sources */,
 				92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */,
 				92D647BA255CB6E000856900 /* TrackListViewController.swift in Sources */,
 				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
@@ -1163,12 +1194,13 @@
 				9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */,
 				92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */,
 				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
+				92FA3EE425707C1D00D05326 /* SettingHeaderView.swift in Sources */,
 				9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */,
 				921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */,
-				92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
 				927C7F87255FF360009F8898 /* Track.swift in Sources */,
 				92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */,
+				92FA3EDD257077B000D05326 /* PresetsTableViewCell.swift in Sources */,
 				92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */,
 				92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
@@ -1189,13 +1221,13 @@
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */,
 				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,
+				92FA3EF72570806700D05326 /* PlayerHeaderView.swift in Sources */,
 				92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */,
 				9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
 				92D647AC255CB52300856900 /* TrackTableViewCell.swift in Sources */,
 				92BCE72B256165330029DD3F /* PlayerViewModel.swift in Sources */,
 				92D6479B255CB26800856900 /* PlaylistViewController.swift in Sources */,
-				92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */,
 				92A284F62560E40C00739A94 /* DisplayItem.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
 				92698EB1255FEFF1009F3A9F /* MoyaProvider+Rx.swift in Sources */,

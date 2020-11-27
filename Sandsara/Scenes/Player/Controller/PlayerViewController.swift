@@ -18,11 +18,7 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         return playerVC
     }()
 
-    @IBOutlet weak var songTitleLabel: UILabel!
-    @IBOutlet weak var songAuthorLabel: UILabel!
-    @IBOutlet weak var trackImageView: UIImageView!
     @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet weak var backBtn: UIButton!
 
     var selecledIndex = BehaviorRelay<Int>(value: 0)
     var tracks = [DisplayItem]()
@@ -34,10 +30,6 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
 
     override func viewDidLoad() {
         setupTableView()
-        songTitleLabel.textColor = Asset.primary.color
-        songAuthorLabel.textColor = Asset.secondary.color
-        songTitleLabel.font = FontFamily.Tinos.regular.font(size: 30)
-        songAuthorLabel.font = FontFamily.OpenSans.regular.font(size: 14)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +46,9 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
 
     override func setupViewModel() {
         viewModel = PlayerViewModel(inputs: PlayerViewModelContract.Input(selectedIndex: selecledIndex, tracks: tracks))
+        tableView
+            .rx.setDelegate(self)
+            .disposed(by: disposeBag)
     }
 
     override func bindViewModel() {
@@ -68,13 +63,7 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         .drive(tableView.rx.items(dataSource: makeDataSource())).disposed(by: disposeBag)
 
         viewModel.outputs.trackDisplay.compactMap { $0 }.driveNext { [weak self] track in
-            self?.songTitleLabel.text = track.title
-            self?.songAuthorLabel.text = L10n.authorBy(track.author)
-            self?.trackImageView.kf.setImage(with: URL(string: track.thumbnail))
-        }.disposed(by: disposeBag)
-
-        backBtn.rx.tap.asDriver().driveNext { [weak self] in
-            self?.popupPresentationContainer?.closePopup(animated: true, completion: nil)
+            (self?.tableView.headerView(forSection: 0) as? PlayerHeaderView)?.reloadHeaderCell(trackDisplay: Driver.just(track))
         }.disposed(by: disposeBag)
 
         Observable
@@ -92,9 +81,10 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
-        tableView
-            .rx.setDelegate(self)
-            .disposed(by: disposeBag)
+        tableView.register(PlayerHeaderView.nib, forHeaderFooterViewReuseIdentifier: PlayerHeaderView.identifier)
+
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
     }
 
     private func makeDataSource() -> DataSource {
@@ -111,6 +101,23 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
 extension PlayerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 70
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlayerHeaderView.identifier) as! PlayerHeaderView
+        headerView.reloadHeaderCell(trackDisplay: Driver.just(tracks[selecledIndex.value]))
+        headerView.backBtn.rx.tap.asDriver().driveNext { [weak self] in
+            self?.popupPresentationContainer?.closePopup(animated: true, completion: nil)
+        }.disposed(by: disposeBag)
+        return headerView
     }
 }
 

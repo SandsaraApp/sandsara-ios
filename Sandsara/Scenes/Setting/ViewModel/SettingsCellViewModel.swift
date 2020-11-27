@@ -12,62 +12,52 @@ import RxCocoa
 
 enum SettingItemCellType {
     case speed(ProgressCellViewModel)
-    case pause(ToogleCellViewModel)
     case brightness(ProgressCellViewModel)
-    case lightMode(ToogleCellViewModel)
-    case colorSettings(ColorSettingsCellViewModel)
-    case lightTemp(ProgressCellViewModel)
-    case nightMode(MenuCellViewModel)
+    case presets(PresetsCellViewModel)
+    case lightCycleSpeed(ProgressCellViewModel)
     case advanced(MenuCellViewModel)
     case visitSandsara(MenuCellViewModel)
     case help(MenuCellViewModel)
+    case changeName(MenuCellViewModel)
     case firmwareUpdate(MenuCellViewModel)
-    case sleep(MenuCellViewModel)
-    case draw(MenuCellViewModel)
-    case disconnect(MenuCellViewModel)
+    case factoryReset(MenuCellViewModel)
 }
 
 enum SettingItemType {
     case speed
-    case pause
     case brightness
     case lightMode
-    case colorSettings
-    case lightTemp
-    case nightMode
+    case presets
+    case lightCycleSpeed
     case advanced
     case visitSandsara
     case help
     case firmwareUpdate
-    case sleep
-    case draw
-    case disconnect
+    case changeName
+    case factoryReset
 
     var title: String {
         switch self {
         case .speed:
-            return "Speed"
-        case .pause:
-            return "Led strip direction"
+            return L10n.speed
         case .brightness:
-            return "Color Palette"
+            return L10n.brightness
         case .lightMode:
-            return "Led Strip Cycle Mode Enable/ Disable"
-        case .colorSettings:
-            return "Color Settings"
-        case .lightTemp:
-            return "Lighting Color temperature"
-        case .nightMode:
-            return "Night Mode"
+            return L10n.lightmode
+        case .presets:
+            return L10n.presets
+        case .lightCycleSpeed:
+            return L10n.lightCycleSpeed
         case .advanced:
-            return "Advanced"
+            return L10n.advanceSetting
         case .visitSandsara:
-            return "Visit Sandsara"
-        case .help: return "Help"
-        case .firmwareUpdate: return "Firmware update"
-        case .sleep: return "Sleep"
-        case .draw: return "Draw"
-        case .disconnect: return "Disconnect"
+            return L10n.website
+        case .help:
+            return L10n.help
+        case .firmwareUpdate:
+            return L10n.updateFirmware
+        case .changeName: return L10n.changeName
+        case .factoryReset: return L10n.factoryReset
         }
     }
 }
@@ -110,47 +100,16 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
 
     func sendCommand(command: String) {
         // TODO: support multi type here
-        if inputs.type == .speed {
-            bluejay.write(to: ledStripSpeed, value: command) { result in
-                switch result {
-                case .success:
-                    debugPrint("Write to sensor location is successful.")
-                case .failure(let error):
-                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-}
-
-
-enum ToogleCellVMContract {
-    struct Input: InputType {
-        let type: SettingItemType
-        let toogle: BehaviorRelay<Bool>
-    }
-
-    struct Output: OutputType {
-        let title: Driver<String>
-        let command: Driver<String>
-    }
-}
-
-class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
-                                               ToogleCellVMContract.Output>, SettingSendCommandable {
-    override func transform() {
-        inputs
-            .toogle
-            .subscribeNext { value in
-                self.sendCommand(command: "\(value)")
-            }.disposed(by: disposeBag)
-
-        setOutput(Output(title: Driver.just(inputs.type.title),
-                         command: Driver.just("\(inputs.toogle.value)")))
-    }
-
-    func sendCommand(command: String) {
-        // TODO: support multi type here
+//        if inputs.type == .speed {
+//            bluejay.write(to: ledStripSpeed, value: command) { result in
+//                switch result {
+//                case .success:
+//                    debugPrint("Write to sensor location is successful.")
+//                case .failure(let error):
+//                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+//                }
+//            }
+//        }
     }
 }
 
@@ -171,40 +130,63 @@ class MenuCellViewModel: BaseCellViewModel<MenuCellVMContract.Input,
     }
 }
 
-enum DropDownCellVMContract {
+enum PresetsCellVMContract {
     struct Input: InputType {
         let type: SettingItemType
     }
 
     struct Output: OutputType {
         let title: Driver<String>
-        let datas: Driver<[String]>
+        let datas: Driver<[PresetCellViewModel]>
     }
 }
 
-class DropDownCellViewModel: BaseCellViewModel<DropDownCellVMContract.Input,
-                                           DropDownCellVMContract.Output> {
+class PresetsCellViewModel: BaseCellViewModel<PresetsCellVMContract.Input,
+                                              PresetsCellVMContract.Output>, SettingSendCommandable {
+
+    private let imageNames: [Int] = [Int](0...11)
+
     override func transform() {
+
+        let images = imageNames.map {
+            if $0 == 0 {
+                return "Rectangle"
+            }
+            return "Rectangle-\($0)"
+        }.map {
+            PresetCellViewModel(inputs: PresetCellVMContract.Input(item: $0))
+        }
+
         setOutput(Output(title: Driver.just(inputs.type.title),
-                         datas: Driver.just(["1", "2", "3", "4"])))
+                         datas: Driver.just(images)))
+    }
+
+    func sendCommand(command: String) {
+        bluejay.write(to: selectPattle, value: command) { result in
+            switch result {
+            case .success:
+                debugPrint("Write to sensor location is successful.\(result)")
+            case .failure(let error):
+                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
-enum ColorSettingsCellVMContract {
+
+enum PresetCellVMContract {
     struct Input: InputType {
-        let type: SettingItemType
+        let item: String
     }
 
     struct Output: OutputType {
-        let title: Driver<String>
-        let buttonTitles: Driver<[String]>
+        let image: Driver<UIImage?>
     }
 }
 
-class ColorSettingsCellViewModel: BaseCellViewModel<ColorSettingsCellVMContract.Input,
-                                                    ColorSettingsCellVMContract.Output> {
+class PresetCellViewModel: BaseCellViewModel<PresetCellVMContract.Input,
+                                                PresetCellVMContract.Output> {
     override func transform() {
-        setOutput(Output(title: Driver.just(inputs.type.title),
-                         buttonTitles: Driver.just(["Primary", "Secondary"])))
+        setOutput(Output(image: Driver.just(UIImage(named: inputs.item))))
     }
 }

@@ -16,7 +16,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 14)
+        progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 18)
         progressNameLabel.textColor = Asset.primary.color
 
         for state: UIControl.State in [.normal, .selected, .application, .reserved] {
@@ -32,29 +32,15 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .disposed(by: disposeBag)
 
         if viewModel.inputs.type == .speed {
-            progressSlider.maximumValue = 50
+            progressSlider.maximumValue = 500
             progressSlider.minimumValue = 10
             progressSlider
                 .rx.value
+                .changed
+                .debounce(.milliseconds(400), scheduler: MainScheduler.asyncInstance)
                 .compactMap { Int($0) }
                 .subscribeNext { value in
                     bluejay.write(to: ledStripSpeed, value: String(format:"%02X", value)) { result in
-                        switch result {
-                        case .success:
-                            debugPrint("Write to sensor location is successful.\(result)")
-                        case .failure(let error):
-                            debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-                        }
-                    }
-                }.disposed(by: disposeBag)
-        } else {
-            progressSlider.maximumValue = 15
-            progressSlider.minimumValue = 1
-            progressSlider
-                .rx.value
-                .compactMap { Int($0) }
-                .subscribeNext { value in
-                    bluejay.write(to: selectPattle, value: String(format:"%02X", value)) { result in
                         switch result {
                         case .success:
                             debugPrint("Write to sensor location is successful.\(result)")

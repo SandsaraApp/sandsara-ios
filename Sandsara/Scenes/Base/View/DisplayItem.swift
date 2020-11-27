@@ -64,6 +64,7 @@ struct DisplayItem {
         self.thumbnail = playlist.thumbnail
         self.id = playlist.tracks.first?.id ?? 0
         self.isPlaylist = isPlaylist
+        self.isLocal = isLocal
     }
 
     init(trackCellViewModel: TrackCellViewModel) {
