@@ -31,4 +31,6 @@ class BaseVMViewController<VMElement: ViewModelType, Input: InputParamView>:
     func bindViewModel() {
         fatalError("All subsclass must implement this method to bind data from VM -> UI View")
     }
+
+    
 }

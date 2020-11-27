@@ -26,10 +26,13 @@ extension UIViewController {
     }
 
     func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, tintColor: UIColor, title: String, preferredLargeTitle: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = preferredLargeTitle
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = tintColor
         if #available(iOS 13.0, *) {
             let navBarAppearance = UINavigationBarAppearance()
          //   navBarAppearance.configureWithDefaultBackground()
-            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: largeTitleColor]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: largeTitleColor, .font: FontFamily.Tinos.regular.font(size: 30)]
             navBarAppearance.titleTextAttributes = [.foregroundColor: largeTitleColor]
             navBarAppearance.backgroundColor = backgoundColor
 
@@ -37,16 +40,14 @@ extension UIViewController {
             navigationController?.navigationBar.compactAppearance = navBarAppearance
             navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
 
-            navigationController?.navigationBar.prefersLargeTitles = preferredLargeTitle
-            navigationController?.navigationBar.isTranslucent = false
-            navigationController?.navigationBar.tintColor = tintColor
+
+
             navigationItem.title = title
 
         } else {
             // Fallback on earlier versions
+            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: largeTitleColor, .font: FontFamily.Tinos.regular.font(size: 30)]
             navigationController?.navigationBar.barTintColor = backgoundColor
-            navigationController?.navigationBar.tintColor = tintColor
-            navigationController?.navigationBar.isTranslucent = false
             navigationItem.title = title
         }
     }

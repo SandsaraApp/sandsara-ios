@@ -20,6 +20,7 @@ public extension Reactive where Base: MoyaProviderType {
                 case let .success(response):
                     single(.success(response))
                 case let .failure(error):
+                    debugPrint(error.localizedDescription)
                     single(.error(error))
                 }
             }

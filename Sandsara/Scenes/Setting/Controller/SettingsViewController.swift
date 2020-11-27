@@ -9,10 +9,20 @@ import UIKit
 import RxCocoa
 import RxSwift
 import RxDataSources
+import Bluejay
+
+extension Array {
+    func chunks(_ chunkSize: Int) -> [[Element]] {
+        return stride(from: 0, to: self.count, by: chunkSize).map {
+            Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
+        }
+    }
+}
 
 class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet weak var testButton: UIBarButtonItem!
 
     private let viewWillAppearTrigger = PublishRelay<()>()
 
@@ -22,6 +32,16 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
 
 
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        configureNavigationBar(largeTitleColor: Asset.primary.color, backgoundColor: Asset.background.color, tintColor: Asset.primary.color, title: L10n.settings, preferredLargeTitle: true)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationController?.navigationBar.sizeToFit()
+        }
+    }
 
     override func setupViewModel() {
         setupTableView()
@@ -35,6 +55,10 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
             .map { [Section(model: "", items: $0)] }
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+
+        testButton.rx.tap.asDriver().driveNext {
+           self.readBinFile()
+        }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -42,37 +66,106 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         tableView.tableFooterView = UIView()
 
         tableView.register(ProgressTableViewCell.nib, forCellReuseIdentifier: ProgressTableViewCell.identifier)
-        tableView.register(ToogleTableViewCell.nib, forCellReuseIdentifier: ToogleTableViewCell.identifier)
         tableView.register(MenuTableViewCell.nib, forCellReuseIdentifier: MenuTableViewCell.identifier)
-        tableView.register(TwoTableViewCell.nib, forCellReuseIdentifier: TwoTableViewCell.identifier)
+        tableView.register(PresetsTableViewCell.nib, forCellReuseIdentifier: PresetsTableViewCell.identifier)
 
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
+
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = 73
+
+        tableView.register(SettingHeaderView.nib, forHeaderFooterViewReuseIdentifier: SettingHeaderView.identifier)
     }
 
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
             configureCell: { [weak self] (_, tableView, indexPath, modelType) -> UITableViewCell in
                 switch modelType {
-                case .speed(let viewModel), .brightness(let viewModel), .lightTemp(let viewModel):
+                case .speed(let viewModel), .brightness(let viewModel), .lightCycleSpeed(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ProgressTableViewCell.identifier, for: indexPath) as? ProgressTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .pause(let viewModel), .lightMode(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: ToogleTableViewCell.identifier, for: indexPath) as? ToogleTableViewCell else { return UITableViewCell()}
-                    cell.bind(to: viewModel)
-                    return cell
-                case .colorSettings(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoTableViewCell.identifier, for: indexPath) as? TwoTableViewCell else { return UITableViewCell()}
-                    cell.bind(to: viewModel)
-                    return cell
-                case .draw(let viewModel), .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel), .sleep(let viewModel), .firmwareUpdate(let viewModel), .nightMode(let viewModel), .disconnect(let viewModel):
+                case .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
+                case .presets(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: PresetsTableViewCell.identifier, for: indexPath) as? PresetsTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    return cell
+                default: return UITableViewCell()
                 }
+
             })
+    }
+
+    private func readBinFile() {
+        let start = CFAbsoluteTimeGetCurrent()
+        var isSendCompleted: Bool = false
+        var isSendError: Bool = false
+
+        bluejay.run { sandsaraBoard -> Bool in
+            if let bytes: [[UInt8]] = self.getFile(forResource: "proof", withExtension: "bin") {
+                do {
+                    try sandsaraBoard.write(to: sendFileFlag, value: "proof")
+                    for i in 0 ..< bytes.count {
+                        try sandsaraBoard.writeAndListen(writeTo: sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: sendBytes, completion: { (result: UInt8) -> ListenAction in
+                            let start1 = CFAbsoluteTimeGetCurrent()
+                            let diff = CFAbsoluteTimeGetCurrent() - start1
+                            print("Send chunks took \(diff) seconds")
+                            return .done
+                        })
+                    }
+                } catch(let error) {
+                    debugPrint(error.localizedDescription)
+                }
+
+            }
+            return false
+        } completionOnMainThread: { result in
+            switch result {
+            case .success(let value):
+                isSendCompleted = true
+                debugPrint("send success")
+                bluejay.write(to: sendFileFlag, value: "completed") { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Send file success")
+                        let diff = CFAbsoluteTimeGetCurrent() - start
+                        print("Took \(diff) seconds")
+                        self.showAlertVC(message: "Took \(diff) seconds")
+                    case .failure(let error):
+                        debugPrint("Send file error \(error.localizedDescription)")
+                    }
+                }
+            case .failure(let value):
+                isSendError = true
+                debugPrint("send error")
+            }
+        }
+    }
+
+    func getFile(forResource resource: String,
+                 withExtension fileExt: String?) -> [[UInt8]]? {
+        var chunks = [[UInt8]]()
+        // See if the file exists.
+        guard let filePath = Bundle.main.path(forResource: resource, ofType: fileExt) else {
+            return nil
+        }
+
+        if let stream = InputStream(fileAtPath: filePath) {
+            var buf = [UInt8](repeating: 0, count: 512)
+            stream.open()
+
+            while case let amount = stream.read(&buf, maxLength: 512), amount > 0 {
+                // print(amount)
+                chunks.append(Array(buf[..<amount]))
+            }
+            stream.close()
+        }
+        return chunks
     }
 
 }
@@ -84,5 +177,19 @@ extension SettingsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeightsDictionary[indexPath] ?? UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SettingHeaderView.identifier) as? SettingHeaderView
+        headerView?.titleLabel.text = L10n.basicSetting
+        return headerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 73
     }
 }

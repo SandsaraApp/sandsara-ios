@@ -42,7 +42,7 @@ enum BrowseVMContract {
 
 class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output> {
 
-    private let apiService: SandsaraAPIService
+    private let apiService: SandsaraDataServices
 
     private let playlists = BehaviorRelay<[DisplayItem]>(value: [])
     private let tracks = BehaviorRelay<[DisplayItem]>(value: [])
@@ -52,7 +52,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     
     private var datasources: [RecommendTableViewCellViewModel]
 
-    init(apiService: SandsaraAPIService, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
+    init(apiService: SandsaraDataServices, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
         self.apiService = apiService
         self.datasources = [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract
                                                                 .Input(section: .recommendedPlaylists, items: [])),
@@ -78,14 +78,24 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
             .subscribeNext { [weak self] in
             guard let self = self else { return }
             self.emitEventLoading(true)
-            Single
-                .zip(self.apiService.getRecommendPlaylist(),
-                     self.apiService.getRecommendTracks()).asObservable().subscribeNext {
-                        self.handleDatas(response1: $0, response2: $1)
-                     }.disposed(by: self.disposeBag)
+            self.apiService
+                .getRecommendedPlaylists(option: self.apiService.getServicesOption(for: .recommendedplaylist))
+                .asObservable().subscribeNext { playlists in
+                    let playlists = playlists.map { DisplayItem(playlist: $0)}
+                    self.cachedPlaylists.accept(playlists)
+                    self.playlists.accept(playlists)
+                    self.apiService
+                        .getRecommendTracks(option: self.apiService.getServicesOption(for: .recommendedtracks))
+                        .asObservable().subscribeNext { tracks in
+                            let tracks = tracks.map { DisplayItem(track: $0) }
+                            self.tracks.accept(tracks)
+                            self.cachedTracks.accept(tracks)
+                            self.emitEventLoading(false)
+                        }.disposed(by: self.disposeBag)
+                }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
 
-        let datasources = Driver.combineLatest(self.playlists.asDriver(), self.tracks.asDriver()).map {
+        let datasources = Driver.combineLatest(self.playlists.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendedPlaylists ?? []).map { DisplayItem(playlist: $0)}), self.tracks.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendTracks ?? []).map { DisplayItem(track: $0)})).map {
             return [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: $0)), RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedTracks, items: $1))]
         }
 
@@ -93,6 +103,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     }
 
     private func handleSearch(title: String) {
+        emitEventLoading(false)
         self.playlists.accept(self.cachedPlaylists.value.filter { $0.title.contains(title) })
         let playlistVM = RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: self.playlists.value))
         self.tracks.accept(self.cachedTracks.value.filter { $0.title.contains(title) })
@@ -107,6 +118,7 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
         self.tracks.accept(tracks)
         self.cachedPlaylists.accept(playlists)
         self.cachedTracks.accept(tracks)
+        emitEventLoading(false)
     }
 
     private func resetSearch() {

@@ -1,8 +1,8 @@
 //
-//  CellIdentifier.swift
+//  Cell+Extensions.swift
 //  Sandsara
 //
-//  Created by Tín Phan on 11/8/20.
+//  Created by Tín Phan on 22/11/2020.
 //
 
 import UIKit

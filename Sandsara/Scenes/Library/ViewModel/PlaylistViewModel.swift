@@ -20,15 +20,16 @@ enum PlaylistViewModelContract {
 
 final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output> {
 
-    private let apiService: SandsaraAPIService
+    private let apiService: SandsaraDataServices
     let datas = BehaviorRelay<[PlaylistCellViewModel]>(value: [])
 
-    init(apiService: SandsaraAPIService, inputs: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output>.Input) {
+    init(apiService: SandsaraDataServices, inputs: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output>.Input) {
         self.apiService = apiService
         super.init(inputs: inputs)
     }
 
     override func transform() {
+        emitEventLoading(true)
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
             self.buildCellVM()
@@ -52,9 +53,10 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
             items.append(contentsOf: localList)
         }
 
-        apiService.playlists().asObservable().subscribeNext { values in
+        apiService.getAllPlaylist(option: apiService.getServicesOption(for: .playlists)).asObservable().subscribeNext { values in
             items.append(contentsOf: values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0)) })
             self.datas.accept(items)
+            self.emitEventLoading(false)
         }.disposed(by: disposeBag)
     }
 }

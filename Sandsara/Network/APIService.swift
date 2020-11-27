@@ -7,6 +7,17 @@
 
 import RxSwift
 import Moya
+import Alamofire
+
+class DefaultAlamofireSession: Alamofire.SessionManager {
+    static let shared: SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 20 // as seconds, you can set your request timeout
+        configuration.timeoutIntervalForResource = 20 // as seconds, you can set your resource timeout
+        configuration.requestCachePolicy = .useProtocolCachePolicy
+        return Alamofire.SessionManager(configuration: configuration)
+    }()
+}
 
 enum ServiceOption {
     case cache
@@ -24,7 +35,7 @@ protocol APIServiceCall {
 
 class SandsaraAPIService: APIServiceCall {
 
-    private let apiProvider: MoyaProvider<SandsaraAPI>
+    let apiProvider: MoyaProvider<SandsaraAPI>
 
     init(apiProvider: MoyaProvider<SandsaraAPI>) {
         self.apiProvider = apiProvider
@@ -33,12 +44,14 @@ class SandsaraAPIService: APIServiceCall {
     func getRecommendTracks() -> Single<[Track]> {
         return apiProvider
             .rx.request(.recommendedtracks)
+            .debug()
             .map(TracksResponse.self).map { $0.tracks }
     }
 
     func getRecommendPlaylist() -> Single<[Playlist]> {
         return apiProvider
             .rx.request(.recommendedplaylist)
+            .debug()
             .map(PlaylistsResponse.self)
             .map { $0.playlists }
     }
@@ -46,6 +59,7 @@ class SandsaraAPIService: APIServiceCall {
     func playlistDetail() -> Single<[Track]> {
         return apiProvider
             .rx.request(.playlistDetail)
+            .debug()
             .map(TracksResponse.self)
             .map { $0.tracks }
     }

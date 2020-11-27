@@ -13,15 +13,15 @@ import RxCocoa
 class CustomSegmentControl: BetterSegmentedControl {
     private(set) var segmentSelected = BehaviorRelay<Int>(value: 0)
 
-    func setStyle() {
-        let titleFont = FontFamily.Tinos.regular.font(size: 30)
-        segments = LabelSegment.segments(withTitles: [L10n.tracks, L10n.playlists],
-                                         normalFont: titleFont,
+    func setStyle(font: UIFont?, titles: [String]) {
+        segments = LabelSegment.segments(withTitles: titles,
+                                         normalFont: font,
                                          normalTextColor: Asset.tertiary.color,
-                                         selectedFont: titleFont,
+                                         selectedFont: font,
                                          selectedTextColor: Asset.primary.color)
         self.addTarget(self, action: #selector(segmentDidSelected), for: .valueChanged)
     }
+
 
     @objc
     private func segmentDidSelected() {
@@ -55,7 +55,7 @@ class LibraryViewController: BaseViewController<NoInputParam> {
     }
 
     private func setupSegment() {
-        segmentControl.setStyle()
+        segmentControl.setStyle(font: FontFamily.Tinos.regular.font(size: 30), titles:  [L10n.tracks, L10n.playlists])
 
         segmentControl
             .segmentSelected
@@ -84,5 +84,18 @@ class LibraryViewController: BaseViewController<NoInputParam> {
             addChildViewController(controller: playlistsVC!, containerView: containerView, byConstraints: true)
             playlistsVC?.viewWillAppearTrigger.accept(())
         }
+    }
+
+    override func triggerAPIAgain() {
+        self.showAlert(title: "Alert", message: "No Internet Connection", preferredStyle: .alert, actions:
+                        UIAlertAction(title: "Try Again", style: .default, handler: { _ in
+                            if self.segmentControl.segmentSelected.value == 0 {
+                                self.allTrackVC?.viewWillAppearTrigger.accept(())
+                            } else {
+                                self.playlistsVC?.viewWillAppearTrigger.accept(())
+                            }
+                        }),
+                       UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        )
     }
 }

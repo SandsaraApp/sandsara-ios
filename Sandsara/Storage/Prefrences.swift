@@ -74,85 +74,33 @@ struct Preferences {
     }
 
     struct PlaylistsDomain {
-        @UserDefault(Keys.featuredList.key, defaultValue: nil)
-        static var featuredList: [GenreItem]?
+        @UserDefault(Keys.recommendedTracks.key, defaultValue: nil)
+        static var recommendTracks: [Track]?
 
-        @UserDefault(Keys.categories.key, defaultValue: nil)
-        static var categories: [GenreItem]?
+        @UserDefault(Keys.allTracks.key, defaultValue: nil)
+        static var allTracks: [Track]?
+
+        @UserDefault(Keys.recommendedPlaylists.key, defaultValue: nil)
+        static var recommendedPlaylists: [Playlist]?
+
+        @UserDefault(Keys.allRemotePlaylists.key, defaultValue: nil)
+        static var allRemotePlaylists: [Playlist]?
+
+        @UserDefault(Keys.playlistDetail.key, defaultValue: nil)
+        static var playlistDetail: [Track]?
+        
 
         enum Keys: String {
-            case topListId
-            case featuredList
-            case categories
+            case recommendedTracks
+            case recommendedPlaylists
+            case allTracks
+            case allRemotePlaylists
+            case playlistDetail
 
             var key: String {
                 return Preferences.prefixDomain + self.rawValue
             }
         }
-    }
-}
-
-struct Config: Decodable {
-    var trial_time_minutes: Double = 0.0
-    var testing_version = 0
-
-    var data: DataItem?
-
-    enum CodingKeys: String, CodingKey {
-        case trial_time_minutes
-        case testing_version
-
-        case data
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent(Double.self, forKey: .trial_time_minutes, assignTo: &trial_time_minutes)
-        container.decodeIfPresent(Int.self, forKey: .testing_version, assignTo: &testing_version)
-
-        data = try container.decodeIfPresent(DataItem.self, forKey: .data)
-    }
-}
-
-struct DataItem: Decodable {
-    var features = [GenreItem]()
-    var categories = [GenreItem]()
-
-    enum CodingKeys: String, CodingKey {
-        case features = "playlists"
-        case categories = "recommended_playlist"
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent([GenreItem].self, forKey: .features, assignTo: &features)
-        container.decodeIfPresent([GenreItem].self, forKey: .categories, assignTo: &categories)
-    }
-}
-
-class GenreItem: Codable {
-    var id = 0
-    var title = ""
-    var thumbnail = ""
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case thumbnail
-    }
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent(Int.self, forKey: .id, assignTo: &id)
-        container.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
-        container.decodeIfPresent(String.self, forKey: .thumbnail, assignTo: &thumbnail)
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(id, forKey: .id)
-        try container.encodeIfPresent(title, forKey: .title)
-        try container.encodeIfPresent(thumbnail, forKey: .thumbnail)
     }
 }
 

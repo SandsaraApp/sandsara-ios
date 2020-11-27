@@ -9,7 +9,7 @@ import UIKit
 import LNPopupController
 import RxSwift
 import RxCocoa
-import Kingfisher
+
 
 enum PlayerState {
     case noConnect

@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		34EB54C0DA74452F0DFAAED1 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E7B6CA0915069102F9E0E05 /* Pods_Sandsara_SandsaraUITests.framework */; };
-		44C6F5BC1B5E96BE973A4269 /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F61F5E730FD8C9BC034F327D /* Pods_SandsaraTests.framework */; };
+		921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */; };
 		9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6C925569E050092FBB6 /* UIAlertController.swift */; };
 		9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6D225569F0A0092FBB6 /* Codable.swift */; };
 		9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6DA25569F5D0092FBB6 /* Dictionary.swift */; };
@@ -18,9 +17,6 @@
 		9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C71B2556AFA10092FBB6 /* AppError.swift */; };
 		9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */; };
 		9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */; };
-		9228C7702557EA950092FBB6 /* CellUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C76F2557EA950092FBB6 /* CellUpdatable.swift */; };
-		9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */; };
-		9228C7842557EC330092FBB6 /* SectionModelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7822557EC330092FBB6 /* SectionModelItem.swift */; };
 		9228C7DB255817A60092FBB6 /* Prefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7DA255817A60092FBB6 /* Prefrences.swift */; };
 		9228C7E62558185C0092FBB6 /* BrowseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */; };
 		9228C7F4255818B00092FBB6 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7F3255818B00092FBB6 /* BrowseViewController.swift */; };
@@ -31,6 +27,12 @@
 		924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5225565F880013CC71 /* LaunchScreen.storyboard */; };
 		924EDF5F25565F880013CC71 /* SandsaraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF5E25565F880013CC71 /* SandsaraTests.swift */; };
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
+		9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72A256A0C60004450CA /* SandsaraDataService.swift */; };
+		9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */; };
+		9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F737256A1527004450CA /* Cell+Extensions.swift */; };
+		9263F75C256A50E1004450CA /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F75B256A50E1004450CA /* NetworkService.swift */; };
+		9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */; };
+		9263F763256A655D004450CA /* PlaylistHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -60,13 +62,14 @@
 		92A2850A256103D500739A94 /* Tinos-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284E12560DECA00739A94 /* Tinos-BoldItalic.ttf */; };
 		92A2850B256103D500739A94 /* Tinos-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284DE2560DECA00739A94 /* Tinos-Italic.ttf */; };
 		92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284E02560DECA00739A94 /* Tinos-Regular.ttf */; };
+		92AD7BBB256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */; };
+		92AD7BE9256D6CCC00F0D0E6 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */; };
+		92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */ = {isa = PBXBuildFile; fileRef = 92AD7BF2256D704300F0D0E6 /* proof.bin */; };
 		92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04624255BE0CF0086FFFE /* SettingsViewController.swift */; };
 		92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */; };
 		92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */; };
 		92B04632255BE1F00086FFFE /* ViewModelBindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04631255BE1F00086FFFE /* ViewModelBindable.swift */; };
 		92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */; };
-		92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */; };
-		92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */; };
 		92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */; };
 		92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */; };
 		92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04654255BF7800086FFFE /* SettingsViewModel.swift */; };
@@ -83,8 +86,6 @@
 		92BE9E722564965600081EEE /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; };
 		92BE9E732564965600081EEE /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */; };
-		92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64771255BFDDB00856900 /* TwoTableViewCell.swift */; };
-		92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64772255BFDDB00856900 /* TwoTableViewCell.xib */; };
 		92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */; };
 		92D64789255CAC2400856900 /* PlaylistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */; };
 		92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D64791255CAE0400856900 /* PlaylistViewModel.swift */; };
@@ -99,7 +100,19 @@
 		92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D66333255AE3FE00CE3F8E /* RecommendCell.swift */; };
 		92D66338255AE3FE00CE3F8E /* RecommendTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66334255AE3FE00CE3F8E /* RecommendTableViewCell.xib */; };
 		92D66339255AE3FE00CE3F8E /* RecommendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D66335255AE3FE00CE3F8E /* RecommendCell.xib */; };
-		D322ABD327BBB03DCE5334CC /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8597A7AFCC8D36FA0B7AAF /* Pods_Sandsara.framework */; };
+		92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3ED5257076AF00D05326 /* ColorCell.swift */; };
+		92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3ED6257076AF00D05326 /* ColorCell.xib */; };
+		92FA3EDD257077B000D05326 /* PresetsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */; };
+		92FA3EDE257077B000D05326 /* PresetsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */; };
+		92FA3EE325707C1D00D05326 /* SettingHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */; };
+		92FA3EE425707C1D00D05326 /* SettingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */; };
+		92FA3EED25707F6500D05326 /* SegmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */; };
+		92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */; };
+		92FA3EF32570805300D05326 /* PlayerHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EF22570805300D05326 /* PlayerHeaderView.xib */; };
+		92FA3EF72570806700D05326 /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EF62570806700D05326 /* PlayerHeaderView.swift */; };
+		956ACD29842CA00F3103602F /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513BACB0A6679C6E2D4735C9 /* Pods_SandsaraTests.framework */; };
+		A326830BEF8E531E17094499 /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28036651D79EAF0AB954D8B7 /* Pods_Sandsara.framework */; };
+		D38FE9081C061A133686CAB4 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68EDD128410CCC0F62A209B8 /* Pods_Sandsara_SandsaraUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,10 +154,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0CC9067F5DA5E07D1BBAC1AA /* Pods-SandsaraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.debug.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.debug.xcconfig"; sourceTree = "<group>"; };
-		2671682481212CF433FFE059 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		2E7B6CA0915069102F9E0E05 /* Pods_Sandsara_SandsaraUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara_SandsaraUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		71E7EC73FA1D79949DB91F41 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.release.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.release.xcconfig"; sourceTree = "<group>"; };
+		101B04B53D3F9E007E3361F9 /* Pods-SandsaraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.debug.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.debug.xcconfig"; sourceTree = "<group>"; };
+		28036651D79EAF0AB954D8B7 /* Pods_Sandsara.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		30FD19A58C4801B8CE6C59BF /* Pods-Sandsara.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.debug.xcconfig"; sourceTree = "<group>"; };
+		513BACB0A6679C6E2D4735C9 /* Pods_SandsaraTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SandsaraTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68EDD128410CCC0F62A209B8 /* Pods_Sandsara_SandsaraUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara_SandsaraUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		888A53D5625C4CFE336F9F86 /* Pods-SandsaraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.release.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.release.xcconfig"; sourceTree = "<group>"; };
+		91F2EF0681A8B22F30B336B1 /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
+		921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewController.swift; sourceTree = "<group>"; };
 		9228C6C925569E050092FBB6 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		9228C6D225569F0A0092FBB6 /* Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codable.swift; sourceTree = "<group>"; };
 		9228C6DA25569F5D0092FBB6 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -154,9 +171,6 @@
 		9228C71B2556AFA10092FBB6 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		9228C73A2556B1360092FBB6 /* BaseVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVMViewController.swift; sourceTree = "<group>"; };
 		9228C7562556B8810092FBB6 /* Rx+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Rx+Shortcuts.swift"; sourceTree = "<group>"; };
-		9228C76F2557EA950092FBB6 /* CellUpdatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellUpdatable.swift; sourceTree = "<group>"; };
-		9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifier.swift; sourceTree = "<group>"; };
-		9228C7822557EC330092FBB6 /* SectionModelItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionModelItem.swift; sourceTree = "<group>"; };
 		9228C7DA255817A60092FBB6 /* Prefrences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefrences.swift; sourceTree = "<group>"; };
 		9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewModel.swift; sourceTree = "<group>"; };
 		9228C7F3255818B00092FBB6 /* BrowseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +184,12 @@
 		924EDF6525565F880013CC71 /* SandsaraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SandsaraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF6925565F880013CC71 /* SandsaraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraUITests.swift; sourceTree = "<group>"; };
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9263F72A256A0C60004450CA /* SandsaraDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataService.swift; sourceTree = "<group>"; };
+		9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataAccess.swift; sourceTree = "<group>"; };
+		9263F737256A1527004450CA /* Cell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Extensions.swift"; sourceTree = "<group>"; };
+		9263F75B256A50E1004450CA /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistHeaderTableViewCell.xib; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -200,13 +220,14 @@
 		92A284E82560E04400739A94 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		92A284F02560E25600739A94 /* RecommendCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendCellViewModel.swift; sourceTree = "<group>"; };
 		92A284F52560E40C00739A94 /* DisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayItem.swift; sourceTree = "<group>"; };
+		92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewModel.swift; sourceTree = "<group>"; };
+		92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		92AD7BF2256D704300F0D0E6 /* proof.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = proof.bin; sourceTree = "<group>"; };
 		92B04624255BE0CF0086FFFE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
 		92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressTableViewCell.xib; sourceTree = "<group>"; };
 		92B04631255BE1F00086FFFE /* ViewModelBindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelBindable.swift; sourceTree = "<group>"; };
 		92B0463E255BE22D0086FFFE /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
-		92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
-		92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
 		92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuTableViewCell.xib; sourceTree = "<group>"; };
 		92B04654255BF7800086FFFE /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -224,8 +245,6 @@
 		92BCE73325616E520029DD3F /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
 		92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LNPopupController.xcodeproj; path = LNPopupController/LNPopupController.xcodeproj; sourceTree = "<group>"; };
 		92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarViewController.swift; sourceTree = "<group>"; };
-		92D64771255BFDDB00856900 /* TwoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoTableViewCell.swift; sourceTree = "<group>"; };
-		92D64772255BFDDB00856900 /* TwoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoTableViewCell.xib; sourceTree = "<group>"; };
 		92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
 		92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistTableViewCell.xib; sourceTree = "<group>"; };
 		92D64791255CAE0400856900 /* PlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
@@ -241,11 +260,18 @@
 		92D66334255AE3FE00CE3F8E /* RecommendTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecommendTableViewCell.xib; sourceTree = "<group>"; };
 		92D66335255AE3FE00CE3F8E /* RecommendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecommendCell.xib; sourceTree = "<group>"; };
 		92D6633D255AE55A00CE3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A55935358626D41FB4B29B53 /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
-		DD8597A7AFCC8D36FA0B7AAF /* Pods_Sandsara.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E58E47A17FE9313FBE5887E1 /* Pods-SandsaraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.release.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.release.xcconfig"; sourceTree = "<group>"; };
-		F332ED6328A038FDA55BC06B /* Pods-Sandsara.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.debug.xcconfig"; sourceTree = "<group>"; };
-		F61F5E730FD8C9BC034F327D /* Pods_SandsaraTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SandsaraTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		92FA3ED5257076AF00D05326 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		92FA3ED6257076AF00D05326 /* ColorCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorCell.xib; sourceTree = "<group>"; };
+		92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsTableViewCell.swift; sourceTree = "<group>"; };
+		92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PresetsTableViewCell.xib; sourceTree = "<group>"; };
+		92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingHeaderView.xib; sourceTree = "<group>"; };
+		92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingHeaderView.swift; sourceTree = "<group>"; };
+		92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTableViewCell.swift; sourceTree = "<group>"; };
+		92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableViewCell.xib; sourceTree = "<group>"; };
+		92FA3EF22570805300D05326 /* PlayerHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerHeaderView.xib; sourceTree = "<group>"; };
+		92FA3EF62570806700D05326 /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
+		B97597A42A8A64009BAF5F27 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.release.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.release.xcconfig"; sourceTree = "<group>"; };
+		C577E2E7F52D0E498002DC1A /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,7 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92BE9E722564965600081EEE /* LNPopupController.framework in Frameworks */,
-				D322ABD327BBB03DCE5334CC /* Pods_Sandsara.framework in Frameworks */,
+				A326830BEF8E531E17094499 /* Pods_Sandsara.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +288,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44C6F5BC1B5E96BE973A4269 /* Pods_SandsaraTests.framework in Frameworks */,
+				956ACD29842CA00F3103602F /* Pods_SandsaraTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,19 +296,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34EB54C0DA74452F0DFAAED1 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */,
+				D38FE9081C061A133686CAB4 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5D3E35E2546F73565FCCD8D7 /* Frameworks */ = {
+		32648F1BF0834A9C969B467F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DD8597A7AFCC8D36FA0B7AAF /* Pods_Sandsara.framework */,
-				2E7B6CA0915069102F9E0E05 /* Pods_Sandsara_SandsaraUITests.framework */,
-				F61F5E730FD8C9BC034F327D /* Pods_SandsaraTests.framework */,
+				28036651D79EAF0AB954D8B7 /* Pods_Sandsara.framework */,
+				68EDD128410CCC0F62A209B8 /* Pods_Sandsara_SandsaraUITests.framework */,
+				513BACB0A6679C6E2D4735C9 /* Pods_SandsaraTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -290,14 +316,39 @@
 		65EF2C02DE236C8EB9FE28CB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F332ED6328A038FDA55BC06B /* Pods-Sandsara.debug.xcconfig */,
-				A55935358626D41FB4B29B53 /* Pods-Sandsara.release.xcconfig */,
-				2671682481212CF433FFE059 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */,
-				71E7EC73FA1D79949DB91F41 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */,
-				0CC9067F5DA5E07D1BBAC1AA /* Pods-SandsaraTests.debug.xcconfig */,
-				E58E47A17FE9313FBE5887E1 /* Pods-SandsaraTests.release.xcconfig */,
+				30FD19A58C4801B8CE6C59BF /* Pods-Sandsara.debug.xcconfig */,
+				91F2EF0681A8B22F30B336B1 /* Pods-Sandsara.release.xcconfig */,
+				C577E2E7F52D0E498002DC1A /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */,
+				B97597A42A8A64009BAF5F27 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */,
+				101B04B53D3F9E007E3361F9 /* Pods-SandsaraTests.debug.xcconfig */,
+				888A53D5625C4CFE336F9F86 /* Pods-SandsaraTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		921A9F02256BB49C0068AF22 /* AddPlaylist */ = {
+			isa = PBXGroup;
+			children = (
+				921A9F04256BB4B40068AF22 /* ViewModel */,
+				921A9F03256BB4A90068AF22 /* Controller */,
+			);
+			path = AddPlaylist;
+			sourceTree = "<group>";
+		};
+		921A9F03256BB4A90068AF22 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		921A9F04256BB4B40068AF22 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		9228C67F25569B410092FBB6 /* Resources */ = {
@@ -332,13 +383,14 @@
 			isa = PBXGroup;
 			children = (
 				9228C6FE2556A36B0092FBB6 /* Base */,
+				921A9F02256BB49C0068AF22 /* AddPlaylist */,
 				927CAC202567B29B00DA54EB /* Devices */,
 				9228C7CA255810280092FBB6 /* Home */,
-				92D6634B255AE93B00CE3F8E /* Setting */,
 				92D64781255CAB4C00856900 /* Library */,
+				92D6477A255CAB2900856900 /* Player */,
+				92D6634B255AE93B00CE3F8E /* Setting */,
 				92D647A3255CB4A600856900 /* TrackList */,
 				92D647A2255CB49B00856900 /* TrackDetail */,
-				92D6477A255CAB2900856900 /* Player */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -346,6 +398,7 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92AD7BE7256D6CBD00F0D0E6 /* DocumentPicker */,
 				9228C6D125569EFB0092FBB6 /* DataTypes */,
 				9228C74D2556B6090092FBB6 /* Rx */,
 				92698EA7255FEFF1009F3A9F /* RxMoya */,
@@ -360,6 +413,7 @@
 			children = (
 				9228C6C925569E050092FBB6 /* UIAlertController.swift */,
 				9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */,
+				9263F737256A1527004450CA /* Cell+Extensions.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -430,16 +484,6 @@
 			path = Rx;
 			sourceTree = "<group>";
 		};
-		9228C76E2557EA770092FBB6 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				9228C76F2557EA950092FBB6 /* CellUpdatable.swift */,
-				9228C77C2557EB7C0092FBB6 /* CellIdentifier.swift */,
-				9228C7822557EC330092FBB6 /* SectionModelItem.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		9228C7CA255810280092FBB6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,6 +499,7 @@
 			children = (
 				9228C7DA255817A60092FBB6 /* Prefrences.swift */,
 				92BA99E62560B6EF00564782 /* DataLayer.swift */,
+				9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -511,7 +556,7 @@
 				924EDF6825565F880013CC71 /* SandsaraUITests */,
 				924EDF4525565F850013CC71 /* Products */,
 				65EF2C02DE236C8EB9FE28CB /* Pods */,
-				5D3E35E2546F73565FCCD8D7 /* Frameworks */,
+				32648F1BF0834A9C969B467F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -528,10 +573,10 @@
 		924EDF4625565F850013CC71 /* Sandsara */ = {
 			isa = PBXGroup;
 			children = (
+				92AD7BF2256D704300F0D0E6 /* proof.bin */,
 				92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */,
 				92A284A62560D7F500739A94 /* Generated */,
 				9228C68425569B740092FBB6 /* Application */,
-				9228C76E2557EA770092FBB6 /* Common */,
 				9228C6C725569DEF0092FBB6 /* Extensions */,
 				9228C71A2556AF4A0092FBB6 /* Model */,
 				92698E87255FED95009F3A9F /* Network */,
@@ -567,6 +612,8 @@
 			children = (
 				92698E88255FEDA7009F3A9F /* Endpoint.swift */,
 				927C7F7C255FF294009F8898 /* APIService.swift */,
+				9263F72A256A0C60004450CA /* SandsaraDataService.swift */,
+				9263F75B256A50E1004450CA /* NetworkService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -620,17 +667,29 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
+		92AD7BE7256D6CBD00F0D0E6 /* DocumentPicker */ = {
+			isa = PBXGroup;
+			children = (
+				92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */,
+			);
+			path = DocumentPicker;
+			sourceTree = "<group>";
+		};
 		92B04629255BE1860086FFFE /* ProgressCell */ = {
 			isa = PBXGroup;
 			children = (
 				92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */,
 				92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */,
-				92B04643255BE5680086FFFE /* ToogleTableViewCell.swift */,
-				92B04644255BE5680086FFFE /* ToogleTableViewCell.xib */,
 				92B0464D255BF6C20086FFFE /* MenuTableViewCell.swift */,
 				92B0464E255BF6C20086FFFE /* MenuTableViewCell.xib */,
-				92D64771255BFDDB00856900 /* TwoTableViewCell.swift */,
-				92D64772255BFDDB00856900 /* TwoTableViewCell.xib */,
+				92FA3ED5257076AF00D05326 /* ColorCell.swift */,
+				92FA3ED6257076AF00D05326 /* ColorCell.xib */,
+				92FA3EDB257077B000D05326 /* PresetsTableViewCell.swift */,
+				92FA3EDC257077B000D05326 /* PresetsTableViewCell.xib */,
+				92FA3EE225707C1D00D05326 /* SettingHeaderView.swift */,
+				92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */,
+				92FA3EEB25707F6500D05326 /* SegmentTableViewCell.swift */,
+				92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */,
 			);
 			path = ProgressCell;
 			sourceTree = "<group>";
@@ -663,6 +722,7 @@
 		92D6477A255CAB2900856900 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				92FA3EF12570802900D05326 /* View */,
 				92BCE729256165170029DD3F /* ViewModel */,
 				92BCE725256165130029DD3F /* Controller */,
 			);
@@ -732,6 +792,8 @@
 				92BCE73325616E520029DD3F /* HeaderView.xib */,
 				92D647AA255CB52300856900 /* TrackTableViewCell.swift */,
 				92D647AB255CB52300856900 /* TrackTableViewCell.xib */,
+				9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */,
+				9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -795,6 +857,15 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		92FA3EF12570802900D05326 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92FA3EF22570805300D05326 /* PlayerHeaderView.xib */,
+				92FA3EF62570806700D05326 /* PlayerHeaderView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -802,13 +873,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF6E25565F880013CC71 /* Build configuration list for PBXNativeTarget "Sandsara" */;
 			buildPhases = (
-				B80CF6BE00017A04B28D67C4 /* [CP] Check Pods Manifest.lock */,
+				E99D4D494C4263935D6AF13D /* [CP] Check Pods Manifest.lock */,
 				924EDF4025565F850013CC71 /* Sources */,
 				924EDF4125565F850013CC71 /* Frameworks */,
 				924EDF4225565F850013CC71 /* Resources */,
 				92BA99F02560D45B00564782 /* ShellScript */,
 				92BE9E0E256495A900081EEE /* Embed Frameworks */,
-				959108AFF03FE36AC40476D3 /* [CP] Embed Pods Frameworks */,
+				0E2A7763CD15A87909F5FDCB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -823,7 +894,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF7125565F880013CC71 /* Build configuration list for PBXNativeTarget "SandsaraTests" */;
 			buildPhases = (
-				89A3BF0985A9D7022E8BD5DD /* [CP] Check Pods Manifest.lock */,
+				85EC5853DBC540C4D6543D08 /* [CP] Check Pods Manifest.lock */,
 				924EDF5625565F880013CC71 /* Sources */,
 				924EDF5725565F880013CC71 /* Frameworks */,
 				924EDF5825565F880013CC71 /* Resources */,
@@ -842,11 +913,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF7425565F880013CC71 /* Build configuration list for PBXNativeTarget "SandsaraUITests" */;
 			buildPhases = (
-				085316147C2BE299959D8733 /* [CP] Check Pods Manifest.lock */,
+				1BF21BB2A7B2929D9D0E69BF /* [CP] Check Pods Manifest.lock */,
 				924EDF6125565F880013CC71 /* Sources */,
 				924EDF6225565F880013CC71 /* Frameworks */,
 				924EDF6325565F880013CC71 /* Resources */,
-				457D4B339420767762DE4986 /* [CP] Embed Pods Frameworks */,
+				E3DE267A4587CFDC2D163B52 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -927,12 +998,14 @@
 				92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */,
 				924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */,
 				92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */,
+				92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */,
 				92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */,
 				92A284C82560D9F100739A94 /* OpenSans-Semibold.ttf in Resources */,
 				92A284C52560D9F100739A94 /* OpenSans-Bold.ttf in Resources */,
 				92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */,
 				924EDF5125565F880013CC71 /* Assets.xcassets in Resources */,
 				92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */,
+				92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */,
 				92D66338255AE3FE00CE3F8E /* RecommendTableViewCell.xib in Resources */,
 				92A284C92560D9F100739A94 /* OpenSans-Regular.ttf in Resources */,
 				92A284CC2560D9F100739A94 /* OpenSans-ExtraBold.ttf in Resources */,
@@ -940,14 +1013,17 @@
 				924EDF4F25565F850013CC71 /* Main.storyboard in Resources */,
 				92A284CB2560D9F100739A94 /* OpenSans-SemiboldItalic.ttf in Resources */,
 				92B04650255BF6C20086FFFE /* MenuTableViewCell.xib in Resources */,
+				92FA3EE325707C1D00D05326 /* SettingHeaderView.xib in Resources */,
+				92FA3EF32570805300D05326 /* PlayerHeaderView.xib in Resources */,
 				92A284CE2560D9F100739A94 /* OpenSans-Italic.ttf in Resources */,
 				92A284CD2560D9F100739A94 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				92A284CA2560D9F100739A94 /* OpenSans-LightItalic.ttf in Resources */,
 				92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */,
+				92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */,
 				92D66339255AE3FE00CE3F8E /* RecommendCell.xib in Resources */,
-				92D64774255BFDDB00856900 /* TwoTableViewCell.xib in Resources */,
-				92B04646255BE5680086FFFE /* ToogleTableViewCell.xib in Resources */,
+				9263F763256A655D004450CA /* PlaylistHeaderTableViewCell.xib in Resources */,
 				92BCE73525616E520029DD3F /* HeaderView.xib in Resources */,
+				92FA3EDE257077B000D05326 /* PresetsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,7 +1044,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		085316147C2BE299959D8733 /* [CP] Check Pods Manifest.lock */ = {
+		0E2A7763CD15A87909F5FDCB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1BF21BB2A7B2929D9D0E69BF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -990,24 +1083,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		457D4B339420767762DE4986 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		89A3BF0985A9D7022E8BD5DD /* [CP] Check Pods Manifest.lock */ = {
+		85EC5853DBC540C4D6543D08 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1046,24 +1122,24 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
 		};
-		959108AFF03FE36AC40476D3 /* [CP] Embed Pods Frameworks */ = {
+		E3DE267A4587CFDC2D163B52 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B80CF6BE00017A04B28D67C4 /* [CP] Check Pods Manifest.lock */ = {
+		E99D4D494C4263935D6AF13D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1094,34 +1170,41 @@
 			files = (
 				92BCE71E256155130029DD3F /* AllTrackViewModel.swift in Sources */,
 				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
+				92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */,
 				9228C7E62558185C0092FBB6 /* BrowseViewModel.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
 				92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */,
 				92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */,
+				92FA3EED25707F6500D05326 /* SegmentTableViewCell.swift in Sources */,
 				92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */,
 				92D647BA255CB6E000856900 /* TrackListViewController.swift in Sources */,
 				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
-				9228C77D2557EB7C0092FBB6 /* CellIdentifier.swift in Sources */,
 				92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */,
+				9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */,
+				9263F75C256A50E1004450CA /* NetworkService.swift in Sources */,
+				92AD7BE9256D6CCC00F0D0E6 /* DocumentPicker.swift in Sources */,
 				9228C7F4255818B00092FBB6 /* BrowseViewController.swift in Sources */,
-				9228C7842557EC330092FBB6 /* SectionModelItem.swift in Sources */,
+				9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */,
 				92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */,
 				92BCE73425616E520029DD3F /* HeaderView.swift in Sources */,
 				92698EB2255FEFF1009F3A9F /* Single+Response.swift in Sources */,
 				92D647C2255CB83B00856900 /* TrackDetailViewController.swift in Sources */,
 				927C7F82255FF33A009F8898 /* Playlist.swift in Sources */,
 				92D66336255AE3FE00CE3F8E /* RecommendTableViewCell.swift in Sources */,
+				9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */,
 				92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */,
 				9228C7572556B8810092FBB6 /* Rx+Shortcuts.swift in Sources */,
-				92D64773255BFDDB00856900 /* TwoTableViewCell.swift in Sources */,
+				92FA3EE425707C1D00D05326 /* SettingHeaderView.swift in Sources */,
+				9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */,
+				921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
 				927C7F87255FF360009F8898 /* Track.swift in Sources */,
 				92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */,
+				92FA3EDD257077B000D05326 /* PresetsTableViewCell.swift in Sources */,
 				92B0463F255BE22D0086FFFE /* BaseTableViewCell.swift in Sources */,
 				92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
 				92A284E92560E04400739A94 /* BaseCollectionViewCell.swift in Sources */,
-				9228C7702557EA950092FBB6 /* CellUpdatable.swift in Sources */,
 				927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */,
 				92BA99EC2560B9F500564782 /* ApperanceService.swift in Sources */,
 				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,
@@ -1138,18 +1221,19 @@
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */,
 				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,
+				92FA3EF72570806700D05326 /* PlayerHeaderView.swift in Sources */,
 				92D64792255CAE0400856900 /* PlaylistViewModel.swift in Sources */,
 				9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
 				92D647AC255CB52300856900 /* TrackTableViewCell.swift in Sources */,
 				92BCE72B256165330029DD3F /* PlayerViewModel.swift in Sources */,
 				92D6479B255CB26800856900 /* PlaylistViewController.swift in Sources */,
-				92B04645255BE5680086FFFE /* ToogleTableViewCell.swift in Sources */,
 				92A284F62560E40C00739A94 /* DisplayItem.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
 				92698EB1255FEFF1009F3A9F /* MoyaProvider+Rx.swift in Sources */,
 				92A284D52560DAD200739A94 /* Strings.swift in Sources */,
 				92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */,
+				92AD7BBB256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift in Sources */,
 				92A284D72560DAD200739A94 /* Fonts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1332,10 +1416,11 @@
 		};
 		924EDF6F25565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F332ED6328A038FDA55BC06B /* Pods-Sandsara.debug.xcconfig */;
+			baseConfigurationReference = 30FD19A58C4801B8CE6C59BF /* Pods-Sandsara.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = AY63F88W3R;
@@ -1355,10 +1440,11 @@
 		};
 		924EDF7025565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A55935358626D41FB4B29B53 /* Pods-Sandsara.release.xcconfig */;
+			baseConfigurationReference = 91F2EF0681A8B22F30B336B1 /* Pods-Sandsara.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = AY63F88W3R;
@@ -1378,7 +1464,7 @@
 		};
 		924EDF7225565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0CC9067F5DA5E07D1BBAC1AA /* Pods-SandsaraTests.debug.xcconfig */;
+			baseConfigurationReference = 101B04B53D3F9E007E3361F9 /* Pods-SandsaraTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1400,7 +1486,7 @@
 		};
 		924EDF7325565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E58E47A17FE9313FBE5887E1 /* Pods-SandsaraTests.release.xcconfig */;
+			baseConfigurationReference = 888A53D5625C4CFE336F9F86 /* Pods-SandsaraTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1422,7 +1508,7 @@
 		};
 		924EDF7525565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2671682481212CF433FFE059 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */;
+			baseConfigurationReference = C577E2E7F52D0E498002DC1A /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1442,7 +1528,7 @@
 		};
 		924EDF7625565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 71E7EC73FA1D79949DB91F41 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */;
+			baseConfigurationReference = B97597A42A8A64009BAF5F27 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

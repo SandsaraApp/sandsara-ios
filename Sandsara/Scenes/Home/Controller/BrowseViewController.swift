@@ -9,8 +9,6 @@ import UIKit
 import RxCocoa
 import RxSwift
 import RxDataSources
-import Moya
-import RxSwiftExt
 
 class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> {
 
@@ -28,8 +26,6 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
         }
     }
 
-   // @IBOutlet private weak var activityIndicatorView: UIActivityIndicatorView!
-
     private let sc = UISearchController(searchResultsController: nil)
     private var viewWillAppearTrigger = PublishRelay<()>()
     private var inputTrigger = BehaviorRelay<String?>(value: nil)
@@ -44,17 +40,16 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSearchBar()
+        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
             once.run {
                 delegate.initPlayerBar()
             }
         }
-        viewWillAppearTrigger.accept(())
     }
 
     override func setupViewModel() {
@@ -63,7 +58,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             .text
             .orEmpty.doOnNext{ text in
                 if text.isEmpty {
-                    self.cancelSearchTrigger.accept(())
+                 //   self.cancelSearchTrigger.accept(())
                 }
             }
             .asObservable()
@@ -77,12 +72,10 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             .bind(to: cancelSearchTrigger)
             .disposed(by: disposeBag)
 
-        viewModel = BrowseViewModel(apiService: SandsaraAPIService(apiProvider: MoyaProvider<SandsaraAPI>()),
+        viewModel = BrowseViewModel(apiService: SandsaraDataServices(),
                                     inputs: BrowseVMContract.Input(searchText: inputTrigger,
                                                                    cancelSearch: cancelSearchTrigger,
                                                                    viewWillAppearTrigger: viewWillAppearTrigger))
-
-        self.viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {
@@ -92,6 +85,10 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             .map {
                  [Section(model: "", items: $0)]
             }.drive(tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+
+        viewModel.isLoading
+            .drive(loadingActivity.rx.isAnimating)
+            .disposed(by: disposeBag)
     }
 
     private func setUpSearchBar() {
@@ -133,7 +130,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
     private func goDetail(item: DisplayItem, index: Int, viewModel: RecommendTableViewCellViewModel) {
         if item.isPlaylist {
             let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
-            trackList.playlistTitle = item.title
+            trackList.playlistItem = item
             navigationController?.pushViewController(trackList, animated: true)
         } else {
             let trackDetail = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
@@ -142,6 +139,15 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
             trackDetail.selecledIndex = index
             navigationController?.pushViewController(trackDetail, animated: true)
         }
+    }
+
+    override func triggerAPIAgain() {
+        self.showAlert(title: "Alert", message: "No Internet Connection", preferredStyle: .alert, actions:
+                        UIAlertAction(title: "Try Again", style: .default, handler: { _ in
+                            self.viewWillAppearTrigger.accept(())
+                        }),
+                       UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        )
     }
 }
 

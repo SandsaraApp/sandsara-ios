@@ -11,11 +11,11 @@ class PlaylistsResponse: Decodable {
     let playlists: [Playlist]
 }
 
-class Playlist: Decodable {
-    @objc dynamic var id = 0
-    @objc dynamic var title = ""
-    @objc dynamic var thumbnail = ""
-    @objc dynamic var author = ""
+class Playlist: Codable {
+    var id = 0
+    var title = ""
+    var thumbnail = ""
+    var author = ""
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -30,6 +30,14 @@ class Playlist: Decodable {
         container.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
         container.decodeIfPresent(String.self, forKey: .thumbnail, assignTo: &thumbnail)
         container.decodeIfPresent(String.self, forKey: .author, assignTo: &author)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(title, forKey: .title)
+        try container.encode(thumbnail, forKey: .thumbnail)
+        try container.encode(author, forKey: .author)
     }
 }
 
