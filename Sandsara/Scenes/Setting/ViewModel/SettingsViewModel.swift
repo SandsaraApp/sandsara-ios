@@ -41,9 +41,9 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
         datas.append(.presets(PresetsCellViewModel(inputs: PresetsCellViewModel.Input(type: .presets))))
         datas.append(.lightCycleSpeed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .lightCycleSpeed,
                                                                                             progress: BehaviorRelay(value: 0.2)))))
-        datas.append(.advanced(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .advanced))))
-        datas.append(.visitSandsara(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .visitSandsara))))
-        datas.append(.help(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .help))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .advanced))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .visitSandsara))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .help))))
         return datas
     }
 }

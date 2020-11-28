@@ -43,6 +43,7 @@ struct AppApperance {
     }
 
     private static func setNavApperrance() {
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
         UINavigationBar.appearance().tintColor = Asset.primary.color
         UINavigationBar.appearance().barTintColor = Asset.primary.color
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes

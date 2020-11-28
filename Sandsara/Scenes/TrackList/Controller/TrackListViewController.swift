@@ -25,16 +25,20 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func setupViewModel() {
-        
+        tableView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         setupTableView()
         viewModel = TrackListViewModel(apiService: SandsaraDataServices(), inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() , viewWillAppearTrigger: viewWillAppearTrigger))
-        viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {
         viewModel
             .outputs.datasources
             .map { [Section(model: "", items: $0)] }
+            .doOnNext { [weak self] in
+                if !$0.isEmpty {
+                    self?.tableView.scrollsToTop = true
+                }
+            }
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         tableView.rx.itemSelected.subscribeNext { [weak self] indexPath in
@@ -42,7 +46,22 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
             if indexPath.row != 0 {
                 self.openTrackDetail(index: indexPath.row)
             }
-            }.disposed(by: disposeBag)
+        }.disposed(by: disposeBag)
+
+        if let item = playlistItem {
+            if item.isLocal == true && item.title != L10n.favorite {
+                tableView.rx.itemDeleted.filter { $0.row != 0 && !self.viewModel.isEmpty }.subscribeNext { [weak self] indexPath in
+                    guard let self = self else { return }
+                    switch self.viewModel.datas.value[indexPath.row] {
+                    case .track(let vm):
+                        let localTrack = LocalTrack(track: vm.inputs.track)
+                        DataLayer.deleteTrackFromPlaylist(item.title, localTrack)
+                        self.viewWillAppearTrigger.accept(())
+                    default: break
+                    }
+                }.disposed(by: disposeBag)
+            }
+        }
     }
 
     private func setupTableView() {
@@ -51,6 +70,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         tableView.register(PlaylistHeaderTableViewCell.nib, forCellReuseIdentifier: PlaylistHeaderTableViewCell.identifier)
+        tableView.register(EmptyCell.nib, forCellReuseIdentifier: EmptyCell.identifier)
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -63,16 +83,22 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                 case .header(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistHeaderTableViewCell.identifier, for: indexPath) as? PlaylistHeaderTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
-                    cell.playAction.asObservable().subscribeNext {
+                    cell.playAction.subscribeNext {
                         self.openPlayer(index: 0)
                     }.disposed(by: cell.disposeBag)
-                    cell.backAction.asObservable().subscribeNext {
+                    cell.backAction.subscribeNext {
                         self.navigationController?.popViewController(animated: true)
+                    }.disposed(by: cell.disposeBag)
+                    cell.deleteAction.subscribeNext {
+                        self.showDeletePlaylistAlert()
                     }.disposed(by: cell.disposeBag)
                     return cell
                 case .track(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    return cell
+                case .empty:
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyCell.identifier, for: indexPath) as? EmptyCell else { return UITableViewCell() }
                     return cell
                 }
 
@@ -82,6 +108,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -123,6 +150,20 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         tabBarController?.popupBar.isHidden = false
         tabBarController?.popupContentView.popupCloseButton.isHidden = true
         tabBarController?.presentPopupBar(withContentViewController: player, openPopup: true, animated: false, completion: nil)
+    }
+
+    private func showDeletePlaylistAlert() {
+        guard let item = playlistItem else { return }
+        let alert = UIAlertController(title: "Alert", message: L10n.alertDeletePlaylist, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { _ in
+            DataLayer.deletePlaylist(item.title)
+            self.navigationController?.popViewController(animated: true)
+        }))
+
+        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))
+
+        present(alert, animated: true, completion: nil)
     }
 }
 

@@ -9,16 +9,6 @@ import RxSwift
 import Moya
 import Alamofire
 
-class DefaultAlamofireSession: Alamofire.SessionManager {
-    static let shared: SessionManager = {
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = 20 // as seconds, you can set your request timeout
-        configuration.timeoutIntervalForResource = 20 // as seconds, you can set your resource timeout
-        configuration.requestCachePolicy = .useProtocolCachePolicy
-        return Alamofire.SessionManager(configuration: configuration)
-    }()
-}
-
 enum ServiceOption {
     case cache
     case server

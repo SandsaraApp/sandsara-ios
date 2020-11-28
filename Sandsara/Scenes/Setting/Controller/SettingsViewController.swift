@@ -37,10 +37,11 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         super.viewWillAppear(animated)
 
         configureNavigationBar(largeTitleColor: Asset.primary.color, backgoundColor: Asset.background.color, tintColor: Asset.primary.color, title: L10n.settings, preferredLargeTitle: true)
+    }
 
-        DispatchQueue.main.async { [weak self] in
-            self?.navigationController?.navigationBar.sizeToFit()
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.title = " "
     }
 
     override func setupViewModel() {
@@ -59,6 +60,28 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         testButton.rx.tap.asDriver().driveNext {
            self.readBinFile()
         }.disposed(by: disposeBag)
+
+        Observable
+            .zip(
+                tableView.rx.itemSelected,
+                tableView.rx.modelSelected(SettingItemCellType.self)
+            ).bind { [weak self] indexPath, model in
+                guard let self = self else { return }
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                switch model {
+                case .menu(let viewModel):
+                    switch viewModel.inputs.type {
+                    case .visitSandsara:
+                        UIApplication.shared.open(URL(string: "https://www.kickstarter.com/projects/edcano/sandsara")!, options: [:], completionHandler: nil)
+                    case .advanced:
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: AdvanceSettingViewController.identifier) as! AdvanceSettingViewController
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    default:
+                        break
+                    }
+                default: break
+                }
+            }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -87,7 +110,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ProgressTableViewCell.identifier, for: indexPath) as? ProgressTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .advanced(let viewModel), .visitSandsara(let viewModel), .help(let viewModel):
+                case .menu(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
@@ -95,7 +118,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: PresetsTableViewCell.identifier, for: indexPath) as? PresetsTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                default: return UITableViewCell()
                 }
 
             })
@@ -103,8 +125,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
 
     private func readBinFile() {
         let start = CFAbsoluteTimeGetCurrent()
-        var isSendCompleted: Bool = false
-        var isSendError: Bool = false
 
         bluejay.run { sandsaraBoard -> Bool in
             if let bytes: [[UInt8]] = self.getFile(forResource: "proof", withExtension: "bin") {
@@ -126,8 +146,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
             return false
         } completionOnMainThread: { result in
             switch result {
-            case .success(let value):
-                isSendCompleted = true
+            case .success:
                 debugPrint("send success")
                 bluejay.write(to: sendFileFlag, value: "completed") { result in
                     switch result {
@@ -140,8 +159,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                         debugPrint("Send file error \(error.localizedDescription)")
                     }
                 }
-            case .failure(let value):
-                isSendError = true
+            case .failure:
                 debugPrint("send error")
             }
         }

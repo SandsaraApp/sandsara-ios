@@ -88,13 +88,15 @@ class DataLayer {
         return false
     }
 
-    static func addTrackToFavoriteList(_ favoriteTrack: LocalTrack) {
+    static func addTrackToFavoriteList(_ favoriteTrack: LocalTrack) -> Bool {
         var isExisted: Bool = false
         if let favList = realm?.objects(FavoritePlaylist.self).first {
             for track in favList.tracks {
-                if track.id == favoriteTrack.id && !track.isInvalidated{
+                if track.id == favoriteTrack.id && !track.isInvalidated {
                     isExisted = true
-                    return
+                    break
+                } else {
+                    continue
                 }
             }
             if isExisted == false {
@@ -111,6 +113,8 @@ class DataLayer {
                 list.tracks.append(favoriteTrack)
             })
         }
+
+        return isExisted
     }
 
     static func unLikeTrack(_ trackToDelete: LocalTrack) {
@@ -191,5 +195,40 @@ class DataLayer {
         }
         return followUsers
     }
+
+    static func deleteTrackFromPlaylist(_ name: String ,_ trackToDelete: LocalTrack) {
+        if let localList = realm?.objects(LocalPlaylist.self).filter("playlistName == '\(name)'").first {
+            var isFound = false
+            for track in localList.tracks {
+                if track.id == trackToDelete.id && !track.isInvalidated {
+                    isFound = true
+                }
+                else { continue }
+            }
+            if isFound == true {
+                var dbTracks = [LocalTrack]()
+
+                for track in localList.tracks {
+                    if !track.isInvalidated && track.id != trackToDelete.id {
+                        dbTracks.append(track)
+                    }
+                }
+                write(realm: realm!, writeClosure: {
+                    localList.tracks.removeAll()
+                    localList.tracks.append(objectsIn: dbTracks)
+                })
+            }
+        }
+    }
+
+    static func deletePlaylist(_ name: String) {
+        if let object = realm?.objects(LocalPlaylist.self).filter("playlistName == '\(name)'").first {
+            write(realm: realm!, writeClosure: {
+                realm?.delete(object)
+            })
+        }
+    }
+
+
 
 }

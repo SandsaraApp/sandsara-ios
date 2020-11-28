@@ -106,7 +106,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
         guard let item = track else { return }
         let localTrack = LocalTrack(track: item)
         if !isFavorite {
-            DataLayer.addTrackToFavoriteList(localTrack)
+            _ = DataLayer.addTrackToFavoriteList(localTrack)
             showSuccessHUD(message: "Track added to Favorite List")
         } else {
             DataLayer.unLikeTrack(localTrack)

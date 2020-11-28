@@ -18,6 +18,8 @@ internal enum L10n {
   internal static let addToPlaylist = L10n.tr("Localizeable", "add_to_playlist")
   /// Advanced Settings
   internal static let advanceSetting = L10n.tr("Localizeable", "advance_setting")
+  /// Do you want to delete this playlist ?
+  internal static let alertDeletePlaylist = L10n.tr("Localizeable", "alert_delete_playlist")
   /// By %@
   internal static func authorBy(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "author_by", String(describing: p1))
@@ -40,6 +42,8 @@ internal enum L10n {
   }
   /// Duplicate track found
   internal static let duplicateFound = L10n.tr("Localizeable", "duplicate_found")
+  /// No track here !!!
+  internal static let emptyList = L10n.tr("Localizeable", "empty_list")
   /// Factory Reset
   internal static let factoryReset = L10n.tr("Localizeable", "factory_reset")
   /// Favorite

@@ -50,6 +50,7 @@ extension UIViewController {
             navigationController?.navigationBar.barTintColor = backgoundColor
             navigationItem.title = title
         }
+        navigationController?.navigationBar.sizeToFit()
     }
 
     func showAlertVC(message: String) {

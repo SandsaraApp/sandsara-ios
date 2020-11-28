@@ -82,7 +82,7 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         tableView.register(PlayerHeaderView.nib, forHeaderFooterViewReuseIdentifier: PlayerHeaderView.identifier)
-
+        tableView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
     }
@@ -120,5 +120,3 @@ extension PlayerViewController: UITableViewDelegate {
         return headerView
     }
 }
-
-

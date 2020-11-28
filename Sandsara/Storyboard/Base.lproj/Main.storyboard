@@ -110,6 +110,36 @@
             </objects>
             <point key="canvasLocation" x="1519" y="2820"/>
         </scene>
+        <!--Advance Setting View Controller-->
+        <scene sceneID="yH1-bU-2WC">
+            <objects>
+                <viewController storyboardIdentifier="AdvanceSettingViewController" id="oc0-8H-z46" customClass="AdvanceSettingViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="83g-vx-Jt6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kQN-PM-zOQ">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Hkx-H5-55Z"/>
+                        <color key="backgroundColor" name="background"/>
+                        <constraints>
+                            <constraint firstItem="Hkx-H5-55Z" firstAttribute="trailing" secondItem="kQN-PM-zOQ" secondAttribute="trailing" id="8wL-nz-1lJ"/>
+                            <constraint firstItem="kQN-PM-zOQ" firstAttribute="top" secondItem="Hkx-H5-55Z" secondAttribute="top" id="WnN-UK-6Wt"/>
+                            <constraint firstItem="Hkx-H5-55Z" firstAttribute="bottom" secondItem="kQN-PM-zOQ" secondAttribute="bottom" id="a7C-ES-OaM"/>
+                            <constraint firstItem="kQN-PM-zOQ" firstAttribute="leading" secondItem="Hkx-H5-55Z" secondAttribute="leading" id="tc6-pn-V4S"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="kQN-PM-zOQ" id="Sb3-Vq-Jub"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LyG-HF-pIG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2313" y="2820"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="fEK-UR-mOG">
             <objects>
@@ -420,12 +450,12 @@
         <!--Track List View Controller-->
         <scene sceneID="3fh-1q-rqI">
             <objects>
-                <viewController storyboardIdentifier="TrackListViewController" id="n8g-5X-CUx" customClass="TrackListViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TrackListViewController" automaticallyAdjustsScrollViewInsets="NO" id="n8g-5X-CUx" customClass="TrackListViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tcp-Te-Xup">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BbH-vO-RwL">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BbH-vO-RwL">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
@@ -557,12 +587,12 @@
         <!--Player View Controller-->
         <scene sceneID="5nI-Xc-XgI">
             <objects>
-                <viewController storyboardIdentifier="PlayerViewController" id="NcE-oe-v6F" customClass="PlayerViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayerViewController" automaticallyAdjustsScrollViewInsets="NO" id="NcE-oe-v6F" customClass="PlayerViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kfJ-Q8-e4X">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="p7N-BU-CtH">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7N-BU-CtH">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
@@ -572,7 +602,7 @@
                         <constraints>
                             <constraint firstItem="p7N-BU-CtH" firstAttribute="leading" secondItem="p2n-hO-li0" secondAttribute="leading" id="BjH-4A-Ni8"/>
                             <constraint firstItem="p2n-hO-li0" firstAttribute="trailing" secondItem="p7N-BU-CtH" secondAttribute="trailing" id="J0j-g0-hwX"/>
-                            <constraint firstItem="p7N-BU-CtH" firstAttribute="top" secondItem="p2n-hO-li0" secondAttribute="top" id="qxa-f1-jaS"/>
+                            <constraint firstItem="p7N-BU-CtH" firstAttribute="top" secondItem="p2n-hO-li0" secondAttribute="top" id="u1b-fz-D5n"/>
                             <constraint firstItem="p2n-hO-li0" firstAttribute="bottom" secondItem="p7N-BU-CtH" secondAttribute="bottom" id="yQ3-Co-LAZ"/>
                         </constraints>
                     </view>
@@ -582,7 +612,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y9P-fl-BLl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2065" y="-544"/>
+            <point key="canvasLocation" x="2065" y="-557"/>
         </scene>
         <!--All Track View Controller-->
         <scene sceneID="y5B-Ez-gHJ">

@@ -15,12 +15,7 @@ enum SettingItemCellType {
     case brightness(ProgressCellViewModel)
     case presets(PresetsCellViewModel)
     case lightCycleSpeed(ProgressCellViewModel)
-    case advanced(MenuCellViewModel)
-    case visitSandsara(MenuCellViewModel)
-    case help(MenuCellViewModel)
-    case changeName(MenuCellViewModel)
-    case firmwareUpdate(MenuCellViewModel)
-    case factoryReset(MenuCellViewModel)
+    case menu(MenuCellViewModel)
 }
 
 enum SettingItemType {
@@ -35,6 +30,8 @@ enum SettingItemType {
     case firmwareUpdate
     case changeName
     case factoryReset
+    case deviceName(String)
+    case firmwareVersion(String)
 
     var title: String {
         switch self {
@@ -58,6 +55,23 @@ enum SettingItemType {
             return L10n.updateFirmware
         case .changeName: return L10n.changeName
         case .factoryReset: return L10n.factoryReset
+        case .deviceName(let name):
+            return L10n.deviceName(name)
+        case .firmwareVersion(let version):
+            return L10n.firmwareVersion(version)
+        }
+    }
+}
+
+extension SettingItemType: Equatable {
+    static func ==(lhs: SettingItemType, rhs: SettingItemType) -> Bool {
+        switch (lhs, rhs) {
+        case let (.deviceName(name1), .deviceName(name2)):
+            return name1 == name2
+        case let (.firmwareVersion(version1), .firmwareVersion(version2)):
+            return version1 == version2
+        default:
+            return true
         }
     }
 }
@@ -116,6 +130,7 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
 enum MenuCellVMContract {
     struct Input: InputType {
         let type: SettingItemType
+        var color: UIColor = Asset.primary.color
     }
 
     struct Output: OutputType {

@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pe8-LB-SbY">
-                    <rect key="frame" x="16" y="20" width="40" height="40"/>
+                    <rect key="frame" x="16" y="40" width="40" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="J9M-HG-ukn"/>
                         <constraint firstAttribute="width" constant="40" id="aGT-Er-jM1"/>
@@ -26,7 +26,7 @@
                     <state key="normal" image="down"/>
                 </button>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q9B-Ot-lc4">
-                    <rect key="frame" x="69.5" y="24" width="275" height="275"/>
+                    <rect key="frame" x="69.5" y="44" width="275" height="275"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="q9B-Ot-lc4" secondAttribute="height" id="0Jl-HB-bJE"/>
                         <constraint firstAttribute="width" constant="275" id="v5H-jg-BdF"/>
@@ -64,7 +64,7 @@
                 <constraint firstItem="Nnf-eD-RTb" firstAttribute="top" secondItem="xzS-Lh-RHU" secondAttribute="bottom" constant="8" id="Oaf-7E-Nfw"/>
                 <constraint firstItem="Pe8-LB-SbY" firstAttribute="top" secondItem="q9B-Ot-lc4" secondAttribute="top" constant="-4" id="PTa-Bz-Sfm"/>
                 <constraint firstItem="ksf-3t-oO9" firstAttribute="centerX" secondItem="TLF-f6-h5x" secondAttribute="centerX" id="WZu-LG-UqL"/>
-                <constraint firstItem="tUu-nb-tla" firstAttribute="top" secondItem="q9B-Ot-lc4" secondAttribute="top" constant="20" id="eN1-TP-9ka"/>
+                <constraint firstItem="tUu-nb-tla" firstAttribute="top" secondItem="q9B-Ot-lc4" secondAttribute="top" id="eN1-TP-9ka"/>
                 <constraint firstItem="Pe8-LB-SbY" firstAttribute="leading" secondItem="tUu-nb-tla" secondAttribute="leading" constant="16" id="j9l-Gs-Bwc"/>
                 <constraint firstItem="ksf-3t-oO9" firstAttribute="top" secondItem="Nnf-eD-RTb" secondAttribute="bottom" constant="16" id="u6X-Jk-m4B"/>
                 <constraint firstItem="tUu-nb-tla" firstAttribute="bottom" secondItem="ksf-3t-oO9" secondAttribute="bottom" constant="30" id="wEh-WX-Uyz"/>

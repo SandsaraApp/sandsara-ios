@@ -41,23 +41,18 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
         if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
-            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList))))
+            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList), isFavorite: true)))
         }
 
         if DataLayer.loadPlaylists().count > 0 {
             let localList = DataLayer.loadPlaylists().map {
                 DisplayItem(playlist: $0)
             }.map {
-                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0))
+                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
             }
             items.append(contentsOf: localList)
         }
-
-        apiService.getAllPlaylist(option: apiService.getServicesOption(for: .playlists)).asObservable().subscribeNext { values in
-            items.append(contentsOf: values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0)) })
-            self.datas.accept(items)
-            self.emitEventLoading(false)
-        }.disposed(by: disposeBag)
+        datas.accept(items)
     }
 }
 
@@ -65,6 +60,7 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
 enum PlaylistCellVMContract {
     struct Input: InputType {
         let track: DisplayItem
+        let isFavorite: Bool
     }
 
     struct Output: OutputType {

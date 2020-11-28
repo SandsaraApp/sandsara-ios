@@ -53,7 +53,7 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
             .zip(
                 tableView.rx.itemSelected,
                 tableView.rx.modelSelected(PlaylistCellViewModel.self)
-            ).observeOn(MainScheduler.asyncInstance).bind { [weak self] indexPath, model in
+            ).bind { [weak self] indexPath, model in
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 self.addPlaylistItem(model: model)
@@ -124,9 +124,20 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
     private func addPlaylistItem(model: PlaylistCellViewModel) {
         guard let itemToAdd = item else { return }
         let localTrack = LocalTrack(track: itemToAdd)
-        if DataLayer.addTrackToPlaylist(name: model.inputs.track.title, track: localTrack) {
-            self.showSuccessHUD(message: "Track \(itemToAdd.title) was added to Playlist \(model.inputs.track.title)")
-            self.dismiss(animated: true, completion: nil)
+        if model.inputs.isFavorite {
+            if !DataLayer.addTrackToFavoriteList(localTrack) {
+                self.showSuccessHUD(message: "Track added to Favorite List")
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.showErrorHUD(message: "Track \(itemToAdd.title) was existed in Favorite List")
+            }
+        } else {
+            if DataLayer.addTrackToPlaylist(name: model.inputs.track.title, track: localTrack) {
+                self.showSuccessHUD(message: "Track \(itemToAdd.title) was added to Playlist \(model.inputs.track.title)")
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.showErrorHUD(message: "Track \(itemToAdd.title) was existed in playlist")
+            }
         }
     }
 }

@@ -22,11 +22,14 @@ final class AddPlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input,
 
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
+        if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
+            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList), isFavorite: true)))
+        }
         if DataLayer.loadPlaylists().count > 0 {
             let localList = DataLayer.loadPlaylists().map {
                 DisplayItem(playlist: $0)
             }.map {
-                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0))
+                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
             }
             items.append(contentsOf: localList)
         }

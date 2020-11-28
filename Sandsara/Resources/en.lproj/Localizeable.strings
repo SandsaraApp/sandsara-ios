@@ -42,4 +42,5 @@
 "change_name" = "Change Name";
 "update_firmware" = "Update Firmware";
 "factory_reset" = "Factory Reset";
-
+"alert_delete_playlist" = "Do you want to delete this playlist ?";
+"empty_list" = "No track here !!!";

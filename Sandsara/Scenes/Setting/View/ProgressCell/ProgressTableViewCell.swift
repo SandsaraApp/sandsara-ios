@@ -16,6 +16,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        selectionStyle = .none
         progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 18)
         progressNameLabel.textColor = Asset.primary.color
 

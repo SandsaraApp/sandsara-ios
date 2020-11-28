@@ -27,6 +27,10 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
     override func setupViewModel() {
         setupTableView()
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
     }
 

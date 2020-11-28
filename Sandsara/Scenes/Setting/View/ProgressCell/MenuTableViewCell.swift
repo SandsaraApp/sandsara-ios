@@ -12,24 +12,16 @@ class MenuTableViewCell: BaseTableViewCell<MenuCellViewModel> {
     @IBOutlet private weak var titleLabel: UILabel!
 
     override func awakeFromNib() {
+        selectionStyle = .none
         titleLabel.font = FontFamily.OpenSans.regular.font(size: 18)
-        titleLabel.textColor = Asset.primary.color
     }
 
     override func bindViewModel() {
+        titleLabel.textColor = viewModel.inputs.color
         viewModel
             .outputs
             .title
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-//        if viewModel.inputs.type == .disconnect {
-//            bluejay.disconnect(immediate: true)
-//        }
-    }
-    
 }

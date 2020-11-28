@@ -42,6 +42,7 @@ internal enum Asset {
   internal static let down = ImageAsset(name: "down")
   internal static let favorite = ImageAsset(name: "favorite")
   internal static let icons8Heart60 = ImageAsset(name: "icons8-heart-60")
+  internal static let icons8Trash30 = ImageAsset(name: "icons8-trash-30")
   internal static let library = ImageAsset(name: "library")
   internal static let notFound = ImageAsset(name: "notFound")
   internal static let pause = ImageAsset(name: "pause")
@@ -54,6 +55,7 @@ internal enum Asset {
   internal static let settings = ImageAsset(name: "settings")
   internal static let smallSearch = ImageAsset(name: "smallSearch")
   internal static let thumbs = ImageAsset(name: "thumbs")
+  internal static let trash = ImageAsset(name: "trash")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
