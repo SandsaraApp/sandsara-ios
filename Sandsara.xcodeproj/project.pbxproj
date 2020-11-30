@@ -76,6 +76,8 @@
 		92B0465A255BF81E0086FFFE /* SettingsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */; };
 		92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */; };
 		92B8C6F82574C6970051C1CC /* CommandService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8C6F72574C6970051C1CC /* CommandService.swift */; };
+		92B8C6FF2574D9190051C1CC /* LedStripServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8C6FE2574D9190051C1CC /* LedStripServiceImpl.swift */; };
+		92B8C7032574D9D20051C1CC /* FileServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8C7022574D9D20051C1CC /* FileServiceImpl.swift */; };
 		92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA99E62560B6EF00564782 /* DataLayer.swift */; };
 		92BA99EC2560B9F500564782 /* ApperanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA99EB2560B9F500564782 /* ApperanceService.swift */; };
 		92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCE6FD25614AD40029DD3F /* LibraryViewController.swift */; };
@@ -271,6 +273,8 @@
 		92B04659255BF81E0086FFFE /* SettingsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellViewModel.swift; sourceTree = "<group>"; };
 		92B0465E255BF9C00086FFFE /* BaseCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCellViewModel.swift; sourceTree = "<group>"; };
 		92B8C6F72574C6970051C1CC /* CommandService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandService.swift; sourceTree = "<group>"; };
+		92B8C6FE2574D9190051C1CC /* LedStripServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedStripServiceImpl.swift; sourceTree = "<group>"; };
+		92B8C7022574D9D20051C1CC /* FileServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileServiceImpl.swift; sourceTree = "<group>"; };
 		92BA99E62560B6EF00564782 /* DataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLayer.swift; sourceTree = "<group>"; };
 		92BA99EB2560B9F500564782 /* ApperanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApperanceService.swift; sourceTree = "<group>"; };
 		92BA9A0A2560D61C00564782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -549,6 +553,8 @@
 			children = (
 				92BA99EB2560B9F500564782 /* ApperanceService.swift */,
 				92B8C6F72574C6970051C1CC /* CommandService.swift */,
+				92B8C6FE2574D9190051C1CC /* LedStripServiceImpl.swift */,
+				92B8C7022574D9D20051C1CC /* FileServiceImpl.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1342,6 +1348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B8C7032574D9D20051C1CC /* FileServiceImpl.swift in Sources */,
 				92BCE71E256155130029DD3F /* AllTrackViewModel.swift in Sources */,
 				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
 				92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */,
@@ -1424,6 +1431,7 @@
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92C7D1CF2573C0990062FC78 /* ColorPaletteDelegate.swift in Sources */,
+				92B8C6FF2574D9190051C1CC /* LedStripServiceImpl.swift in Sources */,
 				92C7D1DA2573C0990062FC78 /* ColorPickerControllerProtocol.swift in Sources */,
 				92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */,
 				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,

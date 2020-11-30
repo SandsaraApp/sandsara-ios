@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-
 class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @IBOutlet private weak var progressNameLabel: UILabel!
     @IBOutlet private weak var progressSlider: UISlider!

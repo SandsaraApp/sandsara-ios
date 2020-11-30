@@ -199,7 +199,20 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             staticColorViewHeightConstraint.constant = staticModeHeight(isColorTemp: staticColorSegmentControl.segmentSelected.value == 0)
             return CGFloat(height) + staticColorViewHeightConstraint.constant
         } else {
-            return CGFloat(Constraints.labelHeight + Constraints.commonSpacing + Constraints.hsbViewHeight + Constraints.commonSpacing * 1.5 + Constraints.labelHeight + Constraints.commonSpacing + Constraints.collectionViewHeight + Constraints.commonSpacing / 2 + Constraints.labelHeight + Constraints.commonSpacing * 1.5 + Constraints.sliderHeight + Constraints.commonSpacing / 2)
+            return CGFloat(
+                Constraints.labelHeight +
+                Constraints.commonSpacing +
+                Constraints.hsbViewHeight +
+                Constraints.commonSpacing * 1.5 +
+                Constraints.labelHeight +
+                Constraints.commonSpacing +
+                Constraints.collectionViewHeight +
+                Constraints.commonSpacing / 2 +
+                Constraints.labelHeight +
+                Constraints.commonSpacing * 1.5 +
+                Constraints.sliderHeight +
+                Constraints.commonSpacing / 2
+            )
         }
     }
 
@@ -207,19 +220,19 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         let spacing = Constraints.commonSpacing * 1.875
         if isColorTemp {
             return CGFloat(
-                Constraints.sliderHeight + spacing + Constraints.commonSpacing * 1.375
+                Constraints.sliderHeight +
+                spacing +
+                Constraints.commonSpacing * 1.375
             )
         } else {
-
             return CGFloat(
-                Constraints.commonSpacing * 1.875 +
-                    Constraints.colorSliderHeight +
+                spacing +
+                Constraints.colorSliderHeight +
                 Constraints.commonSpacing * 1.75 +
-                    Constraints.colorSliderHeight +
+                Constraints.colorSliderHeight +
                 Constraints.commonSpacing * 1.75 +
-                    Constraints.colorSliderHeight
+                Constraints.colorSliderHeight
             )
-
         }
     }
 }
