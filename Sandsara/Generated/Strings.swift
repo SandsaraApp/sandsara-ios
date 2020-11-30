@@ -32,8 +32,14 @@ internal enum L10n {
   internal static let cancel = L10n.tr("Localizeable", "cancel")
   /// Change Name
   internal static let changeName = L10n.tr("Localizeable", "change_name")
+  /// Color Pallete
+  internal static let colorPallete = L10n.tr("Localizeable", "color_pallete")
+  /// Color Temperature
+  internal static let colorTemp = L10n.tr("Localizeable", "color_temp")
   /// Create new playlist
   internal static let createPlaylist = L10n.tr("Localizeable", "create_playlist")
+  /// Custom Color
+  internal static let customColor = L10n.tr("Localizeable", "custom_color")
   /// Cycle
   internal static let cycle = L10n.tr("Localizeable", "cycle")
   /// Name: %@
@@ -80,7 +86,7 @@ internal enum L10n {
   internal static let sandsaraDetected = L10n.tr("Localizeable", "sandsara_detected")
   /// Settings
   internal static let settings = L10n.tr("Localizeable", "settings")
-  /// Speed
+  /// Ball Speed
   internal static let speed = L10n.tr("Localizeable", "speed")
   /// Static
   internal static let `static` = L10n.tr("Localizeable", "static")

@@ -35,13 +35,9 @@ extension UIViewController {
             navBarAppearance.largeTitleTextAttributes = [.foregroundColor: largeTitleColor, .font: FontFamily.Tinos.regular.font(size: 30)]
             navBarAppearance.titleTextAttributes = [.foregroundColor: largeTitleColor]
             navBarAppearance.backgroundColor = backgoundColor
-
             navigationController?.navigationBar.standardAppearance = navBarAppearance
             navigationController?.navigationBar.compactAppearance = navBarAppearance
             navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-
-
-
             navigationItem.title = title
 
         } else {

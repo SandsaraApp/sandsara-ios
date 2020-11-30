@@ -152,8 +152,7 @@ extension ScanViewController: ConnectionObserver {
         debugPrint("ScanViewController - Connected to: \(peripheral.description)")
 
 
-        bluejay.read(from: ledStripSpeed) { [weak self] (result: ReadResult<String>) in
-
+        bluejay.read(from: LedStripService.ledStripSpeed) { [weak self] (result: ReadResult<String>) in
             switch result {
             case .success(let location):
                 debugPrint("Read from sensor location is successful: \(location)")

@@ -10,9 +10,41 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+enum PredifinedColor: Int {
+    case one
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case eleven
+    case twelve
+
+    // these one cannot be editted
+//    var gradientColors: (UIColor, UIColor) {
+//
+//    }
+}
+
+enum StaticMode: Int {
+    case colorTemp
+    case customColor
+}
+
+enum LightMode: Int {
+    case rotate = 0
+    case cycle
+    case staticMode
+}
+
 enum SettingItemCellType {
     case speed(ProgressCellViewModel)
     case brightness(ProgressCellViewModel)
+    case lightMode(LightModeCellViewModel)
     case presets(PresetsCellViewModel)
     case lightCycleSpeed(ProgressCellViewModel)
     case menu(MenuCellViewModel)
@@ -113,17 +145,6 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
     }
 
     func sendCommand(command: String) {
-        // TODO: support multi type here
-//        if inputs.type == .speed {
-//            bluejay.write(to: ledStripSpeed, value: command) { result in
-//                switch result {
-//                case .success:
-//                    debugPrint("Write to sensor location is successful.")
-//                case .failure(let error):
-//                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-//                }
-//            }
-//        }
     }
 }
 
@@ -177,7 +198,7 @@ class PresetsCellViewModel: BaseCellViewModel<PresetsCellVMContract.Input,
     }
 
     func sendCommand(command: String) {
-        bluejay.write(to: selectPattle, value: command) { result in
+        bluejay.write(to: LedStripService.selectPattle, value: command) { result in
             switch result {
             case .success:
                 debugPrint("Write to sensor location is successful.\(result)")
@@ -203,5 +224,38 @@ class PresetCellViewModel: BaseCellViewModel<PresetCellVMContract.Input,
                                                 PresetCellVMContract.Output> {
     override func transform() {
         setOutput(Output(image: Driver.just(UIImage(named: inputs.item))))
+    }
+}
+
+
+enum LightModeVMContract {
+    struct Input: InputType {
+        let type: SettingItemType
+        let segmentsSelection: BehaviorRelay<LightMode>
+    }
+
+    struct Output: OutputType {
+        let segmentsSelection: Driver<LightMode>
+        let title: Driver<String>
+        let datas: Driver<[PresetCellViewModel]>
+    }
+}
+
+class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
+                                             LightModeVMContract.Output> {
+    private let imageNames: [Int] = [Int](0...11)
+    override func transform() {
+        let images = imageNames.map {
+            if $0 == 0 {
+                return "Rectangle"
+            }
+            return "Rectangle-\($0)"
+        }.map {
+            PresetCellViewModel(inputs: PresetCellVMContract.Input(item: $0))
+        }
+
+        setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
+                         title: Driver.just(inputs.type.title),
+                         datas: Driver.just(images)))
     }
 }

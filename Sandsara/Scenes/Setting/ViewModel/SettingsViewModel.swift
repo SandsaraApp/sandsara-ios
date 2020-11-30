@@ -13,6 +13,7 @@ import RxCocoa
 enum SettingViewModelContract {
     struct Input: InputType {
         let viewWillAppearTrigger: PublishRelay<()>
+        let lightMode: BehaviorRelay<LightMode>
     }
 
     struct Output: OutputType {
@@ -38,12 +39,7 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
                                                                                        progress: BehaviorRelay(value: 0.2)))))
         datas.append(.brightness(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .brightness,
                                                                                        progress: BehaviorRelay(value: 0.2)))))
-        datas.append(.presets(PresetsCellViewModel(inputs: PresetsCellViewModel.Input(type: .presets))))
-        datas.append(.lightCycleSpeed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .lightCycleSpeed,
-                                                                                            progress: BehaviorRelay(value: 0.2)))))
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .advanced))))
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .visitSandsara))))
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .help))))
+        datas.append(.lightMode(LightModeCellViewModel(inputs: LightModeVMContract.Input(type: .lightMode, segmentsSelection: inputs.lightMode))))
         return datas
     }
 }

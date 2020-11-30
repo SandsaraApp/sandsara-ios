@@ -31,7 +31,7 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
 
     override func setupViewModel() {
         setupTableView()
-        viewModel = AdvanceSettingViewModel(inputs: SettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = AdvanceSettingViewModel(inputs: AdvanceSettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
     }
 

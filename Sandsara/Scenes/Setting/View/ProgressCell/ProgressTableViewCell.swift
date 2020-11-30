@@ -41,7 +41,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
                 .debounce(.milliseconds(400), scheduler: MainScheduler.asyncInstance)
                 .compactMap { Int($0) }
                 .subscribeNext { value in
-                    bluejay.write(to: ledStripSpeed, value: String(format:"%02X", value)) { result in
+                    bluejay.write(to: LedStripService.ledStripSpeed, value: String(format:"%02X", value)) { result in
                         switch result {
                         case .success:
                             debugPrint("Write to sensor location is successful.\(result)")

@@ -25,6 +25,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     @IBOutlet weak var testButton: UIBarButtonItem!
 
     private let viewWillAppearTrigger = PublishRelay<()>()
+    private let lightMode = BehaviorRelay<LightMode>(value: .rotate)
 
     typealias Section = SectionModel<String, SettingItemCellType>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
@@ -46,7 +47,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
 
     override func setupViewModel() {
         setupTableView()
-        viewModel = SettingViewModel(inputs: SettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = SettingViewModel(inputs: SettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger, lightMode: lightMode))
         viewWillAppearTrigger.accept(())
     }
 
@@ -60,28 +61,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         testButton.rx.tap.asDriver().driveNext {
            self.readBinFile()
         }.disposed(by: disposeBag)
-
-        Observable
-            .zip(
-                tableView.rx.itemSelected,
-                tableView.rx.modelSelected(SettingItemCellType.self)
-            ).bind { [weak self] indexPath, model in
-                guard let self = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-                switch model {
-                case .menu(let viewModel):
-                    switch viewModel.inputs.type {
-                    case .visitSandsara:
-                        UIApplication.shared.open(URL(string: "https://www.kickstarter.com/projects/edcano/sandsara")!, options: [:], completionHandler: nil)
-                    case .advanced:
-                        let vc = self.storyboard?.instantiateViewController(withIdentifier: AdvanceSettingViewController.identifier) as! AdvanceSettingViewController
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    default:
-                        break
-                    }
-                default: break
-                }
-            }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -89,9 +68,8 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
         tableView.tableFooterView = UIView()
 
         tableView.register(ProgressTableViewCell.nib, forCellReuseIdentifier: ProgressTableViewCell.identifier)
-        tableView.register(MenuTableViewCell.nib, forCellReuseIdentifier: MenuTableViewCell.identifier)
-        tableView.register(PresetsTableViewCell.nib, forCellReuseIdentifier: PresetsTableViewCell.identifier)
-
+        tableView.register(SegmentTableViewCell.nib, forCellReuseIdentifier: SegmentTableViewCell.identifier)
+        tableView.remembersLastFocusedIndexPath = true
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -105,19 +83,32 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
             configureCell: { [weak self] (_, tableView, indexPath, modelType) -> UITableViewCell in
+                guard let self = self else { return UITableViewCell() }
                 switch modelType {
                 case .speed(let viewModel), .brightness(let viewModel), .lightCycleSpeed(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: ProgressTableViewCell.identifier, for: indexPath) as? ProgressTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
                     return cell
-                case .menu(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
+                case .lightMode(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTableViewCell.identifier, for: indexPath) as? SegmentTableViewCell else { return UITableViewCell() }
                     cell.bind(to: viewModel)
+                    cell.segmentSelected
+                        .bind(to: self.lightMode)
+                        .disposed(by: cell.disposeBag)
+                    cell.cellUpdated
+                        .observeOn(MainScheduler.asyncInstance)
+                        .subscribeNext {
+                            tableView.beginUpdates()
+                            tableView.endUpdates()
+                    }.disposed(by: cell.disposeBag)
+
+                    cell.advancedBtnTap.subscribeNext { [weak self] in
+                        guard let self = self else { return }
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: AdvanceSettingViewController.identifier) as! AdvanceSettingViewController
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }.disposed(by: cell.disposeBag)
                     return cell
-                case .presets(let viewModel):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: PresetsTableViewCell.identifier, for: indexPath) as? PresetsTableViewCell else { return UITableViewCell()}
-                    cell.bind(to: viewModel)
-                    return cell
+                default: return UITableViewCell()
                 }
 
             })
@@ -126,43 +117,43 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     private func readBinFile() {
         let start = CFAbsoluteTimeGetCurrent()
 
-        bluejay.run { sandsaraBoard -> Bool in
-            if let bytes: [[UInt8]] = self.getFile(forResource: "proof", withExtension: "bin") {
-                do {
-                    try sandsaraBoard.write(to: sendFileFlag, value: "proof")
-                    for i in 0 ..< bytes.count {
-                        try sandsaraBoard.writeAndListen(writeTo: sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: sendBytes, completion: { (result: UInt8) -> ListenAction in
-                            let start1 = CFAbsoluteTimeGetCurrent()
-                            let diff = CFAbsoluteTimeGetCurrent() - start1
-                            print("Send chunks took \(diff) seconds")
-                            return .done
-                        })
-                    }
-                } catch(let error) {
-                    debugPrint(error.localizedDescription)
-                }
-
-            }
-            return false
-        } completionOnMainThread: { result in
-            switch result {
-            case .success:
-                debugPrint("send success")
-                bluejay.write(to: sendFileFlag, value: "completed") { result in
-                    switch result {
-                    case .success:
-                        debugPrint("Send file success")
-                        let diff = CFAbsoluteTimeGetCurrent() - start
-                        print("Took \(diff) seconds")
-                        self.showAlertVC(message: "Took \(diff) seconds")
-                    case .failure(let error):
-                        debugPrint("Send file error \(error.localizedDescription)")
-                    }
-                }
-            case .failure:
-                debugPrint("send error")
-            }
-        }
+//        bluejay.run { sandsaraBoard -> Bool in
+//            if let bytes: [[UInt8]] = self.getFile(forResource: "proof", withExtension: "bin") {
+//                do {
+//                    try sandsaraBoard.write(to: sendFileFlag, value: "proof")
+//                    for i in 0 ..< bytes.count {
+//                        try sandsaraBoard.writeAndListen(writeTo: sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: sendBytes, completion: { (result: UInt8) -> ListenAction in
+//                            let start1 = CFAbsoluteTimeGetCurrent()
+//                            let diff = CFAbsoluteTimeGetCurrent() - start1
+//                            print("Send chunks took \(diff) seconds")
+//                            return .done
+//                        })
+//                    }
+//                } catch(let error) {
+//                    debugPrint(error.localizedDescription)
+//                }
+//
+//            }
+//            return false
+//        } completionOnMainThread: { result in
+//            switch result {
+//            case .success:
+//                debugPrint("send success")
+//                bluejay.write(to: sendFileFlag, value: "completed") { result in
+//                    switch result {
+//                    case .success:
+//                        debugPrint("Send file success")
+//                        let diff = CFAbsoluteTimeGetCurrent() - start
+//                        print("Took \(diff) seconds")
+//                        self.showAlertVC(message: "Took \(diff) seconds")
+//                    case .failure(let error):
+//                        debugPrint("Send file error \(error.localizedDescription)")
+//                    }
+//                }
+//            case .failure:
+//                debugPrint("send error")
+//            }
+//        }
     }
 
     func getFile(forResource resource: String,

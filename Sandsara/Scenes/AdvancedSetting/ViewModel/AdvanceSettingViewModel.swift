@@ -8,7 +8,17 @@
 import RxSwift
 import RxCocoa
 
-final class AdvanceSettingViewModel: BaseViewModel<SettingViewModelContract.Input, SettingViewModelContract.Output> {
+enum AdvanceSettingViewModelContract {
+    struct Input: InputType {
+        let viewWillAppearTrigger: PublishRelay<()>
+    }
+
+    struct Output: OutputType {
+        let datasources: Driver<[SettingItemCellType]>
+    }
+}
+
+final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContract.Input, AdvanceSettingViewModelContract.Output> {
 
     override func transform() {
         let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
