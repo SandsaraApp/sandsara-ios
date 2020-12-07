@@ -44,6 +44,9 @@ struct LedStripService {
 
     static let notifyError = CharacteristicIdentifier(uuid: "1a9a8880-2305-11eb-adc1-0242ac120002",
                                                       service: ledStripService)
+
+    static let brightness = CharacteristicIdentifier(uuid: "1a9a8948-2305-11eb-adc1-0242ac120002",
+                                                     service: ledStripService)
 }
 
 // MARK: File Service
@@ -81,7 +84,7 @@ struct DeviceService {
 
     static let deviceName = CharacteristicIdentifier(uuid: "7b204548-30c3-11eb-adc1-0242ac120002", service: deviceService)
 
-    //static let deviceStatus = CharacteristicIdentifier(uuid: "7b204660-30c3-11eb-adc1-0242ac120002", service: deviceService)
+    static let deviceStatus = CharacteristicIdentifier(uuid: "7b204660-30c3-11eb-adc1-0242ac120002", service: deviceService)
 
     static let pause = CharacteristicIdentifier(uuid: "7b20473c-30c3-11eb-adc1-0242ac120002", service: deviceService)
 

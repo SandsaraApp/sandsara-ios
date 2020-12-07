@@ -22,3 +22,12 @@ extension Reactive where Base: NVActivityIndicatorView {
         }
     }
 }
+
+
+extension Reactive where Base: ToggleSwitch {
+    var isOn: Binder<Bool> {
+        return Binder(base) { (indicator, isOn) in
+            indicator.setOn(on: isOn, animated: true)
+        }
+    }
+}

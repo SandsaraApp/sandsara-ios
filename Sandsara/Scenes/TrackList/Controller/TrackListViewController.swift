@@ -31,6 +31,10 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     }
 
     override func bindViewModel() {
+        dataSource.canEditRowAtIndexPath = { (ds, ip) in
+            return true
+        }
+
         viewModel
             .outputs.datasources
             .map { [Section(model: "", items: $0)] }

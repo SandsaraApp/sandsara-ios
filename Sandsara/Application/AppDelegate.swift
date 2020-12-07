@@ -67,57 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    func pairing() {
-        // TODO: store uuid in this function
-        guard let device = discoveredDevice else { return }
-        bluejay.connect(device.peripheralIdentifier, timeout: .seconds(15)) { result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
-                }
-                debugPrint("Connection attempt to: \(device.peripheralIdentifier.description) is successful")
-            case .failure(let error):
-                debugPrint("Failed to connect with error: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    func getConnected() {
-        bluejay.scan(
-            duration: 15,
-            allowDuplicates: false,
-            serviceIdentifiers: nil ,
-            discovery: { [weak self] (discovery, discoveries) -> ScanAction in
-                guard let weakSelf = self else {
-                    return .stop
-                }
-                if discovery.peripheralIdentifier.name == "Sandsara BLE" {
-                    weakSelf.discoveredDevice = discovery
-                    DispatchQueue.main.async {
-                        (weakSelf.window?.rootViewController?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
-                    }
-                    self?.pairing()
-                    Preferences.AppDomain.connectedSandasa = [discovery.peripheralIdentifier.uuid.uuidString]
-                }
-                return .continue
-            },
-            expired: { [weak self] (lostDiscovery, discoveries) -> ScanAction in
-                guard self != nil else {
-                    return .stop
-                }
-                debugPrint("Lost discovery: \(lostDiscovery)")
-                return .continue
-            }) { (discoveries, error) in
-            if let error = error {
-                debugPrint("Scan stopped with error: \(error.localizedDescription)")
-            }
-            else {
-                debugPrint("Scan stopped without error.")
-            }
-        }
-    }
-
     func initPlayerBar() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
@@ -140,6 +89,8 @@ extension AppDelegate: BackgroundRestorer {
     func didRestoreConnection(
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
+        DeviceServiceImpl.shared.readSensorValues()
+     //   LedStripServiceImpl.shared.readValues()
         DispatchQueue.main.async {
             (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
         }
@@ -149,6 +100,7 @@ extension AppDelegate: BackgroundRestorer {
     func didFailToRestoreConnection(
         to peripheral: PeripheralIdentifier, error: Error) -> BackgroundRestoreCompletion {
         // Opportunity to perform cleanup or error handling logic here.
+        DeviceServiceImpl.shared.cleanup()
         return .continue
     }
 }
@@ -168,6 +120,7 @@ extension AppDelegate: DisconnectHandler {
         DispatchQueue.main.async {
             (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
         }
+        DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: false)
     }
 }

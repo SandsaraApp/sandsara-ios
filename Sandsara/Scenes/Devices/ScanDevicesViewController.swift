@@ -150,8 +150,6 @@ extension ScanViewController: ConnectionObserver {
 
     func connected(to peripheral: PeripheralIdentifier) {
         debugPrint("ScanViewController - Connected to: \(peripheral.description)")
-
-
         bluejay.read(from: LedStripService.ledStripSpeed) { [weak self] (result: ReadResult<String>) in
             switch result {
             case .success(let location):
@@ -164,6 +162,9 @@ extension ScanViewController: ConnectionObserver {
                     }
                 }))
                 UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
+
+                DeviceServiceImpl.shared.readSensorValues()
+       //         LedStripServiceImpl.shared.readValues()
 
             case .failure(let error):
                 let alertVC = UIAlertController(title: "Alert", message: "Failed to read sensor location with error: \(error.localizedDescription)", preferredStyle: .alert)

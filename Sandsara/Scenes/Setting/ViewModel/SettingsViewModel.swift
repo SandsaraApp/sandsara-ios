@@ -23,6 +23,10 @@ enum SettingViewModelContract {
 
 final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, SettingViewModelContract.Output> {
 
+    var status = BehaviorRelay<SandsaraStatus?>(value: nil)
+
+    var sleepMode = BehaviorRelay<Bool>(value: false)
+
     override func transform() {
         let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
@@ -36,10 +40,12 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
     private func buildCellVM() -> [SettingItemCellType] {
         var datas = [SettingItemCellType]()
         datas.append(.speed(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .speed,
-                                                                                       progress: BehaviorRelay(value: 0.2)))))
+                                                                                       progress: DeviceServiceImpl.shared.ballSpeed))))
         datas.append(.brightness(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .brightness,
-                                                                                       progress: BehaviorRelay(value: 0.2)))))
-        datas.append(.lightMode(LightModeCellViewModel(inputs: LightModeVMContract.Input(type: .lightMode, segmentsSelection: inputs.lightMode))))
+                                                                                            progress: DeviceServiceImpl.shared.brightness))))
+        datas.append(.lightMode(LightModeCellViewModel(inputs: LightModeVMContract.Input(type: .lightMode, segmentsSelection: DeviceServiceImpl.shared.lightMode, flipDirection: DeviceServiceImpl.shared.flipDirection))))
+
+        datas.append(.toogle(ToogleCellViewModel(inputs: ToogleCellVMContract.Input(type: .sleep, toogle: DeviceServiceImpl.shared.sleepStatus))))
         return datas
     }
 }

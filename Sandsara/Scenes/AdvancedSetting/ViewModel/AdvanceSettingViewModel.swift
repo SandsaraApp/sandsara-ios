@@ -32,8 +32,8 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
 
     private func buildCellVM() -> [SettingItemCellType] {
         var datas = [SettingItemCellType]()
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareVersion("1.09.1"), color: Asset.secondary.color))))
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .deviceName("Sandsara"), color: Asset.secondary.color))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareVersion(DeviceServiceImpl.shared.firmwareVersion.value.isEmpty ? "N/A" : DeviceServiceImpl.shared.firmwareVersion.value ), color: Asset.secondary.color))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .deviceName(DeviceServiceImpl.shared.deviceName.value.isEmpty ? "N/A" : DeviceServiceImpl.shared.deviceName.value), color: Asset.secondary.color))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .changeName))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareUpdate))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .factoryReset))))

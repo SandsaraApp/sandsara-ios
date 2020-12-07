@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ToogleTableViewCell" customModule="Sandsara" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tRs-oQ-XxR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGM-Rg-nae">
+                                <rect key="frame" x="16" y="16" width="246" height="12"/>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rtu-MB-1pm" customClass="ToggleSwitch" customModule="Sandsara" customModuleProvider="target">
+                                <rect key="frame" x="272" y="15" width="32" height="14"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="77X-h4-B5c"/>
+                                    <constraint firstAttribute="height" constant="14" id="IOC-gB-vCx"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" name="background"/>
+                        <constraints>
+                            <constraint firstItem="rtu-MB-1pm" firstAttribute="centerY" secondItem="hGM-Rg-nae" secondAttribute="centerY" id="2fW-wh-43Y"/>
+                            <constraint firstItem="hGM-Rg-nae" firstAttribute="top" secondItem="tRs-oQ-XxR" secondAttribute="top" constant="16" id="3J8-yn-sGy"/>
+                            <constraint firstAttribute="trailing" secondItem="rtu-MB-1pm" secondAttribute="trailing" constant="16" id="4Ag-Pt-4E1"/>
+                            <constraint firstItem="rtu-MB-1pm" firstAttribute="leading" secondItem="hGM-Rg-nae" secondAttribute="trailing" constant="10" id="4f5-Ae-y1u"/>
+                            <constraint firstAttribute="bottom" secondItem="hGM-Rg-nae" secondAttribute="bottom" constant="16" id="Xi5-jJ-x2f"/>
+                            <constraint firstItem="hGM-Rg-nae" firstAttribute="leading" secondItem="tRs-oQ-XxR" secondAttribute="leading" constant="16" id="w5u-Bn-9h6"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="tRs-oQ-XxR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="3oD-KC-gZS"/>
+                    <constraint firstAttribute="bottom" secondItem="tRs-oQ-XxR" secondAttribute="bottom" id="5eO-sz-3dD"/>
+                    <constraint firstAttribute="trailing" secondItem="tRs-oQ-XxR" secondAttribute="trailing" id="aan-hf-1ft"/>
+                    <constraint firstItem="tRs-oQ-XxR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="lty-9b-OYz"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" name="background"/>
+            <connections>
+                <outlet property="titleLabel" destination="hGM-Rg-nae" id="KUm-kq-WzG"/>
+                <outlet property="toogleSwitch" destination="rtu-MB-1pm" id="5Ex-tD-ugl"/>
+            </connections>
+            <point key="canvasLocation" x="-197.10144927536234" y="101.78571428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

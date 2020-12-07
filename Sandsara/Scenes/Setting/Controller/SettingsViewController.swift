@@ -69,6 +69,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
 
         tableView.register(ProgressTableViewCell.nib, forCellReuseIdentifier: ProgressTableViewCell.identifier)
         tableView.register(SegmentTableViewCell.nib, forCellReuseIdentifier: SegmentTableViewCell.identifier)
+        tableView.register(ToogleTableViewCell.nib, forCellReuseIdentifier: ToogleTableViewCell.identifier)
         tableView.remembersLastFocusedIndexPath = true
         tableView
             .rx.setDelegate(self)
@@ -107,6 +108,10 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: AdvanceSettingViewController.identifier) as! AdvanceSettingViewController
                         self.navigationController?.pushViewController(vc, animated: true)
                     }.disposed(by: cell.disposeBag)
+                    return cell
+                case .toogle(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: ToogleTableViewCell.identifier, for: indexPath) as? ToogleTableViewCell else { return UITableViewCell() }
+                    cell.bind(to: viewModel)
                     return cell
                 default: return UITableViewCell()
                 }

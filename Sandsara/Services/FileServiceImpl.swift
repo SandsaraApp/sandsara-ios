@@ -17,9 +17,9 @@ class FileServiceImpl {
 
     let disposeBag = DisposeBag()
 
-    func sendFiles(fileName: String, extensionName: String) {
+    func sendFiles(fileName: String,
+                   extensionName: String) {
         let start = CFAbsoluteTimeGetCurrent()
-
         bluejay.run { sandsaraBoard -> Bool in
             if let bytes: [[UInt8]] = self.getFile(forResource: fileName, withExtension: extensionName) {
                 do {

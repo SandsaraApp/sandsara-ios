@@ -47,7 +47,20 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBOutlet weak var sandsaraWebLabel: UIButton!
     @IBOutlet weak var helpLabel: UIButton!
     @IBOutlet weak var colorTempSliderView: UIView!
-    @IBOutlet weak var customColorView: UIStackView!
+    @IBOutlet weak var customColorView: HSBASliderGroup!
+    @IBOutlet weak var staticColorUpdateView: UIView!
+    @IBOutlet weak var colorGradientView: ColorGradientView!
+    @IBOutlet weak var overlayGradientView: UIView!
+    @IBOutlet weak var overlayLineView: UIView!
+    @IBOutlet weak var overlayColorUpdatedView: UIView!
+    @IBOutlet weak var overlaySliderView: HSBASliderGroup!
+    @IBOutlet weak var deleteBtn: UIButton!
+    @IBOutlet weak var acceptBtn: UIButton!
+    @IBOutlet weak var overlayLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var colorTempSlider: UISlider!
+
+    @IBOutlet weak var flipModeTitleLabel: UILabel!
+    @IBOutlet weak var toogleSwitch: ToggleSwitch!
 
     let segmentSelected = BehaviorRelay<LightMode>(value: .rotate)
     let cellUpdated = PublishRelay<()>()
@@ -87,15 +100,47 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         collectionView.register(ColorCell.nib, forCellWithReuseIdentifier: ColorCell.identifier)
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
 
-        lightSpeedSlider.maximumValue = 500
-        lightSpeedSlider.minimumValue = 10
+        lightSpeedSlider.maximumValue = SettingItemType.lightCycleSpeed.sliderValue.1
+        lightSpeedSlider.minimumValue = SettingItemType.lightCycleSpeed.sliderValue.0
+
+        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+            lightSpeedSlider.setThumbImage(Asset.thumbs.image, for: state)
+        }
+
+        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+            colorTempSlider.setThumbImage(Asset.thumbs.image, for: state)
+        }
 
         hsbView.isHidden = true
         hsbView.alpha = 0
         staticColorView.isHidden = true
         staticColorView.alpha = 0
 
+        colorGradientView.delegate = self
+
+        customColorView.color = Asset.primary.color
+        customColorView.showAlphaSlider = false
+        customColorView.colorKnob = false
+        customColorView.knobSize = CGSize(width: 24.0, height: 24.0)
+
+        overlaySliderView.showAlphaSlider = false
+        overlaySliderView.colorKnob = false
+        overlaySliderView.knobSize = CGSize(width: 24.0, height: 24.0)
+
+        overlayGradientView.alpha = 0
+        overlayGradientView.isHidden = true
+
+        lightSpeedSlider.value = DeviceServiceImpl.shared.ledSpeed.value
+
+        let images = ToggleSwitchImages(baseOnImage: Asset.toggleBaseOn.image,
+                                        baseOffImage: Asset.toggleBaseOff.image,
+                                        thumbOnImage: Asset.thumbs.image,
+                                        thumbOffImage: Asset.thumbs.image)
+
+        toogleSwitch.configurationImages = images
+        flipModeTitleLabel.text = L10n.flipMode
         selectionStyle = .none
+        segmentControl.segmentSelected.accept(DeviceServiceImpl.shared.lightModeInt.value)
     }
 
     override func bindViewModel() {
@@ -111,11 +156,13 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
                 self.hsbView.isHidden = isStatic
                 self.hsbView.alpha = isStatic ? 0 : 1
+                self.collectionView.isHidden = isStatic
                 self.staticColorView.isHidden = !isStatic
                 self.staticColorView.alpha = isStatic ? 1 : 0
                 self.needsUpdateConstraints()
                 self.layoutIfNeeded()
                 self.cellUpdated.accept(())
+                self.segmentSelected.accept($0)
             }
             .disposed(by: disposeBag)
 
@@ -129,17 +176,16 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .map { LightMode(rawValue: $0) ?? .rotate }
             .subscribeNext {
                 self.viewModel.inputs.segmentsSelection.accept($0)
-                self.segmentSelected.accept($0)
             }
             .disposed(by: disposeBag)
 
         lightSpeedSlider
             .rx.value
             .changed
-            .debounce(.milliseconds(400), scheduler: MainScheduler.asyncInstance)
+            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .compactMap { Int($0) }
             .subscribeNext { value in
-                bluejay.write(to: LedStripService.ledStripSpeed, value: String(format:"%02X", value)) { result in
+                bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
                     switch result {
                     case .success:
                         debugPrint("Write to sensor location is successful.\(result)")
@@ -163,6 +209,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         staticColorSegmentControl
             .segmentSelected
+            .skip(1)
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
                 self.colorTempSliderView.isHidden = $0 != StaticMode.colorTemp
@@ -175,6 +222,48 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.cellUpdated.accept(())
 
         }.disposed(by: disposeBag)
+
+        collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
+            guard let self = self else { return }
+            self.colorGradientView?.color = PredifinedColor(rawValue: indexPath.item) ?? .one
+            bluejay.write(to: LedStripService.selectPattle, value: "\(indexPath.item + 1)") { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result)")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
+            }
+        }.disposed(by: disposeBag)
+
+        acceptBtn.rx.tap.subscribeNext {
+            self.overlayGradientView.isHidden = true
+            self.overlayGradientView.alpha = 0
+            //TODO: add color or update color
+            if self.colorGradientView.isFirst {
+                self.colorGradientView.updateFirstColor(color: self.overlaySliderView.color)
+            } else if self.colorGradientView.isLast {
+                self.colorGradientView.updateSecondColor(color: self.overlaySliderView.color)
+            } else if self.colorGradientView.addCustomPoint {
+                self.colorGradientView.addColor(color: self.overlaySliderView.color)
+            } else {
+                self.colorGradientView.updatePointColor(color: self.overlaySliderView.color)
+            }
+        }.disposed(by: disposeBag)
+
+        deleteBtn.rx.tap.subscribeNext {
+            self.overlayGradientView.isHidden = true
+            self.overlayGradientView.alpha = 0
+            if self.colorGradientView.updateCustomPoint {
+                self.colorGradientView.removeColor(color: self.overlaySliderView.color)
+            }
+        }.disposed(by: disposeBag)
+
+        viewModel.outputs.flipDirection.drive(toogleSwitch.rx.isOn).disposed(by: disposeBag)
+
+        toogleSwitch.stateChanged = { [weak self] state in
+            self?.viewModel.inputs.flipDirection.accept(state)
+        }
     }
 
     override func layoutSubviews() {
@@ -211,7 +300,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 Constraints.labelHeight +
                 Constraints.commonSpacing * 1.5 +
                 Constraints.sliderHeight +
-                Constraints.commonSpacing / 2
+                    30.0
             )
         }
     }
@@ -225,20 +314,91 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 Constraints.commonSpacing * 1.375
             )
         } else {
-            return CGFloat(
-                spacing +
-                Constraints.colorSliderHeight +
-                Constraints.commonSpacing * 1.75 +
-                Constraints.colorSliderHeight +
-                Constraints.commonSpacing * 1.75 +
-                Constraints.colorSliderHeight
-            )
+            return customColorView.intrinsicContentSize.height + 30.0
         }
     }
+
+    @IBAction func hsbaSliderGroupValueChanged(_ sender: HSBASliderGroup) {
+        updateBackgroundColor()
+    }
+
+    @IBAction func hsbaSliderGroupTouchDown(_ sender: HSBASliderGroup) {
+        updateBackgroundColor()
+    }
+
+    @IBAction func hsbaSliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
+        updateBackgroundColor()
+        let postions = ["0", "255"].joined(separator: ",")
+
+        let red = "\(Int(customColorView.color.rgba().red * 255)),\(Int(customColorView.color.rgba().red * 255))"
+
+        let green = "\(Int(customColorView.color.rgba().green * 255)),\(Int(customColorView.color.rgba().green * 255))"
+
+        let blue = "\(Int(customColorView.color.rgba().blue * 255)),\(Int(customColorView.color.rgba().blue * 255))"
+
+        let amount = "2"
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            LedStripServiceImpl.shared.uploadCustomPalette(amoutColors: amount, postions: postions, red: red, blue: blue, green: green)
+        }
+    }
+
+    private func updateBackgroundColor() {
+        staticColorUpdateView.backgroundColor = customColorView.color
+        print(customColorView.colorFromSliders().hsba())
+    }
+
+    @IBAction func overlaySliderGroupValueChanged(_ sender: HSBASliderGroup) {
+        overlayColorUpdatedView.backgroundColor = overlaySliderView.color
+        overlayLineView.backgroundColor = overlaySliderView.color
+    }
+
+    @IBAction func overlaySliderGroupTouchDown(_ sender: HSBASliderGroup) {
+        overlayColorUpdatedView.backgroundColor = overlaySliderView.color
+        overlayLineView.backgroundColor = overlaySliderView.color
+    }
+
+    @IBAction func overlaySliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
+        overlayColorUpdatedView.backgroundColor = overlaySliderView.color
+        overlayLineView.backgroundColor = overlaySliderView.color
+    }
+
 }
 
 extension SegmentTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: Constants.cellWidth, height: Constants.cellHeight)
+    }
+}
+
+extension SegmentTableViewCell: ColorGradientViewDelegate {
+    func firstPointTouch(color: UIColor) {
+        overlayLineView.backgroundColor = color
+        overlayLeadingConstraint.constant = 27.0
+        overlayGradientView.alpha = 1
+        overlayGradientView.isHidden = false
+        overlayColorUpdatedView.backgroundColor = color
+        overlaySliderView.color = color
+        deleteBtn.isHidden = true
+    }
+
+    func secondPointTouch(color: UIColor) {
+        overlayLineView.backgroundColor = color
+        overlayLeadingConstraint.constant = UIScreen.main.bounds.size.width - 29.0
+        overlayGradientView.alpha = 1
+        overlayGradientView.isHidden = false
+        overlayColorUpdatedView.backgroundColor = color
+        overlaySliderView.color = color
+        deleteBtn.isHidden = true
+    }
+
+    func showGradient(atPoint: CGPoint, color: UIColor) {
+        overlayLineView.backgroundColor = color
+        overlayLeadingConstraint.constant = atPoint.x + 27.0
+        overlayGradientView.alpha = 1
+        overlayGradientView.isHidden = false
+        overlayColorUpdatedView.backgroundColor = color
+        overlaySliderView.color = color
+        deleteBtn.isHidden = false
     }
 }

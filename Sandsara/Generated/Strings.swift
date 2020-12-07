@@ -60,6 +60,8 @@ internal enum L10n {
   internal static func firmwareVersion(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "firmware_version", String(describing: p1))
   }
+  /// Flip Mode
+  internal static let flipMode = L10n.tr("Localizeable", "flip_mode")
   /// Help
   internal static let help = L10n.tr("Localizeable", "help")
   /// Light Cycle Speed
@@ -80,12 +82,16 @@ internal enum L10n {
   internal static let recommendedPlaylists = L10n.tr("Localizeable", "recommended_playlists")
   /// Recomended Tracks
   internal static let recommendedTracks = L10n.tr("Localizeable", "recommended_tracks")
+  /// Restart
+  internal static let restart = L10n.tr("Localizeable", "restart")
   /// Rotate
   internal static let rotate = L10n.tr("Localizeable", "rotate")
   /// Sandsara detected.
   internal static let sandsaraDetected = L10n.tr("Localizeable", "sandsara_detected")
   /// Settings
   internal static let settings = L10n.tr("Localizeable", "settings")
+  /// Sleep
+  internal static let sleep = L10n.tr("Localizeable", "sleep")
   /// Ball Speed
   internal static let speed = L10n.tr("Localizeable", "speed")
   /// Static

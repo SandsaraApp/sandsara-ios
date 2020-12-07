@@ -56,6 +56,49 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
         tableView.estimatedSectionHeaderHeight = 73
 
         tableView.register(SettingHeaderView.nib, forHeaderFooterViewReuseIdentifier: SettingHeaderView.identifier)
+
+        Observable
+            .zip(
+                tableView.rx.itemSelected,
+                tableView.rx.modelSelected(SettingItemCellType.self)
+            ).bind { [weak self] indexPath, model in
+                guard let self = self else { return }
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                switch model {
+                case .menu(let viewModel):
+                    switch viewModel.inputs.type {
+                    case .changeName:
+                        let alert = UIAlertController(title: nil, message: "Update Name", preferredStyle: .alert)
+                        alert.addTextField { (textField) in
+                            textField.placeholder = "Enter a new name for Sandsara here"
+                        }
+                        alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { [weak alert] (_) in
+                            if let textField = alert?.textFields?[0]  {
+                                if let text = textField.text {
+                                    if text.isEmpty == false {
+                                        DeviceServiceImpl.shared.updateDeviceName(name: text)
+                                        DeviceServiceImpl.shared.updateError.subscribeNext { error in
+                                            if error == nil {
+                                                DeviceServiceImpl.shared.deviceName.accept(text)
+                                                self.showSuccessHUD(message: "Name \(text) was updated successfully")
+                                                self.viewWillAppearTrigger.accept(())
+                                            } else {
+                                                self.showErrorHUD(message: "\(error?.localizedDescription ?? "")")
+                                            }
+                                        }.disposed(by: self.disposeBag)
+                                    }
+                                }
+                            }}))
+
+                        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    case .factoryReset:
+                        viewModel.sendCommand(command: "1")
+                    default: break
+                    }
+                default: break
+                }
+        }.disposed(by: disposeBag)
     }
 
     private func makeDataSource() -> DataSource {

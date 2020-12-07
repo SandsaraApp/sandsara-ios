@@ -18,6 +18,7 @@ target 'Sandsara' do
   pod 'RxReachability'
   pod 'SVProgressHUD'
   pod 'RealmSwift', '~> 5.5.0'
+  pod 'SnapKit', '~> 5.0.0'
 
   target 'SandsaraTests' do
     inherit! :search_paths

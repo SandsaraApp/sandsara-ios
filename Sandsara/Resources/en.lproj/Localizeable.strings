@@ -48,3 +48,7 @@
 "color_pallete" = "Color Pallete";
 "color_temp" = "Color Temperature";
 "custom_color" = "Custom Color";
+
+"flip_mode" = "Flip Mode";
+"sleep" = "Sleep";
+"restart" = "Restart";

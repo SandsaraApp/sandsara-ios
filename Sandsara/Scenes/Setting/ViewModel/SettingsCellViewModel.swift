@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import Bluejay
 
-enum PredifinedColor: Int {
+enum PredifinedColor: Int, CaseIterable {
     case one
     case two
     case three
@@ -19,15 +20,52 @@ enum PredifinedColor: Int {
     case six
     case seven
     case eight
-    case nine
-    case ten
-    case eleven
-    case twelve
 
-    // these one cannot be editted
-//    var gradientColors: (UIColor, UIColor) {
-//
-//    }
+    var colors: [UIColor] {
+        var colorStrings = [String]()
+        switch self {
+        case .one:
+            colorStrings = ["FB7657", "FD5962", "E95EBB", "6B3EF3", "F35EC5", "FD5962", "FB7657"]
+        case .two:
+            colorStrings = ["FEF0D6", "FFAFB2", "BEE9E9", "FEF0D6"]
+        case .three:
+            colorStrings = ["14F7F7", "FFFFFF", "D00040", "E700D5", "14F7F7"]
+        case .four:
+            colorStrings = ["FF3306", "FFFFFF", "FF0653", "FF3306"]
+        case .five:
+            colorStrings = ["86DBD8", "FC4C61", "FEE6E6", "FF6A5A", "FFC8C5", "FDB57B", "86DBD8"]
+        case .six:
+            colorStrings = ["06A4AF", "D8EBCB", "06A4AF"]
+        case .seven:
+            colorStrings = ["BCE9FE", "FDDDEA", "FFFFFF", "BCE9FE"]
+        case .eight:
+            colorStrings = ["D6F2E6", "004D7E", "D6F2E6"]
+        }
+        return colorStrings.map {
+            UIColor(hexString: "#\($0)")
+        }
+    }
+
+    var posistion: [CGFloat] {
+        switch self {
+        case .one:
+            return [0, 42, 85, 127, 170, 212, 255]
+        case .two:
+            return [0, 85, 170, 255]
+        case .three:
+            return [0, 64, 127, 191, 255]
+        case .four:
+            return [0, 106, 212, 255]
+        case .five:
+            return [0, 42, 85, 127, 170, 212, 255]
+        case .six:
+            return [0, 127, 255]
+        case .seven:
+            return [0, 85, 170, 255]
+        case .eight:
+            return [0, 127, 255]
+        }
+    }
 }
 
 enum StaticMode: Int {
@@ -45,16 +83,15 @@ enum SettingItemCellType {
     case speed(ProgressCellViewModel)
     case brightness(ProgressCellViewModel)
     case lightMode(LightModeCellViewModel)
-    case presets(PresetsCellViewModel)
     case lightCycleSpeed(ProgressCellViewModel)
     case menu(MenuCellViewModel)
+    case toogle(ToogleCellViewModel)
 }
 
 enum SettingItemType {
     case speed
     case brightness
     case lightMode
-    case presets
     case lightCycleSpeed
     case advanced
     case visitSandsara
@@ -64,6 +101,10 @@ enum SettingItemType {
     case factoryReset
     case deviceName(String)
     case firmwareVersion(String)
+    case flipMode
+
+    case sleep
+    case restart
 
     var title: String {
         switch self {
@@ -73,8 +114,6 @@ enum SettingItemType {
             return L10n.brightness
         case .lightMode:
             return L10n.lightmode
-        case .presets:
-            return L10n.presets
         case .lightCycleSpeed:
             return L10n.lightCycleSpeed
         case .advanced:
@@ -91,6 +130,53 @@ enum SettingItemType {
             return L10n.deviceName(name)
         case .firmwareVersion(let version):
             return L10n.firmwareVersion(version)
+        case .sleep:
+            return L10n.sleep
+        case .restart:
+            return L10n.restart
+        case .flipMode:
+            return L10n.flipMode
+        }
+    }
+
+    var sliderValue: (Float, Float) {
+        switch self {
+        case .lightCycleSpeed:
+            return (10, 500)
+        case .speed:
+            return (1, 150)
+        case .brightness:
+            return (0, 255)
+        default:
+            return (0, 0)
+        }
+    }
+
+    var progressCharacteristic: CharacteristicIdentifier? {
+        switch self {
+        case .speed:
+            return DeviceService.speed
+        case .lightCycleSpeed:
+            return LedStripService.ledStripSpeed
+        case .brightness:
+            return LedStripService.brightness
+        default:
+            return nil
+        }
+    }
+
+    var toogleCharacteristic: CharacteristicIdentifier? {
+        switch self {
+        case .sleep:
+            return DeviceService.sleep
+        case .restart:
+            return DeviceService.restart
+        case .factoryReset:
+            return DeviceService.factoryReset
+        case .flipMode:
+            return LedStripService.ledStripDirection
+        default:
+            return nil
         }
     }
 }
@@ -127,7 +213,7 @@ enum ProgressCellVMContract {
 
     struct Output: OutputType {
         let title: Driver<String>
-        let command: Driver<String>
+        let progress: Driver<Float>
     }
 }
 
@@ -136,15 +222,25 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
     override func transform() {
         inputs
             .progress
+            .skip(1)
             .subscribeNext { value in
                 self.sendCommand(command: "\(value)")
         }.disposed(by: disposeBag)
 
         setOutput(Output(title: Driver.just(inputs.type.title),
-                         command: Driver.just("\(inputs.progress.value)")))
+                         progress: inputs.progress.asDriver()))
     }
 
     func sendCommand(command: String) {
+        guard let character = inputs.type.progressCharacteristic else { return }
+        bluejay.write(to: character, value: command) { result in
+            switch result {
+            case .success:
+                debugPrint("Write to sensor location is successful.\(result)")
+            case .failure(let error):
+                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
@@ -160,45 +256,89 @@ enum MenuCellVMContract {
 }
 
 class MenuCellViewModel: BaseCellViewModel<MenuCellVMContract.Input,
-                                             MenuCellVMContract.Output> {
+                                             MenuCellVMContract.Output>, SettingSendCommandable {
     override func transform() {
         setOutput(Output(title: Driver.just(inputs.type.title)))
     }
+
+    func sendCommand(command: String) {
+        switch inputs.type {
+        case .factoryReset:
+            DeviceServiceImpl.shared.factoryReset()
+        default:
+            break
+        }
+    }
 }
 
-enum PresetsCellVMContract {
+
+enum PresetCellVMContract {
     struct Input: InputType {
-        let type: SettingItemType
+        let color: PredifinedColor
     }
 
     struct Output: OutputType {
-        let title: Driver<String>
-        let datas: Driver<[PresetCellViewModel]>
+        let color: Driver<PredifinedColor>
     }
 }
 
-class PresetsCellViewModel: BaseCellViewModel<PresetsCellVMContract.Input,
-                                              PresetsCellVMContract.Output>, SettingSendCommandable {
-
-    private let imageNames: [Int] = [Int](0...11)
-
+class PresetCellViewModel: BaseCellViewModel<PresetCellVMContract.Input,
+                                                PresetCellVMContract.Output> {
     override func transform() {
+        setOutput(Output(color: Driver.just(inputs.color)))
+    }
+}
 
-        let images = imageNames.map {
-            if $0 == 0 {
-                return "Rectangle"
-            }
-            return "Rectangle-\($0)"
-        }.map {
-            PresetCellViewModel(inputs: PresetCellVMContract.Input(item: $0))
+
+enum LightModeVMContract {
+    struct Input: InputType {
+        let type: SettingItemType
+        let segmentsSelection: BehaviorRelay<LightMode>
+        let flipDirection: BehaviorRelay<Bool>
+    }
+
+    struct Output: OutputType {
+        let segmentsSelection: Driver<LightMode>
+        let title: Driver<String>
+        let datas: Driver<[PresetCellViewModel]>
+        let flipDirection: Driver<Bool>
+    }
+}
+
+class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
+                                             LightModeVMContract.Output>, SettingSendCommandable {
+    private let colors: [PredifinedColor] = PredifinedColor.allCases
+    override func transform() {
+        inputs
+            .flipDirection
+            .skip(1)
+            .subscribeNext { value in
+                self.sendCommand(command: "\(value)")
+            }.disposed(by: disposeBag)
+
+        let images = colors.map {
+            PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
         }
 
-        setOutput(Output(title: Driver.just(inputs.type.title),
-                         datas: Driver.just(images)))
+        inputs.segmentsSelection
+            .skip(1)
+            .subscribeNext { mode in
+                if mode == .cycle {
+                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
+                } else {
+                    DeviceServiceImpl.shared.updateCycleMode(mode: "0")
+                }
+            }.disposed(by: disposeBag)
+
+        setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
+                         title: Driver.just(inputs.type.title),
+                         datas: Driver.just(images),
+                         flipDirection: inputs.flipDirection.asDriver()))
     }
 
     func sendCommand(command: String) {
-        bluejay.write(to: LedStripService.selectPattle, value: command) { result in
+        guard let toogle = SettingItemType.flipMode.toogleCharacteristic else { return }
+        bluejay.write(to: toogle, value: command) { result in
             switch result {
             case .success:
                 debugPrint("Write to sensor location is successful.\(result)")
@@ -209,53 +349,40 @@ class PresetsCellViewModel: BaseCellViewModel<PresetsCellVMContract.Input,
     }
 }
 
-
-enum PresetCellVMContract {
-    struct Input: InputType {
-        let item: String
-    }
-
-    struct Output: OutputType {
-        let image: Driver<UIImage?>
-    }
-}
-
-class PresetCellViewModel: BaseCellViewModel<PresetCellVMContract.Input,
-                                                PresetCellVMContract.Output> {
-    override func transform() {
-        setOutput(Output(image: Driver.just(UIImage(named: inputs.item))))
-    }
-}
-
-
-enum LightModeVMContract {
+enum ToogleCellVMContract {
     struct Input: InputType {
         let type: SettingItemType
-        let segmentsSelection: BehaviorRelay<LightMode>
+        let toogle: BehaviorRelay<Bool>
     }
 
     struct Output: OutputType {
-        let segmentsSelection: Driver<LightMode>
         let title: Driver<String>
-        let datas: Driver<[PresetCellViewModel]>
+        let toogle: Driver<Bool>
     }
 }
 
-class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
-                                             LightModeVMContract.Output> {
-    private let imageNames: [Int] = [Int](0...11)
+class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
+                                             ToogleCellVMContract.Output>, SettingSendCommandable {
     override func transform() {
-        let images = imageNames.map {
-            if $0 == 0 {
-                return "Rectangle"
-            }
-            return "Rectangle-\($0)"
-        }.map {
-            PresetCellViewModel(inputs: PresetCellVMContract.Input(item: $0))
-        }
+        // Skip initial value
+        inputs
+            .toogle
+            .skip(1)
+            .subscribeNext { value in
+                self.sendCommand(command: "\(value)")
+            }.disposed(by: disposeBag)
 
-        setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
-                         title: Driver.just(inputs.type.title),
-                         datas: Driver.just(images)))
+        setOutput(Output(title: Driver.just(inputs.type.title),
+                         toogle: inputs.toogle.asDriver()))
+    }
+
+    func sendCommand(command: String) {
+        if inputs.type == .sleep {
+            if inputs.toogle.value {
+                DeviceServiceImpl.shared.sleepDevice()
+            } else {
+                DeviceServiceImpl.shared.resumeDevice()
+            }
+        }
     }
 }

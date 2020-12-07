@@ -25,31 +25,26 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     }
 
     override func bindViewModel() {
+        progressSlider.maximumValue = viewModel.inputs.type.sliderValue.1
+        progressSlider.minimumValue = viewModel.inputs.type.sliderValue.0
+
         viewModel
             .outputs
             .title
             .drive(progressNameLabel.rx.text)
             .disposed(by: disposeBag)
 
-        if viewModel.inputs.type == .lightCycleSpeed {
-            progressSlider.maximumValue = 500
-            progressSlider.minimumValue = 10
-            progressSlider
-                .rx.value
-                .changed
-                .debounce(.milliseconds(400), scheduler: MainScheduler.asyncInstance)
-                .compactMap { Int($0) }
-                .subscribeNext { value in
-                    bluejay.write(to: LedStripService.ledStripSpeed, value: String(format:"%02X", value)) { result in
-                        switch result {
-                        case .success:
-                            debugPrint("Write to sensor location is successful.\(result)")
-                        case .failure(let error):
-                            debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-                        }
-                    }
-                }.disposed(by: disposeBag)
-        }
+        viewModel
+            .outputs
+            .progress
+            .drive(progressSlider.rx.value)
+            .disposed(by: disposeBag)
+
+        progressSlider
+            .rx.value
+            .changed
+            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
+            .bind(to: viewModel.inputs.progress).disposed(by: disposeBag)
     }
 
 }

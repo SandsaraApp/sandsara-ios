@@ -54,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tdb-5t-5HC">
-                                <rect key="frame" x="0.0" y="44" width="430" height="818"/>
+                                <rect key="frame" x="16" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" red="0.24313725489999999" green="0.24313725489999999" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                         </subviews>
@@ -62,7 +62,7 @@
                         <color key="backgroundColor" name="backgroundColor"/>
                         <constraints>
                             <constraint firstItem="tdb-5t-5HC" firstAttribute="top" secondItem="Dba-4B-CXf" secondAttribute="top" id="9d1-Lc-SAl"/>
-                            <constraint firstItem="tdb-5t-5HC" firstAttribute="leading" secondItem="Dba-4B-CXf" secondAttribute="leading" id="KZH-uh-nkU"/>
+                            <constraint firstItem="tdb-5t-5HC" firstAttribute="leading" secondItem="Dba-4B-CXf" secondAttribute="leading" constant="16" id="KZH-uh-nkU"/>
                             <constraint firstItem="tdb-5t-5HC" firstAttribute="trailing" secondItem="Dba-4B-CXf" secondAttribute="trailing" constant="16" id="pBi-zf-TLB"/>
                             <constraint firstItem="Dba-4B-CXf" firstAttribute="bottom" secondItem="tdb-5t-5HC" secondAttribute="bottom" id="zWF-TK-gSd"/>
                         </constraints>
