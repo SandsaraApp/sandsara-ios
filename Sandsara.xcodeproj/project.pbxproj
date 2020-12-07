@@ -30,6 +30,7 @@
 		924EDF5F25565F880013CC71 /* SandsaraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF5E25565F880013CC71 /* SandsaraTests.swift */; };
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
 		925221F3257DC20E005F75DE /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925221F1257DC20E005F75DE /* ToggleSwitch.swift */; };
+		925221FB257DFF22005F75DE /* UIColor+Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925221FA257DFF22005F75DE /* UIColor+Temperature.swift */; };
 		9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72A256A0C60004450CA /* SandsaraDataService.swift */; };
 		9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */; };
 		9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F737256A1527004450CA /* Cell+Extensions.swift */; };
@@ -258,6 +259,7 @@
 		924EDF6925565F880013CC71 /* SandsaraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraUITests.swift; sourceTree = "<group>"; };
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		925221F1257DC20E005F75DE /* ToggleSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
+		925221FA257DFF22005F75DE /* UIColor+Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Temperature.swift"; sourceTree = "<group>"; };
 		9263F72A256A0C60004450CA /* SandsaraDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataService.swift; sourceTree = "<group>"; };
 		9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataAccess.swift; sourceTree = "<group>"; };
 		9263F737256A1527004450CA /* Cell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Extensions.swift"; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				925221F9257DFF11005F75DE /* Color */,
 				925221F6257DC216005F75DE /* Switch */,
 				92C7D18F2573C01B0062FC78 /* HSBPicker */,
 				92AD7BE7256D6CBD00F0D0E6 /* DocumentPicker */,
@@ -763,6 +766,14 @@
 				925221F1257DC20E005F75DE /* ToggleSwitch.swift */,
 			);
 			path = Switch;
+			sourceTree = "<group>";
+		};
+		925221F9257DFF11005F75DE /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				925221FA257DFF22005F75DE /* UIColor+Temperature.swift */,
+			);
+			path = Color;
 			sourceTree = "<group>";
 		};
 		92698E87255FED95009F3A9F /* Network */ = {
@@ -1482,6 +1493,7 @@
 				92DFBEBE2577BABE00B1BFA9 /* Throttle.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
 				92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */,
+				925221FB257DFF22005F75DE /* UIColor+Temperature.swift in Sources */,
 				92B04655255BF7800086FFFE /* SettingsViewModel.swift in Sources */,
 				92DFBEAC2577BABE00B1BFA9 /* HSBASpectrum.swift in Sources */,
 				92DFBEA32577BABE00B1BFA9 /* Slider.swift in Sources */,

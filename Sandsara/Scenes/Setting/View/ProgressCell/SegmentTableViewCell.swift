@@ -24,8 +24,10 @@ private struct Constraints {
 
     static let segmentHeight = 50.0
     static let colorViewHeight = 43.0
-
     static let colorSliderHeight = 30.0
+
+    static let minColorTemp: Float = 2000.0
+    static let maxColorTemp: Float = 10000.0
 }
 
 class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
@@ -141,6 +143,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         flipModeTitleLabel.text = L10n.flipMode
         selectionStyle = .none
         segmentControl.segmentSelected.accept(DeviceServiceImpl.shared.lightModeInt.value)
+
+        colorTempSlider.maximumValue = Constraints.maxColorTemp
     }
 
     override func bindViewModel() {
@@ -264,6 +268,14 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         toogleSwitch.stateChanged = { [weak self] state in
             self?.viewModel.inputs.flipDirection.accept(state)
         }
+
+        colorTempSlider
+            .rx.value.changed
+            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
+            .subscribeNext { temperature in
+                self.staticColorUpdateView.backgroundColor = UIColor(temperature: CGFloat(temperature))
+                self.sendColor()
+        }.disposed(by: disposeBag)
     }
 
     override func layoutSubviews() {
@@ -328,19 +340,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     @IBAction func hsbaSliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
         updateBackgroundColor()
-        let postions = ["0", "255"].joined(separator: ",")
-
-        let red = "\(Int(customColorView.color.rgba().red * 255)),\(Int(customColorView.color.rgba().red * 255))"
-
-        let green = "\(Int(customColorView.color.rgba().green * 255)),\(Int(customColorView.color.rgba().green * 255))"
-
-        let blue = "\(Int(customColorView.color.rgba().blue * 255)),\(Int(customColorView.color.rgba().blue * 255))"
-
-        let amount = "2"
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            LedStripServiceImpl.shared.uploadCustomPalette(amoutColors: amount, postions: postions, red: red, blue: blue, green: green)
-        }
+        sendColor()
     }
 
     private func updateBackgroundColor() {
@@ -361,6 +361,27 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBAction func overlaySliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+    }
+
+    func sendColor() {
+        guard let staticColorViewColor = self.staticColorUpdateView.backgroundColor else { return }
+        let postions = ["0", "255"].joined(separator: ",")
+
+        let redColor = (staticColorViewColor.rgba().red * 255).rounded()
+        let red = "\(redColor),\(redColor)"
+
+        let greenColor = (staticColorViewColor.rgba().green * 255).rounded()
+        let green = "\(greenColor),\(greenColor)"
+
+        let blueColor = (staticColorViewColor.rgba().blue * 255).rounded()
+
+        let blue = "\(blueColor),\(blueColor)"
+
+        let amount = "2"
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            LedStripServiceImpl.shared.uploadCustomPalette(amoutColors: amount, postions: postions, red: red, blue: blue, green: green)
+        }
     }
 
 }
