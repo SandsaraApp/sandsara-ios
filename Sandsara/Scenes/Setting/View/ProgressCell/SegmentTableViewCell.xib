@@ -31,7 +31,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ld7-2a-JkO" customClass="CustomSegmentControl" customModule="Sandsara" customModuleProvider="target">
-                        <rect key="frame" x="-34" y="44.5" width="388" height="233.5"/>
+                        <rect key="frame" x="-34" y="44.5" width="388" height="253.5"/>
                         <color key="backgroundColor" name="background"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="indicatorViewBackgroundColor">
@@ -43,10 +43,10 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V01-uM-gYk">
-                        <rect key="frame" x="16" y="307" width="288" height="800"/>
+                        <rect key="frame" x="16" y="327" width="288" height="780"/>
                         <subviews>
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nhB-R8-BC6">
-                                <rect key="frame" x="0.0" y="0.0" width="288" height="800"/>
+                                <rect key="frame" x="0.0" y="0.0" width="288" height="780"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2Q-Dv-bV5">
                                         <rect key="frame" x="0.0" y="0.0" width="288" height="25"/>
@@ -74,7 +74,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="OJc-ac-xLz">
-                                        <rect key="frame" x="0.0" y="193" width="288" height="510"/>
+                                        <rect key="frame" x="0.0" y="193" width="288" height="490"/>
                                         <color key="backgroundColor" name="backgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="35" id="JPK-1b-91I"/>
@@ -87,7 +87,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NmL-gj-8vz">
-                                        <rect key="frame" x="0.0" y="711" width="288" height="25"/>
+                                        <rect key="frame" x="0.0" y="691" width="288" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="BS6-hz-roI"/>
                                         </constraints>
@@ -96,7 +96,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NE1-B5-wlu">
-                                        <rect key="frame" x="-2" y="756" width="292" height="15"/>
+                                        <rect key="frame" x="-2" y="736" width="292" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="5wU-Y9-VFd"/>
                                         </constraints>
@@ -129,11 +129,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YFO-aS-dQj">
-                                <rect key="frame" x="0.0" y="0.0" width="288" height="800"/>
+                                <rect key="frame" x="0.0" y="0.0" width="288" height="780"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j60-h5-aoo" customClass="CustomSegmentControl" customModule="Sandsara" customModuleProvider="target">
-                                        <rect key="frame" x="-16" y="0.0" width="320" height="70"/>
+                                        <rect key="frame" x="-16" y="0.0" width="320" height="50"/>
                                         <color key="backgroundColor" name="background"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="14f-Xe-QIv"/>
+                                        </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="indicatorViewBackgroundColor">
                                                 <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -144,14 +147,14 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ihe-Cx-yD9">
-                                        <rect key="frame" x="0.0" y="100" width="288" height="43"/>
+                                        <rect key="frame" x="0.0" y="80" width="288" height="43"/>
                                         <color key="backgroundColor" red="0.0" green="0.76862745099999996" blue="0.70196078429999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="43" id="OOY-bS-fzq"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KSt-Pe-lvH">
-                                        <rect key="frame" x="0.0" y="143" width="288" height="657"/>
+                                        <rect key="frame" x="0.0" y="123" width="288" height="657"/>
                                         <subviews>
                                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QRH-RE-RFt">
                                                 <rect key="frame" x="0.0" y="0.0" width="288" height="657"/>
@@ -223,7 +226,7 @@
                             <constraint firstAttribute="bottom" secondItem="YFO-aS-dQj" secondAttribute="bottom" id="cIn-1y-3Le"/>
                             <constraint firstItem="nhB-R8-BC6" firstAttribute="top" secondItem="V01-uM-gYk" secondAttribute="top" id="czu-Kf-Huc"/>
                             <constraint firstItem="YFO-aS-dQj" firstAttribute="leading" secondItem="V01-uM-gYk" secondAttribute="leading" id="ggv-Jp-MoK"/>
-                            <constraint firstAttribute="height" constant="800" id="ptE-2I-QBC"/>
+                            <constraint firstAttribute="height" priority="999" constant="800" id="ptE-2I-QBC"/>
                             <constraint firstAttribute="trailing" secondItem="nhB-R8-BC6" secondAttribute="trailing" id="wkX-l0-tWp"/>
                         </constraints>
                     </view>
@@ -303,7 +306,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UjZ-eX-umM">
-                        <rect key="frame" x="0.0" y="391" width="320" height="954"/>
+                        <rect key="frame" x="0.0" y="411" width="320" height="934"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdH-Qc-2pm">
                                 <rect key="frame" x="16" y="0.0" width="2" height="44"/>
@@ -396,6 +399,7 @@
                 <outlet property="customColorView" destination="OFX-77-CgR" id="qv3-cs-fDE"/>
                 <outlet property="deleteBtn" destination="Bjn-bA-ZRs" id="zwR-1u-WVC"/>
                 <outlet property="flipModeTitleLabel" destination="dGe-dl-dkZ" id="fGP-BQ-Foe"/>
+                <outlet property="flipModeView" destination="wCA-GG-aUH" id="MSr-PY-0te"/>
                 <outlet property="helpLabel" destination="0d1-Kj-9ms" id="msC-N7-BWk"/>
                 <outlet property="hsbView" destination="nhB-R8-BC6" id="2Za-Kb-PDL"/>
                 <outlet property="lightSpeedLabel" destination="NmL-gj-8vz" id="0TY-ct-eQu"/>

@@ -266,5 +266,6 @@ class DeviceServiceImpl {
         cycleMode.accept(false)
         flipDirection.accept(false)
         brightness.accept(0)
+        lightMode.accept(.rotate)
     }
 }

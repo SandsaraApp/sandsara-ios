@@ -63,7 +63,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     @IBOutlet weak var flipModeTitleLabel: UILabel!
     @IBOutlet weak var toogleSwitch: ToggleSwitch!
-
+    @IBOutlet weak var flipModeView: UIView!
+    
     let segmentSelected = BehaviorRelay<LightMode>(value: .rotate)
     let cellUpdated = PublishRelay<()>()
 
@@ -142,9 +143,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         toogleSwitch.configurationImages = images
         flipModeTitleLabel.text = L10n.flipMode
         selectionStyle = .none
-        segmentControl.segmentSelected.accept(DeviceServiceImpl.shared.lightModeInt.value)
-
         colorTempSlider.maximumValue = Constraints.maxColorTemp
+
+        contraints(DeviceServiceImpl.shared.lightMode.value)
     }
 
     override func bindViewModel() {
@@ -156,17 +157,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         viewModel.outputs
             .segmentsSelection
             .driveNext {
-                let isStatic = $0 == .staticMode
-                self.mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
-                self.hsbView.isHidden = isStatic
-                self.hsbView.alpha = isStatic ? 0 : 1
-                self.collectionView.isHidden = isStatic
-                self.staticColorView.isHidden = !isStatic
-                self.staticColorView.alpha = isStatic ? 1 : 0
-                self.needsUpdateConstraints()
-                self.layoutIfNeeded()
-                self.cellUpdated.accept(())
-                self.segmentSelected.accept($0)
+                self.contraints($0)
             }
             .disposed(by: disposeBag)
 
@@ -176,7 +167,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .drive(collectionView.rx.items(dataSource: makeDatasource()))
             .disposed(by: disposeBag)
 
-        segmentControl.segmentSelected
+        segmentControl.segmentSelected.skip(1)
             .map { LightMode(rawValue: $0) ?? .rotate }
             .subscribeNext {
                 self.viewModel.inputs.segmentsSelection.accept($0)
@@ -213,7 +204,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         staticColorSegmentControl
             .segmentSelected
-            .skip(1)
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
                 self.colorTempSliderView.isHidden = $0 != StaticMode.colorTemp
@@ -271,7 +261,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         colorTempSlider
             .rx.value.changed
-            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .subscribeNext { temperature in
                 self.staticColorUpdateView.backgroundColor = UIColor(temperature: CGFloat(temperature))
                 self.sendColor()
@@ -290,6 +279,22 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 cell.bind(to: viewModel)
                 return cell
             })
+    }
+
+    private func contraints(_ mode: LightMode) {
+        let isStatic = mode == .staticMode
+        hsbView.isHidden = isStatic
+        hsbView.alpha = isStatic ? 0 : 1
+        collectionView.isHidden = isStatic
+        staticColorView.isHidden = !isStatic
+        staticColorView.alpha = isStatic ? 1 : 0
+        flipModeView.isHidden = isStatic
+        flipModeView.alpha = isStatic ? 0 : 1
+        mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
+        needsUpdateConstraints()
+        layoutIfNeeded()
+        cellUpdated.accept(())
+        segmentSelected.accept(mode)
     }
 
     private func lightModeHeight(isStatic: Bool) -> CGFloat {
