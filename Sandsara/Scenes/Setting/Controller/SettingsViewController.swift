@@ -93,16 +93,12 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                 case .lightMode(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTableViewCell.identifier, for: indexPath) as? SegmentTableViewCell else { return UITableViewCell() }
                     cell.bind(to: viewModel)
-                    cell.segmentSelected
-                        .bind(to: self.lightMode)
-                        .disposed(by: cell.disposeBag)
                     cell.cellUpdated
                         .observeOn(MainScheduler.asyncInstance)
                         .subscribeNext {
                             tableView.beginUpdates()
                             tableView.endUpdates()
-                    }.disposed(by: cell.disposeBag)
-
+                        }.disposed(by: cell.disposeBag)
                     cell.advancedBtnTap.subscribeNext { [weak self] in
                         guard let self = self else { return }
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: AdvanceSettingViewController.identifier) as! AdvanceSettingViewController

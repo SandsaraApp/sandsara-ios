@@ -320,6 +320,16 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
             PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
         }
 
+//        inputs.segmentsSelection
+//            .skip(1)
+//            .subscribeNext { mode in
+//                if mode == .cycle {
+//                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
+//                } else {
+//                    DeviceServiceImpl.shared.updateCycleMode(mode: "0")
+//                }
+//            }.disposed(by: disposeBag)
+
         setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
                          title: Driver.just(inputs.type.title),
                          datas: Driver.just(images),

@@ -19,7 +19,7 @@ private struct Constraints {
     static let labelHeight = 25.0
     static let commonSpacing = 16.0
     static let hsbViewHeight = 87.0
-    static let collectionViewHeight = 35.0
+    static let collectionViewHeight = 40.0
     static let sliderHeight = 14.0
 
     static let segmentHeight = 50.0
@@ -64,6 +64,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBOutlet weak var flipModeTitleLabel: UILabel!
     @IBOutlet weak var toogleSwitch: ToggleSwitch!
     @IBOutlet weak var flipModeView: UIView!
+
+    @IBOutlet var sliderTempHeightConstraint: NSLayoutConstraint!
     
     let segmentSelected = BehaviorRelay<LightMode>(value: .rotate)
     let cellUpdated = PublishRelay<()>()
@@ -144,8 +146,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         flipModeTitleLabel.text = L10n.flipMode
         selectionStyle = .none
         colorTempSlider.maximumValue = Constraints.maxColorTemp
-
-        contraints(DeviceServiceImpl.shared.lightMode.value)
     }
 
     override func bindViewModel() {
@@ -164,6 +164,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         viewModel.outputs
             .datas
             .map { [Section(model: "", items: $0)] }
+            .doOnNext { _ in
+                self.contraints(DeviceServiceImpl.shared.lightMode.value)
+            }
             .drive(collectionView.rx.items(dataSource: makeDatasource()))
             .disposed(by: disposeBag)
 
@@ -206,6 +209,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .segmentSelected
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
+                guard self.segmentControl.segmentSelected.value == 2 else {
+                    return
+                }
                 self.colorTempSliderView.isHidden = $0 != StaticMode.colorTemp
                 self.colorTempSliderView.alpha = $0 == StaticMode.colorTemp ? 1 : 0
                 self.customColorView.alpha = $0 == StaticMode.colorTemp ? 0 : 1
@@ -214,7 +220,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.needsUpdateConstraints()
                 self.layoutIfNeeded()
                 self.cellUpdated.accept(())
-
         }.disposed(by: disposeBag)
 
         collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
@@ -283,6 +288,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     private func contraints(_ mode: LightMode) {
         let isStatic = mode == .staticMode
+        mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
         hsbView.isHidden = isStatic
         hsbView.alpha = isStatic ? 0 : 1
         collectionView.isHidden = isStatic
@@ -290,8 +296,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         staticColorView.alpha = isStatic ? 1 : 0
         flipModeView.isHidden = isStatic
         flipModeView.alpha = isStatic ? 0 : 1
-        mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
-        needsUpdateConstraints()
         layoutIfNeeded()
         cellUpdated.accept(())
         segmentSelected.accept(mode)
@@ -302,34 +306,18 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             let height = Constraints.segmentHeight +
             Constraints.commonSpacing * 1.875 +
             Constraints.colorViewHeight
+            sliderTempHeightConstraint.isActive = staticColorSegmentControl.segmentSelected.value == 0
             staticColorViewHeightConstraint.constant = staticModeHeight(isColorTemp: staticColorSegmentControl.segmentSelected.value == 0)
             return CGFloat(height) + staticColorViewHeightConstraint.constant
         } else {
-            return CGFloat(
-                Constraints.labelHeight +
-                Constraints.commonSpacing +
-                Constraints.hsbViewHeight +
-                Constraints.commonSpacing * 1.5 +
-                Constraints.labelHeight +
-                Constraints.commonSpacing +
-                Constraints.collectionViewHeight +
-                Constraints.commonSpacing / 2 +
-                Constraints.labelHeight +
-                Constraints.commonSpacing * 1.5 +
-                Constraints.sliderHeight +
-                    30.0
-            )
+            sliderTempHeightConstraint.isActive = false
+            return 329.0
         }
     }
 
     private func staticModeHeight(isColorTemp: Bool) -> CGFloat {
-        let spacing = Constraints.commonSpacing * 1.875
         if isColorTemp {
-            return CGFloat(
-                Constraints.sliderHeight +
-                spacing +
-                Constraints.commonSpacing * 1.375
-            )
+            return sliderTempHeightConstraint.constant
         } else {
             return customColorView.intrinsicContentSize.height + 30.0
         }

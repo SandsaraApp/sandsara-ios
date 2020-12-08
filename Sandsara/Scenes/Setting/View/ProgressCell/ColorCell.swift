@@ -31,6 +31,8 @@ class ColorCell: BaseCollectionViewCell<PresetCellViewModel> {
     }
 
     override func layoutSubviews() {
+        super.layoutSubviews()
         gradientView.layer.cornerRadius = gradientView.frame.size.width / 2
+        gradientView.clipsToBounds = true
     }
 }
