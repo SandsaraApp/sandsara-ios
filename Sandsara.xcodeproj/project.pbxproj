@@ -31,6 +31,8 @@
 		924EDF6A25565F880013CC71 /* SandsaraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF6925565F880013CC71 /* SandsaraUITests.swift */; };
 		925221F3257DC20E005F75DE /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925221F1257DC20E005F75DE /* ToggleSwitch.swift */; };
 		925221FB257DFF22005F75DE /* UIColor+Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925221FA257DFF22005F75DE /* UIColor+Temperature.swift */; };
+		925E95642581108B003DBB07 /* TrackCountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925E95622581108B003DBB07 /* TrackCountTableViewCell.swift */; };
+		925E95652581108B003DBB07 /* TrackCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925E95632581108B003DBB07 /* TrackCountTableViewCell.xib */; };
 		9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72A256A0C60004450CA /* SandsaraDataService.swift */; };
 		9263F730256A14BD004450CA /* SandsaraDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */; };
 		9263F738256A1527004450CA /* Cell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F737256A1527004450CA /* Cell+Extensions.swift */; };
@@ -46,6 +48,7 @@
 		927C7F82255FF33A009F8898 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C7F81255FF33A009F8898 /* Playlist.swift */; };
 		927C7F87255FF360009F8898 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C7F86255FF360009F8898 /* Track.swift */; };
 		927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */; };
+		9299013825822F2200D0A199 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9299013725822F2200D0A199 /* UIApplication.swift */; };
 		92A284C52560D9F100739A94 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BB2560D9F100739A94 /* OpenSans-Bold.ttf */; };
 		92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BC2560D9F100739A94 /* OpenSans-BoldItalic.ttf */; };
 		92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BD2560D9F100739A94 /* OpenSans-Light.ttf */; };
@@ -260,6 +263,8 @@
 		924EDF6B25565F880013CC71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		925221F1257DC20E005F75DE /* ToggleSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
 		925221FA257DFF22005F75DE /* UIColor+Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Temperature.swift"; sourceTree = "<group>"; };
+		925E95622581108B003DBB07 /* TrackCountTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCountTableViewCell.swift; sourceTree = "<group>"; };
+		925E95632581108B003DBB07 /* TrackCountTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackCountTableViewCell.xib; sourceTree = "<group>"; };
 		9263F72A256A0C60004450CA /* SandsaraDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataService.swift; sourceTree = "<group>"; };
 		9263F72F256A14BD004450CA /* SandsaraDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandsaraDataAccess.swift; sourceTree = "<group>"; };
 		9263F737256A1527004450CA /* Cell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+Extensions.swift"; sourceTree = "<group>"; };
@@ -275,6 +280,7 @@
 		927C7F81255FF33A009F8898 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		927C7F86255FF360009F8898 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanDevicesViewController.swift; sourceTree = "<group>"; };
+		9299013725822F2200D0A199 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		92A2847C2560D65F00739A94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		92A284BB2560D9F100739A94 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		92A284BC2560D9F100739A94 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -561,7 +567,8 @@
 			children = (
 				9228C6C925569E050092FBB6 /* UIAlertController.swift */,
 				9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */,
-				9263F737256A1527004450CA /* Cell+Extensions.swift */,
+				9299013F25822F4100D0A199 /* Gradient */,
+				9299013C25822F3B00D0A199 /* Cell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -696,7 +703,7 @@
 			isa = PBXGroup;
 			children = (
 				9228C84425581BF20092FBB6 /* UIViewController.swift */,
-				92DFBECC2577D06800B1BFA9 /* GradientView.swift */,
+				9299013725822F2200D0A199 /* UIApplication.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -803,6 +810,22 @@
 				927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */,
 			);
 			path = Devices;
+			sourceTree = "<group>";
+		};
+		9299013C25822F3B00D0A199 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				9263F737256A1527004450CA /* Cell+Extensions.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		9299013F25822F4100D0A199 /* Gradient */ = {
+			isa = PBXGroup;
+			children = (
+				92DFBECC2577D06800B1BFA9 /* GradientView.swift */,
+			);
+			path = Gradient;
 			sourceTree = "<group>";
 		};
 		92A284A22560D7CA00739A94 /* Fonts */ = {
@@ -951,6 +974,8 @@
 			children = (
 				92D64786255CAC2400856900 /* PlaylistTableViewCell.swift */,
 				92D64787255CAC2400856900 /* PlaylistTableViewCell.xib */,
+				925E95622581108B003DBB07 /* TrackCountTableViewCell.swift */,
+				925E95632581108B003DBB07 /* TrackCountTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1305,6 +1330,7 @@
 				92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */,
 				92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */,
 				92A284C82560D9F100739A94 /* OpenSans-Semibold.ttf in Resources */,
+				925E95652581108B003DBB07 /* TrackCountTableViewCell.xib in Resources */,
 				92A284C52560D9F100739A94 /* OpenSans-Bold.ttf in Resources */,
 				92DFBEBA2577BABE00B1BFA9 /* LICENSE in Resources */,
 				92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */,
@@ -1475,6 +1501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9299013825822F2200D0A199 /* UIApplication.swift in Sources */,
 				92B8C7032574D9D20051C1CC /* FileServiceImpl.swift in Sources */,
 				92DFBE862577BABE00B1BFA9 /* RGBASliderGroup.swift in Sources */,
 				92DFBECD2577D06800B1BFA9 /* GradientView.swift in Sources */,
@@ -1597,6 +1624,7 @@
 				9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */,
 				924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */,
 				92D647AC255CB52300856900 /* TrackTableViewCell.swift in Sources */,
+				925E95642581108B003DBB07 /* TrackCountTableViewCell.swift in Sources */,
 				92DFBEA62577BABE00B1BFA9 /* HSLA.swift in Sources */,
 				92DFBEA42577BABE00B1BFA9 /* HSLASpectrum.swift in Sources */,
 				92BCE72B256165330029DD3F /* PlayerViewModel.swift in Sources */,

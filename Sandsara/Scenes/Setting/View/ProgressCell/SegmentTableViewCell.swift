@@ -146,6 +146,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         flipModeTitleLabel.text = L10n.flipMode
         selectionStyle = .none
         colorTempSlider.maximumValue = Constraints.maxColorTemp
+        colorTempSlider.minimumValue = Constraints.minColorTemp
+        segmentControl.segmentSelected.accept(DeviceServiceImpl.shared.lightModeInt.value)
     }
 
     override func bindViewModel() {
@@ -181,16 +183,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .rx.value
             .changed
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
-            .compactMap { Int($0) }
-            .subscribeNext { value in
-                bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
-                    switch result {
-                    case .success:
-                        debugPrint("Write to sensor location is successful.\(result)")
-                    case .failure(let error):
-                        debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-                    }
-                }
+            .compactMap { $0.rounded() }
+            .subscribeNext {
+                self.viewModel.sendLightSpeed(value: $0)
             }.disposed(by: disposeBag)
 
         advanceInfoLabel
@@ -206,17 +201,19 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
 
         staticColorSegmentControl
-            .segmentSelected
+            .segmentSelected.skip(1)
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
                 guard self.segmentControl.segmentSelected.value == 2 else {
                     return
                 }
-                self.colorTempSliderView.isHidden = $0 != StaticMode.colorTemp
-                self.colorTempSliderView.alpha = $0 == StaticMode.colorTemp ? 1 : 0
-                self.customColorView.alpha = $0 == StaticMode.colorTemp ? 0 : 1
-                self.customColorView.isHidden = $0 == StaticMode.colorTemp
+                let isColorTemp = $0 == StaticMode.colorTemp
+                self.colorTempSliderView.isHidden = !isColorTemp
+                self.colorTempSliderView.alpha = isColorTemp ? 1 : 0
+                self.customColorView.alpha = isColorTemp ? 0 : 1
+                self.customColorView.isHidden = isColorTemp
                 self.mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: true)
+                self.resetValue(isColorTemp: isColorTemp)
                 self.needsUpdateConstraints()
                 self.layoutIfNeeded()
                 self.cellUpdated.accept(())
@@ -225,19 +222,10 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
             self.colorGradientView?.color = PredifinedColor(rawValue: indexPath.item) ?? .one
-            bluejay.write(to: LedStripService.selectPattle, value: "\(indexPath.item + 1)") { result in
-                switch result {
-                case .success:
-                    debugPrint("Write to sensor location is successful.\(result)")
-                case .failure(let error):
-                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-                }
-            }
         }.disposed(by: disposeBag)
 
         acceptBtn.rx.tap.subscribeNext {
-            self.overlayGradientView.isHidden = true
-            self.overlayGradientView.alpha = 0
+            self.hideOverlayView()
             //TODO: add color or update color
             if self.colorGradientView.isFirst {
                 self.colorGradientView.updateFirstColor(color: self.overlaySliderView.color)
@@ -251,8 +239,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         }.disposed(by: disposeBag)
 
         deleteBtn.rx.tap.subscribeNext {
-            self.overlayGradientView.isHidden = true
-            self.overlayGradientView.alpha = 0
+            self.hideOverlayView()
             if self.colorGradientView.updateCustomPoint {
                 self.colorGradientView.removeColor(color: self.overlaySliderView.color)
             }
@@ -263,6 +250,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         toogleSwitch.stateChanged = { [weak self] state in
             self?.viewModel.inputs.flipDirection.accept(state)
         }
+
+        staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
 
         colorTempSlider
             .rx.value.changed
@@ -338,7 +327,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     private func updateBackgroundColor() {
         staticColorUpdateView.backgroundColor = customColorView.color
-        print(customColorView.colorFromSliders().hsba())
+        print(customColorView.colorFromSliders().hexString())
     }
 
     @IBAction func overlaySliderGroupValueChanged(_ sender: HSBASliderGroup) {
@@ -377,6 +366,17 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         }
     }
 
+    func resetValue(isColorTemp: Bool) {
+        if isColorTemp {
+            colorTempSlider.value = Constraints.minColorTemp
+            staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
+        } else {
+            customColorView.color = UIColor(hexString: "#FF0000")
+            staticColorUpdateView.backgroundColor = UIColor(hexString: "#FF0000")
+            sendColor()
+        }
+    }
+
 }
 
 extension SegmentTableViewCell: UICollectionViewDelegateFlowLayout {
@@ -387,32 +387,31 @@ extension SegmentTableViewCell: UICollectionViewDelegateFlowLayout {
 
 extension SegmentTableViewCell: ColorGradientViewDelegate {
     func firstPointTouch(color: UIColor) {
-        overlayLineView.backgroundColor = color
-        overlayLeadingConstraint.constant = 27.0
-        overlayGradientView.alpha = 1
-        overlayGradientView.isHidden = false
-        overlayColorUpdatedView.backgroundColor = color
-        overlaySliderView.color = color
-        deleteBtn.isHidden = true
+        showOverlayView(at: 27.0, by: color)
     }
 
     func secondPointTouch(color: UIColor) {
-        overlayLineView.backgroundColor = color
-        overlayLeadingConstraint.constant = UIScreen.main.bounds.size.width - 29.0
-        overlayGradientView.alpha = 1
-        overlayGradientView.isHidden = false
-        overlayColorUpdatedView.backgroundColor = color
-        overlaySliderView.color = color
-        deleteBtn.isHidden = true
+        showOverlayView(at: UIScreen.main.bounds.size.width - 29.0, by: color)
     }
 
     func showGradient(atPoint: CGPoint, color: UIColor) {
+        showOverlayView(at: atPoint.x + 27.0, by: color, isDeleteAble: true)
+    }
+
+    private func showOverlayView(at point: CGFloat,
+                                 by color: UIColor,
+                                 isDeleteAble: Bool = false) {
         overlayLineView.backgroundColor = color
-        overlayLeadingConstraint.constant = atPoint.x + 27.0
+        overlayLeadingConstraint.constant = point
         overlayGradientView.alpha = 1
         overlayGradientView.isHidden = false
         overlayColorUpdatedView.backgroundColor = color
         overlaySliderView.color = color
-        deleteBtn.isHidden = false
+        deleteBtn.isHidden = !isDeleteAble
+    }
+
+    private func hideOverlayView() {
+        overlayGradientView.isHidden = true
+        overlayGradientView.alpha = 0
     }
 }

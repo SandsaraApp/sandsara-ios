@@ -268,10 +268,7 @@ class ColorGradientView: UIView {
         gradientView?.locations = locations
         firstPointView?.color = colors.first
         secondPointView?.color = colors.last
-
-        if addCustomPoint || updateCustomPoint {
-            colorCommand()
-        }
+        colorCommand()
     }
 
     func showColorThumb(colorThumbView: ColorPointView, isShow: Bool) {

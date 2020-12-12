@@ -90,7 +90,6 @@ extension AppDelegate: BackgroundRestorer {
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
         DeviceServiceImpl.shared.readSensorValues()
-     //   LedStripServiceImpl.shared.readValues()
         DispatchQueue.main.async {
             (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
         }
@@ -123,27 +122,4 @@ extension AppDelegate: DisconnectHandler {
         DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: false)
     }
-}
-
-
-extension UIApplication {
-
-    class func topViewController(_ base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let nav = base as? UINavigationController {
-            return topViewController(nav.visibleViewController)
-        }
-
-        if let tab = base as? UITabBarController {
-            if let selected = tab.selectedViewController {
-                return topViewController(selected)
-            }
-        }
-
-        if let presented = base?.presentedViewController {
-            return topViewController(presented)
-        }
-
-        return base
-    }
-
 }

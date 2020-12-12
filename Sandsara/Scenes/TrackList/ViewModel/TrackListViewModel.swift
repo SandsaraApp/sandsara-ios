@@ -72,17 +72,29 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
             }.disposed(by: disposeBag)
         }
     }
+
+    func deleteTracks(index: Int) {
+        switch datas.value[index] {
+            case .track(let vm):
+                let localTrack = LocalTrack(track: vm.inputs.track)
+                DataLayer.deleteTrackFromPlaylist(inputs.playlistItem.title, localTrack)
+                inputs.viewWillAppearTrigger.accept(())
+            default: break
+        }
+    }
 }
 
 enum TrackCellVMContract {
     struct Input: InputType {
-        let track: DisplayItem
+        var track: DisplayItem
+        var saved: Bool = true
     }
 
     struct Output: OutputType {
         let title: Driver<String>
         let authorTitle: Driver<String>
         let thumbnailUrl: URL?
+        let saved: Driver<Bool>
     }
 }
 
@@ -91,7 +103,9 @@ class TrackCellViewModel: BaseCellViewModel<TrackCellVMContract.Input,
     override func transform() {
         let url = URL(string: inputs.track.thumbnail)
         setOutput(Output(title: Driver.just(inputs.track.title),
-                         authorTitle: Driver.just(L10n.authorBy(inputs.track.author)), thumbnailUrl: url))
+                         authorTitle: Driver.just(L10n.authorBy(inputs.track.author)),
+                         thumbnailUrl: url,
+                         saved: Driver.just(inputs.saved)))
     }
 }
 

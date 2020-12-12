@@ -197,12 +197,16 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 self.cycleMode.accept(mode == "1" ? true: false)
+                self.lightMode.accept(mode == "1" ? .cycle: .rotate)
+                self.lightModeInt.accept(mode == "1" ? 1 : 0)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
                 if error.localizedDescription == "" {
                     self.cycleMode.accept(mode == "1" ? true: false)
+                    self.lightMode.accept(mode == "1" ? .cycle: .rotate)
+                    self.lightModeInt.accept(mode == "1" ? 1 : 0)
                 }
             }
         }

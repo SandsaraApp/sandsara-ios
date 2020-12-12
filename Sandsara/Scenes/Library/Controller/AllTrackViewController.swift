@@ -16,14 +16,13 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
     let viewWillAppearTrigger = PublishRelay<()>()
 
-    typealias Section = SectionModel<String, TrackCellViewModel>
+    typealias Section = SectionModel<String, AllTrackCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
     var playlistTitle: String?
 
     override func setupViewModel() {
-        //configureNavigationBar(largeTitleColor: .white, backgoundColor: .black, tintColor: .white, title: playlistTitle ?? "", preferredLargeTitle: true)
         setupTableView()
         viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
@@ -36,19 +35,12 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-        Observable
-            .zip(
-                tableView.rx.itemSelected,
-                tableView.rx.modelSelected(TrackCellViewModel.self)
-            ).bind { [weak self] indexPath, model in
-                guard let self = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-                let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
-                trackList.track = model.inputs.track
-                trackList.tracks = self.viewModel.datas.value.map { $0.inputs.track }
-                trackList.selecledIndex = indexPath.row
-                self.navigationController?.pushViewController(trackList, animated: true)
-            }.disposed(by: disposeBag)
+        tableView.rx.itemSelected.subscribeNext { [weak self] indexPath in
+            guard let self = self else { return }
+            if indexPath.row != 0 {
+                self.openTrackDetail(index: indexPath.row)
+            }
+        }.disposed(by: disposeBag)
 
         viewModel.isLoading
             .drive(loadingActivity.rx.isAnimating)
@@ -60,6 +52,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
+        tableView.register(TrackCountTableViewCell.nib, forCellReuseIdentifier: TrackCountTableViewCell.identifier)
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -68,15 +61,44 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
     private func makeDataSource() -> DataSource {
         return RxTableViewSectionedReloadDataSource<Section>(
             configureCell: { (_, tableView, indexPath, viewModel) -> UITableViewCell in
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
-                cell.bind(to: viewModel)
-                return cell
+                switch viewModel {
+                case .header(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackCountTableViewCell.identifier, for: indexPath) as? TrackCountTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    return cell
+                case .track(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    return cell
+                }
             })
+    }
+
+    private func openTrackDetail(index: Int) {
+        let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
+        switch viewModel.datas.value[index] {
+        case .track(let viewModel):
+            trackList.track = viewModel.inputs.track
+            trackList.tracks = self.viewModel.datas.value.map {
+                switch $0 {
+                case .track(let vm): return vm.inputs.track
+                default: return nil
+                }
+            }.compactMap { $0 }
+        default:
+            break
+        }
+
+        trackList.selecledIndex = index - 1
+        self.navigationController?.pushViewController(trackList, animated: true)
     }
 }
 
 extension AllTrackViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 50.0
+        }
         return 96.0
     }
 }

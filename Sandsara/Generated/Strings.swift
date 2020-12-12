@@ -46,6 +46,10 @@ internal enum L10n {
   internal static func deviceName(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "device_name", String(describing: p1))
   }
+  /// Download to Library
+  internal static let download = L10n.tr("Localizeable", "download")
+  /// Downloaded to Library
+  internal static let downloaded = L10n.tr("Localizeable", "downloaded")
   /// Duplicate track found
   internal static let duplicateFound = L10n.tr("Localizeable", "duplicate_found")
   /// No track here !!!
@@ -96,12 +100,22 @@ internal enum L10n {
   internal static let speed = L10n.tr("Localizeable", "speed")
   /// Static
   internal static let `static` = L10n.tr("Localizeable", "static")
+  /// Sync all
+  internal static let syncAll = L10n.tr("Localizeable", "sync_all")
   /// Tracks
   internal static let tracks = L10n.tr("Localizeable", "tracks")
   /// Update Firmware
   internal static let updateFirmware = L10n.tr("Localizeable", "update_firmware")
   /// Sandsara’s Website
   internal static let website = L10n.tr("Localizeable", "website")
+  /// %@ min estimated
+  internal static func xMinEsimated(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "x_min_esimated", String(describing: p1))
+  }
+  /// %d Tracks need to be synced
+  internal static func xTrackNeedToBeSynced(_ p1: Int) -> String {
+    return L10n.tr("Localizeable", "x_track_need_to_be_synced", p1)
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

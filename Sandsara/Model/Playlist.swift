@@ -52,6 +52,13 @@ class LocalPlaylist: Object {
         self.thumbnail = thumbnail
         self.author = author
     }
+
+    required convenience init(track: DisplayItem) {
+        self.init()
+        self.playlistName = track.title
+        self.author = track.author
+        self.thumbnail = track.thumbnail
+    }
 }
 
 class FavoritePlaylist: Object {

@@ -10,7 +10,6 @@ import RxSwift
 import RxDataSources
 import RxCocoa
 
-
 class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
@@ -49,7 +48,8 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             ).bind { [weak self] indexPath, model in
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
+                let trackList = self.storyboard?
+                    .instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
                 trackList.playlistItem = model.inputs.track
                 self.navigationController?.pushViewController(trackList, animated: true)
             }.disposed(by: disposeBag)
@@ -57,6 +57,11 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         viewModel.isLoading
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
+
+//        tableView.rx.itemDeleted.filter { $0.row != 0 && !self.viewModel.isEmpty }.subscribeNext { [weak self] indexPath in
+//            guard let self = self else { return }
+//            self.viewModel.deletePlaylist(index: indexPath.row)
+//        }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -68,6 +73,10 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
+
+//        dataSource.canEditRowAtIndexPath = { (ds, ip) in
+//            return self.viewModel.canDeletePlaylist(index: ip.row)
+//        }
     }
 
     private func makeDataSource() -> DataSource {

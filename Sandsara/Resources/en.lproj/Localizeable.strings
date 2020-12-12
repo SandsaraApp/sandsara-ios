@@ -52,3 +52,8 @@
 "flip_mode" = "Flip Mode";
 "sleep" = "Sleep";
 "restart" = "Restart";
+"download" = "Download to Library";
+"downloaded" = "Downloaded to Library";
+"x_track_need_to_be_synced" = "%d Tracks need to be synced";
+"x_min_esimated" = "%@ min estimated";
+"sync_all" = "Sync all";

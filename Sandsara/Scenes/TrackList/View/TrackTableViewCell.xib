@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,38 +25,58 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="726-3v-ARn">
-                        <rect key="frame" x="113" y="27.5" width="285" height="41"/>
+                        <rect key="frame" x="113" y="27.5" width="245" height="41"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hw-m7-e4T">
-                                <rect key="frame" x="0.0" y="0.0" width="285" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hw-m7-e4T">
+                                <rect key="frame" x="0.0" y="0.0" width="245" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3rR-h7-h65">
-                                <rect key="frame" x="0.0" y="20.5" width="285" height="20.5"/>
+                                <rect key="frame" x="0.0" y="20.5" width="245" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                     </stackView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-uX-j9F">
+                        <rect key="frame" x="368" y="34" width="30" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="hXY-7D-H8H"/>
+                        </constraints>
+                        <state key="normal" image="sync"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="sA7-SV-nM9" secondAttribute="bottom" constant="10" id="7Lb-9A-CNr"/>
                     <constraint firstItem="sA7-SV-nM9" firstAttribute="top" secondItem="flQ-o7-x61" secondAttribute="top" constant="10" id="8pi-Qu-XlY"/>
-                    <constraint firstAttribute="trailing" secondItem="726-3v-ARn" secondAttribute="trailing" constant="16" id="Aym-97-ABZ"/>
+                    <constraint firstAttribute="trailing" secondItem="LdL-uX-j9F" secondAttribute="trailing" constant="16" id="Rbs-37-2nZ"/>
                     <constraint firstItem="sA7-SV-nM9" firstAttribute="leading" secondItem="flQ-o7-x61" secondAttribute="leading" constant="16" id="bUR-5L-Okz"/>
+                    <constraint firstItem="LdL-uX-j9F" firstAttribute="leading" secondItem="726-3v-ARn" secondAttribute="trailing" constant="10" id="dSO-Rr-mKg"/>
+                    <constraint firstItem="LdL-uX-j9F" firstAttribute="centerY" secondItem="726-3v-ARn" secondAttribute="centerY" id="eWa-fw-QWz"/>
                     <constraint firstItem="726-3v-ARn" firstAttribute="leading" secondItem="sA7-SV-nM9" secondAttribute="trailing" constant="21" id="fWS-Zf-KBQ"/>
                     <constraint firstItem="726-3v-ARn" firstAttribute="centerY" secondItem="sA7-SV-nM9" secondAttribute="centerY" id="vg4-xs-utb"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="background"/>
             <connections>
                 <outlet property="authorLabel" destination="3rR-h7-h65" id="TFJ-zV-TCp"/>
+                <outlet property="syncBtn" destination="LdL-uX-j9F" id="cUn-Sd-Bxv"/>
+                <outlet property="syncBtnLeadingConstraint" destination="dSO-Rr-mKg" id="eaZ-O5-07x"/>
+                <outlet property="syncBtnTrailingConstraint" destination="Rbs-37-2nZ" id="Ttv-oH-i7H"/>
+                <outlet property="syncBtnWidthConstraint" destination="hXY-7D-H8H" id="H1T-Qr-pxh"/>
                 <outlet property="titleLabel" destination="8hw-m7-e4T" id="Is9-ho-TUW"/>
                 <outlet property="trackImageView" destination="sA7-SV-nM9" id="Jd1-tF-gSC"/>
             </connections>
             <point key="canvasLocation" x="-189.85507246376812" y="125.55803571428571"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="sync" width="28" height="28"/>
+        <namedColor name="background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -169,7 +169,7 @@
                                                         <color key="thumbTintColor" name="primary"/>
                                                     </slider>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="6X9-da-wxD" secondAttribute="trailing" id="GUd-c8-Fvs"/>
                                                     <constraint firstItem="6X9-da-wxD" firstAttribute="top" secondItem="sL8-D6-KJM" secondAttribute="top" constant="20" id="d9X-T3-p7h"/>

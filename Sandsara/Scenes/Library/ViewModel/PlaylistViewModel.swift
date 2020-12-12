@@ -23,6 +23,8 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
     private let apiService: SandsaraDataServices
     let datas = BehaviorRelay<[PlaylistCellViewModel]>(value: [])
 
+    var isEmpty = false
+
     init(apiService: SandsaraDataServices, inputs: BaseViewModel<PlaylistViewModelContract.Input, PlaylistViewModelContract.Output>.Input) {
         self.apiService = apiService
         super.init(inputs: inputs)
@@ -41,7 +43,8 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
         if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
-            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList), isFavorite: true)))
+            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList),
+                                                                                    isFavorite: true)))
         }
 
         if DataLayer.loadPlaylists().count > 0 {
@@ -52,7 +55,19 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
             }
             items.append(contentsOf: localList)
         }
+        // 
+        isEmpty = items.isEmpty
         datas.accept(items)
+    }
+
+    func canDeletePlaylist(index: Int) -> Bool {
+        return !datas.value[index].inputs.isFavorite
+    }
+
+    func deletePlaylist(index: Int) {
+        if DataLayer.deletePlaylist(datas.value[index].inputs.track.title) {
+            inputs.viewWillAppearTrigger.accept(())
+        }
     }
 }
 

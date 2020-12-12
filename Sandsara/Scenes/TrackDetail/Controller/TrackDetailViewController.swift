@@ -20,6 +20,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     @IBOutlet weak var addToPlaylistBtn: UIButton!
     @IBOutlet weak var favBtn: UIButton!
     @IBOutlet weak var backBtn: UIButton!
+    @IBOutlet weak var downloadBtn: UIButton!
 
     var isFavorite: Bool = false
     
@@ -44,6 +45,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
         setButtonStyle(button: playBtn, title: L10n.play)
         setButtonStyle(button: favBtn, title: L10n.favorite)
         setButtonStyle(button: addToPlaylistBtn, title: L10n.addToPlaylist)
+        setButtonStyle(button: downloadBtn, title: L10n.download)
 
         playBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
@@ -56,7 +58,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
 
         addToPlaylistBtn.rx.tap.asDriver().driveNext { [weak self] in
             self?.showAddPlaylist()
-        }
+        }.disposed(by: disposeBag)
 
         backBtn.rx.tap.asDriver().driveNext { [weak self] in
             self?.navigationController?.popViewController(animated: true)

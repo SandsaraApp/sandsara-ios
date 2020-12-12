@@ -221,11 +221,14 @@ class DataLayer {
         }
     }
 
-    static func deletePlaylist(_ name: String) {
+    static func deletePlaylist(_ name: String) -> Bool {
         if let object = realm?.objects(LocalPlaylist.self).filter("playlistName == '\(name)'").first {
             write(realm: realm!, writeClosure: {
+                object.tracks.removeAll()
                 realm?.delete(object)
             })
+            return true
         }
+        return false
     }
 }

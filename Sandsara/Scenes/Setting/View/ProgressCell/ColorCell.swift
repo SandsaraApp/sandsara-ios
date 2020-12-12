@@ -15,7 +15,11 @@ class ColorCell: BaseCollectionViewCell<PresetCellViewModel> {
         super.awakeFromNib()
         gradientView.mode = .linear
         gradientView.direction = .horizontal
+        gradientView.layer.cornerRadius = gradientView.frame.size.width / 2
+        gradientView.clipsToBounds = true
     }
+
+
 
     override func bindViewModel() {
         viewModel
@@ -26,6 +30,8 @@ class ColorCell: BaseCollectionViewCell<PresetCellViewModel> {
                 self.gradientView.locations = color.posistion.map {
                     $0 / 255.0
                 }
+
+                self.layoutIfNeeded()
             }
             .disposed(by: disposeBag)
     }

@@ -313,27 +313,40 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
             .flipDirection
             .skip(1)
             .subscribeNext { value in
-                self.sendCommand(command: "\(value)")
+                let stringValue = value ? "1" : "0"
+                self.sendCommand(command: stringValue)
             }.disposed(by: disposeBag)
 
         let images = colors.map {
             PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
         }
 
-//        inputs.segmentsSelection
-//            .skip(1)
-//            .subscribeNext { mode in
-//                if mode == .cycle {
-//                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
-//                } else {
-//                    DeviceServiceImpl.shared.updateCycleMode(mode: "0")
-//                }
-//            }.disposed(by: disposeBag)
+        inputs.segmentsSelection
+            .skip(1)
+            .subscribeNext { mode in
+                if mode == .cycle {
+                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
+                } else {
+                    DeviceServiceImpl.shared.updateCycleMode(mode: "0")
+                }
+            }.disposed(by: disposeBag)
 
         setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
                          title: Driver.just(inputs.type.title),
                          datas: Driver.just(images),
                          flipDirection: inputs.flipDirection.asDriver()))
+    }
+
+    func sendLightSpeed(value: Float) {
+        bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
+            switch result {
+            case .success:
+                debugPrint("Write to sensor location is successful.\(result)")
+                DeviceServiceImpl.shared.ledSpeed.accept(value)
+            case .failure(let error):
+                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            }
+        }
     }
 
     func sendCommand(command: String) {

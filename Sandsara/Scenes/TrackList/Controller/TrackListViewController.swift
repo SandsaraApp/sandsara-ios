@@ -54,15 +54,11 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
         if let item = playlistItem {
             if item.isLocal == true && item.title != L10n.favorite {
-                tableView.rx.itemDeleted.filter { $0.row != 0 && !self.viewModel.isEmpty }.subscribeNext { [weak self] indexPath in
+                tableView.rx.itemDeleted
+                    .filter { $0.row != 0 && !self.viewModel.isEmpty }
+                    .subscribeNext { [weak self] indexPath in
                     guard let self = self else { return }
-                    switch self.viewModel.datas.value[indexPath.row] {
-                    case .track(let vm):
-                        let localTrack = LocalTrack(track: vm.inputs.track)
-                        DataLayer.deleteTrackFromPlaylist(item.title, localTrack)
-                        self.viewWillAppearTrigger.accept(())
-                    default: break
-                    }
+                    self.viewModel.deleteTracks(index: indexPath.row)
                 }.disposed(by: disposeBag)
             }
         }
@@ -161,7 +157,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         let alert = UIAlertController(title: "Alert", message: L10n.alertDeletePlaylist, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { _ in
-            DataLayer.deletePlaylist(item.title)
+            _ = DataLayer.deletePlaylist(item.title)
             self.navigationController?.popViewController(animated: true)
         }))
 
