@@ -40,6 +40,7 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
             .isFavoriteList
             .drive(deleteButton.rx.isHidden)
             .disposed(by: disposeBag)
+        
         viewModel
             .outputs
             .title

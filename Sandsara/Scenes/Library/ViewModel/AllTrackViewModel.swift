@@ -29,6 +29,10 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
     private let apiService: SandsaraDataServices
     let datas = BehaviorRelay<[AllTrackCellVM]>(value: [])
 
+    private var tracks = [TrackCellViewModel]()
+
+    private let syncAll = PublishRelay<()>()
+
     init(apiService: SandsaraDataServices, inputs: BaseViewModel<AllTracksViewModelContract.Input, AllTracksViewModelContract.Output>.Input) {
         self.apiService = apiService
         super.init(inputs: inputs)
@@ -41,23 +45,41 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             self.buildCellVM()
         }.disposed(by: disposeBag)
 
+        syncAll.subscribeNext { [weak self] in
+            guard let self = self else { return }
+            for track in self.tracks where DataLayer.addSyncedTrack(track.inputs.track) {
+                let inputString = track.inputs.track.fileName
+                let splits = inputString.components(separatedBy: ".")
+                ServiceSerialQueue.shared.addTask(.syncFiles) { [weak self] commit -> Bool in
+                    guard let self = self else { return false }
+                    var fileSuccess = false
+                    FileServiceImpl.shared.sendFiles(fileName: splits.first ?? "", extensionName: splits.last ?? "")
+                    FileServiceImpl.shared.sendSuccess.subscribeNext {
+                        if $0 {
+                            _ = DataLayer.addSyncedTrack(track.inputs.track)
+                        }
+                        fileSuccess = $0
+                    }.disposed(by: self.disposeBag)
+                    return fileSuccess
+                }
+            }
+        }.disposed(by: disposeBag)
+
         setOutput(Output(datasources: datas.asDriver()))
     }
 
     private func buildCellVM()  {
         var datas = [AllTrackCellVM]()
-        datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: 10), timeRemaining: .init(value: 350), syncAllTrigger: .init()))))
-        apiService.getAllTracks(option: apiService.getServicesOption(for: .alltrack)).asObservable().subscribeNext { values in
-            let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: false)) }.map {
-                AllTrackCellVM.track($0)
-            }
-            datas.append(contentsOf: items)
-            self.datas.accept(datas)
-            self.emitEventLoading(false)
-        }.disposed(by: disposeBag)
+        datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: 10), timeRemaining: .init(value: 350), syncAllTrigger: syncAll))))
+        let list = DataLayer.loadDownloadedTracks()
+        let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: false)) }.map {
+            AllTrackCellVM.track($0)
+        }
+        datas.append(contentsOf: items)
+        self.datas.accept(datas)
+        self.emitEventLoading(false)
     }
 }
-
 
 enum DownloadCellVMContract {
     struct Input: InputType {
@@ -72,12 +94,10 @@ enum DownloadCellVMContract {
     }
 }
 
-final class DownloadCellViewModel: BaseCellViewModel<DownloadCellVMContract.Input, DownloadCellVMContract.Output> {
-    override func transform() {
-        inputs.syncAllTrigger.subscribeNext { [weak self] in
-            // TODO: call api, update not sync / time here 
-        }.disposed(by: disposeBag)
 
+final class DownloadCellViewModel: BaseCellViewModel<DownloadCellVMContract.Input, DownloadCellVMContract.Output> {
+
+    override func transform() {
         setOutput(Output(notSyncedTrack: inputs.notSyncedTrack.asDriver(),
                          timeRemaining: inputs.timeRemaining.map {
                             String(format:"%.1f", $0 / 60)

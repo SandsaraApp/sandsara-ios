@@ -28,9 +28,19 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
     }
 
+    @objc func reloadData() {
+        viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func bindViewModel() {

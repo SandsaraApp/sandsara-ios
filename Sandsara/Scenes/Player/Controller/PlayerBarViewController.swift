@@ -14,7 +14,7 @@ import RxCocoa
 enum PlayerState {
     case noConnect
     case connected
-    case haveTrack(displayItem: DisplayItem)
+    case haveTrack(displayItem: DisplayItem?)
 
     var isConnection: Bool {
         return self == .connected || self == .noConnect
@@ -120,12 +120,11 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.connectionTitleLabel.text = L10n.noSandsaraDetected
                         self.retryBtn.isHidden = false
                     case .haveTrack(let item):
-
                         self.playerBar.isHidden = false
                         self.connectionBar.isHidden = true
-                        self.trackImageView.kf.setImage(with: URL(string: item.thumbnail))
-                        self.songLabel.text = item.title
-                        self.authorLabel.text = L10n.authorBy(item.author)
+                        self.trackImageView.kf.setImage(with: URL(string: item?.thumbnail ?? ""))
+                        self.songLabel.text = item?.title
+                        self.authorLabel.text = L10n.authorBy(item?.author ?? "")
                     }
             }.disposed(by: disposeBag)
         }

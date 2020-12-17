@@ -32,6 +32,7 @@ class PlayerViewModel: BaseViewModel<PlayerViewModelContract.Input, PlayerViewMo
         self.inputs.selectedIndex.subscribeNext { value in
             guard !self.inputs.tracks.isEmpty else { return }
             self.displayTrack.accept(self.inputs.tracks[value])
+            FileServiceImpl.shared.updateTrack(name: self.inputs.tracks[value].fileName)
         }.disposed(by: self.disposeBag)
         self.setOutput(Output(trackDisplay: self.displayTrack.asDriver(onErrorJustReturn: nil),
                               datasources: datas.asDriver()))
@@ -40,6 +41,25 @@ class PlayerViewModel: BaseViewModel<PlayerViewModelContract.Input, PlayerViewMo
     private func placeHolderData() {
         displayTrack.accept(nil)
         datas.accept([])
+    }
+
+    func createPlaylist(name: String) {
+        let fileNames = inputs.tracks.map {
+            $0.fileName
+        }.joined(separator: "\r\n")
+
+        let filename = name
+
+        FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename)
+        if let handle = FileServiceImpl.shared.getHandleForFileInDocuments(filename: filename) {
+            FileServiceImpl.shared.writeString(string: fileNames, fileHandle: handle)
+        }
+
+        FileServiceImpl.shared.sendFiles(fileName: filename.components(separatedBy: ".").first ?? "", extensionName: filename.components(separatedBy: ".").last ?? "", isPlaylist: true)
+    }
+
+    func playFromDownloadedPlaylist(item: DisplayItem) {
+        self.createPlaylist(name: item.title)
     }
 }
 

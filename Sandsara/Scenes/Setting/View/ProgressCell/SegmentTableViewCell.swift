@@ -372,6 +372,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
         } else {
             customColorView.color = UIColor(hexString: "#FF0000")
+            customColorView.slidersFrom(color: .red)
             staticColorUpdateView.backgroundColor = UIColor(hexString: "#FF0000")
             sendColor()
         }

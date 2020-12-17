@@ -65,3 +65,22 @@ extension UIViewController {
     }
 }
 
+extension UIView {
+    func rotate360Degrees(duration: CFTimeInterval = 1, repeatCount: Float = .infinity) {
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(Double.pi * 2)
+        rotateAnimation.isRemovedOnCompletion = false
+        rotateAnimation.duration = duration
+        rotateAnimation.repeatCount = repeatCount
+        layer.add(rotateAnimation, forKey: "rotate")
+    }
+
+    func stopRotation () {
+        layer.removeAllAnimations()
+    }
+
+    var isRotating: Bool {
+        return (layer.animation(forKey: "rotate") != nil)
+    }
+}

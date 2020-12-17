@@ -7,7 +7,7 @@
 
 import Foundation
 import Moya
-
+fileprivate let token = "keysvlN7KOHqUBdGn"
 enum SandsaraAPI: String {
     case recommendedplaylist
     case recommendedtracks
@@ -17,24 +17,40 @@ enum SandsaraAPI: String {
 }
 
 extension SandsaraAPI: TargetType {
+
+
     var method: Moya.Method {
         return .get
     }
 
     var baseURL: URL {
-        return URL(string: "http://uninterested-cows.surge.sh/")!
+        return URL(string: "https://api.airtable.com/v0/apph4ADJ06dIfpZ3C/")!
     }
 
     var path: String {
-        return "\(self.rawValue).json"
+        switch self {
+        case .recommendedtracks:
+            return "tracks"
+        case .recommendedplaylist:
+            return "playlist"
+        default:
+            return ""
+        }
     }
 
+
+
     var headers: [String : String]? {
-        return nil
+        return ["Authorization": "Bearer \(token)"]
     }
 
     var task: Task {
-        return .requestPlain
+        switch self {
+        case .recommendedplaylist, .recommendedtracks:
+            return .requestParameters(parameters: ["view": "recommended"], encoding: URLEncoding.default)
+        default:
+            return .requestPlain
+        }
     }
 
     var sampleData: Data {

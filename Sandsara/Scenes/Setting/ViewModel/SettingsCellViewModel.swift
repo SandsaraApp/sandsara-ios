@@ -233,12 +233,14 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
 
     func sendCommand(command: String) {
         guard let character = inputs.type.progressCharacteristic else { return }
-        bluejay.write(to: character, value: command) { result in
-            switch result {
-            case .success:
-                debugPrint("Write to sensor location is successful.\(result)")
-            case .failure(let error):
-                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+        DispatchQueue.main.async {
+            bluejay.write(to: character, value: command) { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result)")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
             }
         }
     }

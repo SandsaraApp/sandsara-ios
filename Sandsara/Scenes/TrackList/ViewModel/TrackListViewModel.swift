@@ -60,16 +60,30 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
                     showItems
             )
         } else {
-            apiService.getPlaylistDetail(option: apiService.getServicesOption(for: .playlistDetail)).asObservable().subscribeNext { values in
-                let items = values
+            if inputs.playlistItem.isTestPlaylist {
+                let isFavlist = true
+                let list = DataLayer.loadDownloadedDetailList(name: inputs.playlistItem.title)
+                let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }.map {
+                    PlaylistDetailCellVM.track($0)
+                }
+                self.isEmpty = items.isEmpty
+                let showItems = items.isEmpty ? [PlaylistDetailCellVM.empty] : items
+                self.datas.accept(
+                    [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem, isFavlist: isFavlist)))] +
+                        showItems
+                )
+            } else {
+                let isFavlist = !inputs.playlistItem.isLocal
+                let items = inputs.playlistItem.tracks
                     .map { DisplayItem(track: $0) }
                     .map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }
                     .map { PlaylistDetailCellVM.track($0) }
                 self.datas.accept(
-                    [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem, isFavlist: false)))] +
+                    [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem,
+                                                                                                                            isFavlist: isFavlist)))] +
                         items
                 )
-            }.disposed(by: disposeBag)
+            }
         }
     }
 
@@ -87,7 +101,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
 enum TrackCellVMContract {
     struct Input: InputType {
         var track: DisplayItem
-        var saved: Bool = true
+        var saved: Bool = false
     }
 
     struct Output: OutputType {
@@ -105,7 +119,7 @@ class TrackCellViewModel: BaseCellViewModel<TrackCellVMContract.Input,
         setOutput(Output(title: Driver.just(inputs.track.title),
                          authorTitle: Driver.just(L10n.authorBy(inputs.track.author)),
                          thumbnailUrl: url,
-                         saved: Driver.just(inputs.saved)))
+                         saved: Driver.just(DataLayer.checkTrackIsSynced(inputs.track))))
     }
 }
 

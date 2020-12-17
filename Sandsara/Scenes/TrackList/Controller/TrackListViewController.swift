@@ -27,7 +27,9 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     override func setupViewModel() {
         tableView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         setupTableView()
-        viewModel = TrackListViewModel(apiService: SandsaraDataServices(), inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() , viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = TrackListViewModel(apiService: SandsaraDataServices(),
+                                       inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() ,
+                                                                                viewWillAppearTrigger: viewWillAppearTrigger))
     }
 
     override func bindViewModel() {
@@ -127,6 +129,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                 default: return nil
                 }
             }.compactMap { $0 }
+            trackList.playlistItem = self.playlistItem
         default:
             break
         }
@@ -145,6 +148,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
             default: return nil
             }
         }.compactMap { $0 }
+        player.playlistItem = playlistItem
         player.isReloaded = true
         (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: player.tracks[index])
         tabBarController?.popupBar.isHidden = false

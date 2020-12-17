@@ -28,12 +28,15 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     var selecledIndex = 0
     var tracks = [DisplayItem]()
 
+    var playlistItem: DisplayItem?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         guard let track = track else { return }
 
         checkFavorite()
+        checkDownloaed()
         songTitleLabel.textColor = Asset.primary.color
         songAuthorLabel.textColor = Asset.secondary.color
         songTitleLabel.font = FontFamily.Tinos.regular.font(size: 30)
@@ -77,17 +80,20 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
 
     private func setButtonStyle(button: UIButton?, title: String) {
         button?.titleLabel?.font = FontFamily.OpenSans.regular.font(size: 18)
-
         button?.setTitle(title, for: .normal)
     }
 
     private func showPlayer() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.selecledIndex.accept(self.selecledIndex)
+        let index = self.tracks.isEmpty ? 0 : (self.tracks.count > 1 ? self.selecledIndex : 0)
+        player.selecledIndex.accept(
+            index
+        )
         player.tracks = self.tracks
         player.isReloaded = true
-        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: self.tracks[self.selecledIndex])
+        player.playlistItem = playlistItem
+        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: tracks.isEmpty ? track : tracks[index])
         tabBarController?.popupBar.isHidden = false
         tabBarController?.popupContentView.popupCloseButton.isHidden = true
         tabBarController?.presentPopupBar(withContentViewController: player, openPopup: true, animated: false, completion: nil)
@@ -100,6 +106,15 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
             DispatchQueue.main.async {
                 self.favBtn.setImage(self.isFavorite ? Asset.icons8Heart60.image: Asset.favorite.image, for: .normal)
                 self.favBtn.setTitle(self.isFavorite ? L10n.favorited: L10n.favorite, for: .normal)
+            }
+        }
+    }
+
+    private func checkDownloaed() {
+        if let item = track {
+            let localTrack = LocalTrack(track: item)
+            DispatchQueue.main.async {
+                self.downloadBtn.isHidden = DataLayer.loadDownloadedTrack(localTrack)
             }
         }
     }
@@ -121,7 +136,6 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     private func showAddPlaylist() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: AddPlaylistViewController.identifier) as! AddPlaylistViewController
         vc.item = track
-
         let navVC = UINavigationController(rootViewController: vc)
 
         present(navVC, animated: true, completion: nil)

@@ -43,6 +43,16 @@ class BaseViewController<Input: InputParamView>: UIViewController {
         return loadingActivity
     }()
 
+    var isPlaySingle: Bool {
+        get {
+            return _isSingle
+        } set(newValue) {
+            _isSingle = newValue
+        }
+    }
+
+    private var _isSingle = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Asset.background.color

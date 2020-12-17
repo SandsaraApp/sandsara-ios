@@ -22,10 +22,27 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
     var playlistTitle: String?
 
+
+
     override func setupViewModel() {
         setupTableView()
+        isPlaySingle = true
         viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
         viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
+    }
+
+    @objc func reloadData() {
+        viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func bindViewModel() {
@@ -79,12 +96,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
         switch viewModel.datas.value[index] {
         case .track(let viewModel):
             trackList.track = viewModel.inputs.track
-            trackList.tracks = self.viewModel.datas.value.map {
-                switch $0 {
-                case .track(let vm): return vm.inputs.track
-                default: return nil
-                }
-            }.compactMap { $0 }
+            trackList.tracks = [viewModel.inputs.track]
         default:
             break
         }

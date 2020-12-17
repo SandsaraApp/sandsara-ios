@@ -28,6 +28,13 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
         authorLabel.font = FontFamily.OpenSans.light.font(size: 10)
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        if syncBtn.isRotating {
+            syncBtn.rotate360Degrees()
+        }
+    }
+
     override func bindViewModel() {
         viewModel
             .outputs
@@ -49,6 +56,23 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
             .saved
             .driveNext {
                 self.updateConstraints(isSynced: $0)
+        }.disposed(by: disposeBag)
+
+        syncBtn
+            .rx.tap.subscribeNext {
+                self.syncBtn.rotate360Degrees()
+                let inputString = self.viewModel.inputs.track.fileName
+                let splits = inputString.components(separatedBy: ".")
+                var fileSuccess = true
+                FileServiceImpl.shared.sendFiles(fileName: splits.first ?? "", extensionName: splits.last ?? "")
+                FileServiceImpl.shared.sendSuccess.subscribeNext {
+                    if $0 {
+                        _ = DataLayer.addSyncedTrack(self.viewModel.inputs.track)
+                        self.syncBtn.stopRotation()
+                        self.updateConstraints(isSynced: true)
+                    }
+                    fileSuccess = $0
+                }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
     }
 

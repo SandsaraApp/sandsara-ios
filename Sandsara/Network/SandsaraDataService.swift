@@ -308,4 +308,17 @@ class SandsaraDataServices {
             }
         }
     }
+
+    func mockData() -> Observable<[Track]> {
+        var tracks = [Track]()
+//        tracks = [
+//            Track(id: 0, title: "Bumerang1", thumbnail: "http://uninterested-cows.surge.sh/images/layer1.png", author: "Test", fileName: "Sandsara-trackNumber-0001.thr"),
+//            Track(id: 1, title: "Bumerang2", thumbnail: "http://uninterested-cows.surge.sh/images/layer2.png", author: "Test", fileName: "Sandsara-trackNumber-0002.thr"),
+//            Track(id: 2, title: "Bumerang3", thumbnail: "http://uninterested-cows.surge.sh/images/layer3.png", author: "Test", fileName: "Sandsara-trackNumber-0003.thr"),
+//            Track(id: 3, title: "Bumerang4", thumbnail: "http://uninterested-cows.surge.sh/images/layer4.png", author: "Test", fileName: "Sandsara-trackNumber-0004.thr"),
+//            Track(id: 4, title: "Bumerang5s", thumbnail: "http://uninterested-cows.surge.sh/images/layer5.png", author: "Test", fileName: "Sandsara-trackNumber-0005.thr")
+//        ]
+
+        return Observable.just(tracks)
+    }
 }

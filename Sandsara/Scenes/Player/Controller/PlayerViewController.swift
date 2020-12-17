@@ -24,6 +24,8 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
     var tracks = [DisplayItem]()
     var isReloaded = false
 
+    var playlistItem: DisplayItem?
+
     typealias Section = SectionModel<String, TrackCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -41,6 +43,11 @@ class PlayerViewController: BaseVMViewController<PlayerViewModel, NoInputParam> 
             bindViewModel()
             viewModel.viewModelDidBind()
             isReloaded = false
+            if let item = playlistItem {
+                viewModel.playFromDownloadedPlaylist(item: item)
+            } else {
+                FileServiceImpl.shared.updateTrack(name: self.tracks[selecledIndex.value].fileName)
+            }
         }
     }
 

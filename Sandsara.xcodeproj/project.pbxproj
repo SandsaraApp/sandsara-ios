@@ -10,6 +10,7 @@
 		92068651257B3D9700D8CC89 /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */; };
 		92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */; };
 		921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */; };
+		92235798258843CE007E56E7 /* SerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92235797258843CE007E56E7 /* SerialQueue.swift */; };
 		9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6C925569E050092FBB6 /* UIAlertController.swift */; };
 		9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6D225569F0A0092FBB6 /* Codable.swift */; };
 		9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6DA25569F5D0092FBB6 /* Dictionary.swift */; };
@@ -71,7 +72,6 @@
 		92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284E02560DECA00739A94 /* Tinos-Regular.ttf */; };
 		92AD7BBB256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */; };
 		92AD7BE9256D6CCC00F0D0E6 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */; };
-		92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */ = {isa = PBXBuildFile; fileRef = 92AD7BF2256D704300F0D0E6 /* proof.bin */; };
 		92B04625255BE0CF0086FFFE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B04624255BE0CF0086FFFE /* SettingsViewController.swift */; };
 		92B0462C255BE1BA0086FFFE /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */; };
 		92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */; };
@@ -177,6 +177,8 @@
 		92DFBEBF2577BABE00B1BFA9 /* Clip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DFBE812577BABE00B1BFA9 /* Clip.swift */; };
 		92DFBECD2577D06800B1BFA9 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DFBECC2577D06800B1BFA9 /* GradientView.swift */; };
 		92DFBEF22577D15200B1BFA9 /* ColorGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DFBEF12577D15200B1BFA9 /* ColorGradientView.swift */; };
+		92E61D1A258A7ED0007464FF /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E61D19258A7ED0007464FF /* DownloadQueue.swift */; };
+		92F5612A2584DF3500A1C047 /* Tracks in Resources */ = {isa = PBXBuildFile; fileRef = 92F561292584DF3500A1C047 /* Tracks */; };
 		92FA3ED7257076AF00D05326 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3ED5257076AF00D05326 /* ColorCell.swift */; };
 		92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3ED6257076AF00D05326 /* ColorCell.xib */; };
 		92FA3EE325707C1D00D05326 /* SettingHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */; };
@@ -239,6 +241,7 @@
 		9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
 		92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
 		921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewController.swift; sourceTree = "<group>"; };
+		92235797258843CE007E56E7 /* SerialQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialQueue.swift; sourceTree = "<group>"; };
 		9228C6C925569E050092FBB6 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		9228C6D225569F0A0092FBB6 /* Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codable.swift; sourceTree = "<group>"; };
 		9228C6DA25569F5D0092FBB6 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -304,7 +307,6 @@
 		92A284F52560E40C00739A94 /* DisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayItem.swift; sourceTree = "<group>"; };
 		92AD7BBA256BC0FB00F0D0E6 /* AddPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewModel.swift; sourceTree = "<group>"; };
 		92AD7BE8256D6CCC00F0D0E6 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
-		92AD7BF2256D704300F0D0E6 /* proof.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = proof.bin; sourceTree = "<group>"; };
 		92B04624255BE0CF0086FFFE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92B0462A255BE1BA0086FFFE /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
 		92B0462B255BE1BA0086FFFE /* ProgressTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressTableViewCell.xib; sourceTree = "<group>"; };
@@ -412,6 +414,8 @@
 		92DFBE812577BABE00B1BFA9 /* Clip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clip.swift; sourceTree = "<group>"; };
 		92DFBECC2577D06800B1BFA9 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		92DFBEF12577D15200B1BFA9 /* ColorGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGradientView.swift; sourceTree = "<group>"; };
+		92E61D19258A7ED0007464FF /* DownloadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
+		92F561292584DF3500A1C047 /* Tracks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tracks; sourceTree = "<group>"; };
 		92FA3ED5257076AF00D05326 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		92FA3ED6257076AF00D05326 /* ColorCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorCell.xib; sourceTree = "<group>"; };
 		92FA3EE125707C1D00D05326 /* SettingHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingHeaderView.xib; sourceTree = "<group>"; };
@@ -532,8 +536,8 @@
 		9228C6C225569D020092FBB6 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				92C7D12F257228E00062FC78 /* AdvancedSetting */,
 				9228C6FE2556A36B0092FBB6 /* Base */,
+				92C7D12F257228E00062FC78 /* AdvancedSetting */,
 				921A9F02256BB49C0068AF22 /* AddPlaylist */,
 				927CAC202567B29B00DA54EB /* Devices */,
 				9228C7CA255810280092FBB6 /* Home */,
@@ -549,6 +553,7 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92E61D17258A7E40007464FF /* Download */,
 				925221F9257DFF11005F75DE /* Color */,
 				925221F6257DC216005F75DE /* Switch */,
 				92C7D18F2573C01B0062FC78 /* HSBPicker */,
@@ -631,6 +636,7 @@
 				92B8C6FE2574D9190051C1CC /* LedStripServiceImpl.swift */,
 				92B8C7022574D9D20051C1CC /* FileServiceImpl.swift */,
 				92B8C70B2574FEF40051C1CC /* DeviceServiceImpl.swift */,
+				92235797258843CE007E56E7 /* SerialQueue.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -733,7 +739,7 @@
 		924EDF4625565F850013CC71 /* Sandsara */ = {
 			isa = PBXGroup;
 			children = (
-				92AD7BF2256D704300F0D0E6 /* proof.bin */,
+				92F561292584DF3500A1C047 /* Tracks */,
 				92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */,
 				92A284A62560D7F500739A94 /* Generated */,
 				9228C68425569B740092FBB6 /* Application */,
@@ -1186,6 +1192,14 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		92E61D17258A7E40007464FF /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				92E61D19258A7ED0007464FF /* DownloadQueue.swift */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
 		92FA3EF12570802900D05326 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1326,8 +1340,8 @@
 				92A2850B256103D500739A94 /* Tinos-Italic.ttf in Resources */,
 				92A2850C256103D500739A94 /* Tinos-Regular.ttf in Resources */,
 				924EDF5425565F880013CC71 /* LaunchScreen.storyboard in Resources */,
+				92F5612A2584DF3500A1C047 /* Tracks in Resources */,
 				92B0462D255BE1BA0086FFFE /* ProgressTableViewCell.xib in Resources */,
-				92AD7BF3256D704300F0D0E6 /* proof.bin in Resources */,
 				92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */,
 				92A284C82560D9F100739A94 /* OpenSans-Semibold.ttf in Resources */,
 				925E95652581108B003DBB07 /* TrackCountTableViewCell.xib in Resources */,
@@ -1572,6 +1586,7 @@
 				92D64788255CAC2400856900 /* PlaylistTableViewCell.swift in Sources */,
 				92DFBE8A2577BABE00B1BFA9 /* ColorString.swift in Sources */,
 				92DFBE9C2577BABE00B1BFA9 /* SliderView.swift in Sources */,
+				92E61D1A258A7ED0007464FF /* DownloadQueue.swift in Sources */,
 				92DFBE9B2577BABE00B1BFA9 /* CMYKASliderGroup.swift in Sources */,
 				9228C7132556AD8F0092FBB6 /* BaseViewModel.swift in Sources */,
 				92DFBEA92577BABE00B1BFA9 /* HSBWheelView.swift in Sources */,
@@ -1614,6 +1629,7 @@
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92B8C6FF2574D9190051C1CC /* LedStripServiceImpl.swift in Sources */,
 				92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */,
+				92235798258843CE007E56E7 /* SerialQueue.swift in Sources */,
 				92DFBEBF2577BABE00B1BFA9 /* Clip.swift in Sources */,
 				92DFBEB22577BABE00B1BFA9 /* HSBWheel.swift in Sources */,
 				92B0464F255BF6C20086FFFE /* MenuTableViewCell.swift in Sources */,

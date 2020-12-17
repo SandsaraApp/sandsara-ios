@@ -42,6 +42,13 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
 
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
+
+//        let testPlaylist = Playlist(id: 0, title: "Test Playlist", thumbnail: "http://uninterested-cows.surge.sh/images/layer1.png", author: "Test")
+//
+//        items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: testPlaylist,
+//                                                                                                   isTestPlaylist: true),
+//                                                                                isFavorite: true)))
+
         if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
             items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList),
                                                                                     isFavorite: true)))
@@ -55,7 +62,15 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
             }
             items.append(contentsOf: localList)
         }
-        // 
+
+        if DataLayer.loadDownloaedPlaylists().count > 0 {
+            let localList = DataLayer.loadDownloaedPlaylists().map {
+                DisplayItem(playlist: $0)
+            }.map {
+                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+            }
+            items.append(contentsOf: localList)
+        }
         isEmpty = items.isEmpty
         datas.accept(items)
     }
