@@ -14,6 +14,7 @@ enum SandsaraAPI: String {
     case playlists
     case playlistDetail
     case alltrack = "tracks"
+    case colorPalette
 }
 
 extension SandsaraAPI: TargetType {
@@ -33,6 +34,8 @@ extension SandsaraAPI: TargetType {
             return "tracks"
         case .recommendedplaylist:
             return "playlist"
+        case .colorPalette:
+            return self.rawValue
         default:
             return ""
         }

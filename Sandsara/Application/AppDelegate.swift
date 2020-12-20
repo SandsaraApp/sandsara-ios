@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var discoveredDevice: ScanDiscovery?
 
+    let disposeBag = DisposeBag()
+
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,6 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(options))
+
+        SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
+            print(colors)
+        }.disposed(by: disposeBag)
+
         return true
     }
 
@@ -70,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func initPlayerBar() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.selecledIndex.accept(0)
+        player.index = 0
         player.tracks = []
         player.popupContentView.popupCloseButtonStyle = .none
 

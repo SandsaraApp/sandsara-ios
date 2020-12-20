@@ -26,6 +26,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
     override func setupViewModel() {
         setupTableView()
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewWillAppearTrigger.accept(())
     }
 
     @objc func reloadData() {

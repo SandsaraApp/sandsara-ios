@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -67,6 +67,14 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="-14" maxY="18"/>
                                 <state key="normal" image="trash"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pFP-Eg-zGJ" customClass="LoadingButton" customModule="Sandsara" customModuleProvider="target">
+                                <rect key="frame" x="252" y="328" width="52" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="KiZ-xt-v7p"/>
+                                    <constraint firstAttribute="width" constant="52" id="ZRc-vx-oEd"/>
+                                </constraints>
+                                <state key="normal" image="download"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" name="background"/>
                         <constraints>
@@ -76,6 +84,7 @@
                             <constraint firstItem="yau-3B-wwT" firstAttribute="top" secondItem="BB3-pF-Iui" secondAttribute="bottom" constant="8" id="BlK-51-cdb"/>
                             <constraint firstItem="b3u-Vx-09S" firstAttribute="top" secondItem="uMQ-AV-Whp" secondAttribute="top" constant="20" id="HeC-Bj-0Vu"/>
                             <constraint firstAttribute="trailing" secondItem="b3u-Vx-09S" secondAttribute="trailing" constant="16" id="Il4-qw-awT"/>
+                            <constraint firstAttribute="trailing" secondItem="pFP-Eg-zGJ" secondAttribute="trailing" constant="16" id="K2e-Tu-bWn"/>
                             <constraint firstItem="Cnn-Cp-MCq" firstAttribute="leading" secondItem="uMQ-AV-Whp" secondAttribute="leading" id="Ocf-Xe-mk6"/>
                             <constraint firstItem="So9-cI-dbc" firstAttribute="leading" secondItem="uMQ-AV-Whp" secondAttribute="leading" constant="16" id="Q8j-IB-OUK"/>
                             <constraint firstItem="Cnn-Cp-MCq" firstAttribute="top" secondItem="4st-1h-tfV" secondAttribute="bottom" id="Rxm-v4-OEb"/>
@@ -84,6 +93,7 @@
                             <constraint firstAttribute="trailing" secondItem="yau-3B-wwT" secondAttribute="trailing" constant="16" id="XeF-cZ-FW1"/>
                             <constraint firstAttribute="trailing" secondItem="Cnn-Cp-MCq" secondAttribute="trailing" id="ZWj-pH-i4x"/>
                             <constraint firstItem="BB3-pF-Iui" firstAttribute="leading" secondItem="uMQ-AV-Whp" secondAttribute="leading" constant="16" id="Zo7-It-2FF"/>
+                            <constraint firstItem="pFP-Eg-zGJ" firstAttribute="top" secondItem="So9-cI-dbc" secondAttribute="top" id="irs-rC-Oel"/>
                             <constraint firstItem="BB3-pF-Iui" firstAttribute="top" secondItem="So9-cI-dbc" secondAttribute="bottom" constant="16" id="tH1-AH-9f0"/>
                             <constraint firstItem="So9-cI-dbc" firstAttribute="top" secondItem="Cnn-Cp-MCq" secondAttribute="bottom" constant="28" id="uGJ-FB-gFg"/>
                         </constraints>
@@ -100,6 +110,7 @@
             <connections>
                 <outlet property="backBtn" destination="4st-1h-tfV" id="eeg-Hc-8rZ"/>
                 <outlet property="deleteButton" destination="b3u-Vx-09S" id="E4D-tu-qBJ"/>
+                <outlet property="downloadButton" destination="pFP-Eg-zGJ" id="WL6-7q-Nlo"/>
                 <outlet property="playBtn" destination="So9-cI-dbc" id="z18-Ea-u0F"/>
                 <outlet property="playlistCoverImage" destination="Cnn-Cp-MCq" id="GnI-lw-1IQ"/>
                 <outlet property="songAuthorLabel" destination="yau-3B-wwT" id="bYw-fV-BSw"/>
@@ -110,6 +121,7 @@
     </objects>
     <resources>
         <image name="back" width="11" height="24"/>
+        <image name="download" width="22" height="24"/>
         <image name="playerPlay" width="52" height="52"/>
         <image name="playlist Cover" width="320" height="240"/>
         <image name="trash" width="25" height="25"/>

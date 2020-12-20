@@ -398,6 +398,14 @@ class DataLayer {
         }
         return tracks
     }
+
+    static func loadDownloadedDetail(name: String) -> Bool {
+        if (realm?.objects(DownloadedPlaylist.self).filter("playlistName == '\(name)'").first) != nil {
+            return true
+        }
+
+        return false
+    }
 }
 
 

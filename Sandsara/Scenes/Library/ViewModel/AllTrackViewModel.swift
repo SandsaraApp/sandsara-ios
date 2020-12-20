@@ -72,7 +72,7 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
         var datas = [AllTrackCellVM]()
         datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: 10), timeRemaining: .init(value: 350), syncAllTrigger: syncAll))))
         let list = DataLayer.loadDownloadedTracks()
-        let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: false)) }.map {
+        let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
             AllTrackCellVM.track($0)
         }
         datas.append(contentsOf: items)

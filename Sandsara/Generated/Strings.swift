@@ -16,6 +16,8 @@ internal enum L10n {
   internal static let addAnyway = L10n.tr("Localizeable", "add_anyway")
   /// Add to Playlist
   internal static let addToPlaylist = L10n.tr("Localizeable", "add_to_playlist")
+  /// Add to Queue
+  internal static let addToQueue = L10n.tr("Localizeable", "add_to_queue")
   /// Advanced Settings
   internal static let advanceSetting = L10n.tr("Localizeable", "advance_setting")
   /// Do you want to delete this playlist ?
@@ -50,6 +52,8 @@ internal enum L10n {
   internal static let download = L10n.tr("Localizeable", "download")
   /// Downloaded to Library
   internal static let downloaded = L10n.tr("Localizeable", "downloaded")
+  /// Downloading...
+  internal static let downloading = L10n.tr("Localizeable", "downloading")
   /// Duplicate track found
   internal static let duplicateFound = L10n.tr("Localizeable", "duplicate_found")
   /// No track here !!!
@@ -60,6 +64,26 @@ internal enum L10n {
   internal static let favorite = L10n.tr("Localizeable", "favorite")
   /// Favorited
   internal static let favorited = L10n.tr("Localizeable", "favorited")
+  /// Firmware Update Available v %@
+  internal static func firmwareAlert(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "firmware_alert", String(describing: p1))
+  }
+  /// Downloading Firmware v %@
+  internal static func firmwareDownloading(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "firmware_downloading", String(describing: p1))
+  }
+  /// Firmware v %@ is Ready
+  internal static func firmwareIsReady(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "firmware_is_ready", String(describing: p1))
+  }
+  /// This process takes about 10 minutes and can’t be cancelled.
+  internal static let firmwareNotice = L10n.tr("Localizeable", "firmware_notice")
+  /// Syncing Firmware v %@
+  internal static func firmwareSyncing(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "firmware_syncing", String(describing: p1))
+  }
+  /// Update Firmware Now
+  internal static let firmwareUpdateNow = L10n.tr("Localizeable", "firmware_update_now")
   /// Firmware version: %@
   internal static func firmwareVersion(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "firmware_version", String(describing: p1))
@@ -72,8 +96,12 @@ internal enum L10n {
   internal static let lightCycleSpeed = L10n.tr("Localizeable", "light_cycle_speed")
   /// Light mode
   internal static let lightmode = L10n.tr("Localizeable", "lightmode")
+  /// Next by:
+  internal static let nextBy = L10n.tr("Localizeable", "next_by")
   /// No Sandsara detected.
   internal static let noSandsaraDetected = L10n.tr("Localizeable", "no_sandsara_detected")
+  /// Now Playing
+  internal static let nowPlaying = L10n.tr("Localizeable", "now_playing")
   /// Ok
   internal static let ok = L10n.tr("Localizeable", "ok")
   /// Play
@@ -102,6 +130,12 @@ internal enum L10n {
   internal static let `static` = L10n.tr("Localizeable", "static")
   /// Sync all
   internal static let syncAll = L10n.tr("Localizeable", "sync_all")
+  /// Syncing tracks. Playback will resume soon.
+  internal static let syncNoti = L10n.tr("Localizeable", "sync_noti")
+  /// Sync to Sandsara
+  internal static let syncToBoard = L10n.tr("Localizeable", "sync_to_board")
+  /// Syncing...
+  internal static let syncing = L10n.tr("Localizeable", "syncing")
   /// Tracks
   internal static let tracks = L10n.tr("Localizeable", "tracks")
   /// Update Firmware

@@ -8,7 +8,7 @@
 import RealmSwift
 
 class PlaylistsResponse: Decodable {
-    var playlists: [Playlist] = []
+    var playlists: [PlaylistResponse] = []
 
     enum CodingKeys: String, CodingKey {
         case records
@@ -16,7 +16,25 @@ class PlaylistsResponse: Decodable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent([Playlist].self, forKey: .records, assignTo: &playlists)
+        container.decodeIfPresent([PlaylistResponse].self, forKey: .records, assignTo: &playlists)
+    }
+}
+
+class PlaylistResponse: Decodable {
+    var playlist: Playlist = Playlist()
+
+    enum CodingKeys: String, CodingKey {
+        case fields
+        case id
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        container.decodeIfPresent(Playlist.self, forKey: .fields, assignTo: &playlist)
+
+        if let id = try container.decodeIfPresent(String.self, forKey: .id) {
+            playlist.id = id
+        }
     }
 }
 
@@ -29,28 +47,30 @@ class Playlist: Codable {
     var names = [String]()
     var trackId = [String]()
 
-    var file: File?
+    var file: [File]?
     var files: [File]?
     var authors = [String]()
 
     var tracks = [Track]()
-    
+
+    enum NestedKeys: String, CodingKey {
+        case fields
+    }
 
     enum CodingKeys: String, CodingKey {
-        case fields
         case id
         case title = "name"
         case thumbnails
         case author
-
         case trackId
         case authors
         case names
         case file
         case files
-
         case tracks
     }
+
+    init() {}
 
     init(id: String, title: String, thumbnail: [Thumbnail], author: String) {
         self.id = id
@@ -60,13 +80,12 @@ class Playlist: Codable {
     }
 
     required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let fieldContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .fields)
-        fieldContainer.decodeIfPresent(String.self, forKey: .id, assignTo: &id)
-        fieldContainer.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
+        let fieldContainer = try decoder.container(keyedBy: CodingKeys.self)
         if let thumbnail = try fieldContainer.decodeIfPresent([Thumbnail].self, forKey: .thumbnails) {
             self.thumbnail = thumbnail
         }
+        fieldContainer.decodeIfPresent(String.self, forKey: .id, assignTo: &id)
+        fieldContainer.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
         fieldContainer.decodeIfPresent(String.self, forKey: .author, assignTo: &author)
 
         fieldContainer.decodeIfPresent([String].self, forKey: .names, assignTo: &names)
@@ -85,22 +104,22 @@ class Playlist: Codable {
             }
         }
 
-        if let file = try fieldContainer.decodeIfPresent([File].self, forKey: .file)?.first {
+        if let file = try fieldContainer.decodeIfPresent([File].self, forKey: .file) {
             self.file = file
         }
     }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(title, forKey: .title)
-        try container.encode(thumbnail, forKey: .thumbnails)
-        try container.encode(author, forKey: .author)
-        try container.encode(file, forKey: .file)
-        try container.encode(files, forKey: .files)
-        try container.encode(names, forKey: .names)
-        try container.encode(authors, forKey: .authors)
-        try container.encode(trackId, forKey: .trackId)
+        var nestedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try nestedContainer.encode(id, forKey: .id)
+        try nestedContainer.encode(title, forKey: .title)
+        try nestedContainer.encode(thumbnail, forKey: .thumbnails)
+        try nestedContainer.encode(author, forKey: .author)
+        try nestedContainer.encode(file, forKey: .file)
+        try nestedContainer.encode(files, forKey: .files)
+        try nestedContainer.encode(names, forKey: .names)
+        try nestedContainer.encode(authors, forKey: .authors)
+        try nestedContainer.encode(trackId, forKey: .trackId)
     }
 }
 

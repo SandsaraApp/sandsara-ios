@@ -135,8 +135,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
         } else {
             let trackDetail = self.storyboard?.instantiateViewController(withIdentifier: TrackDetailViewController.identifier) as! TrackDetailViewController
             trackDetail.track = item
-            trackDetail.tracks = viewModel.inputs.items
-            trackDetail.selecledIndex = index
+            trackDetail.tracks = [item]
             navigationController?.pushViewController(trackDetail, animated: true)
         }
     }

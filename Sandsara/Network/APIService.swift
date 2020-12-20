@@ -35,7 +35,11 @@ class SandsaraAPIService: APIServiceCall {
         return apiProvider
             .rx.request(.recommendedtracks)
             .debug()
-            .map(TracksResponse.self).map { $0.tracks }
+            .map(TracksResponse.self).map {
+                $0.tracks.map {
+                    $0.playlist
+                }
+            }
     }
 
     func getRecommendPlaylist() -> Single<[Playlist]> {
@@ -43,7 +47,11 @@ class SandsaraAPIService: APIServiceCall {
             .rx.request(.recommendedplaylist)
             .debug()
             .map(PlaylistsResponse.self)
-            .map { $0.playlists }
+            .map {
+                $0.playlists.map {
+                    $0.playlist
+                }
+            }
     }
 
     func playlistDetail() -> Single<[Track]> {
@@ -51,19 +59,43 @@ class SandsaraAPIService: APIServiceCall {
             .rx.request(.playlistDetail)
             .debug()
             .map(TracksResponse.self)
-            .map { $0.tracks }
+            .map {
+                $0.tracks.map {
+                    $0.playlist
+                }
+            }
     }
 
     func playlists() -> Single<[Playlist]> {
         return apiProvider
             .rx.request(.playlists)
             .map(PlaylistsResponse.self)
-            .map { $0.playlists }
+            .map {
+                $0.playlists.map {
+                    $0.playlist
+                }
+            }
     }
 
     func getAllTracks() -> Single<[Track]> {
         return apiProvider
             .rx.request(.alltrack)
-            .map(TracksResponse.self).map { $0.tracks }
+            .map(TracksResponse.self)
+            .map {
+                $0.tracks.map {
+                    $0.playlist
+                }
+            }
+    }
+
+    func getColorPalettes() -> Single<[ColorModel]> {
+        return apiProvider
+            .rx.request(.colorPalette)
+            .map(ColorsResponse.self)
+            .map {
+                $0.colors.map {
+                    $0.color
+                }
+            }
     }
 }

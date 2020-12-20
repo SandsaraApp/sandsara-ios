@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		92068651257B3D9700D8CC89 /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */; };
 		92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */; };
+		9214E11D258E29CF006E43D2 /* ProgressButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214E11C258E29CF006E43D2 /* ProgressButtonView.swift */; };
+		9214E12A258F065F006E43D2 /* PlayerFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214E129258F065F006E43D2 /* PlayerFooterView.swift */; };
+		9214E12E258F07F3006E43D2 /* PlayerFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9214E12D258F07F3006E43D2 /* PlayerFooterView.xib */; };
 		921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */; };
 		92235798258843CE007E56E7 /* SerialQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92235797258843CE007E56E7 /* SerialQueue.swift */; };
 		9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C6C925569E050092FBB6 /* UIAlertController.swift */; };
@@ -50,6 +53,7 @@
 		927C7F87255FF360009F8898 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C7F86255FF360009F8898 /* Track.swift */; };
 		927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */; };
 		9299013825822F2200D0A199 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9299013725822F2200D0A199 /* UIApplication.swift */; };
+		929C03C8258F722D009F6A2F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929C03C7258F722D009F6A2F /* Color.swift */; };
 		92A284C52560D9F100739A94 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BB2560D9F100739A94 /* OpenSans-Bold.ttf */; };
 		92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BC2560D9F100739A94 /* OpenSans-BoldItalic.ttf */; };
 		92A284C72560D9F100739A94 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A284BD2560D9F100739A94 /* OpenSans-Light.ttf */; };
@@ -91,7 +95,6 @@
 		92BCE6FE25614AD40029DD3F /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCE6FD25614AD40029DD3F /* LibraryViewController.swift */; };
 		92BCE70325614ADD0029DD3F /* AllTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCE70225614ADD0029DD3F /* AllTrackViewController.swift */; };
 		92BCE71E256155130029DD3F /* AllTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCE71D256155130029DD3F /* AllTrackViewModel.swift */; };
-		92BCE72B256165330029DD3F /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCE72A256165330029DD3F /* PlayerViewModel.swift */; };
 		92BE9E722564965600081EEE /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; };
 		92BE9E732564965600081EEE /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92BE9E6F2564964B00081EEE /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */; };
@@ -240,6 +243,9 @@
 		91F2EF0681A8B22F30B336B1 /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
 		9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
 		92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
+		9214E11C258E29CF006E43D2 /* ProgressButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressButtonView.swift; sourceTree = "<group>"; };
+		9214E129258F065F006E43D2 /* PlayerFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFooterView.swift; sourceTree = "<group>"; };
+		9214E12D258F07F3006E43D2 /* PlayerFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerFooterView.xib; sourceTree = "<group>"; };
 		921A9F07256BB8920068AF22 /* AddPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistViewController.swift; sourceTree = "<group>"; };
 		92235797258843CE007E56E7 /* SerialQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialQueue.swift; sourceTree = "<group>"; };
 		9228C6C925569E050092FBB6 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
@@ -284,6 +290,7 @@
 		927C7F86255FF360009F8898 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanDevicesViewController.swift; sourceTree = "<group>"; };
 		9299013725822F2200D0A199 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		929C03C7258F722D009F6A2F /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		92A2847C2560D65F00739A94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		92A284BB2560D9F100739A94 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		92A284BC2560D9F100739A94 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -328,7 +335,6 @@
 		92BCE6FD25614AD40029DD3F /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		92BCE70225614ADD0029DD3F /* AllTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTrackViewController.swift; sourceTree = "<group>"; };
 		92BCE71D256155130029DD3F /* AllTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTrackViewModel.swift; sourceTree = "<group>"; };
-		92BCE72A256165330029DD3F /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		92BE9E6A2564964B00081EEE /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LNPopupController.xcodeproj; path = LNPopupController/LNPopupController.xcodeproj; sourceTree = "<group>"; };
 		92BE9E7B2564995C00081EEE /* PlayerBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarViewController.swift; sourceTree = "<group>"; };
 		92C7D1282572188A0062FC78 /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
@@ -574,6 +580,7 @@
 				9228C7082556A4A90092FBB6 /* NVActivityIndicatorView.swift */,
 				9299013F25822F4100D0A199 /* Gradient */,
 				9299013C25822F3B00D0A199 /* Cell */,
+				9214E11C258E29CF006E43D2 /* ProgressButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -624,6 +631,7 @@
 				9228C71B2556AFA10092FBB6 /* AppError.swift */,
 				927C7F81255FF33A009F8898 /* Playlist.swift */,
 				927C7F86255FF360009F8898 /* Track.swift */,
+				929C03C7258F722D009F6A2F /* Color.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -902,14 +910,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		92BCE729256165170029DD3F /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				92BCE72A256165330029DD3F /* PlayerViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
 		92BE9E6B2564964B00081EEE /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -959,7 +959,6 @@
 			isa = PBXGroup;
 			children = (
 				92FA3EF12570802900D05326 /* View */,
-				92BCE729256165170029DD3F /* ViewModel */,
 				92BCE725256165130029DD3F /* Controller */,
 			);
 			path = Player;
@@ -1205,6 +1204,8 @@
 			children = (
 				92FA3EF22570805300D05326 /* PlayerHeaderView.xib */,
 				92FA3EF62570806700D05326 /* PlayerHeaderView.swift */,
+				9214E129258F065F006E43D2 /* PlayerFooterView.swift */,
+				9214E12D258F07F3006E43D2 /* PlayerFooterView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1349,6 +1350,7 @@
 				92DFBEBA2577BABE00B1BFA9 /* LICENSE in Resources */,
 				92D647AD255CB52300856900 /* TrackTableViewCell.xib in Resources */,
 				924EDF5125565F880013CC71 /* Assets.xcassets in Resources */,
+				9214E12E258F07F3006E43D2 /* PlayerFooterView.xib in Resources */,
 				92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */,
 				92C7D12B2572188A0062FC78 /* EmptyCell.xib in Resources */,
 				92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */,
@@ -1519,6 +1521,7 @@
 				92B8C7032574D9D20051C1CC /* FileServiceImpl.swift in Sources */,
 				92DFBE862577BABE00B1BFA9 /* RGBASliderGroup.swift in Sources */,
 				92DFBECD2577D06800B1BFA9 /* GradientView.swift in Sources */,
+				9214E12A258F065F006E43D2 /* PlayerFooterView.swift in Sources */,
 				92DFBE822577BABE00B1BFA9 /* UIColor+Utilities.swift in Sources */,
 				92BCE71E256155130029DD3F /* AllTrackViewModel.swift in Sources */,
 				9228C7002556A3870092FBB6 /* BaseViewController.swift in Sources */,
@@ -1532,6 +1535,7 @@
 				92DFBE9F2577BABE00B1BFA9 /* ImagePixelPicker.swift in Sources */,
 				92DFBE962577BABE00B1BFA9 /* VideoCaptureView.swift in Sources */,
 				92DFBEBE2577BABE00B1BFA9 /* Throttle.swift in Sources */,
+				9214E11D258E29CF006E43D2 /* ProgressButtonView.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
 				92D66337255AE3FE00CE3F8E /* RecommendCell.swift in Sources */,
 				925221FB257DFF22005F75DE /* UIColor+Temperature.swift in Sources */,
@@ -1643,10 +1647,10 @@
 				925E95642581108B003DBB07 /* TrackCountTableViewCell.swift in Sources */,
 				92DFBEA62577BABE00B1BFA9 /* HSLA.swift in Sources */,
 				92DFBEA42577BABE00B1BFA9 /* HSLASpectrum.swift in Sources */,
-				92BCE72B256165330029DD3F /* PlayerViewModel.swift in Sources */,
 				92D6479B255CB26800856900 /* PlaylistViewController.swift in Sources */,
 				92A284F62560E40C00739A94 /* DisplayItem.swift in Sources */,
 				92068651257B3D9700D8CC89 /* ToogleTableViewCell.swift in Sources */,
+				929C03C8258F722D009F6A2F /* Color.swift in Sources */,
 				9228C6D325569F0A0092FBB6 /* Codable.swift in Sources */,
 				92698EB1255FEFF1009F3A9F /* MoyaProvider+Rx.swift in Sources */,
 				92A284D52560DAD200739A94 /* Strings.swift in Sources */,
@@ -1842,7 +1846,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1866,7 +1870,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

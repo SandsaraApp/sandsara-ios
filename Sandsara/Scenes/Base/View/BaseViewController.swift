@@ -22,7 +22,7 @@ struct NoOutputParam: OutputParamView {}
 class BaseViewController<Input: InputParamView>: UIViewController {
 
     let once = Once()
-    private let _disposeBag = DisposeBag()
+    var _disposeBag = DisposeBag()
     var disposeBag: DisposeBag! {
         return _disposeBag
     }

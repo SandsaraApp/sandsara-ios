@@ -18,6 +18,7 @@ enum TrackListViewModelContract {
     struct Input: InputType {
         let playlistItem: DisplayItem
         let viewWillAppearTrigger: PublishRelay<()>
+        let downloadBtnTrigger: PublishRelay<()>
     }
 
     struct Output: OutputType {
@@ -41,6 +42,22 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
             self.buildCellVM()
+        }.disposed(by: disposeBag)
+
+        inputs.downloadBtnTrigger.subscribeNext { [weak self] in
+            guard let self = self else { return }
+            let isFavlist = !self.inputs.playlistItem.isLocal
+            let items = self.inputs.playlistItem.tracks
+                .map { DisplayItem(track: $0) }
+                .map { TrackCellViewModel(inputs:
+                    !DataLayer.loadDownloadedTrack(LocalTrack(track: $0)) ? TrackCellVMContract.Input(track: $0, downloadTrigger: BehaviorRelay<()>(value: ())) : TrackCellVMContract.Input(track: $0)
+                    )}
+                .map { PlaylistDetailCellVM.track($0) }
+            self.datas.accept(
+                [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem,
+                                                                                                                        isFavlist: isFavlist)))] +
+                    items
+            )
         }.disposed(by: disposeBag)
 
         setOutput(Output(datasources: datas.asDriver()))
@@ -102,6 +119,8 @@ enum TrackCellVMContract {
     struct Input: InputType {
         var track: DisplayItem
         var saved: Bool = false
+        var progress = BehaviorRelay<Float>(value: 0)
+        var downloadTrigger: BehaviorRelay<()>?
     }
 
     struct Output: OutputType {
@@ -109,6 +128,7 @@ enum TrackCellVMContract {
         let authorTitle: Driver<String>
         let thumbnailUrl: URL?
         let saved: Driver<Bool>
+        let syncProgress: Driver<Float>
     }
 }
 
@@ -119,7 +139,7 @@ class TrackCellViewModel: BaseCellViewModel<TrackCellVMContract.Input,
         setOutput(Output(title: Driver.just(inputs.track.title),
                          authorTitle: Driver.just(L10n.authorBy(inputs.track.author)),
                          thumbnailUrl: url,
-                         saved: Driver.just(DataLayer.checkTrackIsSynced(inputs.track))))
+                         saved: Driver.just(inputs.saved), syncProgress: inputs.progress.asDriver()))
     }
 }
 

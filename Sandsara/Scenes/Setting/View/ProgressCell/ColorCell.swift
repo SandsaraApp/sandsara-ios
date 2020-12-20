@@ -26,9 +26,11 @@ class ColorCell: BaseCollectionViewCell<PresetCellViewModel> {
             .outputs
             .color
             .driveNext { color in
-                self.gradientView.colors = color.colors
-                self.gradientView.locations = color.posistion.map {
-                    $0 / 255.0
+                self.gradientView.colors = color.colors.map {
+                    UIColor(hexString: $0)
+                }
+                self.gradientView.locations = color.position.map {
+                    CGFloat($0) / 255.0
                 }
 
                 self.layoutIfNeeded()

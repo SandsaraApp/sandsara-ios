@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,6 +39,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kxz-Gf-OeQ">
+                                <rect key="frame" x="0.0" y="41" width="245" height="1"/>
+                                <color key="progressTintColor" name="primary"/>
+                            </progressView>
                         </subviews>
                     </stackView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-uX-j9F">
@@ -63,6 +67,7 @@
             <color key="backgroundColor" name="background"/>
             <connections>
                 <outlet property="authorLabel" destination="3rR-h7-h65" id="TFJ-zV-TCp"/>
+                <outlet property="progressView" destination="kxz-Gf-OeQ" id="PFF-on-8io"/>
                 <outlet property="syncBtn" destination="LdL-uX-j9F" id="cUn-Sd-Bxv"/>
                 <outlet property="syncBtnLeadingConstraint" destination="dSO-Rr-mKg" id="eaZ-O5-07x"/>
                 <outlet property="syncBtnTrailingConstraint" destination="Rbs-37-2nZ" id="Ttv-oH-i7H"/>
@@ -77,6 +82,9 @@
         <image name="sync" width="28" height="28"/>
         <namedColor name="background">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="primary">
+            <color red="0.9100000262260437" green="0.9100000262260437" blue="0.9100000262260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

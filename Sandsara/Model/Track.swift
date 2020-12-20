@@ -18,10 +18,39 @@ class File: Codable {
     var filename = ""
     var size: Int64 = 0
     var type = ""
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case url
+        case filename
+        case size
+        case type
+    }
+
+    init() {}
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        container.decodeIfPresent(String.self, forKey: .id, assignTo: &id)
+        container.decodeIfPresent(String.self, forKey: .url, assignTo: &url)
+        container.decodeIfPresent(String.self, forKey: .filename, assignTo: &filename)
+        container.decodeIfPresent(String.self, forKey: .type, assignTo: &type)
+        container.decodeIfPresent(Int64.self, forKey: .size, assignTo: &size)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var nestedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try nestedContainer.encode(id, forKey: .id)
+        try nestedContainer.encode(url, forKey: .url)
+        try nestedContainer.encode(filename, forKey: .filename)
+        try nestedContainer.encode(type, forKey: .type)
+        try nestedContainer.encode(size, forKey: .size)
+    }
 }
 
 class TracksResponse: Decodable {
-    var tracks: [Track] = []
+    var tracks: [TrackResponse] = []
 
     enum CodingKeys: String, CodingKey {
         case records
@@ -29,9 +58,28 @@ class TracksResponse: Decodable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent([Track].self, forKey: .records, assignTo: &tracks)
+        container.decodeIfPresent([TrackResponse].self, forKey: .records, assignTo: &tracks)
     }
 }
+
+class TrackResponse: Decodable {
+    var playlist: Track = Track()
+
+    enum CodingKeys: String, CodingKey {
+        case fields
+        case id
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        container.decodeIfPresent(Track.self, forKey: .fields, assignTo: &playlist)
+
+        if let id = try container.decodeIfPresent(String.self, forKey: .id) {
+            playlist.trackId = id
+        }
+    }
+}
+
 
 class Track: Codable {
     var trackId = ""
@@ -39,10 +87,9 @@ class Track: Codable {
     var title = ""
     var thumbnail: [Thumbnail]?
     var author = ""
-    var file: File?
+    var file: [File]?
 
     enum CodingKeys: String, CodingKey {
-        case fields
         case trackId = "id"
         case id = "trackNumber"
         case title = "name"
@@ -51,19 +98,22 @@ class Track: Codable {
         case file
     }
 
+    init() {} 
+
     init(id: Int, title: String, trackId: String ,thumbnail: [Thumbnail]?, author: String, file: File?) {
         self.id = id
         self.title = title
         self.thumbnail = thumbnail
         self.author = author
-        self.file = file
+        self.file = [file ?? File()]
         self.trackId = trackId
     }
 
     required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        container.decodeIfPresent(String.self, forKey: .trackId, assignTo: &trackId)
-        let fieldContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .fields)
+        let fieldContainer = try decoder.container(keyedBy: CodingKeys.self)
+        if let id = try? fieldContainer.decodeIfPresent(String.self, forKey: .trackId) {
+            self.trackId = id
+        }
         fieldContainer.decodeIfPresent(Int.self, forKey: .id, assignTo: &id)
         fieldContainer.decodeIfPresent(String.self, forKey: .title, assignTo: &title)
         fieldContainer.decodeIfPresent(String.self, forKey: .author, assignTo: &author)
@@ -72,19 +122,19 @@ class Track: Codable {
             self.thumbnail = thumbnail
         }
 
-        if let file = try fieldContainer.decodeIfPresent([File].self, forKey: .file)?.first {
+        if let file = try fieldContainer.decodeIfPresent([File].self, forKey: .file) {
             self.file = file
         }
     }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(trackId, forKey: .trackId)
-        try container.encode(title, forKey: .title)
-        try container.encode(thumbnail, forKey: .thumbnail)
-        try container.encode(author, forKey: .author)
-        try container.encode(file, forKey: .file)
+        var nestedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try nestedContainer.encode(id, forKey: .id)
+        try nestedContainer.encode(trackId, forKey: .trackId)
+        try nestedContainer.encode(title, forKey: .title)
+        try nestedContainer.encode(thumbnail, forKey: .thumbnail)
+        try nestedContainer.encode(author, forKey: .author)
+        try nestedContainer.encode(file, forKey: .file)
     }
 }
 
@@ -106,8 +156,8 @@ class LocalTrack: Object {
         self.thumbnail = track.thumbnail?.first?.url ?? ""
         self.id = track.id
         self.dateModified = Date()
-        self.fileName = track.file?.filename ?? ""
-        self.fileSize = track.file?.size ?? 0
+        self.fileName = track.file?.first?.filename ?? ""
+        self.fileSize = track.file?.first?.size ?? 0
         self.trackId = track.trackId
     }
 

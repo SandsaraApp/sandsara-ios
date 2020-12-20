@@ -17,6 +17,7 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
     @IBOutlet private weak var syncBtnTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var syncBtnLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var syncBtnWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var progressView: UIProgressView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,6 +37,15 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
     }
 
     override func bindViewModel() {
+        viewModel
+            .inputs
+            .downloadTrigger?
+            .subscribeNext {
+                if !DataLayer.loadDownloadedTrack(LocalTrack(track: self.viewModel.inputs.track)) {
+                    self.progressView.isHidden = false
+                    self.downloadAction()
+                }
+        }.disposed(by: disposeBag)
         viewModel
             .outputs
             .title
@@ -83,5 +93,27 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
         syncBtnTrailingConstraint.constant = isSynced ? 0 : 16
         syncBtnWidthConstraint.constant = isSynced ? 0 : 30
         syncBtnLeadingConstraint.constant = isSynced ? 16 : 10
+    }
+
+    private func downloadAction() {
+        let track = viewModel.inputs.track
+        let completion = BlockOperation {
+            print("downloaded \(self.viewModel.inputs.track.fileName) is done")
+            self.progressView.isHidden = true
+            self.progressView.progress = 0
+        }
+        let name = track.fileName; let size = track.fileSize; let urlString = track.fileURL
+        guard let url = URL(string: urlString) else { return }
+        let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+        if resultCheck.0 == false || resultCheck.1 < size {
+            let operation = DownloadManager.shared.queueDownload(url, item: track)
+            print(operation.progress.value)
+            operation
+                .progress.bind(to: self.progressView.rx.progress)
+                .disposed(by: self.disposeBag)
+            completion.addDependency(operation)
+        }
+
+        OperationQueue.main.addOperation(completion)
     }
 }

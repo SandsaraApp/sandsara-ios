@@ -83,7 +83,6 @@ class AsynchronousOperation: Operation {
 class DownloadManager: NSObject {
 
     /// Dictionary of operations, keyed by the `taskIdentifier` of the `URLSessionTask`
-
     fileprivate var operations = [Int: DownloadOperation]()
 
     static let shared = DownloadManager()
@@ -93,7 +92,7 @@ class DownloadManager: NSObject {
     private let queue: OperationQueue = {
         let _queue = OperationQueue()
         _queue.name = "download"
-        _queue.maxConcurrentOperationCount = 3    // I'd usually use values like 3 or 4 for performance reasons, but OP asked about downloading one at a time
+        _queue.maxConcurrentOperationCount = 1    // I'd usually use values like 3 or 4 for performance reasons, but OP asked about downloading one at a time
 
         return _queue
     }()
@@ -130,7 +129,6 @@ class DownloadManager: NSObject {
 // MARK: URLSessionDownloadDelegate methods
 
 extension DownloadManager: URLSessionDownloadDelegate {
-
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         operations[downloadTask.taskIdentifier]?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
@@ -143,21 +141,24 @@ extension DownloadManager: URLSessionDownloadDelegate {
 // MARK: URLSessionTaskDelegate methods
 
 extension DownloadManager: URLSessionTaskDelegate {
-
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)  {
         let key = task.taskIdentifier
         operations[key]?.urlSession(session, task: task, didCompleteWithError: error)
         operations.removeValue(forKey: key)
     }
-
 }
 
 /// Asynchronous Operation subclass for downloading
+
+import RxSwift
+import RxCocoa
 
 class DownloadOperation : AsynchronousOperation {
     let task: URLSessionTask
 
     let item: DisplayItem
+
+    let progress = BehaviorRelay<Float>(value: 0)
 
     init(session: URLSession, url: URL, item: DisplayItem) {
         self.item = item
@@ -200,27 +201,15 @@ extension DownloadOperation: URLSessionDownloadDelegate {
             print("File URL \(destinationURL)")
 
             if item.isPlaylist {
-                let completion = BlockOperation {
-                    print("all done")
-                }
-
                 DispatchQueue.main.async {
                     _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
+                    NotificationCenter.default.post(name: reloadNoti, object: self)
                 }
-
-                for track in item.tracks {
-                    guard let name = track.file?.filename, let size = track.file?.size, let urlString = track.file?.url, let url = URL(string: urlString) else { continue }
-                    let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
-                    if resultCheck.0 == false || resultCheck.1 < size {
-                        let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(track: track))
-                        completion.addDependency(operation)
-                    }
-                }
-                OperationQueue.main.addOperation(completion)
             } else {
                 DispatchQueue.main.async {
                     print("track \(self.item.fileName) exist hihi")
                     _ = DataLayer.addDownloadedTrack(self.item)
+                    NotificationCenter.default.post(name: reloadNoti, object: self)
                 }
             }
 
@@ -230,7 +219,8 @@ extension DownloadOperation: URLSessionDownloadDelegate {
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        let progress = Float(totalBytesWritten) / Float(item.fileSize)
+        self.progress.accept(progress)
         print("\(downloadTask.originalRequest!.url!.absoluteString) \(progress)")
     }
 }

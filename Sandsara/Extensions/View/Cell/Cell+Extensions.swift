@@ -36,6 +36,22 @@ extension UICollectionViewCell {
     }
 }
 
+extension UITableViewHeaderFooterView {
+    static var nib:UINib {
+        return UINib(nibName: identifier, bundle: nil)
+    }
+
+    static var identifier: String {
+        return String(describing: self)
+    }
+
+    func backgroundView(color: UIColor) {
+        let bgView = UIView(frame: self.bounds)
+        bgView.backgroundColor = color
+        insertSubview(bgView, at: 0)
+    }
+}
+
 extension UIColor {
     convenience init(hexFromString: String, alpha: CGFloat = 1.0) {
         var cString: String = hexFromString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

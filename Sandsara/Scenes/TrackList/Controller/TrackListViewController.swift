@@ -16,6 +16,8 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     private let viewWillAppearTrigger = PublishRelay<()>()
 
+    private let downloadBtnTrigger = PublishRelay<()>()
+
     typealias Section = SectionModel<String, PlaylistDetailCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -29,7 +31,8 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         setupTableView()
         viewModel = TrackListViewModel(apiService: SandsaraDataServices(),
                                        inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() ,
-                                                                                viewWillAppearTrigger: viewWillAppearTrigger))
+                                                                                viewWillAppearTrigger: viewWillAppearTrigger,
+                                                                                downloadBtnTrigger: downloadBtnTrigger))
     }
 
     override func bindViewModel() {
@@ -85,6 +88,9 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                 case .header(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistHeaderTableViewCell.identifier, for: indexPath) as? PlaylistHeaderTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    cell.playlistTrigger.subscribeNext {
+                        self.downloadBtnTrigger.accept(())
+                    }.disposed(by: cell.disposeBag)
                     cell.playAction.subscribeNext {
                         self.openPlayer(index: 0)
                     }.disposed(by: cell.disposeBag)
@@ -141,7 +147,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     private func openPlayer(index: Int) {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.selecledIndex.accept(index)
+        player.index = index
         player.tracks = self.viewModel.datas.value.map {
             switch $0 {
             case .track(let vm): return vm.inputs.track

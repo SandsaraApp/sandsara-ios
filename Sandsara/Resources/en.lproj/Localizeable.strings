@@ -57,3 +57,17 @@
 "x_track_need_to_be_synced" = "%d Tracks need to be synced";
 "x_min_esimated" = "%@ min estimated";
 "sync_all" = "Sync all";
+
+"sync_to_board" = "Sync to Sandsara";
+"add_to_queue" = "Add to Queue";
+"downloading" = "Downloading...";
+"next_by" = "Next by:";
+"syncing" = "Syncing...";
+"firmware_alert" = "Firmware Update Available v %@";
+"firmware_downloading" = "Downloading Firmware v %@";
+"firmware_syncing" = "Syncing Firmware v %@";
+"firmware_is_ready" = "Firmware v %@ is Ready";
+"firmware_update_now" = "Update Firmware Now";
+"firmware_notice" = "This process takes about 10 minutes and can’t be cancelled.";
+"sync_noti" = "Syncing tracks. Playback will resume soon.";
+"now_playing" = "Now Playing";

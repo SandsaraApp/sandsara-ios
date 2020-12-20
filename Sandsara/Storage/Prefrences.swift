@@ -63,9 +63,18 @@ struct Preferences {
         @UserDefault(Keys.connectedSandasa.key, defaultValue: nil)
         static var connectedSandasa: [String]?
 
+        @UserDefault(Keys.firmwareVersion.key, defaultValue: nil)
+        static var firmwareVersion: String?
+
+        @UserDefault(Keys.colors.key, defaultValue: nil)
+        static var colors: [ColorModel]?
+
+
         enum Keys: String {
             case currentAppLanguage
             case connectedSandasa
+            case colors
+            case firmwareVersion
 
             var key: String {
                 return Preferences.prefixDomain + self.rawValue

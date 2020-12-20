@@ -19,6 +19,8 @@ struct DisplayItem {
     var isSynced: Bool = false
     var isTestPlaylist: Bool = false
 
+    var fileURL = ""
+
     var tracks = [Track]()
 
     var trackId: String = ""
@@ -38,9 +40,10 @@ struct DisplayItem {
         self.thumbnail = track.thumbnail?.first?.url ?? ""
         self.id = track.id
         self.isPlaylist = isPlaylist
-        self.fileName = track.file?.filename ?? ""
-        self.fileSize = track.file?.size ?? 0
+        self.fileName = track.file?.first?.filename ?? ""
+        self.fileSize = track.file?.first?.size ?? 0
         self.trackId = track.trackId
+        self.fileURL = track.file?.first?.url ?? ""
     }
 
     init(playlist: Playlist, isPlaylist: Bool = true, isTestPlaylist: Bool = false) {
@@ -52,8 +55,9 @@ struct DisplayItem {
         self.isTestPlaylist = isTestPlaylist
         self.tracks = playlist.tracks
         self.isLocal = false
-        self.fileName = playlist.file?.filename ?? ""
-        self.fileSize = playlist.file?.size ?? 0
+        self.fileName = playlist.file?.first?.filename ?? ""
+        self.fileSize = playlist.file?.first?.size ?? 0
+        self.fileURL = playlist.file?.first?.url ?? ""
     }
 
     init(track: LocalTrack, isPlaylist: Bool = false, isLocal: Bool = true) {

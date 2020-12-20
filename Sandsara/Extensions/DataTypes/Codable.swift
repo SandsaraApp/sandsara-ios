@@ -10,20 +10,36 @@ import Foundation
 extension Encodable {
     /// Converting object to postable dictionary
     func toDictionary(_ encoder: JSONEncoder = JSONEncoder()) throws -> [String: Any] {
-        let data = try encoder.encode(self)
-        let object = try JSONSerialization.jsonObject(with: data)
-        guard let json = object as? [String: Any] else {
-            let context = DecodingError.Context(codingPath: [], debugDescription: "Deserialized object is not a dictionary")
-            throw DecodingError.typeMismatch(type(of: object), context)
+        var json = [String: Any]()
+        var data: Data = Data()
+        do {
+            data = try encoder.encode(self)
+        } catch(let error) {
+            throw error
         }
+
+        do {
+            json = try JSONSerialization.jsonObject(with: data) as? [String : Any] ?? [:]
+        } catch(let error) {
+            throw error
+        }
+
         return json
     }
 
     func toData(_ encoder: JSONEncoder = JSONEncoder()) -> Data? {
         do {
             let data = try encoder.encode(self)
+
+            let dict = try toDictionary(encoder)
+
+            debugPrint(dict)
+
+            debugPrint(data)
+
             return data
-        } catch {
+        } catch(let error) {
+            print(error.localizedDescription)
             return nil
         }
     }

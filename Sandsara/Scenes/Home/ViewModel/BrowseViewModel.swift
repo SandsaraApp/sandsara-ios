@@ -85,17 +85,6 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
             self.apiService
                 .getRecommendedPlaylists(option: self.apiService.getServicesOption(for: .recommendedplaylist))
                 .asObservable()
-                .doOnNext { [weak self] playlists in
-                    guard let self = self else { return }
-                    for playlist in playlists {
-                        guard let name = playlist.file?.filename, let size = playlist.file?.size, let urlString = playlist.file?.url, let url = URL(string: urlString) else { continue }
-                        let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
-                        if resultCheck.0 == false || resultCheck.1 < size {
-                            let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(playlist: playlist))
-                            self.completion.addDependency(operation)
-                        }
-                    }
-                }
                 .subscribeNext { playlists in
                     let playlists = playlists.map { DisplayItem(playlist: $0)}
                     self.cachedPlaylists.accept(playlists)
@@ -103,17 +92,6 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
                     self.apiService
                         .getRecommendTracks(option: self.apiService.getServicesOption(for: .recommendedtracks))
                         .asObservable()
-                        .doOnNext { [weak self] playlists in
-                            guard let self = self else { return }
-                            for playlist in playlists {
-                                guard let name = playlist.file?.filename, let size = playlist.file?.size, let urlString = playlist.file?.url, let url = URL(string: urlString) else { continue }
-                                let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
-                                if resultCheck.0 == false || resultCheck.1 < size {
-                                    let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(track: playlist))
-                                    self.completion.addDependency(operation)
-                                }
-                            }
-                        }
                         .subscribeNext { tracks in
                             let tracks = tracks.map { DisplayItem(track: $0) }
                             self.tracks.accept(tracks)
@@ -126,8 +104,6 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
         let datasources = Driver.combineLatest(self.playlists.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendedPlaylists ?? []).map { DisplayItem(playlist: $0)}), self.tracks.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendTracks ?? []).map { DisplayItem(track: $0)})).map {
             return [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: $0)), RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedTracks, items: $1))]
         }
-
-        OperationQueue.main.addOperation(self.completion)
 
         setOutput(Output(datasources: datasources))
     }
