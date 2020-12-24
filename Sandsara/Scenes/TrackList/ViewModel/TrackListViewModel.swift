@@ -78,7 +78,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
             )
         } else {
             if inputs.playlistItem.isTestPlaylist {
-                let isFavlist = true
+                let isFavlist = false
                 let list = DataLayer.loadDownloadedDetailList(name: inputs.playlistItem.title)
                 let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }.map {
                     PlaylistDetailCellVM.track($0)
@@ -90,7 +90,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
                         showItems
                 )
             } else {
-                let isFavlist = !inputs.playlistItem.isLocal
+                let isFavlist = false
                 let items = inputs.playlistItem.tracks
                     .map { DisplayItem(track: $0) }
                     .map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }
@@ -119,8 +119,8 @@ enum TrackCellVMContract {
     struct Input: InputType {
         var track: DisplayItem
         var saved: Bool = false
-        var progress = BehaviorRelay<Float>(value: 0)
         var downloadTrigger: BehaviorRelay<()>?
+        var syncTrigger: BehaviorRelay<()>?
     }
 
     struct Output: OutputType {
@@ -128,7 +128,6 @@ enum TrackCellVMContract {
         let authorTitle: Driver<String>
         let thumbnailUrl: URL?
         let saved: Driver<Bool>
-        let syncProgress: Driver<Float>
     }
 }
 
@@ -139,7 +138,7 @@ class TrackCellViewModel: BaseCellViewModel<TrackCellVMContract.Input,
         setOutput(Output(title: Driver.just(inputs.track.title),
                          authorTitle: Driver.just(L10n.authorBy(inputs.track.author)),
                          thumbnailUrl: url,
-                         saved: Driver.just(inputs.saved), syncProgress: inputs.progress.asDriver()))
+                         saved: Driver.just(DataLayer.checkTrackIsSynced(inputs.track))))
     }
 }
 

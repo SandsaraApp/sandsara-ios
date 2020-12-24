@@ -22,12 +22,12 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
     var playlistTitle: String?
 
-
+    let syncAll = PublishRelay<()>()
 
     override func setupViewModel() {
         setupTableView()
         isPlaySingle = true
-        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger, syncAll: syncAll))
         viewWillAppearTrigger.accept(())
     }
 
@@ -83,6 +83,9 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
                 case .header(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackCountTableViewCell.identifier, for: indexPath) as? TrackCountTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    cell.playlistTrigger
+                        .bind(to: self.syncAll)
+                        .disposed(by: cell.disposeBag)
                     return cell
                 case .track(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}

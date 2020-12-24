@@ -179,3 +179,22 @@ class DownloadedPlaylist: Object {
         self.fileSize = track.fileSize
     }
 }
+
+
+class SyncedPlaylist: Object {
+    @objc dynamic var playlistName: String = ""
+    @objc dynamic var thumbnail: String = ""
+    @objc dynamic var author: String = ""
+    @objc dynamic var fileName: String = ""
+    @objc dynamic var fileSize: Int64 = 0
+    let tracks = List<LocalTrack>()
+    
+    required convenience init(track: DisplayItem) {
+        self.init()
+        self.playlistName = track.title
+        self.author = track.author
+        self.thumbnail = track.thumbnail
+        self.fileName = track.fileName
+        self.fileSize = track.fileSize
+    }
+}

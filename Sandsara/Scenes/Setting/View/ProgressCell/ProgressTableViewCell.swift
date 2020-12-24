@@ -45,6 +45,18 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .changed
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .bind(to: viewModel.inputs.progress).disposed(by: disposeBag)
+
+        progressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
+    }
+
+    @objc func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
+        guard let slider = gestureRecognizer.view as? UISlider else { return }
+        let pointTapped = gestureRecognizer.location(in: slider)
+
+        let positionOfSlider = slider.bounds.origin
+        let widthOfSlider = slider.bounds.size.width
+        let newValue = ((pointTapped.x - positionOfSlider.x) * CGFloat(slider.maximumValue) / widthOfSlider)
+        slider.setValue(Float(newValue), animated: true)
     }
 
 }

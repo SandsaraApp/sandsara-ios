@@ -93,7 +93,12 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                         alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     case .factoryReset:
-                        viewModel.sendCommand(command: "1")
+                        let alert = UIAlertController(title: "Alert", message: "Do you want to factory reset the board ?", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { _ in
+                            viewModel.sendCommand(command: "1")
+                        }))
+                        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
                     default: break
                     }
                 default: break

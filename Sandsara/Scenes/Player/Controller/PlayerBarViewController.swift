@@ -14,6 +14,7 @@ import RxCocoa
 enum PlayerState {
     case noConnect
     case connected
+    case busy
     case haveTrack(displayItem: DisplayItem?)
 
     var isConnection: Bool {
@@ -98,7 +99,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated) 
+        super.viewWillAppear(animated)
     }
 
     override func popupItemDidUpdate() {
@@ -109,6 +110,11 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.view.addGestureRecognizer(self.popupContentView.popupInteractionGestureRecognizer)
                     }
                     switch state {
+                    case .busy:
+                        self.playerBar.isHidden = true
+                        self.connectionBar.isHidden = false
+                        self.connectionTitleLabel.text = L10n.syncNoti
+                        self.retryBtn.isHidden = true
                     case .connected:
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false

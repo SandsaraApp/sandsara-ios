@@ -27,7 +27,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var downloadBtn: ProgressButtonUIView!
     @IBOutlet weak var addToQueueBtn: UIButton!
-    @IBOutlet weak var sycnButton: UIButton!
+    @IBOutlet weak var sycnButton: ProgressButtonUIView!
 
     var isFavorite: Bool = false
     
@@ -36,7 +36,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     var tracks = [DisplayItem]()
     var playlistItem: DisplayItem?
 
-    var state: TrackState = .synced {
+    var state: TrackState = .download {
         didSet {
             trackDetailUIConfig()
         }
@@ -47,18 +47,23 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
         setupUIStyle()
         setupUIData()
         buttonAction()
-//        checkDownloaed()
-        trackDetailUIConfig()
+        checkDownloaed()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func reloadData() {
+        checkSynced()
     }
 
     private func setButtonStyle(button: UIButton?, title: String) {
@@ -119,6 +124,9 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
             let synced = DataLayer.checkTrackIsSynced(item)
             DispatchQueue.main.async {
                 self.state = synced ? .synced : .downloaded
+                if !synced {
+                    self.getCurrentSyncTask(item: item)
+                }
             }
         }
     }
@@ -152,7 +160,6 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
         setButtonStyle(button: playBtn, title: L10n.play)
         setButtonStyle(button: favBtn, title: L10n.favorite)
         setButtonStyle(button: addToPlaylistBtn, title: L10n.addToPlaylist)
-        setButtonStyle(button: sycnButton, title: L10n.syncToBoard)
         setButtonStyle(button: addToQueueBtn, title: L10n.addToQueue)
 
         downloadBtn.setupUI(title: L10n.download,
@@ -160,6 +167,12 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
                             font: FontFamily.OpenSans.regular.font(size: 18),
                             inProgressTitle: L10n.downloading,
                             color: Asset.primary.color)
+
+        sycnButton.setupUI(title: L10n.syncToBoard,
+                           image: Asset.sync1.image,
+                           font: FontFamily.OpenSans.regular.font(size: 18),
+                           inProgressTitle: L10n.syncing,
+                           color: Asset.primary.color)
     }
 
     private func setupUIData() {
@@ -192,24 +205,12 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
             PlayerViewController.shared.addToQueue(track: item)
         }.disposed(by: disposeBag)
 
-        sycnButton
-            .rx.tap.subscribeNext { [weak self] in
-                guard let self = self, let track = self.track else {return }
-                self.sycnButton.rotate360Degrees()
-                let inputString = track.fileName
-                let splits = inputString.components(separatedBy: ".")
-                FileServiceImpl.shared.sendFiles(fileName: splits.first ?? "", extensionName: splits.last ?? "")
-                FileServiceImpl.shared.sendSuccess.subscribeNext {
-                    if $0 {
-                        _ = DataLayer.addSyncedTrack(track)
-                        self.sycnButton.stopRotation()
-                        self.checkSynced()
-                    }
-                }.disposed(by: self.disposeBag)
-            }.disposed(by: disposeBag)
-
         downloadBtn.touchEvent = { [weak self] in
             self?.downloadAction()
+        }
+
+        sycnButton.touchEvent = { [weak self] in
+            self?.syncAction()
         }
     }
 
@@ -226,9 +227,39 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
             print(operation.progress.value)
             operation
                 .progress.bind(to: self.downloadBtn.progressBar.rx.progress)
-                .disposed(by: self.disposeBag)
+                .disposed(by: operation.disposeBag)
             completion.addDependency(operation)
+            OperationQueue.main.addOperation(completion)
+        } else {
+            _ = DataLayer.addDownloadedTrack(track)
         }
+    }
+
+    private func getCurrentSyncTask(item: DisplayItem) {
+        if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
+            DispatchQueue.main.async {
+                self.sycnButton.isTaskRunning = true
+            }
+            task.progress
+                .bind(to: self.sycnButton.progressBar.rx.progress)
+                .disposed(by: task.disposeBag)
+        }
+    }
+
+    private func syncAction() {
+        guard let track = track else { return }
+        let completion = BlockOperation {
+            self.checkSynced()
+        }
+
+        let operation = FileSyncManager.shared.queueDownload(item: track)
+        operation.progress
+            .bind(to: self.sycnButton.progressBar.rx.progress)
+            .disposed(by: operation.disposeBag)
+
+        FileSyncManager.shared.triggerOperation(id: track.trackId)
+
+        completion.addDependency(operation)
 
         OperationQueue.main.addOperation(completion)
     }

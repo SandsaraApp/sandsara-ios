@@ -314,6 +314,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     @IBAction func hsbaSliderGroupValueChanged(_ sender: HSBASliderGroup) {
         updateBackgroundColor()
+        sendColor()
     }
 
     @IBAction func hsbaSliderGroupTouchDown(_ sender: HSBASliderGroup) {

@@ -72,7 +72,7 @@ class AsynchronousOperation: Operation {
 
     /// Call this function to finish an operation that is currently executing
 
-    public final func finish() {
+    public func finish() {
         if !isFinished { state = .finished }
     }
 }
@@ -92,7 +92,7 @@ class DownloadManager: NSObject {
     private let queue: OperationQueue = {
         let _queue = OperationQueue()
         _queue.name = "download"
-        _queue.maxConcurrentOperationCount = 1    // I'd usually use values like 3 or 4 for performance reasons, but OP asked about downloading one at a time
+        _queue.maxConcurrentOperationCount = 4   // I'd usually use values like 3 or 4 for performance reasons, but OP asked about downloading one at a time
 
         return _queue
     }()
@@ -159,6 +159,8 @@ class DownloadOperation : AsynchronousOperation {
     let item: DisplayItem
 
     let progress = BehaviorRelay<Float>(value: 0)
+
+    let disposeBag = DisposeBag()
 
     init(session: URLSession, url: URL, item: DisplayItem) {
         self.item = item

@@ -24,8 +24,8 @@
                             <constraint firstAttribute="height" constant="76" id="ySb-bO-kZV"/>
                         </constraints>
                     </imageView>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="726-3v-ARn">
-                        <rect key="frame" x="113" y="27.5" width="245" height="41"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="726-3v-ARn">
+                        <rect key="frame" x="113" y="23" width="245" height="50.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hw-m7-e4T">
                                 <rect key="frame" x="0.0" y="0.0" width="245" height="20.5"/>
@@ -34,13 +34,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3rR-h7-h65">
-                                <rect key="frame" x="0.0" y="20.5" width="245" height="20.5"/>
+                                <rect key="frame" x="0.0" y="24.5" width="245" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kxz-Gf-OeQ">
-                                <rect key="frame" x="0.0" y="41" width="245" height="1"/>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kxz-Gf-OeQ">
+                                <rect key="frame" x="0.0" y="49" width="245" height="2.5"/>
                                 <color key="progressTintColor" name="primary"/>
                             </progressView>
                         </subviews>

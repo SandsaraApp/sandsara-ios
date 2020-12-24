@@ -17,7 +17,8 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var playlistCoverImage: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var downloadButton: LoadingButton!
+    @IBOutlet weak var downloadButton: ProgressButtonUIView!
+    @IBOutlet weak var syncButton: ProgressButtonUIView!
 
     let backAction = PublishRelay<()>()
 
@@ -26,6 +27,13 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
     let deleteAction = PublishRelay<()>()
 
     let playlistTrigger = PublishRelay<()>()
+
+    var state: TrackState = .download {
+        didSet {
+            trackDetailUIConfig()
+        }
+    }
+
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,6 +46,18 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
     }
 
     override func bindViewModel() {
+        downloadButton.setupUI(title: L10n.download,
+                               image: Asset.download.image,
+                               font: FontFamily.OpenSans.regular.font(size: 18),
+                               inProgressTitle: L10n.downloading,
+                               color: Asset.primary.color)
+
+        syncButton.setupUI(title: L10n.syncToBoard,
+                           image: Asset.sync1.image,
+                           font: FontFamily.OpenSans.regular.font(size: 18),
+                           inProgressTitle: L10n.syncing,
+                           color: Asset.primary.color)
+
         viewModel
             .outputs
             .isFavoriteList
@@ -60,34 +80,101 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
         playlistCoverImage.kf.indicatorType = .activity
         playlistCoverImage.kf.setImage(with: viewModel.outputs.thumbnailUrl)
 
+
+        downloadButton.touchEvent = { [weak self] in
+            self?.downloadAction()
+        }
+
+        syncButton.touchEvent = { [weak self] in
+            self?.syncAction()
+        }
         checkDownloaed()
+    }
 
-        downloadButton
-            .rx.tap.asDriver()
-            .driveNext {
-                let completion = BlockOperation {
-                    self.checkDownloaed()
-                    self.downloadButton.hideLoading()
-                    self.playlistTrigger.accept(())
-                }
-                let track = self.viewModel.inputs.track
-                let name = self.viewModel.inputs.track.fileName; let size = track.fileSize; let urlString = track.fileURL
-                guard let url = URL(string: urlString) else { return }
-                let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
-                if resultCheck.0 == false || resultCheck.1 < size {
-                    let operation = DownloadManager.shared.queueDownload(url, item: track)
-                    self.downloadButton.showLoading()
-                    completion.addDependency(operation)
-                }
+    private func downloadAction() {
+        let track = viewModel.inputs.track
+        let completion = BlockOperation {
+            self.checkDownloaed()
+            self.playlistTrigger.accept(())
+        }
+        let name = track.fileName; let size = track.fileSize; let urlString = track.fileURL
+        guard let url = URL(string: urlString) else { return }
+        let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+        if resultCheck.0 == false || resultCheck.1 < size {
+            let operation = DownloadManager.shared.queueDownload(url, item: track)
+            print(operation.progress.value)
+            operation
+                .progress.bind(to: self.downloadButton.progressBar.rx.progress)
+                .disposed(by: operation.disposeBag)
+            completion.addDependency(operation)
+            OperationQueue.main.addOperation(completion)
+        } else {
+            _ = DataLayer.createDownloaedPlaylist(playlist: track)
+        }
+    }
 
-                OperationQueue.main.addOperation(completion)
-        }.disposed(by: disposeBag)
+    private func getCurrentSyncTask(item: DisplayItem) {
+        if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
+            DispatchQueue.main.async {
+                self.syncButton.isTaskRunning = true
+            }
+            task.progress
+                .bind(to: self.syncButton.progressBar.rx.progress)
+                .disposed(by: task.disposeBag)
+        }
+    }
+
+    private func syncAction() {
+        let track = viewModel.inputs.track
+        let completion = BlockOperation {
+            self.checkSynced()
+        }
+
+        let operation = FileSyncManager.shared.queueDownload(item: track)
+        operation.progress
+            .bind(to: self.syncButton.progressBar.rx.progress)
+            .disposed(by: operation.disposeBag)
+
+        FileSyncManager.shared.triggerOperation(id: track.trackId)
+
+        completion.addDependency(operation)
+
+        OperationQueue.main.addOperation(completion)
+    }
+
+    private func checkSynced() {
+        let item = viewModel.inputs.track
+        guard !item.isLocal else {
+            self.state = .synced
+            return
+        }
+        let synced = DataLayer.loadSyncedList(name: item.title)
+        DispatchQueue.main.async {
+            self.state = synced ? .synced : .downloaded
+            if !synced {
+                self.getCurrentSyncTask(item: item)
+            }
+        }
     }
 
     func checkDownloaed() {
-        let check = DataLayer.loadDownloadedDetail(name: self.viewModel.inputs.track.title)
-        DispatchQueue.main.async {
-            self.downloadButton.isHidden = check
+        guard !viewModel.inputs.track.isTestPlaylist && !viewModel.inputs.track.isLocal
+        else {
+            checkSynced(); return
         }
+        let item = viewModel.inputs.track
+        let downloaded = DataLayer.loadDownloadedDetail(name: item.title)
+        DispatchQueue.main.async {
+            self.state = downloaded ? .downloaded : .download
+            if self.state == .downloaded {
+                self.checkSynced()
+            }
+        }
+    }
+
+    private func trackDetailUIConfig() {
+        playBtn.isHidden = (state == .download || state == .downloaded)
+        downloadButton.isHidden = state != .download
+        syncButton.isHidden = state != .downloaded
     }
 }

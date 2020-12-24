@@ -69,9 +69,6 @@ class FileServiceImpl {
                             print("Took \(diff) seconds")
                             self.seconds.accept(diff)
                             self.sendSuccess.accept(true)
-                            if isPlaylist {
-                                self.updatePlaylist(fileName: fileName)
-                            }
                         case .failure(let error):
                             self.sendSuccess.accept(false)
                             debugPrint("Send file error \(error.localizedDescription)")
@@ -196,26 +193,49 @@ class FileServiceImpl {
         }
     }
 
-    func updatePlaylist(fileName: String) {
+    func updatePlaylist(fileName: String, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.write(to: PlaylistService.playlistName, value: fileName) { result in
             switch result {
             case .success:
                 debugPrint("Play success")
+                completionHandler(true)
                 DeviceServiceImpl.shared.readPlaylistValue()
             case .failure(let error):
+                completionHandler(false)
                 debugPrint("Play error")
             }
         }
     }
 
-    func updateTrack(name: String) {
+    func updateTrack(name: String, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.write(to: PlaylistService.pathName, value: name) { result in
             switch result {
             case .success:
                 debugPrint("Play success")
                 DeviceServiceImpl.shared.readPlaylistValue()
+                completionHandler(true)
             case .failure(let error):
                 debugPrint("Play error")
+                completionHandler(false)
+            }
+        }
+    }
+
+    func checkFileExistOnSDCard(name: String, completionHandler: @escaping ((Bool) -> ())) {
+        bluejay.write(to: FileService.checkFileExist, value: name) { result in
+            switch result {
+            case .success:
+                bluejay.read(from: FileService.receiveFileRespone) { (result: ReadResult<String>) in
+                    switch result {
+                    case .success(let value):
+                        completionHandler(value == "1")
+                        print("Status \(value.debugDescription)")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }

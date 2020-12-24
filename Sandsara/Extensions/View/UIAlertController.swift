@@ -85,6 +85,7 @@ extension UIView {
     }
 }
 
+import SnapKit
 class LoadingButton: UIButton {
 
     struct ButtonState {
@@ -99,10 +100,10 @@ class LoadingButton: UIButton {
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = self.titleColor(for: .normal)
         self.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        let xCenterConstraint = NSLayoutConstraint(item: self, attribute: .centerX, relatedBy: .equal, toItem: activityIndicator, attribute: .centerX, multiplier: 1, constant: 0)
-        let yCenterConstraint = NSLayoutConstraint(item: self, attribute: .centerY, relatedBy: .equal, toItem: activityIndicator, attribute: .centerY, multiplier: 1, constant: 0)
-        self.addConstraints([xCenterConstraint, yCenterConstraint])
+        activityIndicator.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
         return activityIndicator
     }()
 
@@ -112,10 +113,11 @@ class LoadingButton: UIButton {
         for state in [UIControl.State.disabled] {
             let buttonState = ButtonState(state: state, title: title(for: state), image: image(for: state))
             buttonStates.append(buttonState)
-            setTitle("", for: state)
+          //  setTitle("", for: state)
             setImage(UIImage(), for: state)
         }
         self.buttonStates = buttonStates
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         isEnabled = false
     }
 
@@ -126,6 +128,7 @@ class LoadingButton: UIButton {
             setImage(buttonState.image, for: buttonState.state)
         }
         isEnabled = true
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
 }

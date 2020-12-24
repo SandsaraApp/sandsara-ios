@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Bluejay
 
 class PlayerViewController: BaseViewController<NoInputParam> {
     static var shared: PlayerViewController = {
@@ -36,6 +37,10 @@ class PlayerViewController: BaseViewController<NoInputParam> {
 
     var nowPlayingQueues = [DisplayItem]()
 
+    var timer: Timer?
+
+    var progress = BehaviorRelay<Float>(value: 0)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -46,8 +51,8 @@ class PlayerViewController: BaseViewController<NoInputParam> {
         if isReloaded {
             isReloaded = false
             if let item = playlistItem {
-                playFromDownloadedPlaylist(item: item)
                 showTrack(at: index)
+                playFromDownloadedPlaylist(item: item)
             } else {
                 showTrack(at: index)
                 playTrack(at: index)
@@ -103,12 +108,16 @@ extension PlayerViewController: UITableViewDelegate {
         headerView.nextBtn.addTarget(self, action: #selector(nextBtnTap), for: .touchUpInside)
         headerView.prevBtn.addTarget(self, action: #selector(prevBtnTap), for: .touchUpInside)
         headerView.trackProgressSlider.minimumValue = 0
-        headerView.trackProgressSlider.maximumValue = 1.0 // not sure
+        headerView.trackProgressSlider.maximumValue = 100 // not sure
 
         headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchValueChanged(_:)), for: .valueChanged)
         headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchBegan(_:)), for: .touchDown)
         headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
         headerView.trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
+
+        progress
+            .bind(to: headerView.trackProgressSlider.rx.value)
+            .disposed(by: headerView.disposeBag)
 
         return headerView
     }
@@ -172,7 +181,15 @@ extension PlayerViewController {
         }
 
         FileServiceImpl.shared.sendFiles(fileName: filename.components(separatedBy: ".").first ?? "", extensionName: filename.components(separatedBy: ".").last ?? "", isPlaylist: true)
-        playTrack(at: index)
+        FileServiceImpl.shared.sendSuccess.subscribeNext {
+            if $0 {
+                FileServiceImpl.shared.updatePlaylist(fileName: filename) { success in
+                    if success {
+                        self.playTrack(at: self.index)
+                    }
+                }
+            }
+        }.disposed(by: disposeBag)
     }
 
     func playFromDownloadedPlaylist(item: DisplayItem) {
@@ -195,7 +212,24 @@ extension PlayerViewController {
     }
 
     func playTrack(at index: Int) {
-        FileServiceImpl.shared.updateTrack(name: tracks[index].fileName)
+        DeviceServiceImpl.shared.status.subscribeNext { [weak self] status in
+            guard let self = self, let status = status else { return }
+            if status == .calibrating || status == .pause {
+                DeviceServiceImpl.shared.resumeDevice()
+                FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
+                    if success {
+                        self.readProgress()
+                    }
+                }
+            }
+            else if status == .running {
+                FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
+                    if success {
+                        self.readProgress()
+                    }
+                }
+            }
+        }.disposed(by: disposeBag)
     }
 
     func triggerPlayAction(at index: Int) {
@@ -260,6 +294,34 @@ extension PlayerViewController {
             self.tableView.beginUpdates()
             self.tableView.insertRows(at: [IndexPath(row: self.queues.count - 1, section: 0)], with: .automatic)
             self.tableView.endUpdates()
+        }
+    }
+
+    func readProgress() {
+        progress.accept(0)
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+        }
+        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
+    }
+
+    @objc func updateTimer(_ timer: Timer) {
+        if progress.value == 100 {
+            self.timer?.invalidate()
+            self.timer = nil
+            self.nextBtnTap()
+        } else {
+            bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
+                switch result {
+                case .success(let value):
+                    let float = Float(value) ?? 0
+                    print("Progress \(float)")
+                    self.progress.accept(float)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 }

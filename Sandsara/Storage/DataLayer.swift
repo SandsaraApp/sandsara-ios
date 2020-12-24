@@ -15,7 +15,7 @@ class DataLayer {
     static let realm = try? Realm()
 
 
-    private let schemaVersion: UInt64 = 4
+    private let schemaVersion: UInt64 = 5
 
     func config() {
         let config = Realm.Configuration(
@@ -265,21 +265,19 @@ class DataLayer {
         let localTrack = LocalTrack(track: track)
         guard let realm = realm else { return false }
 
-        var isExisted = true
+        var isExisted = false
         if let object = realm.objects(SyncedTracks.self).first {
             for syncedTrack in object.syncedTracks {
-                if syncedTrack.trackId == localTrack.trackId && !localTrack.isInvalidated {
+                if syncedTrack.trackId == localTrack.trackId {
                     isExisted = true
-                    break
+                    return isExisted
                 } else {
                     continue
                 }
             }
-            if isExisted == false {
-                write(realm: realm, writeClosure: {
-                    object.syncedTracks.append(localTrack)
-                })
-            }
+            write(realm: realm, writeClosure: {
+                object.syncedTracks.append(localTrack)
+            })
         } else {
             let list = SyncedTracks()
             write(realm: realm, writeClosure: {
@@ -289,7 +287,7 @@ class DataLayer {
                 list.syncedTracks.append(localTrack)
             })
         }
-        return false
+        return isExisted
     }
 
     static func deleteTrackFromSyncedPlaylist(_ trackToDelete: LocalTrack) {
@@ -363,9 +361,39 @@ class DataLayer {
         return true
     }
 
+    static func createSyncedPlaylist(playlist: DisplayItem) -> Bool {
+        guard let realm = realm else { return false }
+        let playlistToAdd = SyncedPlaylist(track: playlist)
+        let tracks = playlist.tracks.map {
+            LocalTrack(track: $0)
+        }
+        write(realm: realm, writeClosure: {
+            realm.add(playlistToAdd)
+        })
+
+        write(realm: realm, writeClosure: {
+            playlistToAdd.tracks.append(objectsIn: tracks)
+        })
+
+        return true
+    }
+
     static func loadDownloadedTracks() -> [LocalTrack] {
         var tracks = [LocalTrack]()
         if let list = realm?.objects(DownloadedTracks.self).first {
+            let sortedTracks = list.syncedTracks.sorted(byKeyPath: "dateModified", ascending: false)
+            for track in sortedTracks {
+                if !track.isInvalidated {
+                    tracks.append(track)
+                }
+            }
+        }
+        return tracks.unique { $0.trackId }
+    }
+
+    static func loadSyncedTracks() -> [LocalTrack] {
+        var tracks = [LocalTrack]()
+        if let list = realm?.objects(SyncedTracks.self).first {
             let sortedTracks = list.syncedTracks.sorted(byKeyPath: "dateModified", ascending: false)
             for track in sortedTracks {
                 if !track.isInvalidated {
@@ -404,6 +432,58 @@ class DataLayer {
             return true
         }
 
+        return false
+    }
+
+    static func loadSyncedList(name: String) -> Bool {
+        if (realm?.objects(SyncedPlaylist.self).filter("playlistName == '\(name)'").first) != nil {
+            return true
+        }
+        return false
+    }
+
+    static func deleteDownloadedPlaylist(_ name: String) -> Bool {
+        if let object = realm?.objects(DownloadedPlaylist.self).filter("playlistName == '\(name)'").first {
+            for track in object.tracks {
+                let fileName = track.fileName
+                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+                let url = NSURL(fileURLWithPath: path)
+                if let pathComponent = url.appendingPathComponent("\(fileName)") {
+                    let filePath = pathComponent.path
+                    let fileManager = FileManager.default
+                    if fileManager.fileExists(atPath: filePath) {
+                        do {
+                            try FileManager.default.removeItem(at: pathComponent)
+                        } catch let error as NSError {
+                            print("Error: \(error.domain)")
+                        }
+                    }
+                }
+            }
+
+            let fileName = object.fileName
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+            let url = NSURL(fileURLWithPath: path)
+            if let pathComponent = url.appendingPathComponent("\(fileName)") {
+                let filePath = pathComponent.path
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: filePath) {
+                    do {
+                        try FileManager.default.removeItem(at: pathComponent)
+                    } catch let error as NSError {
+                        print("Error: \(error.domain)")
+                    }
+                }
+            }
+
+            defer {
+                write(realm: realm!, writeClosure: {
+                    object.tracks.removeAll()
+                    realm?.delete(object)
+                })
+            }
+            return true
+        }
         return false
     }
 }

@@ -18,6 +18,8 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     private let downloadBtnTrigger = PublishRelay<()>()
 
+    private let syncBtnTrigger = PublishRelay<()>()
+
     typealias Section = SectionModel<String, PlaylistDetailCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -117,11 +119,17 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         viewWillAppearTrigger.accept(())
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func reloadData() {
+        self.viewWillAppearTrigger.accept(())
     }
 
     private func openTrackDetail(index: Int) {
@@ -167,7 +175,11 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         let alert = UIAlertController(title: "Alert", message: L10n.alertDeletePlaylist, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { _ in
-            _ = DataLayer.deletePlaylist(item.title)
+            if !item.isLocal || item.isTestPlaylist {
+                _ = DataLayer.deleteDownloadedPlaylist(item.title)
+            } else {
+                _ = DataLayer.deletePlaylist(item.title)
+            }
             self.navigationController?.popViewController(animated: true)
         }))
 

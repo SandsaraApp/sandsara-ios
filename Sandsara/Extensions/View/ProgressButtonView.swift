@@ -20,8 +20,19 @@ class ProgressButtonUIView: UIView {
     var touchEvent: (() -> ())?
 
     private var vStack: UIStackView!
-    private var button: UIButton!
+    private var button: LoadingButton!
     var progressBar: UIProgressView!
+
+    var isTaskRunning: Bool = false {
+        didSet {
+            if isTaskRunning {
+                isUserInteractionEnabled = false
+                progressBar.isHidden = false
+                button.setTitle(inProgressTitle, for: .normal)
+                vStack.spacing = 10.0
+            }
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -50,8 +61,6 @@ class ProgressButtonUIView: UIView {
         vStack.axis = .vertical
         vStack.alignment = .fill
         vStack.distribution = .equalSpacing
-        vStack.spacing = 10.0
-
         addSubview(vStack)
         vStack.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -59,7 +68,7 @@ class ProgressButtonUIView: UIView {
     }
 
     private func buttonInit() {
-        button = UIButton(type: .system)
+        button = LoadingButton(type: .system)
         button.addTarget(self, action: #selector(bthTouch(_:)), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
         button.contentVerticalAlignment = .center
@@ -81,13 +90,19 @@ class ProgressButtonUIView: UIView {
     }
 
     @objc func bthTouch(_ sender: UIButton) {
-        isUserInteractionEnabled = false
-        progressBar.isHidden = false
-        sender.setTitle(inProgressTitle, for: .normal)
+        isTaskRunning = true
+        button.showLoading()
         touchEvent?()
     }
 
     func updateProgress(progress: Float) {
         progressBar.progress = progress
+    }
+
+    private func updateRunningTask() {
+        isUserInteractionEnabled = false
+        progressBar.isHidden = false
+        button.setTitle(inProgressTitle, for: .normal)
+        button.showLoading()
     }
 }
