@@ -12,12 +12,12 @@ import RxCocoa
 
 
 enum PlayerState {
-    case noConnect
     case connected
-    case haveTrack(displayItem: DisplayItem)
+    case busy
+    case haveTrack(displayItem: DisplayItem?)
 
     var isConnection: Bool {
-        return self == .connected || self == .noConnect
+        return self == .connected || self == .busy
     }
 }
 
@@ -41,17 +41,17 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     @IBOutlet weak var connectionBar: UIView!
     @IBOutlet weak var playerBar: UIView!
     @IBOutlet weak var connectionTitleLabel: UILabel!
-    @IBOutlet weak var retryBtn: UIButton!
     @IBOutlet weak var trackImageView: UIImageView!
     @IBOutlet weak var songLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var subTitleLabel: UILabel!
 
     @IBOutlet weak var playerContentView: UIView!
 
     private let disposeBag = DisposeBag()
 
-    var state: PlayerState = .noConnect {
+    var state: PlayerState = .connected {
         didSet {
             popupItemDidUpdate()
         }
@@ -75,20 +75,14 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         connectionTitleLabel.font = FontFamily.OpenSans.bold.font(size: 12)
-        retryBtn.titleLabel?.font = FontFamily.OpenSans.regular.font(size: 12)
-
         songLabel.font = FontFamily.OpenSans.bold.font(size: 12)
         authorLabel.font = FontFamily.OpenSans.light.font(size: 12)
+        subTitleLabel.font = FontFamily.OpenSans.light.font(size: 12)
 
         view.translatesAutoresizingMaskIntoConstraints = false
 
         updateConstraint()
-
-        retryBtn.rx.tap.asDriver().driveNext { [weak self] in
-            self?.openScanVC()
-        }.disposed(by: disposeBag)
 
         pauseButton.rx.tap.asDriver().driveNext {
             print("tapped")
@@ -98,7 +92,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated) 
+        super.viewWillAppear(animated)
     }
 
     override func popupItemDidUpdate() {
@@ -109,23 +103,24 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.view.addGestureRecognizer(self.popupContentView.popupInteractionGestureRecognizer)
                     }
                     switch state {
+                    case .busy:
+                        self.playerBar.isHidden = true
+                        self.connectionBar.isHidden = false
+                        self.connectionTitleLabel.text = L10n.syncNoti
+                        self.subTitleLabel.text = nil
                     case .connected:
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
-                        self.connectionTitleLabel.text = L10n.sandsaraDetected
-                        self.retryBtn.isHidden = false
-                    case .noConnect:
-                        self.playerBar.isHidden = true
-                        self.connectionBar.isHidden = false
-                        self.connectionTitleLabel.text = L10n.noSandsaraDetected
-                        self.retryBtn.isHidden = false
+                        DeviceServiceImpl.shared.deviceName
+                            .asDriver().drive(self.connectionTitleLabel.rx.text)
+                            .disposed(by: self.disposeBag)
+                        self.subTitleLabel.text = "Connected"
                     case .haveTrack(let item):
-
                         self.playerBar.isHidden = false
                         self.connectionBar.isHidden = true
-                        self.trackImageView.kf.setImage(with: URL(string: item.thumbnail))
-                        self.songLabel.text = item.title
-                        self.authorLabel.text = L10n.authorBy(item.author)
+                        self.trackImageView.kf.setImage(with: URL(string: item?.thumbnail ?? ""))
+                        self.songLabel.text = item?.title
+                        self.authorLabel.text = L10n.authorBy(item?.author ?? "")
                     }
             }.disposed(by: disposeBag)
         }

@@ -17,6 +17,7 @@ enum AllTrackCellVM {
 enum AllTracksViewModelContract {
     struct Input: InputType {
         let viewWillAppearTrigger: PublishRelay<()>
+        let syncAll: PublishRelay<()>
     }
 
     struct Output: OutputType {
@@ -29,6 +30,9 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
     private let apiService: SandsaraDataServices
     let datas = BehaviorRelay<[AllTrackCellVM]>(value: [])
 
+    private var tracks = [TrackCellViewModel]()
+
+
     init(apiService: SandsaraDataServices, inputs: BaseViewModel<AllTracksViewModelContract.Input, AllTracksViewModelContract.Output>.Input) {
         self.apiService = apiService
         super.init(inputs: inputs)
@@ -40,46 +44,58 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             guard let self = self else { return }
             self.buildCellVM()
         }.disposed(by: disposeBag)
+        let completion = BlockOperation {
+            self.inputs.viewWillAppearTrigger.accept(())
+        }
+        inputs.syncAll.subscribeNext { [weak self] in
+            guard let self = self else { return }
+            for track in self.tracks  {
+                let operation = FileSyncManager.shared.queueDownload(item: track.inputs.track)
+                FileSyncManager.shared.triggerOperation(id: track.inputs.track.trackId)
+                completion.addDependency(operation)
+                OperationQueue.main.addOperation(completion)
+            }
+            self.inputs.viewWillAppearTrigger.accept(())
+        }.disposed(by: disposeBag)
 
         setOutput(Output(datasources: datas.asDriver()))
     }
 
     private func buildCellVM()  {
         var datas = [AllTrackCellVM]()
-        datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: 10), timeRemaining: .init(value: 350), syncAllTrigger: .init()))))
-        apiService.getAllTracks(option: apiService.getServicesOption(for: .alltrack)).asObservable().subscribeNext { values in
-            let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: false)) }.map {
-                AllTrackCellVM.track($0)
-            }
-            datas.append(contentsOf: items)
-            self.datas.accept(datas)
-            self.emitEventLoading(false)
-        }.disposed(by: disposeBag)
+
+        let list = DataLayer.loadDownloadedTracks()
+        let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
+            AllTrackCellVM.track($0)
+        }
+        if items.count > 0 {
+            datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: DataLayer.loadDownloadedTracks().count - DataLayer.loadSyncedTracks().count), timeRemaining: FileSyncManager.shared.getCurrentTimeRunning(), syncAllTrigger: inputs.syncAll))))
+        }
+        datas.append(contentsOf: items)
+        self.datas.accept(datas)
+        self.emitEventLoading(false)
     }
 }
-
 
 enum DownloadCellVMContract {
     struct Input: InputType {
         var notSyncedTrack: BehaviorRelay<Int>
-        var timeRemaining: BehaviorRelay<TimeInterval>
+        var timeRemaining: Observable<TimeInterval>?
         var syncAllTrigger: PublishRelay<()>
     }
 
     struct Output: OutputType {
         var notSyncedTrack: Driver<Int>
-        var timeRemaining: Driver<String>
+        var timeRemaining: Driver<String>?
     }
 }
 
-final class DownloadCellViewModel: BaseCellViewModel<DownloadCellVMContract.Input, DownloadCellVMContract.Output> {
-    override func transform() {
-        inputs.syncAllTrigger.subscribeNext { [weak self] in
-            // TODO: call api, update not sync / time here 
-        }.disposed(by: disposeBag)
 
+final class DownloadCellViewModel: BaseCellViewModel<DownloadCellVMContract.Input, DownloadCellVMContract.Output> {
+
+    override func transform() {
         setOutput(Output(notSyncedTrack: inputs.notSyncedTrack.asDriver(),
-                         timeRemaining: inputs.timeRemaining.map {
+                         timeRemaining: inputs.timeRemaining?.map {
                             String(format:"%.1f", $0 / 60)
                          }.asDriver(onErrorJustReturn: "")))
     }

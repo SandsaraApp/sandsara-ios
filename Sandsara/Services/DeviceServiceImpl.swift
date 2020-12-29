@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 
 enum SandsaraStatus: Int {
+    case unknown
     case calibrating = 1
     case running
     case pause
@@ -48,6 +49,10 @@ class DeviceServiceImpl {
 
     let disposeBag = DisposeBag()
 
+    let currentPlaylistName = BehaviorRelay<String>(value: "")
+
+    let currentPath = BehaviorRelay<String>(value: "")
+
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -76,11 +81,12 @@ class DeviceServiceImpl {
             do {
                 let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
                 let intValue = Int(deviceStatus) ?? 0
-                let status = SandsaraStatus(rawValue: intValue) ?? .calibrating
+                let status = SandsaraStatus(rawValue: intValue) ?? .unknown
                 self.status.accept(status)
                 self.sleepStatus.accept(status == .sleep)
                 print("Device status \(status)")
             } catch(let error) {
+                self.status.accept(.unknown)
                 print(error.localizedDescription)
             }
 
@@ -125,7 +131,22 @@ class DeviceServiceImpl {
                 print(error.localizedDescription)
             }
 
+            do {
+                let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
+                print("Led speed \(selectedPalette)")
+                self.currentPlaylistName.accept(selectedPalette)
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
 
+
+            do {
+                let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathName)
+                print("Led speed \(selectedPalette)")
+                self.currentPath.accept(selectedPalette)
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
             return false
         } completionOnMainThread: { result in
             debugPrint(result)
@@ -271,5 +292,32 @@ class DeviceServiceImpl {
         flipDirection.accept(false)
         brightness.accept(0)
         lightMode.accept(.rotate)
+
+        currentPlaylistName.accept("")
+        currentPath.accept("")
+    }
+
+    func readPlaylistValue() {
+        bluejay.run { sandsaraBoard -> Bool in
+        do {
+            let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
+            print("Led speed \(selectedPalette)")
+            self.currentPlaylistName.accept(selectedPalette)
+        } catch(let error) {
+            print(error.localizedDescription)
+        }
+
+
+        do {
+            let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathName)
+            print("Led speed \(selectedPalette)")
+            self.currentPath.accept(selectedPalette)
+        } catch(let error) {
+            print(error.localizedDescription)
+        }
+            return false
+        } completionOnMainThread: { result in
+            debugPrint(result)
+        }
     }
 }

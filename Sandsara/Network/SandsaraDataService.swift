@@ -14,6 +14,7 @@ let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 class SandsaraDataServices {
     private var recommendTracks: [Track]?
     private var recommendPlaylists: [Playlist]?
+    private var colors: [ColorModel]?
     private var allTracks: [Track]?
     private var allPlaylist: [Playlist]?
     private var playlistDetail: [Track]?
@@ -44,6 +45,7 @@ class SandsaraDataServices {
             }
             return .server
         case .recommendedplaylist:
+            recommendPlaylists = Preferences.PlaylistsDomain.recommendedPlaylists
             if recommendPlaylists != nil {
                 return .both
             }
@@ -58,6 +60,8 @@ class SandsaraDataServices {
                 return .both
             }
             return .server
+        case .colorPalette:
+            return Preferences.AppDomain.colors == nil ? .server : .cache
         }
     }
 
@@ -80,7 +84,6 @@ class SandsaraDataServices {
 
     func getRecommendTracks(option: ServiceOption) -> Observable<[Track]> {
         let serverObservable = getRecommendedTracksFromServer()
-
         let localObservable = dataAccess
             .getLocalRecommendTracks()
             .compactMap { $0 }
@@ -300,6 +303,70 @@ class SandsaraDataServices {
             }
         default:
             if let cardList = self.recommendPlaylists {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            } else {
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
+        }
+    }
+
+    func mockData() -> Observable<[Track]> {
+        var tracks = [Track]()
+//        tracks = [
+//            Track(id: 0, title: "Bumerang1", thumbnail: "http://uninterested-cows.surge.sh/images/layer1.png", author: "Test", fileName: "Sandsara-trackNumber-0001.thr"),
+//            Track(id: 1, title: "Bumerang2", thumbnail: "http://uninterested-cows.surge.sh/images/layer2.png", author: "Test", fileName: "Sandsara-trackNumber-0002.thr"),
+//            Track(id: 2, title: "Bumerang3", thumbnail: "http://uninterested-cows.surge.sh/images/layer3.png", author: "Test", fileName: "Sandsara-trackNumber-0003.thr"),
+//            Track(id: 3, title: "Bumerang4", thumbnail: "http://uninterested-cows.surge.sh/images/layer4.png", author: "Test", fileName: "Sandsara-trackNumber-0004.thr"),
+//            Track(id: 4, title: "Bumerang5s", thumbnail: "http://uninterested-cows.surge.sh/images/layer5.png", author: "Test", fileName: "Sandsara-trackNumber-0005.thr")
+//        ]
+
+        return Observable.just(tracks)
+    }
+
+    private func getColorsFromServer() -> Observable<[ColorModel]> {
+        return api
+            .getColorPalettes()
+            .do(onSuccess: { playlists in
+                self.colors = playlists
+            }, onError: { error in
+                debugPrint(error.localizedDescription)
+            })
+            .asObservable()
+            .flatMap { [weak self] result -> Observable<([ColorModel], Bool)> in
+                guard let self = self else { return Observable.just((result, false)) }
+                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveColors(colors: result)) { ($0, $1) }
+            }
+            .map { (cards, _) -> [ColorModel] in
+                return cards
+            }
+    }
+
+
+    func getColorPalettes(option: ServiceOption) -> Observable<[ColorModel]> {
+        let serverObservable = getColorsFromServer()
+        let localObservable = dataAccess
+            .getLocalPalettes()
+            .compactMap { $0 }
+            .doOnNext({ [weak self] cache in
+                guard let self = self else { return }
+                self.colors = cache
+            })
+
+        switch option {
+        case .server:
+            return serverObservable
+                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+        case .cache:
+            if let cardList = self.colors {
+                return Observable.of(cardList)
+            } else {
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
+        default:
+            if let cardList = self.colors {
                 return Observable.concat(Observable.of(cardList), serverObservable)
                     .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {

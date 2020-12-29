@@ -52,6 +52,10 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     
     private var datasources: [RecommendTableViewCellViewModel]
 
+    let completion = BlockOperation {
+        print("all done")
+    }
+
     init(apiService: SandsaraDataServices, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
         self.apiService = apiService
         self.datasources = [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract
@@ -80,13 +84,15 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
             self.emitEventLoading(true)
             self.apiService
                 .getRecommendedPlaylists(option: self.apiService.getServicesOption(for: .recommendedplaylist))
-                .asObservable().subscribeNext { playlists in
+                .asObservable()
+                .subscribeNext { playlists in
                     let playlists = playlists.map { DisplayItem(playlist: $0)}
                     self.cachedPlaylists.accept(playlists)
                     self.playlists.accept(playlists)
                     self.apiService
                         .getRecommendTracks(option: self.apiService.getServicesOption(for: .recommendedtracks))
-                        .asObservable().subscribeNext { tracks in
+                        .asObservable()
+                        .subscribeNext { tracks in
                             let tracks = tracks.map { DisplayItem(track: $0) }
                             self.tracks.accept(tracks)
                             self.cachedTracks.accept(tracks)

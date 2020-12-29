@@ -22,7 +22,7 @@ struct NoOutputParam: OutputParamView {}
 class BaseViewController<Input: InputParamView>: UIViewController {
 
     let once = Once()
-    private let _disposeBag = DisposeBag()
+    var _disposeBag = DisposeBag()
     var disposeBag: DisposeBag! {
         return _disposeBag
     }
@@ -42,6 +42,16 @@ class BaseViewController<Input: InputParamView>: UIViewController {
         view.bringSubviewToFront(loadingActivity)
         return loadingActivity
     }()
+
+    var isPlaySingle: Bool {
+        get {
+            return _isSingle
+        } set(newValue) {
+            _isSingle = newValue
+        }
+    }
+
+    private var _isSingle = false
 
     override func viewDidLoad() {
         super.viewDidLoad()

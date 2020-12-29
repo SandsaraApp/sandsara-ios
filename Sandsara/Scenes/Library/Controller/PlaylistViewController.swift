@@ -26,11 +26,22 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
     override func setupViewModel() {
         setupTableView()
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewWillAppearTrigger.accept(())
+    }
+
+    @objc func reloadData() {
+        viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func bindViewModel() {
@@ -58,10 +69,12 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
 
-//        tableView.rx.itemDeleted.filter { $0.row != 0 && !self.viewModel.isEmpty }.subscribeNext { [weak self] indexPath in
-//            guard let self = self else { return }
-//            self.viewModel.deletePlaylist(index: indexPath.row)
-//        }.disposed(by: disposeBag)
+        tableView.rx.itemDeleted
+            .filter { $0.row != 0 && !self.viewModel.isEmpty }
+            .subscribeNext { [weak self] indexPath in
+                guard let self = self else { return }
+                self.viewModel.deletePlaylist(index: indexPath.row)
+        }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -74,9 +87,9 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
 
-//        dataSource.canEditRowAtIndexPath = { (ds, ip) in
-//            return self.viewModel.canDeletePlaylist(index: ip.row)
-//        }
+        dataSource.canEditRowAtIndexPath = { (ds, ip) in
+            return self.viewModel.canDeletePlaylist(index: ip.row)
+        }
     }
 
     private func makeDataSource() -> DataSource {

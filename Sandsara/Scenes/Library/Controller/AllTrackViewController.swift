@@ -22,10 +22,28 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
     var playlistTitle: String?
 
+    let syncAll = PublishRelay<()>()
+
     override func setupViewModel() {
         setupTableView()
-        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        isPlaySingle = true
+        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger, syncAll: syncAll))
         viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewWillAppearTrigger.accept(())
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
+    }
+
+    @objc func reloadData() {
+        viewWillAppearTrigger.accept(())
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func bindViewModel() {
@@ -65,6 +83,9 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
                 case .header(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackCountTableViewCell.identifier, for: indexPath) as? TrackCountTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    cell.playlistTrigger
+                        .bind(to: self.syncAll)
+                        .disposed(by: cell.disposeBag)
                     return cell
                 case .track(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell else { return UITableViewCell()}
@@ -79,12 +100,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
         switch viewModel.datas.value[index] {
         case .track(let viewModel):
             trackList.track = viewModel.inputs.track
-            trackList.tracks = self.viewModel.datas.value.map {
-                switch $0 {
-                case .track(let vm): return vm.inputs.track
-                default: return nil
-                }
-            }.compactMap { $0 }
+            trackList.tracks = [viewModel.inputs.track]
         default:
             break
         }

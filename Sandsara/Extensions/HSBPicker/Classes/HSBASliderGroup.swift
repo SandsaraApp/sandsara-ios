@@ -78,13 +78,22 @@ import UIKit
         let brightness = brightnessSlider.value
         let alpha = alphaSlider.value
         let color = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
+        let hsba = color.hsba()
+        saturationSlider.color2 = color
+        saturationSlider.color1 = HSBA(hue: hsba.hue, saturation: 0, brightness: hsba.brightness).color()
+        brightnessSlider.color2 = color
+        brightnessSlider.color1 = HSBA(hue: hsba.hue, saturation: hsba.saturation, brightness: 0).color()
         return color
     }
     
     override func slidersFrom(color: UIColor) {
         let hsba = color.hsba()
         hsbaSlider.value = hsba.hue
+        saturationSlider.color2 = color
+        saturationSlider.color1 = HSBA(hue: hsba.hue, saturation: 0, brightness: hsba.brightness).color()
         saturationSlider.value = hsba.saturation
+//        brightnessSlider.color2 = color
+//        brightnessSlider.color1 = HSBA(hue: hsba.hue, saturation: hsba.saturation, brightness: 0).color()
         brightnessSlider.value = hsba.brightness
         alphaSlider.value = hsba.alpha
         updateSliderColors()
@@ -105,16 +114,14 @@ import UIKit
             saturationSlider.color1 = UIColor(hue: hue, saturation: 0.0, brightness: brightness, alpha: 1.0)
             saturationSlider.color2 = UIColor(hue: hue, saturation: 1.0, brightness: brightness, alpha: 1.0)
             
-            // Brightness
-            brightnessSlider.color1 = UIColor(hue: hue, saturation: saturation, brightness: 0.0, alpha: 1.0)
-            brightnessSlider.color2 = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
+//            // Brightness
+//            brightnessSlider.color1 = UIColor(hue: hue, saturation: saturation, brightness: 0.0, alpha: 1.0)
+//            brightnessSlider.color2 = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
             
             hsbaSlider.knobView.color = self.color
             saturationSlider.knobView.color = self.color
             brightnessSlider.knobView.color = self.color
             alphaSlider.knobView.color = self.color
-
-            
         }
     }
     

@@ -233,12 +233,14 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
 
     func sendCommand(command: String) {
         guard let character = inputs.type.progressCharacteristic else { return }
-        bluejay.write(to: character, value: command) { result in
-            switch result {
-            case .success:
-                debugPrint("Write to sensor location is successful.\(result)")
-            case .failure(let error):
-                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+        DispatchQueue.main.async {
+            bluejay.write(to: character, value: command) { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result)")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -274,11 +276,11 @@ class MenuCellViewModel: BaseCellViewModel<MenuCellVMContract.Input,
 
 enum PresetCellVMContract {
     struct Input: InputType {
-        let color: PredifinedColor
+        let color: ColorModel
     }
 
     struct Output: OutputType {
-        let color: Driver<PredifinedColor>
+        let color: Driver<ColorModel>
     }
 }
 
@@ -317,9 +319,9 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
                 self.sendCommand(command: stringValue)
             }.disposed(by: disposeBag)
 
-        let images = colors.map {
+        let images = Preferences.AppDomain.colors?.map {
             PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
-        }
+        }.compactMap { $0 }
 
         inputs.segmentsSelection
             .skip(1)
@@ -333,7 +335,7 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
 
         setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
                          title: Driver.just(inputs.type.title),
-                         datas: Driver.just(images),
+                         datas: Driver.just(images ?? []),
                          flipDirection: inputs.flipDirection.asDriver()))
     }
 

@@ -116,10 +116,10 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     }
 
     private func readBinFile() {
-        FileServiceImpl.shared.sendFiles(fileName: "proof", extensionName: "bin")
-        FileServiceImpl.shared.seconds.subscribeNext {
-            self.showAlertVC(message: "Took \($0) seconds")
-        }.disposed(by: FileServiceImpl.shared.disposeBag)
+//        FileServiceImpl.shared.sendFiles(fileName: "proof", extensionName: "bin")
+//        FileServiceImpl.shared.seconds.subscribeNext {
+//            self.showAlertVC(message: "Took \($0) seconds")
+//        }.disposed(by: FileServiceImpl.shared.disposeBag)
     }
 }
 

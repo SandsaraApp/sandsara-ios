@@ -16,6 +16,10 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
 
     private let viewWillAppearTrigger = PublishRelay<()>()
 
+    private let downloadBtnTrigger = PublishRelay<()>()
+
+    private let syncBtnTrigger = PublishRelay<()>()
+
     typealias Section = SectionModel<String, PlaylistDetailCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -27,7 +31,10 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     override func setupViewModel() {
         tableView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         setupTableView()
-        viewModel = TrackListViewModel(apiService: SandsaraDataServices(), inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() , viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = TrackListViewModel(apiService: SandsaraDataServices(),
+                                       inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() ,
+                                                                                viewWillAppearTrigger: viewWillAppearTrigger,
+                                                                                downloadBtnTrigger: downloadBtnTrigger))
     }
 
     override func bindViewModel() {
@@ -83,6 +90,9 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                 case .header(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistHeaderTableViewCell.identifier, for: indexPath) as? PlaylistHeaderTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    cell.playlistTrigger.subscribeNext {
+                        self.downloadBtnTrigger.accept(())
+                    }.disposed(by: cell.disposeBag)
                     cell.playAction.subscribeNext {
                         self.openPlayer(index: 0)
                     }.disposed(by: cell.disposeBag)
@@ -109,11 +119,17 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         viewWillAppearTrigger.accept(())
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func reloadData() {
+        self.viewWillAppearTrigger.accept(())
     }
 
     private func openTrackDetail(index: Int) {
@@ -127,6 +143,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                 default: return nil
                 }
             }.compactMap { $0 }
+            trackList.playlistItem = self.playlistItem
         default:
             break
         }
@@ -138,13 +155,14 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     private func openPlayer(index: Int) {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.selecledIndex.accept(index)
+        player.index = index
         player.tracks = self.viewModel.datas.value.map {
             switch $0 {
             case .track(let vm): return vm.inputs.track
             default: return nil
             }
         }.compactMap { $0 }
+        player.playlistItem = playlistItem
         player.isReloaded = true
         (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: player.tracks[index])
         tabBarController?.popupBar.isHidden = false
@@ -157,7 +175,11 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         let alert = UIAlertController(title: "Alert", message: L10n.alertDeletePlaylist, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: { _ in
-            _ = DataLayer.deletePlaylist(item.title)
+            if !item.isLocal || item.isTestPlaylist {
+                _ = DataLayer.deleteDownloadedPlaylist(item.title)
+            } else {
+                _ = DataLayer.deletePlaylist(item.title)
+            }
             self.navigationController?.popViewController(animated: true)
         }))
 

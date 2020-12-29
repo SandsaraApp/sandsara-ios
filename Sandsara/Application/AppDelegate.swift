@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var discoveredDevice: ScanDiscovery?
 
+    let disposeBag = DisposeBag()
+
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,6 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(options))
+
+        SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
+            print(colors)
+        }.disposed(by: disposeBag)
+
         return true
     }
 
@@ -70,13 +77,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func initPlayerBar() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.selecledIndex.accept(0)
+        player.index = 0
         player.tracks = []
         player.popupContentView.popupCloseButtonStyle = .none
 
         if UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController == nil {
             let customBar = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
-            customBar.state = bluejay.isConnected ? .connected : .noConnect
+            customBar.state = DeviceServiceImpl.shared.status.value == .busy ? .busy : .connected // TODO: read playlist info there
             UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController = customBar
         }
         UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
@@ -90,9 +97,7 @@ extension AppDelegate: BackgroundRestorer {
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
         DeviceServiceImpl.shared.readSensorValues()
-        DispatchQueue.main.async {
-            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
-        }
+        NotificationCenter.default.post(name: reloadTab, object: nil)
         return .continue
     }
 
@@ -116,9 +121,7 @@ extension AppDelegate: ListenRestorer {
 
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-        DispatchQueue.main.async {
-            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
-        }
+        NotificationCenter.default.post(name: reloadTab, object: nil)
         DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: false)
     }

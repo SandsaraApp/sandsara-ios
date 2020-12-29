@@ -96,5 +96,22 @@ class SandsaraDataAccess {
             return Disposables.create()
         }
     }
+
+    func saveColors(colors: [ColorModel]) -> Observable<Bool> {
+        return Observable.create { observer -> Disposable in
+            Preferences.AppDomain.colors = colors
+            observer.onNext(true)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+    }
+
+    func getLocalPalettes() -> Observable<[ColorModel]?> {
+        return Observable.create { observer -> Disposable in
+            observer.onNext(Preferences.AppDomain.colors)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+    }
 }
 

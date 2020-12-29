@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PlayerFooterView" customModule="Sandsara" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blu-fU-tOO">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+                    <subviews>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Cyx-Ug-Wbt">
+                            <rect key="frame" x="14" y="64" width="386" height="17"/>
+                            <color key="minimumTrackTintColor" name="primary"/>
+                        </slider>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="38" translatesAutoresizingMaskIntoConstraints="NO" id="b6B-ht-UEE">
+                            <rect key="frame" x="103" y="100" width="208" height="64"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YKC-BL-h9D">
+                                    <rect key="frame" x="0.0" y="15" width="34" height="34"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="YKC-BL-h9D" secondAttribute="height" id="qu2-19-2a9"/>
+                                        <constraint firstAttribute="height" constant="34" id="yvC-0Q-tgI"/>
+                                    </constraints>
+                                    <state key="normal" title="Button" image="prev"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gs1-GI-Twn">
+                                    <rect key="frame" x="72" y="0.0" width="64" height="64"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="gs1-GI-Twn" secondAttribute="height" id="qgq-xf-dJV"/>
+                                    </constraints>
+                                    <state key="normal" title="Button" image="pause-1"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nR-5h-rv3">
+                                    <rect key="frame" x="174" y="15" width="34" height="34"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="34" id="sbO-E8-fK8"/>
+                                        <constraint firstAttribute="width" secondItem="9nR-5h-rv3" secondAttribute="height" id="sbo-8o-zoq"/>
+                                    </constraints>
+                                    <state key="normal" title="Button" image="next"/>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="gs1-GI-Twn" firstAttribute="height" secondItem="b6B-ht-UEE" secondAttribute="height" id="0ZL-SW-Z9l"/>
+                                <constraint firstAttribute="height" constant="64" id="Fdv-q1-VoJ"/>
+                                <constraint firstItem="9nR-5h-rv3" firstAttribute="width" secondItem="9nR-5h-rv3" secondAttribute="height" id="VNl-Dw-t7c"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="b6B-ht-UEE" firstAttribute="top" secondItem="Cyx-Ug-Wbt" secondAttribute="bottom" constant="20" id="2Cp-Rz-DfD"/>
+                        <constraint firstAttribute="bottom" secondItem="b6B-ht-UEE" secondAttribute="bottom" constant="20" id="8nF-Nl-LSg"/>
+                        <constraint firstItem="Cyx-Ug-Wbt" firstAttribute="top" secondItem="blu-fU-tOO" secondAttribute="top" constant="64" id="El9-9i-Ny6"/>
+                        <constraint firstAttribute="trailing" secondItem="Cyx-Ug-Wbt" secondAttribute="trailing" constant="16" id="RbB-pB-tTq"/>
+                        <constraint firstItem="Cyx-Ug-Wbt" firstAttribute="leading" secondItem="blu-fU-tOO" secondAttribute="leading" constant="16" id="nao-qm-h9T"/>
+                        <constraint firstItem="b6B-ht-UEE" firstAttribute="centerX" secondItem="blu-fU-tOO" secondAttribute="centerX" id="ozc-UJ-0Th"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="blu-fU-tOO" secondAttribute="trailing" id="3av-ni-KY1"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="blu-fU-tOO" secondAttribute="bottom" id="5Ej-pc-JBR"/>
+                <constraint firstItem="blu-fU-tOO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="hT2-4v-nWl"/>
+                <constraint firstItem="blu-fU-tOO" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="zYa-UQ-giF"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="nextBtn" destination="9nR-5h-rv3" id="TiP-Jr-569"/>
+                <outlet property="playBtn" destination="gs1-GI-Twn" id="MmW-HX-jNV"/>
+                <outlet property="prevBtn" destination="YKC-BL-h9D" id="mIF-im-wp8"/>
+                <outlet property="trackProgressSlider" destination="Cyx-Ug-Wbt" id="brf-5e-332"/>
+            </connections>
+            <point key="canvasLocation" x="-20" y="88"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="next" width="34" height="34"/>
+        <image name="pause-1" width="64" height="64"/>
+        <image name="prev" width="34" height="34"/>
+        <namedColor name="primary">
+            <color red="0.9100000262260437" green="0.9100000262260437" blue="0.9100000262260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

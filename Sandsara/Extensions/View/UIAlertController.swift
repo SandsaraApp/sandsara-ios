@@ -65,3 +65,70 @@ extension UIViewController {
     }
 }
 
+extension UIView {
+    func rotate360Degrees(duration: CFTimeInterval = 1, repeatCount: Float = .infinity) {
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(Double.pi * 2)
+        rotateAnimation.isRemovedOnCompletion = false
+        rotateAnimation.duration = duration
+        rotateAnimation.repeatCount = repeatCount
+        layer.add(rotateAnimation, forKey: "rotate")
+    }
+
+    func stopRotation () {
+        layer.removeAllAnimations()
+    }
+
+    var isRotating: Bool {
+        return (layer.animation(forKey: "rotate") != nil)
+    }
+}
+
+import SnapKit
+class LoadingButton: UIButton {
+
+    struct ButtonState {
+        var state: UIControl.State
+        var title: String?
+        var image: UIImage?
+    }
+
+    private (set) var buttonStates: [ButtonState] = []
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = self.titleColor(for: .normal)
+        self.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
+        return activityIndicator
+    }()
+
+    func showLoading() {
+        activityIndicator.startAnimating()
+        var buttonStates: [ButtonState] = []
+        for state in [UIControl.State.disabled] {
+            let buttonState = ButtonState(state: state, title: title(for: state), image: image(for: state))
+            buttonStates.append(buttonState)
+          //  setTitle("", for: state)
+            setImage(UIImage(), for: state)
+        }
+        self.buttonStates = buttonStates
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleLabel?.text != nil ? 25 : 0, bottom: 0, right: 0)
+        isEnabled = false
+    }
+
+    func hideLoading() {
+        activityIndicator.stopAnimating()
+        for buttonState in buttonStates {
+            setTitle(buttonState.title, for: buttonState.state)
+            setImage(buttonState.image, for: buttonState.state)
+        }
+        isEnabled = true
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+
+}
