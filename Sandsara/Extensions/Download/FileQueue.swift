@@ -134,7 +134,7 @@ class FileOperation: AsynchronousOperation {
         bluejay.run { sandsaraBoard -> Bool in
             if let bytes: [[UInt8]] = self.getFile(file: self.item.fileName) {
                 do {
-                    try sandsaraBoard.write(to: FileService.sendFileFlag, value: file.first ?? "")
+                    try sandsaraBoard.write(to: FileService.sendFileFlag, value: self.item.fileName)
                     for i in 0 ..< bytes.count {
                         let start1 = CFAbsoluteTimeGetCurrent()
                         try sandsaraBoard.writeAndListen(writeTo: FileService.sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: FileService.sendBytes, completion: { (result: UInt8) -> ListenAction in

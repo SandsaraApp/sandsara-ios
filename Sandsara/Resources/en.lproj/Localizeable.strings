@@ -71,3 +71,9 @@
 "firmware_notice" = "This process takes about 10 minutes and can’t be cancelled.";
 "sync_noti" = "Syncing tracks. Playback will resume soon.";
 "now_playing" = "Now Playing";
+"connect_to_sandsara" = "Connect to Sandsara";
+"connect_desc" = "Make sure your Sandsara is closeby and plugged to the wall.";
+"connect_now" = "Connect Now";
+"choose_device" = "Choose your device";
+"connecting" = "Connecting";
+

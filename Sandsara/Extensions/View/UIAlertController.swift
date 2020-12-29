@@ -117,7 +117,7 @@ class LoadingButton: UIButton {
             setImage(UIImage(), for: state)
         }
         self.buttonStates = buttonStates
-        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleLabel?.text != nil ? 25 : 0, bottom: 0, right: 0)
         isEnabled = false
     }
 

@@ -34,10 +34,20 @@ internal enum L10n {
   internal static let cancel = L10n.tr("Localizeable", "cancel")
   /// Change Name
   internal static let changeName = L10n.tr("Localizeable", "change_name")
+  /// Choose your device
+  internal static let chooseDevice = L10n.tr("Localizeable", "choose_device")
   /// Color Pallete
   internal static let colorPallete = L10n.tr("Localizeable", "color_pallete")
   /// Color Temperature
   internal static let colorTemp = L10n.tr("Localizeable", "color_temp")
+  /// Make sure your Sandsara is closeby and plugged to the wall.
+  internal static let connectDesc = L10n.tr("Localizeable", "connect_desc")
+  /// Connect Now
+  internal static let connectNow = L10n.tr("Localizeable", "connect_now")
+  /// Connect to Sandsara
+  internal static let connectToSandsara = L10n.tr("Localizeable", "connect_to_sandsara")
+  /// Connecting
+  internal static let connecting = L10n.tr("Localizeable", "connecting")
   /// Create new playlist
   internal static let createPlaylist = L10n.tr("Localizeable", "create_playlist")
   /// Custom Color

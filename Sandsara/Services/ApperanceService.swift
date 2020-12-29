@@ -19,8 +19,6 @@ struct AppApperance {
             let appearance = UITabBarAppearance()
 
             appearance.backgroundColor = Asset.background.color
-            appearance.shadowImage = UIImage()
-            appearance.shadowColor = .white
 
             appearance.stackedLayoutAppearance.normal.iconColor = Asset.secondary.color
             appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Asset.secondary.color]
@@ -29,6 +27,10 @@ struct AppApperance {
             appearance.stackedLayoutAppearance.selected.iconColor = Asset.primary.color
             appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Asset.primary.color]
 
+            appearance.stackedLayoutAppearance.disabled.iconColor = Asset.secondary.color
+            appearance.stackedLayoutAppearance.disabled.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Asset.secondary.color]
+            appearance.stackedLayoutAppearance.disabled.badgeBackgroundColor = Asset.secondary.color
+
             UITabBar.appearance().standardAppearance = appearance
         } else {
             UITabBarItem.appearance()
@@ -36,9 +38,10 @@ struct AppApperance {
                     [NSAttributedString.Key.foregroundColor: Asset.primary.color], for: .selected)
             UITabBarItem.appearance()
                 .setTitleTextAttributes(
-                    [NSAttributedString.Key.foregroundColor: Asset.secondary.color], for: .normal)
+                    [NSAttributedString.Key.foregroundColor: Asset.secondary.color], for: [.normal, .disabled])
             UITabBar.appearance().tintColor = Asset.primary.color
             UITabBar.appearance().backgroundColor =  Asset.background.color
+            UITabBar.appearance().unselectedItemTintColor = Asset.secondary.color
         }
     }
 

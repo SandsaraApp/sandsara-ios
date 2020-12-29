@@ -69,10 +69,12 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
 
-//        tableView.rx.itemDeleted.filter { $0.row != 0 && !self.viewModel.isEmpty }.subscribeNext { [weak self] indexPath in
-//            guard let self = self else { return }
-//            self.viewModel.deletePlaylist(index: indexPath.row)
-//        }.disposed(by: disposeBag)
+        tableView.rx.itemDeleted
+            .filter { $0.row != 0 && !self.viewModel.isEmpty }
+            .subscribeNext { [weak self] indexPath in
+                guard let self = self else { return }
+                self.viewModel.deletePlaylist(index: indexPath.row)
+        }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -85,9 +87,9 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
 
-//        dataSource.canEditRowAtIndexPath = { (ds, ip) in
-//            return self.viewModel.canDeletePlaylist(index: ip.row)
-//        }
+        dataSource.canEditRowAtIndexPath = { (ds, ip) in
+            return self.viewModel.canDeletePlaylist(index: ip.row)
+        }
     }
 
     private func makeDataSource() -> DataSource {
