@@ -53,6 +53,10 @@ class DeviceServiceImpl {
 
     let currentPath = BehaviorRelay<String>(value: "")
 
+    let currentPosition = BehaviorRelay<Int>(value: 0)
+
+    let runningColor = BehaviorRelay<ColorModel?>(value: nil)
+
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -139,7 +143,6 @@ class DeviceServiceImpl {
                 print(error.localizedDescription)
             }
 
-
             do {
                 let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathName)
                 print("Led speed \(selectedPalette)")
@@ -147,6 +150,47 @@ class DeviceServiceImpl {
             } catch(let error) {
                 print(error.localizedDescription)
             }
+
+            var colorModel = ColorModel()
+            var positions = [Int]()
+            do {
+                let amount: String = try sandsaraBoard.read(from: LedStripService.positions)
+                positions = amount.components(separatedBy: ",").map { Int($0) ?? 0 }
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+
+            var reds = [Int]()
+            do {
+                let red: String = try sandsaraBoard.read(from: LedStripService.red)
+                reds = red.components(separatedBy: ",").map { Int($0) ?? 0 }
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+
+            var blues = [Int]()
+            do {
+                let blue: String = try sandsaraBoard.read(from: LedStripService.blue)
+                blues = blue.components(separatedBy: ",").map { Int($0) ?? 0 }
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+
+            var greens = [Int]()
+            do {
+                let green: String = try sandsaraBoard.read(from: LedStripService.green)
+                greens = green.components(separatedBy: ",").map { Int($0) ?? 0 }
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+
+            colorModel.position = positions
+            colorModel.colors = zip3(reds, greens, blues).map {
+                RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
+            }
+
+            self.runningColor.accept(colorModel)
+
             return false
         } completionOnMainThread: { result in
             debugPrint(result)
@@ -218,16 +262,16 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 self.cycleMode.accept(mode == "1" ? true: false)
-                self.lightMode.accept(mode == "1" ? .cycle: .rotate)
-                self.lightModeInt.accept(mode == "1" ? 1 : 0)
+                self.lightMode.accept(mode == "1" ? .rotate: .staticMode)
+                self.lightModeInt.accept(mode == "1" ? 0 : 2)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
                 if error.localizedDescription == "" {
                     self.cycleMode.accept(mode == "1" ? true: false)
-                    self.lightMode.accept(mode == "1" ? .cycle: .rotate)
-                    self.lightModeInt.accept(mode == "1" ? 1 : 0)
+                    self.lightMode.accept(mode == "1" ? .rotate: .staticMode)
+                    self.lightModeInt.accept(mode == "1" ? 0 : 2)
                 }
             }
         }
@@ -292,7 +336,6 @@ class DeviceServiceImpl {
         flipDirection.accept(false)
         brightness.accept(0)
         lightMode.accept(.rotate)
-
         currentPlaylistName.accept("")
         currentPath.accept("")
     }

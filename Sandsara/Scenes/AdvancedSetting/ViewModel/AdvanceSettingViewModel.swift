@@ -19,12 +19,21 @@ enum AdvanceSettingViewModelContract {
 }
 
 final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContract.Input, AdvanceSettingViewModelContract.Output> {
-
+    let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
     override func transform() {
-        let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
+
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
-            datas.accept(self.buildCellVM())
+            SandsaraDataServices().getFirmwares(option: SandsaraDataServices().getServicesOption(for: .firmware)).subscribeNext { [weak self] firmwares in
+                guard let self = self else { return }
+                for firmware in firmwares {
+                    if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value {
+                        var values = self.buildCellVM()
+                        values.insert(.updateFirmware(DownloadFirmwareViewModel(inputs: DownloadFirmwareVMContract.Input(latestVersion: firmware.version, file: firmware.file?.first))), at: 3)
+                        self.datas.accept(values)
+                    }
+                }
+            }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
 
         setOutput(Output(datasources: datas.asDriver()))
@@ -35,8 +44,8 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .deviceName(DeviceServiceImpl.shared.deviceName.value.isEmpty ? "N/A" : DeviceServiceImpl.shared.deviceName.value), color: Asset.secondary.color))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .changeName))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareVersion(DeviceServiceImpl.shared.firmwareVersion.value.isEmpty ? "N/A" : DeviceServiceImpl.shared.firmwareVersion.value ), color: Asset.secondary.color))))
-        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .firmwareUpdate))))
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .factoryReset))))
+        datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .connectNew))))
         return datas
     }
 }

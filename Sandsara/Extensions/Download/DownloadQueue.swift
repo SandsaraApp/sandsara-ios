@@ -162,6 +162,8 @@ class DownloadOperation : AsynchronousOperation {
 
     let disposeBag = DisposeBag()
 
+    var filePath: URL?
+
     init(session: URLSession, url: URL, item: DisplayItem) {
         self.item = item
         task = session.downloadTask(with: url)
@@ -201,17 +203,21 @@ extension DownloadOperation: URLSessionDownloadDelegate {
             try manager.moveItem(at: location, to: destinationURL)
 
             print("File URL \(destinationURL)")
-
-            if item.isPlaylist {
-                DispatchQueue.main.async {
-                    _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
-                    NotificationCenter.default.post(name: reloadNoti, object: self)
-                }
+            filePath = destinationURL
+            if item.isFile {
+                
             } else {
-                DispatchQueue.main.async {
-                    print("track \(self.item.fileName) exist hihi")
-                    _ = DataLayer.addDownloadedTrack(self.item)
-                    NotificationCenter.default.post(name: reloadNoti, object: self)
+                if item.isPlaylist {
+                    DispatchQueue.main.async {
+                        _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
+                        NotificationCenter.default.post(name: reloadNoti, object: self)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        print("track \(self.item.fileName) exist hihi")
+                        _ = DataLayer.addDownloadedTrack(self.item)
+                        NotificationCenter.default.post(name: reloadNoti, object: self)
+                    }
                 }
             }
 

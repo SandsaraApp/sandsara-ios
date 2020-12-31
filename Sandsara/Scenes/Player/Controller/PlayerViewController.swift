@@ -52,10 +52,10 @@ class PlayerViewController: BaseViewController<NoInputParam> {
             isReloaded = false
             if let item = playlistItem {
                 showTrack(at: index)
-                playFromDownloadedPlaylist(item: item)
+                createPlaylist(name: item.title)
             } else {
                 showTrack(at: index)
-                playTrack(at: index)
+                createPlaylist(name: tracks[index].title)
             }
         }
     }
@@ -173,14 +173,22 @@ extension PlayerViewController {
             $0.fileName
         }.joined(separator: "\r\n")
 
-        let filename = name
+        var filename = ""
 
-        FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename)
-        if let handle = FileServiceImpl.shared.getHandleForFileInDocuments(filename: filename) {
+        let fileExtension = "playlist"
+
+        if name == L10n.favorite {
+            filename = "favorites"
+        } else {
+            filename = name
+        }
+
+        FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename + "." + fileExtension)
+        if let handle = FileServiceImpl.shared.getHandleForFileInDocuments(filename: filename + "." + fileExtension) {
             FileServiceImpl.shared.writeString(string: fileNames, fileHandle: handle)
         }
 
-        FileServiceImpl.shared.sendFiles(fileName: filename.components(separatedBy: ".").first ?? "", extensionName: filename.components(separatedBy: ".").last ?? "", isPlaylist: true)
+        FileServiceImpl.shared.sendFiles(fileName: filename, extensionName: fileExtension, isPlaylist: true)
         FileServiceImpl.shared.sendSuccess.subscribeNext {
             if $0 {
                 FileServiceImpl.shared.updatePlaylist(fileName: filename) { success in
@@ -190,10 +198,6 @@ extension PlayerViewController {
                 }
             }
         }.disposed(by: disposeBag)
-    }
-
-    func playFromDownloadedPlaylist(item: DisplayItem) {
-        self.createPlaylist(name: item.title)
     }
 
     func showTrack(at index: Int) {

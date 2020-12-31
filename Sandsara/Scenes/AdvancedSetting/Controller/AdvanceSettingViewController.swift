@@ -47,6 +47,7 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(MenuTableViewCell.nib, forCellReuseIdentifier: MenuTableViewCell.identifier)
+        tableView.register(DownloadFirmwareTableViewCell.nib, forCellReuseIdentifier: DownloadFirmwareTableViewCell.identifier)
 
         tableView
             .rx.setDelegate(self)
@@ -99,6 +100,9 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                         }))
                         alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))
                         self.present(alert, animated: true, completion: nil)
+                    case .connectNew:
+                        let connectVC = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
+                        self.navigationController?.pushViewController(connectVC, animated: true)
                     default: break
                     }
                 default: break
@@ -113,6 +117,20 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                 case .menu(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuTableViewCell.identifier, for: indexPath) as? MenuTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    return cell
+                case .updateFirmware(let viewModel):
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: DownloadFirmwareTableViewCell.identifier, for: indexPath) as? DownloadFirmwareTableViewCell else { return UITableViewCell()}
+                    cell.bind(to: viewModel)
+                    cell.cellUpdate
+                        .observeOn(MainScheduler.asyncInstance)
+                        .subscribeNext {
+                            tableView.beginUpdates()
+                            tableView.endUpdates()
+                        }.disposed(by: cell.disposeBag)
+                    cell.updateFirmwareAlert
+                        .subscribeNext {
+                            self.showSuccessHUD(message: "Firmware update successful. The board is restarting ")
+                        }.disposed(by: cell.disposeBag)
                     return cell
                 default: return UITableViewCell()
                 }

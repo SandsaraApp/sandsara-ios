@@ -35,15 +35,14 @@ class FileServiceImpl {
             if let bytes: [[UInt8]] = self.getFile(forResource: fileName, withExtension: extensionName, isPlaylist: isPlaylist) {
                 self.originChunks = [Int].init(repeating: 0, count: bytes.count)
                 do {
-                    try sandsaraBoard.write(to: FileService.sendFileFlag, value: fileName)
+                    try sandsaraBoard.write(to: FileService.sendFileFlag, value: "\(fileName).\(extensionName)")
                     for i in 0 ..< bytes.count {
-                        do {
-                            try sandsaraBoard.write(to: FileService.sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count))
-                        } catch(let error) {
-                            if error.localizedDescription.isEmpty {
-                                self.chunks.append(i)
-                            }
-                        }
+                        try sandsaraBoard.writeAndListen(writeTo: FileService.sendBytes, value: Data(bytes: bytes[i], count: bytes[i].count), listenTo: FileService.sendBytes, completion: { (result: UInt8) -> ListenAction in
+                            let start1 = CFAbsoluteTimeGetCurrent()
+                            let diff = CFAbsoluteTimeGetCurrent() - start1
+                            print("Send chunks took \(diff) seconds")
+                            return .done
+                        })
                     }
                 } catch(let error) {
                     debugPrint(error.localizedDescription)
@@ -60,19 +59,17 @@ class FileServiceImpl {
                     }
                 }.disposed(by: self.disposeBag)
 
-                if self.originChunks.count == self.chunks.count {
-                    bluejay.write(to: FileService.sendFileFlag, value: "completed") { result in
-                        switch result {
-                        case .success:
-                            debugPrint("Send file success")
-                            let diff = CFAbsoluteTimeGetCurrent() - start
-                            print("Took \(diff) seconds")
-                            self.seconds.accept(diff)
-                            self.sendSuccess.accept(true)
-                        case .failure(let error):
-                            self.sendSuccess.accept(false)
-                            debugPrint("Send file error \(error.localizedDescription)")
-                        }
+                bluejay.write(to: FileService.sendFileFlag, value: "completed") { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Send file success")
+                        let diff = CFAbsoluteTimeGetCurrent() - start
+                        print("Took \(diff) seconds")
+                        self.seconds.accept(diff)
+                        self.sendSuccess.accept(true)
+                    case .failure(let error):
+                        self.sendSuccess.accept(false)
+                        debugPrint("Send file error \(error.localizedDescription)")
                     }
                 }
             case .failure:
@@ -194,28 +191,42 @@ class FileServiceImpl {
     }
 
     func updatePlaylist(fileName: String, completionHandler: @escaping ((Bool) -> ())) {
-        bluejay.write(to: PlaylistService.playlistName, value: fileName) { result in
+        bluejay.run { sandsaraBoard -> Bool in
+            do {
+                try sandsaraBoard.write(to: PlaylistService.playlistName, value: fileName)
+                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+            return false
+        } completionOnMainThread: { result in
             switch result {
             case .success:
-                debugPrint("Play success")
-                completionHandler(true)
                 DeviceServiceImpl.shared.readPlaylistValue()
+                completionHandler(true)
             case .failure(let error):
+                debugPrint(error.localizedDescription)
                 completionHandler(false)
-                debugPrint("Play error")
             }
         }
     }
 
     func updateTrack(name: String, completionHandler: @escaping ((Bool) -> ())) {
-        bluejay.write(to: PlaylistService.pathName, value: name) { result in
+        bluejay.run { sandsaraBoard -> Bool in
+            do {
+                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
+                try sandsaraBoard.write(to: PlaylistService.pathName, value: name)
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+            return false
+        } completionOnMainThread: { result in
             switch result {
             case .success:
-                debugPrint("Play success")
                 DeviceServiceImpl.shared.readPlaylistValue()
                 completionHandler(true)
             case .failure(let error):
-                debugPrint("Play error")
+                debugPrint(error.localizedDescription)
                 completionHandler(false)
             }
         }

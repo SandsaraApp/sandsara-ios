@@ -163,6 +163,16 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             }
             .disposed(by: disposeBag)
 
+        viewModel
+            .outputs
+            .preselectedColor
+            .compactMap {
+                $0
+            }
+            .driveNext {
+                self.colorGradientView.color = $0
+            }.disposed(by: disposeBag)
+
         viewModel.outputs
             .datas
             .map { [Section(model: "", items: $0)] }
@@ -172,7 +182,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .drive(collectionView.rx.items(dataSource: makeDatasource()))
             .disposed(by: disposeBag)
 
-        segmentControl.segmentSelected.skip(1)
+        segmentControl.segmentSelected
             .map { LightMode(rawValue: $0) ?? .rotate }
             .subscribeNext {
                 self.viewModel.inputs.segmentsSelection.accept($0)
@@ -201,7 +211,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
 
         staticColorSegmentControl
-            .segmentSelected.skip(1)
+            .segmentSelected
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
                 guard self.segmentControl.segmentSelected.value == 2 else {
@@ -221,12 +231,11 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
-            self.colorGradientView?.color = PredifinedColor(rawValue: indexPath.item) ?? .one
+            self.colorGradientView?.color = Preferences.AppDomain.colors?[indexPath.item] ?? ColorModel()
         }.disposed(by: disposeBag)
 
         acceptBtn.rx.tap.subscribeNext {
             self.hideOverlayView()
-            //TODO: add color or update color
             if self.colorGradientView.isFirst {
                 self.colorGradientView.updateFirstColor(color: self.overlaySliderView.color)
             } else if self.colorGradientView.isLast {
@@ -269,7 +278,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     private func makeDatasource() -> DataSource {
         return DataSource(
             configureCell: { (_, collectionView, indexPath, viewModel) -> UICollectionViewCell in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.identifier, for: indexPath) as? ColorCell else { return UICollectionViewCell()}
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.identifier,
+                                                                    for: indexPath)
+                        as? ColorCell else { return UICollectionViewCell()}
                 cell.bind(to: viewModel)
                 return cell
             })
@@ -288,6 +299,11 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         layoutIfNeeded()
         cellUpdated.accept(())
         segmentSelected.accept(mode)
+        if !isStatic {
+            colorGradientView.colorCommand()
+        } else {
+            resetValue(isColorTemp: self.staticColorSegmentControl.segmentSelected.value == 0)
+        }
     }
 
     private func lightModeHeight(isStatic: Bool) -> CGFloat {
@@ -371,6 +387,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         if isColorTemp {
             colorTempSlider.value = Constraints.minColorTemp
             staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
+            sendColor()
         } else {
             customColorView.color = UIColor(hexString: "#FF0000")
             customColorView.slidersFrom(color: .red)

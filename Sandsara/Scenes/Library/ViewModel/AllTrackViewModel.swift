@@ -52,7 +52,7 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             for track in self.tracks  {
                 let operation = FileSyncManager.shared.queueDownload(item: track.inputs.track)
                 FileSyncManager.shared.triggerOperation(id: track.inputs.track.trackId)
-                completion.addDependency(operation)
+                operation.addDependency(completion)
                 OperationQueue.main.addOperation(completion)
             }
             self.inputs.viewWillAppearTrigger.accept(())

@@ -259,6 +259,4 @@ import UIKit
     func updateSliderColors() {
         print("Child class CAN implement (not required)")
     }
-
-    
 }

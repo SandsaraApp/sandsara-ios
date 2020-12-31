@@ -86,6 +86,7 @@ enum SettingItemCellType {
     case lightCycleSpeed(ProgressCellViewModel)
     case menu(MenuCellViewModel)
     case toogle(ToogleCellViewModel)
+    case updateFirmware(DownloadFirmwareViewModel)
 }
 
 enum SettingItemType {
@@ -105,6 +106,7 @@ enum SettingItemType {
 
     case sleep
     case restart
+    case connectNew
 
     var title: String {
         switch self {
@@ -136,6 +138,8 @@ enum SettingItemType {
             return L10n.restart
         case .flipMode:
             return L10n.flipMode
+        case .connectNew:
+            return L10n.connectNew
         }
     }
 
@@ -304,6 +308,7 @@ enum LightModeVMContract {
         let title: Driver<String>
         let datas: Driver<[PresetCellViewModel]>
         let flipDirection: Driver<Bool>
+        let preselectedColor: Driver<ColorModel?>
     }
 }
 
@@ -324,19 +329,19 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
         }.compactMap { $0 }
 
         inputs.segmentsSelection
-            .skip(1)
             .subscribeNext { mode in
-                if mode == .cycle {
-                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
-                } else {
+                if mode == .staticMode {
                     DeviceServiceImpl.shared.updateCycleMode(mode: "0")
+                } else {
+                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
                 }
             }.disposed(by: disposeBag)
 
         setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
                          title: Driver.just(inputs.type.title),
                          datas: Driver.just(images ?? []),
-                         flipDirection: inputs.flipDirection.asDriver()))
+                         flipDirection: inputs.flipDirection.asDriver(),
+                         preselectedColor: DeviceServiceImpl.shared.runningColor.asDriver()))
     }
 
     func sendLightSpeed(value: Float) {

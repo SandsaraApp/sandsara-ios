@@ -42,6 +42,8 @@ internal enum L10n {
   internal static let colorTemp = L10n.tr("Localizeable", "color_temp")
   /// Make sure your Sandsara is closeby and plugged to the wall.
   internal static let connectDesc = L10n.tr("Localizeable", "connect_desc")
+  /// Connect To a Different Sandsara
+  internal static let connectNew = L10n.tr("Localizeable", "connect_new")
   /// Connect Now
   internal static let connectNow = L10n.tr("Localizeable", "connect_now")
   /// Connect to Sandsara
@@ -86,7 +88,7 @@ internal enum L10n {
   internal static func firmwareIsReady(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "firmware_is_ready", String(describing: p1))
   }
-  /// This process takes about 10 minutes and can’t be cancelled.
+  /// This process takes about 10 minutes and can’t be cancelled. Please, don’t disconnect your SANDSARA.
   internal static let firmwareNotice = L10n.tr("Localizeable", "firmware_notice")
   /// Syncing Firmware v %@
   internal static func firmwareSyncing(_ p1: Any) -> String {
@@ -94,7 +96,7 @@ internal enum L10n {
   }
   /// Update Firmware Now
   internal static let firmwareUpdateNow = L10n.tr("Localizeable", "firmware_update_now")
-  /// Firmware version: %@
+  /// Current Firmware: %@
   internal static func firmwareVersion(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "firmware_version", String(describing: p1))
   }
@@ -150,6 +152,12 @@ internal enum L10n {
   internal static let tracks = L10n.tr("Localizeable", "tracks")
   /// Update Firmware
   internal static let updateFirmware = L10n.tr("Localizeable", "update_firmware")
+  /// Updating...
+  internal static let updating = L10n.tr("Localizeable", "updating")
+  /// Updating Firmware v %@
+  internal static func updatingVersion(_ p1: Any) -> String {
+    return L10n.tr("Localizeable", "updating_version", String(describing: p1))
+  }
   /// Sandsara’s Website
   internal static let website = L10n.tr("Localizeable", "website")
   /// %@ min estimated

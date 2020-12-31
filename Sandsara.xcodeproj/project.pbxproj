@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		92068651257B3D9700D8CC89 /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */; };
 		92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */; };
+		920B865C259D2CBF00193F6A /* Firmware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920B865B259D2CBF00193F6A /* Firmware.swift */; };
+		920B8663259D325200193F6A /* DownloadFirmwareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920B8661259D325200193F6A /* DownloadFirmwareTableViewCell.swift */; };
+		920B8664259D325200193F6A /* DownloadFirmwareTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920B8662259D325200193F6A /* DownloadFirmwareTableViewCell.xib */; };
 		9214E11D258E29CF006E43D2 /* ProgressButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214E11C258E29CF006E43D2 /* ProgressButtonView.swift */; };
 		9214E12A258F065F006E43D2 /* PlayerFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214E129258F065F006E43D2 /* PlayerFooterView.swift */; };
 		9214E12E258F07F3006E43D2 /* PlayerFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9214E12D258F07F3006E43D2 /* PlayerFooterView.xib */; };
@@ -249,6 +252,9 @@
 		91F2EF0681A8B22F30B336B1 /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
 		9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
 		92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
+		920B865B259D2CBF00193F6A /* Firmware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firmware.swift; sourceTree = "<group>"; };
+		920B8661259D325200193F6A /* DownloadFirmwareTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFirmwareTableViewCell.swift; sourceTree = "<group>"; };
+		920B8662259D325200193F6A /* DownloadFirmwareTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadFirmwareTableViewCell.xib; sourceTree = "<group>"; };
 		9214E11C258E29CF006E43D2 /* ProgressButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressButtonView.swift; sourceTree = "<group>"; };
 		9214E129258F065F006E43D2 /* PlayerFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFooterView.swift; sourceTree = "<group>"; };
 		9214E12D258F07F3006E43D2 /* PlayerFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerFooterView.xib; sourceTree = "<group>"; };
@@ -498,6 +504,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		920B8660259D323C00193F6A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				920B8661259D325200193F6A /* DownloadFirmwareTableViewCell.swift */,
+				920B8662259D325200193F6A /* DownloadFirmwareTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		921A9F02256BB49C0068AF22 /* AddPlaylist */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,6 +661,7 @@
 				927C7F81255FF33A009F8898 /* Playlist.swift */,
 				927C7F86255FF360009F8898 /* Track.swift */,
 				929C03C7258F722D009F6A2F /* Color.swift */,
+				920B865B259D2CBF00193F6A /* Firmware.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -953,6 +969,7 @@
 		92C7D12F257228E00062FC78 /* AdvancedSetting */ = {
 			isa = PBXGroup;
 			children = (
+				920B8660259D323C00193F6A /* View */,
 				92C7D131257228ED0062FC78 /* ViewModel */,
 				92C7D130257228E90062FC78 /* Controller */,
 			);
@@ -1420,6 +1437,7 @@
 				92A284CE2560D9F100739A94 /* OpenSans-Italic.ttf in Resources */,
 				92A284CD2560D9F100739A94 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				92A284CA2560D9F100739A94 /* OpenSans-LightItalic.ttf in Resources */,
+				920B8664259D325200193F6A /* DownloadFirmwareTableViewCell.xib in Resources */,
 				92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */,
 				92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */,
 				92D66339255AE3FE00CE3F8E /* RecommendCell.xib in Resources */,
@@ -1618,6 +1636,7 @@
 				9263F72B256A0C60004450CA /* SandsaraDataService.swift in Sources */,
 				92D647B5255CB53C00856900 /* TrackListViewModel.swift in Sources */,
 				92698EB2255FEFF1009F3A9F /* Single+Response.swift in Sources */,
+				920B8663259D325200193F6A /* DownloadFirmwareTableViewCell.swift in Sources */,
 				92D647C2255CB83B00856900 /* TrackDetailViewController.swift in Sources */,
 				927C7F82255FF33A009F8898 /* Playlist.swift in Sources */,
 				92DFBE942577BABE00B1BFA9 /* ColorTextField.swift in Sources */,
@@ -1666,6 +1685,7 @@
 				92BCE70325614ADD0029DD3F /* AllTrackViewController.swift in Sources */,
 				92C7D14425722C650062FC78 /* AdvanceSettingViewModel.swift in Sources */,
 				92DFBEA82577BABE00B1BFA9 /* HSBASlider.swift in Sources */,
+				920B865C259D2CBF00193F6A /* Firmware.swift in Sources */,
 				9228C73B2556B1360092FBB6 /* BaseVMViewController.swift in Sources */,
 				92DFBEB72577BABE00B1BFA9 /* Colorable.swift in Sources */,
 				92DFBEAB2577BABE00B1BFA9 /* HSBA.swift in Sources */,

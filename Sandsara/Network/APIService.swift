@@ -98,4 +98,15 @@ class SandsaraAPIService: APIServiceCall {
                 }
             }
     }
+
+    func getFirmwares() -> Single<[Firmware]> {
+        return apiProvider
+            .rx.request(.firmware)
+            .map(FirmwaresResponse.self)
+            .map {
+                $0.firmwares.map {
+                    $0.firmware
+                }
+            }
+    }
 }

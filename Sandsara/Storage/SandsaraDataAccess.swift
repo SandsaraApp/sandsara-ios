@@ -113,5 +113,22 @@ class SandsaraDataAccess {
             return Disposables.create()
         }
     }
+
+    func saveFirmwares(firmwares: [Firmware]) -> Observable<Bool> {
+        return Observable.create { observer -> Disposable in
+            Preferences.AppDomain.firmware = firmwares
+            observer.onNext(true)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+    }
+
+    func getLocalFirmwares() -> Observable<[Firmware]?> {
+        return Observable.create { observer -> Disposable in
+            observer.onNext(Preferences.AppDomain.firmware)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+    }
 }
 

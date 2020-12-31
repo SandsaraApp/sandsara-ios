@@ -37,7 +37,7 @@
 "website" = "Sandsara’s Website";
 "help" = "Help";
 "about" = "About this Sandsara";
-"firmware_version" = "Firmware version: %@";
+"firmware_version" = "Current Firmware: %@";
 "device_name" = "Name: %@";
 "change_name" = "Change Name";
 "update_firmware" = "Update Firmware";
@@ -68,7 +68,7 @@
 "firmware_syncing" = "Syncing Firmware v %@";
 "firmware_is_ready" = "Firmware v %@ is Ready";
 "firmware_update_now" = "Update Firmware Now";
-"firmware_notice" = "This process takes about 10 minutes and can’t be cancelled.";
+"firmware_notice" = "This process takes about 10 minutes and can’t be cancelled. Please, don’t disconnect your SANDSARA.";
 "sync_noti" = "Syncing tracks. Playback will resume soon.";
 "now_playing" = "Now Playing";
 "connect_to_sandsara" = "Connect to Sandsara";
@@ -76,4 +76,6 @@
 "connect_now" = "Connect Now";
 "choose_device" = "Choose your device";
 "connecting" = "Connecting";
-
+"connect_new" = "Connect To a Different Sandsara";
+"updating_version" = "Updating Firmware v %@";
+"updating" = "Updating...";

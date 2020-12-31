@@ -32,7 +32,6 @@ class ColorCell: BaseCollectionViewCell<PresetCellViewModel> {
                 self.gradientView.locations = color.position.map {
                     CGFloat($0) / 255.0
                 }
-
                 self.layoutIfNeeded()
             }
             .disposed(by: disposeBag)

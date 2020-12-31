@@ -18,6 +18,7 @@ class SandsaraDataServices {
     private var allTracks: [Track]?
     private var allPlaylist: [Playlist]?
     private var playlistDetail: [Track]?
+    private var firmware: [Firmware]?
 
     private let api: SandsaraAPIService
     private let dataAccess: SandsaraDataAccess
@@ -62,6 +63,12 @@ class SandsaraDataServices {
             return .server
         case .colorPalette:
             return Preferences.AppDomain.colors == nil ? .server : .cache
+        case .firmware:
+            firmware = Preferences.AppDomain.firmware
+            if firmware != nil {
+                return .both
+            }
+            return .server
         }
     }
 
@@ -367,6 +374,57 @@ class SandsaraDataServices {
             }
         default:
             if let cardList = self.colors {
+                return Observable.concat(Observable.of(cardList), serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            } else {
+                return Observable.concat(localObservable, serverObservable)
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
+        }
+    }
+
+    private func getFirmwaresFromServer() -> Observable<[Firmware]> {
+        return api
+            .getFirmwares()
+            .do(onSuccess: { playlists in
+                self.firmware = playlists
+            }, onError: { error in
+                debugPrint(error.localizedDescription)
+            })
+            .asObservable()
+            .flatMap { [weak self] result -> Observable<([Firmware], Bool)> in
+                guard let self = self else { return Observable.just((result, false)) }
+                return Observable.combineLatest(Observable.just(result), self.dataAccess.saveFirmwares(firmwares: result)) { ($0, $1) }
+            }
+            .map { (cards, _) -> [Firmware] in
+                return cards
+            }
+    }
+
+
+    func getFirmwares(option: ServiceOption) -> Observable<[Firmware]> {
+        let serverObservable = getFirmwaresFromServer()
+        let localObservable = dataAccess
+            .getLocalFirmwares()
+            .compactMap { $0 }
+            .doOnNext({ [weak self] cache in
+                guard let self = self else { return }
+                self.firmware = cache
+            })
+
+        switch option {
+        case .server:
+            return serverObservable
+                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
+        case .cache:
+            if let cardList = self.firmware {
+                return Observable.of(cardList)
+            } else {
+                return localObservable
+                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
+            }
+        default:
+            if let cardList = self.firmware {
                 return Observable.concat(Observable.of(cardList), serverObservable)
                     .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             } else {

@@ -19,6 +19,8 @@ struct DisplayItem {
     var isSynced: Bool = false
     var isTestPlaylist: Bool = false
 
+    var isFile = false
+
     var fileURL = ""
 
     var tracks = [Track]()
@@ -102,6 +104,13 @@ struct DisplayItem {
 
     init(trackCellViewModel: TrackCellViewModel) {
         self = trackCellViewModel.inputs.track
+    }
+
+    init(file: File) {
+        self.init()
+        self.fileURL = file.url
+        self.isFile = true
+        self.fileName = file.filename
     }
 }
 

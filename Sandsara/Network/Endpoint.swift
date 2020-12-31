@@ -15,6 +15,31 @@ enum SandsaraAPI: String {
     case playlistDetail
     case alltrack = "tracks"
     case colorPalette
+    case firmware
+}
+
+extension String {
+
+    static func ==(lhs: String, rhs: String) -> Bool {
+        return lhs.compare(rhs, options: .numeric) == .orderedSame
+    }
+
+    static func <(lhs: String, rhs: String) -> Bool {
+        return lhs.compare(rhs, options: .numeric) == .orderedAscending
+    }
+
+    static func <=(lhs: String, rhs: String) -> Bool {
+        return lhs.compare(rhs, options: .numeric) == .orderedAscending || lhs.compare(rhs, options: .numeric) == .orderedSame
+    }
+
+    static func >(lhs: String, rhs: String) -> Bool {
+        return lhs.compare(rhs, options: .numeric) == .orderedDescending
+    }
+
+    static func >=(lhs: String, rhs: String) -> Bool {
+        return lhs.compare(rhs, options: .numeric) == .orderedDescending || lhs.compare(rhs, options: .numeric) == .orderedSame
+    }
+
 }
 
 extension SandsaraAPI: TargetType {
@@ -34,10 +59,8 @@ extension SandsaraAPI: TargetType {
             return "tracks"
         case .recommendedplaylist:
             return "playlist"
-        case .colorPalette:
-            return self.rawValue
         default:
-            return ""
+            return self.rawValue
         }
     }
 
