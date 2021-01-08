@@ -19,6 +19,17 @@ class Once {
 }
 
 extension UIViewController {
+    /// Call this once to dismiss open keyboards by tapping anywhere in the view controller
+    func setupHideKeyboardOnTap() {
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
+        self.navigationController?.navigationBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
+    }
+    @objc func dismissKeyboard () {
+        view.endEditing(true)
+    }
+}
+
+extension UIViewController {
     static var identifier: String {
         get {
             return String(describing: self)

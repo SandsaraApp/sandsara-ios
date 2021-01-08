@@ -123,6 +123,6 @@ extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
         NotificationCenter.default.post(name: reloadTab, object: nil)
         DeviceServiceImpl.shared.cleanup()
-        return .change(shouldAutoReconnect: true)
+        return .noChange
     }
 }

@@ -38,7 +38,7 @@
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="gs1-GI-Twn" secondAttribute="height" id="qgq-xf-dJV"/>
                                     </constraints>
-                                    <state key="normal" title="Button" image="pause-1"/>
+                                    <state key="normal" image="pause-1"/>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nR-5h-rv3">
                                     <rect key="frame" x="174" y="15" width="34" height="34"/>

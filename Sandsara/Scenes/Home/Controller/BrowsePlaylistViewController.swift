@@ -1,8 +1,8 @@
 //
-//  PlaylistViewController.swift
+//  BrowsePlaylistViewController.swift
 //  Sandsara
 //
-//  Created by Tín Phan on 11/12/20.
+//  Created by Tín Phan on 07/01/2021.
 //
 
 import UIKit
@@ -10,18 +10,13 @@ import RxSwift
 import RxDataSources
 import RxCocoa
 
-enum ControllerMode {
-    case search
-    case local
-}
-
-class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
+class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
 
     let viewWillAppearTrigger = PublishRelay<()>()
 
-    var mode: ControllerMode = .local
+    var mode: ControllerMode = .search
 
     typealias Section = SectionModel<String, PlaylistCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
@@ -30,9 +25,11 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
+    let searchTrigger = PublishRelay<String>()
+
     override func setupViewModel() {
         setupTableView()
-        viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, searchTrigger: nil))
+        viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, searchTrigger: searchTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -55,9 +52,9 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         viewModel
             .outputs.datasources
             .map { [Section(model: "", items: $0)] }
-            
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+
 
         Observable
             .zip(
@@ -81,7 +78,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             .subscribeNext { [weak self] indexPath in
                 guard let self = self else { return }
                 self.viewModel.deletePlaylist(index: indexPath.row)
-        }.disposed(by: disposeBag)
+            }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -105,12 +102,12 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell else { return UITableViewCell()}
                 cell.bind(to: viewModel)
                 return cell
-                })
+            })
     }
 
 }
 
-extension PlaylistViewController: UITableViewDelegate {
+extension BrowsePlaylistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0
     }

@@ -74,8 +74,7 @@ enum StaticMode: Int {
 }
 
 enum LightMode: Int {
-    case rotate = 0
-    case cycle
+    case cycle = 0
     case staticMode
 }
 
@@ -107,6 +106,8 @@ enum SettingItemType {
     case sleep
     case restart
     case connectNew
+
+    case rotate
 
     var title: String {
         switch self {
@@ -140,6 +141,8 @@ enum SettingItemType {
             return L10n.flipMode
         case .connectNew:
             return L10n.connectNew
+        case .rotate:
+            return L10n.rotate
         }
     }
 
@@ -328,15 +331,6 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
             PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
         }.compactMap { $0 }
 
-        inputs.segmentsSelection
-            .subscribeNext { mode in
-                if mode == .staticMode {
-                    DeviceServiceImpl.shared.updateCycleMode(mode: "0")
-                } else {
-                    DeviceServiceImpl.shared.updateCycleMode(mode: "1")
-                }
-            }.disposed(by: disposeBag)
-
         setOutput(Output(segmentsSelection: inputs.segmentsSelection.asDriver(),
                          title: Driver.just(inputs.type.title),
                          datas: Driver.just(images ?? []),
@@ -388,6 +382,7 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
         inputs
             .toogle
             .skip(1)
+            .distinctUntilChanged()
             .subscribeNext { value in
                 self.sendCommand(command: "\(value)")
             }.disposed(by: disposeBag)
@@ -397,12 +392,17 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
     }
 
     func sendCommand(command: String) {
-        if inputs.type == .sleep {
+        switch inputs.type {
+        case .sleep:
             if inputs.toogle.value {
                 DeviceServiceImpl.shared.sleepDevice()
             } else {
                 DeviceServiceImpl.shared.resumeDevice()
             }
+        case .rotate:
+            DeviceServiceImpl.shared.updateCycleMode(mode: inputs.toogle.value ? "0" : "1")
+        default:
+            break
         }
     }
 }

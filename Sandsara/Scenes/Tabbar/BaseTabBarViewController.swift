@@ -20,7 +20,7 @@ class BaseTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defer {
-            setupControllers(isConnected: bluejay.isConnected)
+            setupControllers(isConnected: true)
         }
         browseVC = storyboard?.instantiateViewController(withIdentifier: BrowseViewController.identifier) as? BrowseViewController
         libVC = storyboard?.instantiateViewController(withIdentifier: LibraryViewController.identifier) as? LibraryViewController
@@ -30,7 +30,7 @@ class BaseTabBarViewController: UITabBarController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateControllers), name: reloadTab, object: nil)
+        
     }
 
     @objc func updateControllers() {
@@ -38,7 +38,7 @@ class BaseTabBarViewController: UITabBarController {
     }
 
     private func setupControllers(isConnected: Bool) {
-        let firstNavVC = UINavigationController(rootViewController: isConnected ? browseVC! : connectVC!)
+        let firstNavVC = UINavigationController(rootViewController: browseVC!)
         firstNavVC.tabBarItem = UITabBarItem(title: "Browse", image: Asset.search.image, selectedImage: Asset.search.image)
         let secondNavVC = UINavigationController(rootViewController: libVC!)
         secondNavVC.tabBarItem = UITabBarItem(title: "Library", image: Asset.library.image, selectedImage: Asset.library.image)
@@ -48,10 +48,6 @@ class BaseTabBarViewController: UITabBarController {
         viewControllers = [firstNavVC,
                            secondNavVC,
                            thirdNavVC]
-        guard let items = tabBar.items else { return }
-        for item in items {
-            item.isEnabled = isConnected
-        }
         tabBarController?.selectedIndex = 0
         AppApperance.setTheme()
     }

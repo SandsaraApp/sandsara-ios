@@ -21,16 +21,19 @@ enum AdvanceSettingViewModelContract {
 final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContract.Input, AdvanceSettingViewModelContract.Output> {
     let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
     override func transform() {
-
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
+            // Placeholder data
+            let values = self.buildCellVM()
+            self.datas.accept(values)
             SandsaraDataServices().getFirmwares(option: SandsaraDataServices().getServicesOption(for: .firmware)).subscribeNext { [weak self] firmwares in
                 guard let self = self else { return }
                 for firmware in firmwares {
-                    if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value {
+                    if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value && !DeviceServiceImpl.shared.firmwareVersion.value.isEmpty {
                         var values = self.buildCellVM()
                         values.insert(.updateFirmware(DownloadFirmwareViewModel(inputs: DownloadFirmwareVMContract.Input(latestVersion: firmware.version, file: firmware.file?.first))), at: 3)
                         self.datas.accept(values)
+                        break
                     }
                 }
             }.disposed(by: self.disposeBag)

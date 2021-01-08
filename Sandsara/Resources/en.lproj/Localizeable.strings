@@ -79,3 +79,5 @@
 "connect_new" = "Connect To a Different Sandsara";
 "updating_version" = "Updating Firmware v %@";
 "updating" = "Updating...";
+"no_result" = "No Results";
+"no_result_desc" = "Ooops, we couldn’t find any Playlists that match your search terms, please try another one.";

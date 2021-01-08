@@ -216,6 +216,7 @@ class FileServiceImpl {
             do {
                 try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
                 try sandsaraBoard.write(to: PlaylistService.pathName, value: name)
+                try sandsaraBoard.write(to: DeviceService.play, value: "1")
             } catch(let error) {
                 print(error.localizedDescription)
             }

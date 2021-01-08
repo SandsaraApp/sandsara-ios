@@ -25,7 +25,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     @IBOutlet weak var testButton: UIBarButtonItem!
 
     private let viewWillAppearTrigger = PublishRelay<()>()
-    private let lightMode = BehaviorRelay<LightMode>(value: .rotate)
+    private let lightMode = BehaviorRelay<LightMode>(value: .cycle)
 
     typealias Section = SectionModel<String, SettingItemCellType>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>

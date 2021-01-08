@@ -43,7 +43,7 @@ class DeviceServiceImpl {
 
     let isSleep = BehaviorRelay<Bool>(value: false)
 
-    let lightMode = BehaviorRelay<LightMode>(value: .rotate)
+    let lightMode = BehaviorRelay<LightMode>(value: .cycle)
 
     let lightModeInt = BehaviorRelay<Int>(value: 0)
 
@@ -113,8 +113,6 @@ class DeviceServiceImpl {
                 let cycleMode: String = try sandsaraBoard.read(from: LedStripService.ledStripCycleEnable)
                 print("Mode \(cycleMode)")
                 self.cycleMode.accept(cycleMode == "1" ? true : false)
-                self.lightMode.accept(cycleMode == "1" ? .cycle: .rotate)
-                self.lightModeInt.accept(cycleMode == "1" ? 1 : 0)
             } catch(let error) {
                 print(error.localizedDescription)
             }
@@ -153,41 +151,64 @@ class DeviceServiceImpl {
 
             var colorModel = ColorModel()
             var positions = [Int]()
+            var amount : Int = 0
+            do {
+                let amountColor: String = try sandsaraBoard.read(from: LedStripService.amountOfColors)
+                amount = Int(amountColor) ?? 0
+                debugPrint("Amount \(amountColor)")
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+
             do {
                 let amount: String = try sandsaraBoard.read(from: LedStripService.positions)
                 positions = amount.components(separatedBy: ",").map { Int($0) ?? 0 }
+                debugPrint("Position \(amount)")
             } catch(let error) {
                 print(error.localizedDescription)
             }
 
-            var reds = [Int]()
+            var reds = [Float]()
             do {
                 let red: String = try sandsaraBoard.read(from: LedStripService.red)
-                reds = red.components(separatedBy: ",").map { Int($0) ?? 0 }
+                reds = red.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                debugPrint("reds \(red)")
             } catch(let error) {
                 print(error.localizedDescription)
             }
 
-            var blues = [Int]()
+            var blues = [Float]()
             do {
                 let blue: String = try sandsaraBoard.read(from: LedStripService.blue)
-                blues = blue.components(separatedBy: ",").map { Int($0) ?? 0 }
+                blues = blue.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                debugPrint("blues \(blue)")
             } catch(let error) {
                 print(error.localizedDescription)
             }
 
-            var greens = [Int]()
+            var greens = [Float]()
             do {
                 let green: String = try sandsaraBoard.read(from: LedStripService.green)
-                greens = green.components(separatedBy: ",").map { Int($0) ?? 0 }
+                greens = green.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                debugPrint("greens \(green)")
             } catch(let error) {
                 print(error.localizedDescription)
             }
-
-            colorModel.position = positions
-            colorModel.colors = zip3(reds, greens, blues).map {
+            let colors = zip3(reds, greens, blues).map {
                 RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
             }
+            if positions.count == 1 {
+                colorModel.position = [0, 255]
+                if let color = colors.first {
+                    colorModel.colors = [color, color]
+                }
+            } else {
+                colorModel.position = positions
+                colorModel.colors = colors
+            }
+
+
+
 
             self.runningColor.accept(colorModel)
 
@@ -243,6 +264,23 @@ class DeviceServiceImpl {
         }
     }
 
+    func pauseDevice() {
+        bluejay.write(to: DeviceService.pause, value: "1") { result in
+            switch result {
+            case .success:
+                debugPrint("Resume Success")
+                self.readDeviceStatus()
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.updateError.accept(error)
+
+                if error.localizedDescription == "" {
+                    self.readDeviceStatus()
+                }
+            }
+        }
+    }
+
     func readDeviceStatus() {
         bluejay.read(from: DeviceService.deviceStatus) { (result: ReadResult<String>) in
             switch result {
@@ -261,16 +299,14 @@ class DeviceServiceImpl {
         bluejay.write(to: LedStripService.ledStripCycleEnable, value: mode) { result in
             switch result {
             case .success:
-                self.cycleMode.accept(mode == "1" ? true: false)
-                self.lightMode.accept(mode == "1" ? .rotate: .staticMode)
+                self.cycleMode.accept(mode == "0" ? true: false)
                 self.lightModeInt.accept(mode == "1" ? 0 : 2)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
                 if error.localizedDescription == "" {
-                    self.cycleMode.accept(mode == "1" ? true: false)
-                    self.lightMode.accept(mode == "1" ? .rotate: .staticMode)
+                    self.cycleMode.accept(mode == "0" ? true: false)
                     self.lightModeInt.accept(mode == "1" ? 0 : 2)
                 }
             }
@@ -335,7 +371,7 @@ class DeviceServiceImpl {
         cycleMode.accept(false)
         flipDirection.accept(false)
         brightness.accept(0)
-        lightMode.accept(.rotate)
+        lightMode.accept(.cycle)
         currentPlaylistName.accept("")
         currentPath.accept("")
     }

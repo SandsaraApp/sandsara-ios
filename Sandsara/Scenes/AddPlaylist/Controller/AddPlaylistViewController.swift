@@ -37,7 +37,7 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
 
     override func setupViewModel() {
         navigationItem.title = L10n.playlists
-        viewModel = AddPlaylistViewModel(inputs: PlaylistViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
+        viewModel = AddPlaylistViewModel(inputs: PlaylistViewModelContract.Input(mode: .local, viewWillAppearTrigger: viewWillAppearTrigger, searchTrigger: nil))
         viewWillAppearTrigger.accept(())
     }
 
@@ -112,6 +112,14 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
                         } else {
                             self.showSuccessHUD(message: "Playlist \(text) added")
                             self.viewWillAppearTrigger.accept(())
+                            guard let itemToAdd = self.item else { return }
+                            let localTrack = LocalTrack(track: itemToAdd)
+                            if DataLayer.addTrackToPlaylist(name: text, track: localTrack) {
+                                self.showSuccessHUD(message: "Track \(itemToAdd.title) was added to Playlist \(text)")
+                                self.dismiss(animated: true, completion: nil)
+                            } else {
+                                self.showErrorHUD(message: "Track \(itemToAdd.title) was existed in playlist")
+                            }
                         }
                     }
                 }

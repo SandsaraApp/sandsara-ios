@@ -1,8 +1,8 @@
 //
-//  AllTrackViewController.swift
+//  BrowseTrackViewController.swift
 //  Sandsara
 //
-//  Created by Tín Phan on 15/11/2020.
+//  Created by Tín Phan on 07/01/2021.
 //
 
 import UIKit
@@ -10,13 +10,14 @@ import RxSwift
 import RxDataSources
 import RxCocoa
 
-class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputParam> {
+class BrowseTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
 
+    @IBOutlet weak var noResultView: UIStackView!
     let viewWillAppearTrigger = PublishRelay<()>()
 
-    var mode: ControllerMode = .local
+    var mode: ControllerMode = .search
 
     typealias Section = SectionModel<String, AllTrackCellVM>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
@@ -26,10 +27,12 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
     let syncAll = PublishRelay<()>()
 
+    let searchTrigger = PublishRelay<String>()
+
     override func setupViewModel() {
         setupTableView()
         isPlaySingle = true
-        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, syncAll: syncAll, searchTrigger: nil))
+        viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, syncAll: syncAll, searchTrigger: searchTrigger))
         viewWillAppearTrigger.accept(())
     }
 
@@ -57,11 +60,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
         tableView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
-            if self.mode == .local {
-                if indexPath.row != 0 {
-                    self.openTrackDetail(index: indexPath.row)
-                }
-            } else {
+            if indexPath.row != 0 {
                 self.openTrackDetail(index: indexPath.row)
             }
         }.disposed(by: disposeBag)
@@ -116,11 +115,8 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
     }
 }
 
-extension AllTrackViewController: UITableViewDelegate {
+extension BrowseTrackViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0  {
-            return mode == .local ? 50 : 96
-        }
         return 96.0
     }
 }

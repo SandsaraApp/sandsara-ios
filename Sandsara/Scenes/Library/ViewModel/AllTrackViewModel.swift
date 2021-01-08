@@ -16,8 +16,10 @@ enum AllTrackCellVM {
 
 enum AllTracksViewModelContract {
     struct Input: InputType {
+        let mode: ControllerMode
         let viewWillAppearTrigger: PublishRelay<()>
         let syncAll: PublishRelay<()>
+        let searchTrigger: PublishRelay<String>?
     }
 
     struct Output: OutputType {
@@ -58,22 +60,45 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             self.inputs.viewWillAppearTrigger.accept(())
         }.disposed(by: disposeBag)
 
+        inputs.searchTrigger?.subscribeNext { [weak self] text in
+            guard let self = self else { return }
+            self.apiService.queryTracks(word: text).subscribeNext { values in
+                let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(mode: .remote, track: $0, saved: true)) }.map {
+                    AllTrackCellVM.track($0)
+                }
+                self.datas.accept(items)
+            }.disposed(by: self.disposeBag)
+        }.disposed(by: disposeBag)
+
         setOutput(Output(datasources: datas.asDriver()))
     }
 
     private func buildCellVM()  {
         var datas = [AllTrackCellVM]()
 
-        let list = DataLayer.loadDownloadedTracks()
-        let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
-            AllTrackCellVM.track($0)
+        if inputs.mode == .local {
+            let list = DataLayer.loadDownloadedTracks()
+            let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
+                AllTrackCellVM.track($0)
+            }
+
+            if items.count > 0 {
+                datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: DataLayer.loadDownloadedTracks().count - DataLayer.loadSyncedTracks().count), timeRemaining: FileSyncManager.shared.getCurrentTimeRunning(), syncAllTrigger: inputs.syncAll))))
+            }
+            datas.append(contentsOf: items)
+            self.datas.accept(datas)
+            self.emitEventLoading(false)
+        } else {
+            if self.datas.value.count == 0 {
+                apiService.getAllTracks(option: .both).subscribeNext { values in
+                    let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(mode: .remote, track: $0, saved: true)) }.map {
+                        AllTrackCellVM.track($0)
+                    }
+                    datas.append(contentsOf: items)
+                    self.datas.accept(datas)
+                }.disposed(by: disposeBag)
+            }
         }
-        if items.count > 0 {
-            datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: DataLayer.loadDownloadedTracks().count - DataLayer.loadSyncedTracks().count), timeRemaining: FileSyncManager.shared.getCurrentTimeRunning(), syncAllTrigger: inputs.syncAll))))
-        }
-        datas.append(contentsOf: items)
-        self.datas.accept(datas)
-        self.emitEventLoading(false)
     }
 }
 

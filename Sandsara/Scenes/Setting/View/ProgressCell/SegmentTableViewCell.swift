@@ -67,7 +67,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     @IBOutlet var sliderTempHeightConstraint: NSLayoutConstraint!
     
-    let segmentSelected = BehaviorRelay<LightMode>(value: .rotate)
     let cellUpdated = PublishRelay<()>()
 
     let advancedBtnTap = PublishRelay<()>()
@@ -86,7 +85,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         titleLabel.font = font
 
         segmentControl.setStyle(font: font , titles: [
-            L10n.rotate, L10n.cycle, L10n.static
+            L10n.cycle, L10n.static
         ])
 
         staticColorSegmentControl.setStyle(font: font, titles: [
@@ -147,7 +146,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         selectionStyle = .none
         colorTempSlider.maximumValue = Constraints.maxColorTemp
         colorTempSlider.minimumValue = Constraints.minColorTemp
-        segmentControl.segmentSelected.accept(DeviceServiceImpl.shared.lightModeInt.value)
     }
 
     override func bindViewModel() {
@@ -158,8 +156,13 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         viewModel.outputs
             .segmentsSelection
-            .driveNext {
-                self.contraints($0)
+            .driveNext { value in
+                defer {
+                    if value == .staticMode {
+                        self.resetValue(isColorTemp: self.staticColorSegmentControl.segmentSelected.value == 0)
+                    }
+                }
+                self.contraints(value)
             }
             .disposed(by: disposeBag)
 
@@ -183,7 +186,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .disposed(by: disposeBag)
 
         segmentControl.segmentSelected
-            .map { LightMode(rawValue: $0) ?? .rotate }
+            .map { LightMode(rawValue: $0) ?? .cycle }
             .subscribeNext {
                 self.viewModel.inputs.segmentsSelection.accept($0)
             }
@@ -214,8 +217,11 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .segmentSelected
             .map { StaticMode(rawValue: $0) }
             .subscribeNext {
-                guard self.segmentControl.segmentSelected.value == 2 else {
+                guard self.segmentControl.segmentSelected.value == 1 else {
                     return
+                }
+                defer {
+                    self.resetValue(isColorTemp: self.staticColorSegmentControl.segmentSelected.value == 0)
                 }
                 let isColorTemp = $0 == StaticMode.colorTemp
                 self.colorTempSliderView.isHidden = !isColorTemp
@@ -231,6 +237,9 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
+            defer {
+                self.colorGradientView.colors = (Preferences.AppDomain.colors?[indexPath.item] ?? ColorModel()).colors.map { UIColor(hexString: $0) }
+            }
             self.colorGradientView?.color = Preferences.AppDomain.colors?[indexPath.item] ?? ColorModel()
         }.disposed(by: disposeBag)
 
@@ -298,12 +307,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         flipModeView.alpha = isStatic ? 0 : 1
         layoutIfNeeded()
         cellUpdated.accept(())
-        segmentSelected.accept(mode)
-        if !isStatic {
-            colorGradientView.colorCommand()
-        } else {
-            resetValue(isColorTemp: self.staticColorSegmentControl.segmentSelected.value == 0)
-        }
     }
 
     private func lightModeHeight(isStatic: Bool) -> CGFloat {

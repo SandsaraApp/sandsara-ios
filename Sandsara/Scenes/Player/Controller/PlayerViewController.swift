@@ -115,6 +115,18 @@ extension PlayerViewController: UITableViewDelegate {
         headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
         headerView.trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
 
+        headerView.playBtn.rx.tap.asDriver().driveNext { [weak self] in
+            guard let self = self else { return }
+            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
+                DeviceServiceImpl.shared.resumeDevice()
+                self.readProgress()
+                headerView.playBtn.setImage(Asset.pause1.image, for: .normal)
+            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
+                DeviceServiceImpl.shared.pauseDevice()
+                headerView.playBtn.setImage(Asset.play.image, for: .normal)
+            }
+        }.disposed(by: disposeBag)
+
         progress
             .bind(to: headerView.trackProgressSlider.rx.value)
             .disposed(by: headerView.disposeBag)
@@ -311,7 +323,7 @@ extension PlayerViewController {
     }
 
     @objc func updateTimer(_ timer: Timer) {
-        if progress.value == 100 {
+        if progress.value == 100 || DeviceServiceImpl.shared.status.value == SandsaraStatus.pause {
             self.timer?.invalidate()
             self.timer = nil
             self.nextBtnTap()

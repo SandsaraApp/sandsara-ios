@@ -82,7 +82,11 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
                 self.syncAction()
         }.disposed(by: disposeBag)
 
-        checkDownloaed()
+        if viewModel.inputs.mode == .local {
+            self.checkDownloaed()
+        } else {
+            self.updateConstraints(isSynced: true)
+        }
     }
 
     func updateConstraints(isSynced: Bool) {

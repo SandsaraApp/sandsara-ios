@@ -110,6 +110,10 @@ internal enum L10n {
   internal static let lightmode = L10n.tr("Localizeable", "lightmode")
   /// Next by:
   internal static let nextBy = L10n.tr("Localizeable", "next_by")
+  /// No Results
+  internal static let noResult = L10n.tr("Localizeable", "no_result")
+  /// Ooops, we couldn’t find any Playlists that match your search terms, please try another one.
+  internal static let noResultDesc = L10n.tr("Localizeable", "no_result_desc")
   /// No Sandsara detected.
   internal static let noSandsaraDetected = L10n.tr("Localizeable", "no_sandsara_detected")
   /// Now Playing

@@ -21,6 +21,8 @@ protocol APIServiceCall {
     func playlists() -> Single<[Playlist]>
     func playlistDetail() -> Single<[Track]>
     func getAllTracks() -> Single<[Track]>
+    func queryTracks(word: String) -> Single<[Track]>
+    func queryPlaylists(word: String) -> Single<[Playlist]>
 }
 
 class SandsaraAPIService: APIServiceCall {
@@ -106,6 +108,28 @@ class SandsaraAPIService: APIServiceCall {
             .map {
                 $0.firmwares.map {
                     $0.firmware
+                }
+            }
+    }
+
+    func queryTracks(word: String) -> Single<[Track]> {
+        return apiProvider
+            .rx.request(.searchTrack(word: word))
+            .map(TracksResponse.self)
+            .map {
+                $0.tracks.map {
+                    $0.playlist
+                }
+            }
+    }
+
+    func queryPlaylists(word: String) -> Single<[Playlist]> {
+        return apiProvider
+            .rx.request(.searchPlaylist(word: word))
+            .map(PlaylistsResponse.self)
+            .map {
+                $0.playlists.map {
+                    $0.playlist
                 }
             }
     }

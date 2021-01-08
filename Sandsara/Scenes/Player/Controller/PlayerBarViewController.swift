@@ -84,8 +84,16 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
 
         updateConstraint()
 
-        pauseButton.rx.tap.asDriver().driveNext {
-            print("tapped")
+        pauseButton.rx.tap.asDriver().driveNext { [weak self] in
+            guard let self = self else { return }
+            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
+                DeviceServiceImpl.shared.resumeDevice()
+                PlayerViewController.shared.readProgress()
+                self.pauseButton.setImage(Asset.pause.image, for: .normal)
+            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
+                DeviceServiceImpl.shared.pauseDevice()
+                self.pauseButton.setImage(Asset.play.image, for: .normal)
+            }
         }.disposed(by: disposeBag)
 
         playerContentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openPlayer)))

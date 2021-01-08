@@ -10,7 +10,9 @@ import RxCocoa
 
 enum PlaylistViewModelContract {
     struct Input: InputType {
+        let mode: ControllerMode
         let viewWillAppearTrigger: PublishRelay<()>
+        let searchTrigger: PublishRelay<String>?
     }
 
     struct Output: OutputType {
@@ -22,6 +24,8 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
 
     private let apiService: SandsaraDataServices
     let datas = BehaviorRelay<[PlaylistCellViewModel]>(value: [])
+
+    var cachedDatas = [PlaylistCellViewModel]()
 
     var isEmpty = false
 
@@ -37,36 +41,55 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
             self.buildCellVM()
         }.disposed(by: disposeBag)
 
+        inputs.searchTrigger?.subscribeNext { [weak self] text in
+            guard let self = self else { return }
+            var items = [PlaylistCellViewModel]()
+            self.apiService.queryPlaylists(word: text).subscribeNext { values in
+                items.append(contentsOf: values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0, isFavorite: false)) })
+                self.datas.accept(items)
+            }.disposed(by: self.disposeBag)
+        }.disposed(by: disposeBag)
+
         setOutput(Output(datasources: datas.asDriver()))
     }
 
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
+        if inputs.mode == .local {
 
-        if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
-            items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList),
-                                                                                    isFavorite: true)))
-        }
 
-        if DataLayer.loadPlaylists().count > 0 {
-            let localList = DataLayer.loadPlaylists().map {
-                DisplayItem(playlist: $0)
-            }.map {
-                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+            if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
+                items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList),
+                                                                                        isFavorite: true)))
             }
-            items.append(contentsOf: localList)
-        }
 
-        if DataLayer.loadDownloaedPlaylists().count > 0 {
-            let localList = DataLayer.loadDownloaedPlaylists().map {
-                DisplayItem(playlist: $0)
-            }.map {
-                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+            if DataLayer.loadPlaylists().count > 0 {
+                let localList = DataLayer.loadPlaylists().map {
+                    DisplayItem(playlist: $0)
+                }.map {
+                    PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+                }
+                items.append(contentsOf: localList)
             }
-            items.append(contentsOf: localList)
+
+            if DataLayer.loadDownloaedPlaylists().count > 0 {
+                let localList = DataLayer.loadDownloaedPlaylists().map {
+                    DisplayItem(playlist: $0)
+                }.map {
+                    PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+                }
+                items.append(contentsOf: localList)
+            }
+            isEmpty = items.isEmpty
+            datas.accept(items)
+        } else {
+            if datas.value.count == 0 {
+                apiService.getAllPlaylist(option: .both).asObservable().subscribeNext { values in
+                    items.append(contentsOf: values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0, isFavorite: false)) })
+                    self.datas.accept(items)
+                }.disposed(by: disposeBag)
+            }
         }
-        isEmpty = items.isEmpty
-        datas.accept(items)
     }
 
     func canDeletePlaylist(index: Int) -> Bool {

@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 
-class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> {
+class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>, UISearchBarDelegate {
 
     @IBOutlet private weak var tableView: UITableView!  {
         didSet {
@@ -26,6 +26,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
         }
     }
 
+    @IBOutlet weak var searchView: UIView!
     private let sc = UISearchController(searchResultsController: nil)
     private var viewWillAppearTrigger = PublishRelay<()>()
     private var inputTrigger = BehaviorRelay<String?>(value: nil)
@@ -34,44 +35,45 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
     typealias Section = SectionModel<String, RecommendTableViewCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
-
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSearchBar()
         viewWillAppearTrigger.accept(())
+        sc.searchBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goSearchVC)))
+        sc.searchBar.isUserInteractionEnabled = true
+        sc.searchBar.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateControllers), name: reloadTab, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !bluejay.isConnected {
             once.run {
+                showConnectionVC()
+            }
+        }
+    }
+
+    @objc func goSearchVC() {
+        let vc = storyboard?.instantiateViewController(withIdentifier: SearchViewController.identifier) as! SearchViewController
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    @objc func updateControllers() {
+        if bluejay.isConnected {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
                 delegate.initPlayerBar()
             }
         }
     }
 
     override func setupViewModel() {
-        sc.searchBar
-            .rx
-            .text
-            .orEmpty.doOnNext{ text in
-                if text.isEmpty {
-                 //   self.cancelSearchTrigger.accept(())
-                }
-            }
-            .asObservable()
-            .throttle(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
-            .distinctUntilChanged()
-            .bind(to: inputTrigger)
-            .disposed(by: disposeBag)
-
-        sc.searchBar
-            .rx.cancelButtonClicked
-            .bind(to: cancelSearchTrigger)
-            .disposed(by: disposeBag)
-
         viewModel = BrowseViewModel(apiService: SandsaraDataServices(),
                                     inputs: BrowseVMContract.Input(searchText: inputTrigger,
                                                                    cancelSearch: cancelSearchTrigger,
@@ -95,6 +97,11 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
         sc.dimsBackgroundDuringPresentation = false
         searchBarStyle(sc.searchBar)
         navigationItem.searchController = sc
+    }
+
+    @objc func hideKeyboard() {
+        sc.searchBar.endEditing(true)
+        sc.isActive = false
     }
 
     private func searchBarStyle(_ searchBar: UISearchBar) {
@@ -147,6 +154,24 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam> 
                         }),
                        UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         )
+    }
+
+    private func showConnectionVC() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
+        let navVC = UINavigationController(rootViewController: vc)
+        self.present(navVC, animated: true, completion: nil)
+    }
+
+    private func showSearch(isShow: Bool) {
+        tableView.isHidden = isShow
+        tableView.alpha = isShow ? 0 : 1
+        searchView.isHidden = !isShow
+        searchView.alpha = isShow ? 1 : 0
+    }
+
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        goSearchVC()
+        return false
     }
 }
 

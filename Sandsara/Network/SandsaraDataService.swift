@@ -69,6 +69,8 @@ class SandsaraDataServices {
                 return .both
             }
             return .server
+        default:
+            return .server
         }
     }
 
@@ -432,5 +434,15 @@ class SandsaraDataServices {
                     .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
             }
         }
+    }
+
+    func queryTracks(word: String) -> Observable<[Track]> {
+        return api
+            .queryTracks(word: word).asObservable()
+    }
+
+    func queryPlaylists(word: String) -> Observable<[Playlist]> {
+        return api
+            .queryPlaylists(word: word).asObservable()
     }
 }

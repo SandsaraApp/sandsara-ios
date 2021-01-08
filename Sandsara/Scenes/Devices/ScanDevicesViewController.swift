@@ -140,7 +140,7 @@ extension ScanViewController: ConnectionObserver {
                 let alertVC = UIAlertController(title: "Alert", message: "Connection attempt to: \(peripheral.name) is successful", preferredStyle: .alert)
                 alertVC.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
                     self?.dismiss(animated: true, completion: {
-                        NotificationCenter.default.post(name: reloadTab, object: nil)
+                        NotificationCenter.default.post(name: connectedd, object: nil)
                     })
                 }))
                 UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
