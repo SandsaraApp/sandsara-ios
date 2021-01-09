@@ -46,9 +46,11 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             guard let self = self else { return }
             self.buildCellVM()
         }.disposed(by: disposeBag)
+
         let completion = BlockOperation {
             self.inputs.viewWillAppearTrigger.accept(())
         }
+
         inputs.syncAll.subscribeNext { [weak self] in
             guard let self = self else { return }
             for track in self.tracks  {
@@ -89,15 +91,12 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             self.datas.accept(datas)
             self.emitEventLoading(false)
         } else {
-            if self.datas.value.count == 0 {
-                apiService.getAllTracks(option: .both).subscribeNext { values in
-                    let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(mode: .remote, track: $0, saved: true)) }.map {
-                        AllTrackCellVM.track($0)
-                    }
-                    datas.append(contentsOf: items)
-                    self.datas.accept(datas)
-                }.disposed(by: disposeBag)
-            }
+            apiService.getAllTracks(option: .both).asObservable().subscribeNext { values in
+                let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(mode: .remote, track: $0, saved: true)) }.map {
+                    AllTrackCellVM.track($0)
+                }
+                self.datas.accept(items)
+            }.disposed(by: disposeBag)
         }
     }
 }

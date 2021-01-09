@@ -395,9 +395,35 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
         switch inputs.type {
         case .sleep:
             if inputs.toogle.value {
-                DeviceServiceImpl.shared.sleepDevice()
+                bluejay.write(to: DeviceService.sleep, value: "1") { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Sleep Success")
+                        DeviceServiceImpl.shared.readDeviceStatus()
+                    case .failure(let error):
+                        print(error.localizedDescription)
+
+
+                        if error.localizedDescription == "" {
+                            DeviceServiceImpl.shared.readDeviceStatus()
+                        }
+                    }
+                }
             } else {
-                DeviceServiceImpl.shared.resumeDevice()
+                bluejay.write(to: DeviceService.play, value: "1") { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Resume Success")
+                        DeviceServiceImpl.shared.readDeviceStatus()
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                  //      self.updateError.accept(error)
+
+                        if error.localizedDescription == "" {
+                            DeviceServiceImpl.shared.readDeviceStatus()
+                        }
+                    }
+                }
             }
         case .rotate:
             DeviceServiceImpl.shared.updateCycleMode(mode: inputs.toogle.value ? "0" : "1")

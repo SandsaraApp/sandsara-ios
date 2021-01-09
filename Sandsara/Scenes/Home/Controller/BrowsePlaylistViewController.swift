@@ -30,22 +30,10 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
     override func setupViewModel() {
         setupTableView()
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, searchTrigger: searchTrigger))
-        viewWillAppearTrigger.accept(())
     }
-
-    @objc func reloadData() {
-        viewWillAppearTrigger.accept(())
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func bindViewModel() {

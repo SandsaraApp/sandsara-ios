@@ -92,6 +92,30 @@ class LedStripServiceImpl {
                 bluejay.write(to: LedStripService.selectPattle, value: "16") { result in
                     switch result {
                     case .success:
+                        var colorModel = ColorModel()
+                        var reds = [Float]()
+                        var blues = [Float]()
+                        var greens = [Float]()
+                        var positions = [Int]()
+                        reds = red.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                        blues = blue.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                        greens = green.components(separatedBy: ",").map { Float($0) ?? 0.0 }
+                        positions = postions.components(separatedBy: ",").map { Int($0) ?? 0 }
+
+                        let colors = zip3(reds, greens, blues).map {
+                            RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
+                        }
+                        if positions.count == 1 {
+                            colorModel.position = [0, 255]
+                            if let color = colors.first {
+                                colorModel.colors = [color, color]
+                            }
+                        } else {
+                            colorModel.position = positions
+                            colorModel.colors = colors
+                        }
+                        DeviceServiceImpl.shared.runningColor.accept(colorModel)
+                        
                         debugPrint("Write to sensor location is successful.\(result)")
                     case .failure(let error):
                         debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")

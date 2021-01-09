@@ -33,16 +33,10 @@ class BrowseTrackViewController: BaseVMViewController<AllTracksViewModel, NoInpu
         setupTableView()
         isPlaySingle = true
         viewModel = AllTracksViewModel(apiService: SandsaraDataServices(), inputs: AllTracksViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, syncAll: syncAll, searchTrigger: searchTrigger))
-        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearTrigger.accept(())
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
-    }
-
-    @objc func reloadData() {
         viewWillAppearTrigger.accept(())
     }
 

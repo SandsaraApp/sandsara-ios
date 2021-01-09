@@ -112,7 +112,7 @@ class DeviceServiceImpl {
             do {
                 let cycleMode: String = try sandsaraBoard.read(from: LedStripService.ledStripCycleEnable)
                 print("Mode \(cycleMode)")
-                self.cycleMode.accept(cycleMode == "1" ? true : false)
+                self.cycleMode.accept(cycleMode == "0" ? true : false)
             } catch(let error) {
                 print(error.localizedDescription)
             }
@@ -207,9 +207,6 @@ class DeviceServiceImpl {
                 colorModel.colors = colors
             }
 
-
-
-
             self.runningColor.accept(colorModel)
 
             return false
@@ -235,13 +232,13 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 debugPrint("Sleep Success")
-                self.readDeviceStatus()
+             //   self.readDeviceStatus()
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
                 if error.localizedDescription == "" {
-                    self.readDeviceStatus()
+                 //   self.readDeviceStatus()
                 }
             }
         }
@@ -252,13 +249,13 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 debugPrint("Resume Success")
-                self.readDeviceStatus()
+              //  self.readDeviceStatus()
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
                 if error.localizedDescription == "" {
-                    self.readDeviceStatus()
+               //     self.readDeviceStatus()
                 }
             }
         }
