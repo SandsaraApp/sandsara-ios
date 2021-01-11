@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import Bluejay
+import Firebase
 
 let bluejay = Bluejay()
 @main
@@ -41,6 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
             print(colors)
         }.disposed(by: disposeBag)
+
+        FirebaseApp.configure()
 
         return true
     }

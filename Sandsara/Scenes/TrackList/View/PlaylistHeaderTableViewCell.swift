@@ -98,18 +98,21 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
             self.playlistTrigger.accept(())
         }
         let name = track.fileName; let size = track.fileSize; let urlString = track.fileURL
-        guard let url = URL(string: urlString) else { return }
-        let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
-        if resultCheck.0 == false || resultCheck.1 < size {
-            let operation = DownloadManager.shared.queueDownload(url, item: track)
-            print(operation.progress.value)
-            operation
-                .progress.bind(to: self.downloadButton.progressBar.rx.progress)
-                .disposed(by: operation.disposeBag)
-            completion.addDependency(operation)
-            OperationQueue.main.addOperation(completion)
+        if let url = URL(string: urlString) {
+            let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+            if resultCheck.0 == false || resultCheck.1 < size {
+                let operation = DownloadManager.shared.queueDownload(url, item: track)
+                print(operation.progress.value)
+                operation
+                    .progress.bind(to: self.downloadButton.progressBar.rx.progress)
+                    .disposed(by: operation.disposeBag)
+                completion.addDependency(operation)
+                OperationQueue.main.addOperation(completion)
+            }
         } else {
+            self.playlistTrigger.accept(())
             _ = DataLayer.createDownloaedPlaylist(playlist: track)
+            self.checkDownloaed()
         }
     }
 

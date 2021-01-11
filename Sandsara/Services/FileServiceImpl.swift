@@ -59,7 +59,7 @@ class FileServiceImpl {
                     }
                 }.disposed(by: self.disposeBag)
 
-                bluejay.write(to: FileService.sendFileFlag, value: "completed") { result in
+                bluejay.write(to: FileService.sendFileFlag, value: "\(fileName).\(extensionName)") { result in
                     switch result {
                     case .success:
                         debugPrint("Send file success")
@@ -211,24 +211,30 @@ class FileServiceImpl {
         }
     }
 
+
     func updateTrack(name: String, completionHandler: @escaping ((Bool) -> ())) {
-        bluejay.run { sandsaraBoard -> Bool in
-            do {
-                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
-                try sandsaraBoard.write(to: PlaylistService.pathName, value: name)
-                try sandsaraBoard.write(to: DeviceService.play, value: "1")
-            } catch(let error) {
-                print(error.localizedDescription)
-            }
-            return false
-        } completionOnMainThread: { result in
+        bluejay.write(to: PlaylistService.pathName, value: name) { result in
             switch result {
             case .success:
+                debugPrint("Play success")
                 DeviceServiceImpl.shared.readPlaylistValue()
                 completionHandler(true)
             case .failure(let error):
-                debugPrint(error.localizedDescription)
+                debugPrint("Play update track error")
                 completionHandler(false)
+            }
+        }
+    }
+
+    func updatePosition() {
+        bluejay.write(to: PlaylistService.pathPosition, value: "1") { result in
+            switch result {
+            case .success:
+                debugPrint("Play success")
+              //  DeviceServiceImpl.shared.resumeDevice()
+               // DeviceServiceImpl.shared.readPlaylistValue()
+            case .failure(let error):
+                debugPrint("Play update position error")
             }
         }
     }

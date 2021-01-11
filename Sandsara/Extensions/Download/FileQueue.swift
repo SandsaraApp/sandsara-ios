@@ -157,7 +157,7 @@ class FileOperation: AsynchronousOperation {
         } completionOnMainThread: { result in
             switch result {
             case .success:
-                bluejay.write(to: FileService.sendFileFlag, value: "completed") { result in
+                bluejay.write(to: FileService.sendFileFlag, value: self.item.fileName) { result in
                     switch result {
                     case .success:
                         debugPrint("Send file success")

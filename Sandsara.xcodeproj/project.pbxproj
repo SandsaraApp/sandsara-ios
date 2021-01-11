@@ -45,6 +45,7 @@
 		9263F75C256A50E1004450CA /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F75B256A50E1004450CA /* NetworkService.swift */; };
 		9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */; };
 		9263F763256A655D004450CA /* PlaylistHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */; };
+		9266D10225A99E60007A4948 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9266D10125A99E60007A4948 /* GoogleService-Info.plist */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -294,6 +295,7 @@
 		9263F75B256A50E1004450CA /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistHeaderTableViewCell.xib; sourceTree = "<group>"; };
+		9266D10125A99E60007A4948 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				924EDF5025565F880013CC71 /* Assets.xcassets */,
 				92698E9F255FEEAC009F3A9F /* Localizeable.strings */,
 				92D6633D255AE55A00CE3F8E /* Info.plist */,
+				9266D10125A99E60007A4948 /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1300,6 +1303,7 @@
 				92BA99F02560D45B00564782 /* ShellScript */,
 				92BE9E0E256495A900081EEE /* Embed Frameworks */,
 				0E2A7763CD15A87909F5FDCB /* [CP] Embed Pods Frameworks */,
+				9266D12A25A99F05007A4948 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1429,6 +1433,7 @@
 				9214E12E258F07F3006E43D2 /* PlayerFooterView.xib in Resources */,
 				92A284C62560D9F100739A94 /* OpenSans-BoldItalic.ttf in Resources */,
 				92C7D12B2572188A0062FC78 /* EmptyCell.xib in Resources */,
+				9266D10225A99E60007A4948 /* GoogleService-Info.plist in Resources */,
 				92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */,
 				92FA3ED8257076AF00D05326 /* ColorCell.xib in Resources */,
 				92D66338255AE3FE00CE3F8E /* RecommendTableViewCell.xib in Resources */,
@@ -1531,6 +1536,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9266D12A25A99F05007A4948 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		92BA99F02560D45B00564782 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1934,7 +1956,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1958,7 +1980,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

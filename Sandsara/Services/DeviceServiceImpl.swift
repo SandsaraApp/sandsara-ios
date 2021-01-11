@@ -377,7 +377,7 @@ class DeviceServiceImpl {
         bluejay.run { sandsaraBoard -> Bool in
         do {
             let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
-            print("Led speed \(selectedPalette)")
+            print("Current playlist \(selectedPalette)")
             self.currentPlaylistName.accept(selectedPalette)
         } catch(let error) {
             print(error.localizedDescription)
@@ -386,11 +386,19 @@ class DeviceServiceImpl {
 
         do {
             let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathName)
-            print("Led speed \(selectedPalette)")
+            print("Current track \(selectedPalette)")
             self.currentPath.accept(selectedPalette)
         } catch(let error) {
             print(error.localizedDescription)
         }
+//
+//            do {
+//                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
+//            }
+//
+//            do {
+//                try sandsaraBoard.write(to: DeviceService.play, value: "1")
+//            }
             return false
         } completionOnMainThread: { result in
             debugPrint(result)

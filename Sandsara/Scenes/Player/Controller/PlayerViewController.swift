@@ -55,7 +55,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
                 createPlaylist(name: item.title)
             } else {
                 showTrack(at: index)
-                createPlaylist(name: tracks[index].title)
+                createPlaylist(name: tracks[index].fileName.components(separatedBy: ".").first ?? "")
             }
         }
     }
@@ -205,7 +205,8 @@ extension PlayerViewController {
             if $0 {
                 FileServiceImpl.shared.updatePlaylist(fileName: filename) { success in
                     if success {
-                        self.playTrack(at: self.index)
+                       // FileServiceImpl.shared.updatePosition()
+                     //   self.playTrack(at: self.index)
                     }
                 }
             }
@@ -228,24 +229,12 @@ extension PlayerViewController {
     }
 
     func playTrack(at index: Int) {
-        DeviceServiceImpl.shared.status.subscribeNext { [weak self] status in
-            guard let self = self, let status = status else { return }
-            if status == .calibrating || status == .pause {
-                DeviceServiceImpl.shared.resumeDevice()
-                FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
-                    if success {
-                        self.readProgress()
-                    }
-                }
+        FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
+            if success {
+              //  FileServiceImpl.shared.updatePosition()
+                self.readProgress()
             }
-            else if status == .running {
-                FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
-                    if success {
-                        self.readProgress()
-                    }
-                }
-            }
-        }.disposed(by: disposeBag)
+        }
     }
 
     func triggerPlayAction(at index: Int) {

@@ -20,6 +20,9 @@ target 'Sandsara' do
   pod 'RealmSwift', '~> 5.5.0'
   pod 'SnapKit', '~> 5.0.0'
 
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Analytics'
+
   target 'SandsaraTests' do
     inherit! :search_paths
     # Pods for testing
