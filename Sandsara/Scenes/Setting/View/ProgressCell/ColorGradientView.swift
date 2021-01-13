@@ -272,16 +272,19 @@ class ColorGradientView: UIView {
         if pointViews.count > 1 {
             for i in 0 ..< pointViews.count {
                 if i == 0 {
-                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].currentPoint?.x ?? 0.0  - 11, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: firstPoint.x + 11, y: 30)
+                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].currentPoint?.x ?? 0.0  - 12, y: 30)
+                    pointViews[i].minPoint = CGPoint(x: firstPoint.x + 30, y: 30)
                 } else if i == pointViews.count - 1 {
-                    pointViews[i].maxPoint = CGPoint(x: secondPoint.x - 11, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].currentPoint?.x ?? 0.0  + 11, y: 30)
+                    pointViews[i].maxPoint = CGPoint(x: secondPoint.x - 12, y: 30)
+                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].currentPoint?.x ?? 0.0  + 30, y: 30)
                 } else {
-                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].currentPoint?.x ?? 0.0  - 11, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].currentPoint?.x ?? 0.0  + 11, y: 30)
+                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].currentPoint?.x ?? 0.0  - 12, y: 30)
+                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].currentPoint?.x ?? 0.0  + 30, y: 30)
                 }
             }
+        } else {
+            pointViews[0].maxPoint = CGPoint(x: secondPoint.x - 12, y: 30)
+            pointViews[0].minPoint = CGPoint(x: firstPoint.x + 30, y: 30)
         }
 
         gradientView?.colors = color.colors.map { UIColor(hexString: $0) }
@@ -292,10 +295,10 @@ class ColorGradientView: UIView {
     }
 
     func updateColor() {
-        gradientView?.colors = colors
+        gradientView?.colors = cachedGradients
         gradientView?.locations = locations
-        firstPointView?.color = colors.first
-        secondPointView?.color = colors.last
+        firstPointView?.color = cachedGradients.first
+        secondPointView?.color = cachedGradients.last
         colorCommand()
     }
 
@@ -321,7 +324,7 @@ class ColorGradientView: UIView {
         debugPrint("Touch point \(point.x), \(point.y)")
 
 
-        if point.x > (firstPoint.x + 11) && point.x < (secondPoint.x - 11)  {
+        if point.x > (firstPoint.x + 36) && point.x < (secondPoint.x - 12)  {
             cleanup(isShowAll: false)
             showPoint = point
             addCustomPoint = true
@@ -375,21 +378,26 @@ class ColorGradientView: UIView {
         var index = 0
 
         // update point after add
-        for i in 0 ..< pointViews.count {
-            if pointViews[i].currentPoint?.x == showPoint.x {
-                index = i
-                if i == 0 {
-                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].center.x - 24, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: firstPoint.x + 24, y: 30)
-                } else if i == pointViews.count - 1 {
-                    pointViews[i].maxPoint = CGPoint(x: secondPoint.x - 24, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].center.x + 24, y: 30)
-                } else {
-                    pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].center.x - 24, y: 30)
-                    pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].center.x + 24, y: 30)
+        if pointViews.count > 1 {
+            for i in 0 ..< pointViews.count {
+                if pointViews[i].currentPoint?.x == showPoint.x {
+                    index = i
+                    if i == 0 {
+                        pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].center.x - 12, y: 30)
+                        pointViews[i].minPoint = CGPoint(x: firstPoint.x + 30, y: 30)
+                    } else if i == pointViews.count - 1 {
+                        pointViews[i].maxPoint = CGPoint(x: secondPoint.x - 12, y: 30)
+                        pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].center.x + 30, y: 30)
+                    } else {
+                        pointViews[i].maxPoint = CGPoint(x: pointViews[i + 1].center.x - 12, y: 30)
+                        pointViews[i].minPoint = CGPoint(x: pointViews[i - 1].center.x + 30, y: 30)
+                    }
+                    break
                 }
-                break
             }
+        } else {
+            pointViews[0].maxPoint = CGPoint(x: secondPoint.x - 12, y: 30)
+            pointViews[0].minPoint = CGPoint(x: firstPoint.x + 30, y: 30)
         }
 
         // update
@@ -465,7 +473,7 @@ class ColorGradientView: UIView {
 
                 gestureRecognizer.setTranslation(.zero, in: pointView)
                 for view in pointViews where pointView.currentPoint == view.currentPoint {
-                    view.currentPoint = CGPoint(x: pointView.center.x - 11, y: pointView.center.y)
+                    view.currentPoint = CGPoint(x: pointView.center.x - 18, y: pointView.center.y)
                 }
                 locations = [
                     self.firstPoint.x / self.secondPoint.x
@@ -473,6 +481,7 @@ class ColorGradientView: UIView {
                     ($0.currentPoint?.x ?? 0) / self.secondPoint.x
                 } + [1]
                 updateColor()
+                cleanup(isShowAll: true)
             }
         default: break
 
@@ -494,6 +503,8 @@ class ColorGradientView: UIView {
     private func addPoint(color: UIColor, xPoint: CGFloat) {
         let pointView = ColorPointView()
         addSubview(pointView)
+
+       // pointView.backgroundColor = color
 
         pointView.snp.makeConstraints {
             $0.top.equalTo(43)

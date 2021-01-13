@@ -37,17 +37,20 @@ class BrowseTrackViewController: BaseVMViewController<AllTracksViewModel, NoInpu
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+       // NotificationCenter.default.removeObserver(self)
     }
 
     override func bindViewModel() {
         viewModel
             .outputs.datasources
+            .doOnNext {
+                self.tableView.alpha = $0.isEmpty ? 0 : 1
+                self.noResultView.alpha = $0.isEmpty ? 1 : 0
+            }
             .map { [Section(model: "", items: $0)] }
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)

@@ -12,12 +12,13 @@ import RxCocoa
 
 
 enum PlayerState {
+    case noConnect
     case connected
     case busy
     case haveTrack(displayItem: DisplayItem?)
 
     var isConnection: Bool {
-        return self == .connected || self == .busy
+        return self == .connected || self == .busy || self == .noConnect
     }
 }
 
@@ -41,6 +42,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     @IBOutlet weak var connectionBar: UIView!
     @IBOutlet weak var playerBar: UIView!
     @IBOutlet weak var connectionTitleLabel: UILabel!
+    @IBOutlet weak var retryBtn: UIButton!
     @IBOutlet weak var trackImageView: UIImageView!
     @IBOutlet weak var songLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -79,10 +81,15 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
         songLabel.font = FontFamily.OpenSans.bold.font(size: 12)
         authorLabel.font = FontFamily.OpenSans.light.font(size: 12)
         subTitleLabel.font = FontFamily.OpenSans.light.font(size: 12)
+        retryBtn.titleLabel?.font = FontFamily.OpenSans.regular.font(size: 12)
 
         view.translatesAutoresizingMaskIntoConstraints = false
 
         updateConstraint()
+
+        retryBtn.rx.tap.asDriver().driveNext { [weak self] in
+            self?.showConnectionVC()
+        }.disposed(by: disposeBag)
 
         pauseButton.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
@@ -116,6 +123,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.syncNoti
                         self.subTitleLabel.text = nil
+                        self.retryBtn.isHidden = true
                     case .connected:
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
@@ -123,6 +131,13 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                             .asDriver().drive(self.connectionTitleLabel.rx.text)
                             .disposed(by: self.disposeBag)
                         self.subTitleLabel.text = "Connected"
+                        self.retryBtn.isHidden = true
+                    case .noConnect:
+                        self.playerBar.isHidden = true
+                        self.connectionBar.isHidden = false
+                        self.connectionTitleLabel.text = L10n.noSandsaraDetected
+                        self.retryBtn.isHidden = false
+                        self.subTitleLabel.text = nil
                     case .haveTrack(let item):
                         self.playerBar.isHidden = false
                         self.connectionBar.isHidden = true
@@ -142,9 +157,9 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
         }, completion: nil)
     }
 
-    private func openScanVC() {
-        let scanVC: ScanViewController = self.storyboard?.instantiateViewController(withIdentifier: ScanViewController.identifier) as! ScanViewController
-        let navVC = UINavigationController(rootViewController: scanVC)
+    private func showConnectionVC() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
+        let navVC = UINavigationController(rootViewController: vc)
         self.present(navVC, animated: true, completion: nil)
     }
 

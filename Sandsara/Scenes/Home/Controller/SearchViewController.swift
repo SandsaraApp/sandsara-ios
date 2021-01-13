@@ -53,11 +53,17 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
             .distinctUntilChanged()
             .subscribeNext { text in
                 if !text.isEmpty {
-                    self.playlistsVC?.searchTrigger.accept(text)
                     self.allTrackVC?.searchTrigger.accept(text)
+                    self.playlistsVC?.searchTrigger.accept(text)
                 }
             }
             .disposed(by: disposeBag)
+
+        sc
+            .searchBar.rx.cancelButtonClicked
+            .subscribeNext {
+                self.navigationController?.popViewController(animated: true)
+            }.disposed(by: disposeBag)
 
     }
 
@@ -106,11 +112,28 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
         self.removeAllChildViewController()
         if i == 0 {
             addChildViewController(controller: allTrackVC!, containerView: containerView, byConstraints: true)
-            allTrackVC?.viewWillAppearTrigger.accept(())
+            if let text = sc.searchBar.text {
+                if text.isEmpty {
+                    allTrackVC?.viewWillAppearTrigger.accept(())
+                } else {
+                    allTrackVC?.searchTrigger.accept(text)
+                }
+            } else {
+                allTrackVC?.viewWillAppearTrigger.accept(())
+            }
         } else {
             addChildViewController(controller: playlistsVC!, containerView: containerView, byConstraints: true)
-            playlistsVC?.viewWillAppearTrigger.accept(())
+            if let text = sc.searchBar.text {
+                if text.isEmpty {
+                    playlistsVC?.viewWillAppearTrigger.accept(())
+                } else {
+                    playlistsVC?.searchTrigger.accept(text)
+                }
+            } else {
+                playlistsVC?.viewWillAppearTrigger.accept(())
+            }
         }
+
     }
 
     func didPresentSearchController(_ searchController: UISearchController) {

@@ -149,11 +149,11 @@ enum SettingItemType {
     var sliderValue: (Float, Float) {
         switch self {
         case .lightCycleSpeed:
-            return (10, 500)
+            return (1, 100)
         case .speed:
-            return (1, 150)
+            return (1, 10)
         case .brightness:
-            return (0, 255)
+            return (0, 100)
         default:
             return (0, 0)
         }

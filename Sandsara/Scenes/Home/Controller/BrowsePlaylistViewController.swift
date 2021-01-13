@@ -12,7 +12,8 @@ import RxCocoa
 
 class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
-    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noResultView: UIStackView!
 
     let viewWillAppearTrigger = PublishRelay<()>()
 
@@ -33,12 +34,15 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {
         viewModel
             .outputs.datasources
+            .doOnNext {
+                self.tableView.alpha = $0.isEmpty ? 0 : 1
+                self.noResultView.alpha = $0.isEmpty ? 1 : 0
+            }
             .map { [Section(model: "", items: $0)] }
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)

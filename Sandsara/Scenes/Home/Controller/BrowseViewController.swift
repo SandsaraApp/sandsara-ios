@@ -48,13 +48,9 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateControllers), name: reloadTab, object: nil)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !bluejay.isConnected {
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
             once.run {
+                delegate.initPlayerBar()
                 showConnectionVC()
             }
         }
@@ -66,10 +62,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     }
 
     @objc func updateControllers() {
-        if bluejay.isConnected {
-            if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.initPlayerBar()
-            }
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.initPlayerBar()
         }
     }
 
@@ -159,7 +153,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     private func showConnectionVC() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
         let navVC = UINavigationController(rootViewController: vc)
-        self.present(navVC, animated: true, completion: nil)
+        UIApplication.topViewController()?.tabBarController?.present(navVC, animated: true, completion: nil)
     }
 
     private func showSearch(isShow: Bool) {

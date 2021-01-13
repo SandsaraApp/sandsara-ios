@@ -114,7 +114,7 @@ class SandsaraAPIService: APIServiceCall {
 
     func queryTracks(word: String) -> Single<[Track]> {
         return apiProvider
-            .rx.request(.searchTrack(word: word))
+            .rx.request(.searchTrack(word: word.lowercased()))
             .map(TracksResponse.self)
             .map {
                 $0.tracks.map {
@@ -125,7 +125,7 @@ class SandsaraAPIService: APIServiceCall {
 
     func queryPlaylists(word: String) -> Single<[Playlist]> {
         return apiProvider
-            .rx.request(.searchPlaylist(word: word))
+            .rx.request(.searchPlaylist(word: word.lowercased()))
             .map(PlaylistsResponse.self)
             .map {
                 $0.playlists.map {

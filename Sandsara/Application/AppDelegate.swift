@@ -86,12 +86,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController == nil {
             let customBar = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
-            customBar.state = DeviceServiceImpl.shared.status.value == .busy ? .busy : .connected // TODO: read playlist info there
+            customBar.state = bluejay.isConnected ? (DeviceServiceImpl.shared.status.value == .busy ? .busy : .connected ) : .noConnect
             UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController = customBar
         }
         UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
         UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
         UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
+
+
     }
 }
 
@@ -100,7 +102,9 @@ extension AppDelegate: BackgroundRestorer {
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
         DeviceServiceImpl.shared.readSensorValues()
-        NotificationCenter.default.post(name: reloadTab, object: nil)
+        DispatchQueue.main.async {
+            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
+        }
         return .continue
     }
 
@@ -124,7 +128,9 @@ extension AppDelegate: ListenRestorer {
 
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-        NotificationCenter.default.post(name: reloadTab, object: nil)
+        DispatchQueue.main.async {
+            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
+        }
         DeviceServiceImpl.shared.cleanup()
         return .noChange
     }

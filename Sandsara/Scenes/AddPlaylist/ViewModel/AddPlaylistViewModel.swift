@@ -34,6 +34,15 @@ final class AddPlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input,
             items.append(contentsOf: localList)
         }
 
+        if DataLayer.loadDownloaedPlaylists().count > 0 {
+            let localList = DataLayer.loadDownloaedPlaylists().map {
+                DisplayItem(playlist: $0)
+            }.map {
+                PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: $0, isFavorite: false))
+            }
+            items.append(contentsOf: localList)
+        }
+
         datas.accept(items)
     }
 }
