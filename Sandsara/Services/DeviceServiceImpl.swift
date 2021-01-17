@@ -135,7 +135,7 @@ class DeviceServiceImpl {
 
             do {
                 let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
-                print("Led speed \(selectedPalette)")
+                print(" \(selectedPalette)")
                 self.currentPlaylistName.accept(selectedPalette)
             } catch(let error) {
                 print(error.localizedDescription)

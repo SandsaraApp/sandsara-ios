@@ -53,13 +53,18 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
 
         inputs.syncAll.subscribeNext { [weak self] in
             guard let self = self else { return }
-            for track in self.tracks  {
-                let operation = FileSyncManager.shared.queueDownload(item: track.inputs.track)
-                FileSyncManager.shared.triggerOperation(id: track.inputs.track.trackId)
-                operation.addDependency(completion)
-                OperationQueue.main.addOperation(completion)
+            var allTrackCellVM = [AllTrackCellVM]()
+            allTrackCellVM.append(self.datas.value.first!)
+            for data in self.datas.value {
+                switch data {
+                case .track(let vm):
+                    let trackVM = AllTrackCellVM.track(TrackCellViewModel(inputs: TrackCellVMContract.Input(track: vm.inputs.track, syncTrigger: BehaviorRelay<()>(value: ()))))
+                    allTrackCellVM.append(trackVM)
+                default:
+                    continue
+                }
             }
-            self.inputs.viewWillAppearTrigger.accept(())
+            self.datas.accept(allTrackCellVM)
         }.disposed(by: disposeBag)
 
         inputs.searchTrigger?.subscribeNext { [weak self] text in

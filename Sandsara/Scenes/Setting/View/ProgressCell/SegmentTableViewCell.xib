@@ -160,9 +160,9 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="288" height="207"/>
                                                 <subviews>
                                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6X9-da-wxD">
-                                                        <rect key="frame" x="-2" y="20" width="292" height="15"/>
+                                                        <rect key="frame" x="-2" y="20" width="292" height="26"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="14" id="6rR-yV-YHA"/>
+                                                            <constraint firstAttribute="height" constant="25" id="6rR-yV-YHA"/>
                                                         </constraints>
                                                         <color key="minimumTrackTintColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

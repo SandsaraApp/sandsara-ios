@@ -139,10 +139,9 @@ extension ScanViewController: ConnectionObserver {
                 debugPrint("Read from sensor location is successful: \(location)")
                 let alertVC = UIAlertController(title: "Alert", message: "Connection attempt to: \(peripheral.name) is successful", preferredStyle: .alert)
                 alertVC.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
-                    self?.dismiss(animated: true, completion: nil)
-                    DispatchQueue.main.async {
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
-                    }
+                    self?.dismiss(animated: true, completion: {
+                        NotificationCenter.default.post(name: connectedd, object: nil)
+                    })
                 }))
                 UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
                 DeviceServiceImpl.shared.readSensorValues()

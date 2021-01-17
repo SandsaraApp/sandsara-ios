@@ -55,6 +55,9 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
                 if !text.isEmpty {
                     self.allTrackVC?.searchTrigger.accept(text)
                     self.playlistsVC?.searchTrigger.accept(text)
+                } else {
+                    self.allTrackVC?.viewWillAppearTrigger.accept(())
+                    self.playlistsVC?.viewWillAppearTrigger.accept(())
                 }
             }
             .disposed(by: disposeBag)

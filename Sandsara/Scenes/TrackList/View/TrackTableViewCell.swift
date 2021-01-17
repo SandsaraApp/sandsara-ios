@@ -54,6 +54,14 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
         }.disposed(by: disposeBag)
 
         viewModel
+            .inputs
+            .syncTrigger?.subscribeNext {
+                if !DataLayer.checkTrackIsSynced(self.viewModel.inputs.track) {
+                    self.syncAction()
+                }
+            }.disposed(by: disposeBag)
+
+        viewModel
             .outputs
             .title
             .drive(titleLabel.rx.text)
@@ -77,8 +85,6 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
 
         syncBtn
             .rx.tap.subscribeNext {
-                self.syncBtn.rotate360Degrees()
-                self.progressView.isHidden = false
                 self.syncAction()
         }.disposed(by: disposeBag)
 
@@ -137,6 +143,8 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
     }
 
     private func syncAction() {
+        syncBtn.rotate360Degrees()
+        progressView.isHidden = false
         let track = viewModel.inputs.track
 
         let completion = BlockOperation {

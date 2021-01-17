@@ -367,22 +367,34 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     func sendColor() {
         guard let staticColorViewColor = self.staticColorUpdateView.backgroundColor else { return }
-        let postions = ["0", "255"].joined(separator: ",")
+        let postions = [0, 255].map { String(format:"%02X", $0) }.joined()
 
-        let redColor = (staticColorViewColor.rgba().red * 255).rounded()
-        let red = "\(redColor),\(redColor)"
+        print(postions)
 
-        let greenColor = (staticColorViewColor.rgba().green * 255).rounded()
-        let green = "\(greenColor),\(greenColor)"
+        let redColor = Int(staticColorViewColor.rgba().red * 255)
+        let red = [redColor, redColor].map { String(format:"%02X", $0) }.joined()
 
-        let blueColor = (staticColorViewColor.rgba().blue * 255).rounded()
+        print(red)
 
-        let blue = "\(blueColor),\(blueColor)"
+        let greenColor = Int(staticColorViewColor.rgba().green * 255)
+        let green = [greenColor, greenColor].map { String(format:"%02X", $0) }.joined()
 
-        let amount = "2"
+        print(green)
+
+        let blueColor = Int(staticColorViewColor.rgba().blue * 255)
+
+        let blue = [blueColor, blueColor].map { String(format:"%02X", $0) }.joined()
+
+        print(blue)
+
+        let amount = String(format:"%02X", 2)
+
+        let colorString = [amount, postions, red, green, blue].joined()
+
+        print(colorString)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            LedStripServiceImpl.shared.uploadCustomPalette(amoutColors: amount, postions: postions, red: red, blue: blue, green: green)
+            LedStripServiceImpl.shared.uploadCustomPalette(colorString: colorString)
         }
     }
 

@@ -91,6 +91,8 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
             self?.showConnectionVC()
         }.disposed(by: disposeBag)
 
+        retryBtn.sizeToFit()
+
         pauseButton.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
             if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
@@ -122,8 +124,8 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.syncNoti
-                        self.subTitleLabel.text = nil
                         self.retryBtn.isHidden = true
+                        self.retryBtn.alpha = 0
                     case .connected:
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
@@ -132,12 +134,14 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                             .disposed(by: self.disposeBag)
                         self.subTitleLabel.text = "Connected"
                         self.retryBtn.isHidden = true
+                        self.retryBtn.alpha = 0
                     case .noConnect:
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.noSandsaraDetected
                         self.retryBtn.isHidden = false
                         self.subTitleLabel.text = nil
+                        self.retryBtn.alpha = 1
                     case .haveTrack(let item):
                         self.playerBar.isHidden = false
                         self.connectionBar.isHidden = true
