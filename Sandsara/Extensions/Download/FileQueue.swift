@@ -67,6 +67,7 @@ class FileSyncManager: NSObject {
         guard let currentOperation = operations[id] else { return }
         FileServiceImpl.shared.checkFileExistOnSDCard(name: currentOperation.item.fileName) { isExisted in
             if isExisted && !currentOperation.item.isFile {
+                currentOperation.finish()
                 self.updateTrack(item: currentOperation.item)
             } else {
                 if self.queue.operations.isEmpty {
@@ -94,19 +95,17 @@ extension FileSyncManager: RemoveTask {
     }
 
     func updateTrack(item: DisplayItem) {
-        DispatchQueue.main.async {
-            if !item.isFile {
-                if item.isPlaylist {
-                    if DataLayer.createSyncedPlaylist(playlist: item) {
-                        self.removeTask(id: item.trackId)
-                    }
-                } else {
-                    if !DataLayer.addSyncedTrack(item) {
-                        self.removeTask(id: item.trackId)
-                    }
+        if !item.isFile {
+            if item.isPlaylist {
+                if DataLayer.createSyncedPlaylist(playlist: item) {
+                    self.removeTask(id: item.trackId)
                 }
-                NotificationCenter.default.post(name: reloadNoti, object: nil)
+            } else {
+                if !DataLayer.addSyncedTrack(item) {
+                    self.removeTask(id: item.trackId)
+                }
             }
+            NotificationCenter.default.post(name: reloadNoti, object: nil)
         }
     }
 }

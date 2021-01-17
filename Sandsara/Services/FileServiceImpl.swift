@@ -190,11 +190,11 @@ class FileServiceImpl {
         }
     }
 
-    func updatePlaylist(fileName: String, completionHandler: @escaping ((Bool) -> ())) {
+    func updatePlaylist(fileName: String, index: Int, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.run { sandsaraBoard -> Bool in
             do {
                 try sandsaraBoard.write(to: PlaylistService.playlistName, value: fileName)
-                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
+                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "\(index)")
             } catch(let error) {
                 print(error.localizedDescription)
             }
@@ -257,4 +257,19 @@ class FileServiceImpl {
             }
         }
     }
+
+    func updatePositionIndex(index: Int, completionHandler: @escaping ((Bool) -> ())) {
+        bluejay.write(to: PlaylistService.pathPosition, value: "\(index)") { result in
+            switch result {
+            case .success:
+                debugPrint("Play success")
+                DeviceServiceImpl.shared.readPlaylistValue()
+                completionHandler(true)
+            case .failure(let error):
+                debugPrint("Play update track error")
+                completionHandler(false)
+            }
+        }
+    }
+
 }

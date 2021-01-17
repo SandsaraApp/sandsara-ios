@@ -61,7 +61,7 @@
 "sync_to_board" = "Sync to Sandsara";
 "add_to_queue" = "Add to Queue";
 "downloading" = "Downloading...";
-"next_by" = "Next by:";
+"next_by" = "Queue:";
 "syncing" = "Syncing...";
 "firmware_alert" = "Firmware Update Available v %@";
 "firmware_downloading" = "Downloading Firmware v %@";

@@ -162,6 +162,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
             default: return nil
             }
         }.compactMap { $0 }
+        player.playlingState = .playlist
         player.playlistItem = playlistItem
         player.isReloaded = true
         (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: player.tracks[index])

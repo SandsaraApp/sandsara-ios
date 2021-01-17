@@ -74,12 +74,10 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     private func showPlayer() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.tracks = self.tracks
-        let index = self.tracks.isEmpty ? 0 : (self.tracks.count > 1 ? self.selecledIndex : 0)
-        player.index = index
         player.isReloaded = true
-        player.playlistItem = playlistItem
-        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: tracks.isEmpty ? track : tracks[index])
+        player.playlingState = .track
+        player.firstPriorityTrack = track
+        (tabBarController?.popupBar.customBarViewController as! PlayerBarViewController).state = .haveTrack(displayItem: track)
         tabBarController?.popupBar.isHidden = false
         tabBarController?.popupContentView.popupCloseButton.isHidden = true
         tabBarController?.presentPopupBar(withContentViewController: player, openPopup: true, animated: false, completion: nil)

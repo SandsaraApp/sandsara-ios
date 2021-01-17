@@ -11,6 +11,11 @@ import RxCocoa
 import RxDataSources
 import Bluejay
 
+enum PlayingState {
+    case playlist
+    case track
+}
+
 class PlayerViewController: BaseViewController<NoInputParam> {
     static var shared: PlayerViewController = {
         let playerVC = UIStoryboard(name: "Main",
@@ -31,11 +36,13 @@ class PlayerViewController: BaseViewController<NoInputParam> {
 
     var isReloaded = false
 
+    var playlingState: PlayingState = .playlist
+
     var playingTrackCount = 0
 
     var playlistItem: DisplayItem?
 
-    var nowPlayingQueues = [DisplayItem]()
+    var firstPriorityTrack: DisplayItem?
 
     var timer: Timer?
 
@@ -49,13 +56,14 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if isReloaded {
-            isReloaded = false
-            if let item = playlistItem {
-                showTrack(at: index)
-                createPlaylist(name: item.title)
+            if playlingState == .track {
+                if let firstPriority = firstPriorityTrack {
+                    addToQueue(track: firstPriority)
+                    showTrack(at: self.queues.count - 1)
+                }
             } else {
                 showTrack(at: index)
-                createPlaylist(name: tracks[index].fileName.components(separatedBy: ".").first ?? "")
+                createPlaylist()
             }
         }
     }
@@ -180,20 +188,13 @@ extension PlayerViewController: UITableViewDataSource {
 
 // MARK: - Player Method
 extension PlayerViewController {
-    func createPlaylist(name: String) {
-        let fileNames = ([currentTrack] + queues).map {
+    func createPlaylist() {
+        let fileNames = tracks.map {
             $0.fileName
         }.joined(separator: "\r\n")
 
-        var filename = ""
-
+        let filename = "temporal"
         let fileExtension = "playlist"
-
-        if name == L10n.favorite {
-            filename = "favorites"
-        } else {
-            filename = name
-        }
 
         FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename + "." + fileExtension)
         if let handle = FileServiceImpl.shared.getHandleForFileInDocuments(filename: filename + "." + fileExtension) {
@@ -203,10 +204,14 @@ extension PlayerViewController {
         FileServiceImpl.shared.sendFiles(fileName: filename, extensionName: fileExtension, isPlaylist: true)
         FileServiceImpl.shared.sendSuccess.subscribeNext {
             if $0 {
-                FileServiceImpl.shared.updatePlaylist(fileName: filename) { success in
-                    if success {
-                       // FileServiceImpl.shared.updatePosition()
-                     //   self.playTrack(at: self.index)
+                if self.isReloaded {
+                    self.isReloaded = false
+                    FileServiceImpl.shared.updatePlaylist(fileName: filename,
+                                                          index: self.playlingState == .track ? self.queues.count - 1 : 0) { success in
+                        if success {
+                            print("Play playlist \(filename) success")
+                            self.readProgress()
+                        }
                     }
                 }
             }
@@ -215,10 +220,9 @@ extension PlayerViewController {
 
     func showTrack(at index: Int) {
         sliderValue = 0
-        queues = Array(tracks[index + 1 ..< tracks.count])
+        queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
         currentTrack = tracks[index]
         playingTrackCount = queues.count
-        nowPlayingQueues = [currentTrack] + queues
         self.index = index
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -229,16 +233,22 @@ extension PlayerViewController {
     }
 
     func playTrack(at index: Int) {
-        FileServiceImpl.shared.updateTrack(name: self.tracks[index].fileName) { success in
+        FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
-              //  FileServiceImpl.shared.updatePosition()
                 self.readProgress()
+                DispatchQueue.main.async {
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: self.tracks[index])
+                }
             }
         }
     }
 
     func triggerPlayAction(at index: Int) {
         showTrack(at: index)
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+        }
         playTrack(at: index)
     }
 
@@ -280,6 +290,9 @@ extension PlayerViewController {
         if self.index < self.tracks.count - 1 {
             let indexToPlay = self.index + 1
             self.triggerPlayAction(at: indexToPlay)
+        } else {
+            let indexToPlay = 0
+            self.triggerPlayAction(at: indexToPlay)
         }
     }
 
@@ -295,11 +308,19 @@ extension PlayerViewController {
         tracks.append(track)
         queues.append(track)
 
-        DispatchQueue.main.async {
-            self.tableView.beginUpdates()
-            self.tableView.insertRows(at: [IndexPath(row: self.queues.count - 1, section: 0)], with: .automatic)
-            self.tableView.endUpdates()
+        if tracks.count > 1 {
+            DispatchQueue.main.async {
+                self.tableView.beginUpdates()
+                self.tableView.insertRows(at: [IndexPath(row: self.queues.count - 1, section: 0)], with: .automatic)
+                self.tableView.endUpdates()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
+
+        createPlaylist()
     }
 
     func readProgress() {

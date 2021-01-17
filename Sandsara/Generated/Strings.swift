@@ -108,7 +108,7 @@ internal enum L10n {
   internal static let lightCycleSpeed = L10n.tr("Localizeable", "light_cycle_speed")
   /// Light mode
   internal static let lightmode = L10n.tr("Localizeable", "lightmode")
-  /// Next by:
+  /// Queue:
   internal static let nextBy = L10n.tr("Localizeable", "next_by")
   /// No Results
   internal static let noResult = L10n.tr("Localizeable", "no_result")
