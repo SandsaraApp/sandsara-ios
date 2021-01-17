@@ -298,13 +298,13 @@ class ColorGradientView: UIView {
     @objc func showFirstPoint() {
         cleanup(isShowAll: false)
         isFirst = true
-        delegate?.firstPointTouch(color: colors.first ?? .clear)
+        delegate?.firstPointTouch(color: cachedGradients.first ?? .clear)
     }
 
     @objc func showSecondPoint() {
         cleanup(isShowAll: false)
         isLast = true
-        delegate?.secondPointTouch(color: colors.last ?? .clear)
+        delegate?.secondPointTouch(color: cachedGradients.last ?? .clear)
     }
 
     @objc func showGradientGesture(_ sender: UITapGestureRecognizer) {
@@ -344,7 +344,7 @@ class ColorGradientView: UIView {
     }
 
     func updateFirstColor(color: UIColor) {
-        var colors = self.colors
+        var colors = self.cachedGradients
         colors.removeFirst()
         colors.insert(color, at: 0)
         self.colors = colors
@@ -354,7 +354,7 @@ class ColorGradientView: UIView {
     }
 
     func updateSecondColor(color: UIColor) {
-        var colors = self.colors
+        var colors = self.cachedGradients
         colors.removeLast()
         colors.insert(color, at: colors.count)
 
