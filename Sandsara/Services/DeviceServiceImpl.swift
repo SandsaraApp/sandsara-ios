@@ -63,6 +63,8 @@ class DeviceServiceImpl {
 
     var currentTracks = [DisplayItem]()
 
+    var tracks = [String]()
+
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -231,16 +233,17 @@ class DeviceServiceImpl {
 
                 self.currentTrackPosition.accept(Float(progress) ?? 0.0)
                 self.currentTrackIndex = Int(index) ?? 0 - 1
-                self.currentTracks = bytes.split(separator: "\r\n").map {
+                self.tracks = bytes.split(separator: "\r\n").map {
                     String($0)
-                }.map {
-                    DataLayer.loadDownloadedTrack($0)
                 }
             }
             return false
         } completionOnMainThread: { result in
             switch result {
             case .success:
+                self.currentTracks = self.tracks.map {
+                    DataLayer.loadDownloadedTrack($0)
+                }
                 if !self.currentTracks.isEmpty {
                     DispatchQueue.main.async {
                         let player = PlayerViewController.shared
