@@ -137,6 +137,8 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
             self.state = .synced
         }
 
+        operation.startSendFile()
+
         operation.addDependency(completion)
         OperationQueue.main.addOperation(completion)
         operation.progress.bind(to: self.progressBar.rx.progress).disposed(by: disposeBag)

@@ -67,12 +67,12 @@ class FileSyncManager: NSObject {
         guard let currentOperation = operations[id] else { return }
         FileServiceImpl.shared.checkFileExistOnSDCard(name: currentOperation.item.fileName) { isExisted in
             if isExisted && !currentOperation.item.isFile {
-                currentOperation.finish()
+                self.queue.cancelAllOperations()
                 self.updateTrack(item: currentOperation.item)
             } else {
                 if self.queue.operations.isEmpty {
                     DispatchQueue.main.async {
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
                     }
                     self.queue.addOperation(currentOperation)
                     currentOperation.startSendFile()

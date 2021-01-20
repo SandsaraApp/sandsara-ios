@@ -62,8 +62,11 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBOutlet weak var colorTempSlider: UISlider!
 
     @IBOutlet weak var flipModeTitleLabel: UILabel!
-    @IBOutlet weak var toogleSwitch: ToggleSwitch!
+    @IBOutlet weak var toogleSwitch: UISwitch!
     @IBOutlet weak var flipModeView: UIView!
+    @IBOutlet weak var rotateModeView: UIView!
+    @IBOutlet weak var rotateTitleLabel: UILabel!
+    @IBOutlet weak var rotateSwitch: UISwitch!
 
     @IBOutlet var sliderTempHeightConstraint: NSLayoutConstraint!
     
@@ -135,14 +138,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         overlayGradientView.isHidden = true
 
         lightSpeedSlider.value = DeviceServiceImpl.shared.ledSpeed.value
-
-        let images = ToggleSwitchImages(baseOnImage: Asset.toggleBaseOn.image,
-                                        baseOffImage: Asset.toggleBaseOff.image,
-                                        thumbOnImage: Asset.thumbs.image,
-                                        thumbOffImage: Asset.thumbs.image)
-
-        toogleSwitch.configurationImages = images
         flipModeTitleLabel.text = L10n.flipMode
+        rotateTitleLabel.text = L10n.rotate
         selectionStyle = .none
         colorTempSlider.maximumValue = Constraints.maxColorTemp
         colorTempSlider.minimumValue = Constraints.minColorTemp
@@ -265,9 +262,25 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         viewModel.outputs.flipDirection.drive(toogleSwitch.rx.isOn).disposed(by: disposeBag)
 
-        toogleSwitch.stateChanged = { [weak self] state in
-            self?.viewModel.inputs.flipDirection.accept(state)
-        }
+        viewModel.outputs.rotateToogle.drive(rotateSwitch.rx.isOn).disposed(by: disposeBag)
+
+        toogleSwitch.rx.isOn
+            .changed
+            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
+            .distinctUntilChanged()
+            .asObservable()
+            .subscribeNext { [weak self] state in
+                self?.viewModel.inputs.flipDirection.accept(state)
+        }.disposed(by: disposeBag)
+
+        rotateSwitch.rx.isOn
+            .changed
+            .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
+            .distinctUntilChanged()
+            .asObservable()
+            .subscribeNext { [weak self] state in
+                self?.viewModel.inputs.rotateToogle.accept(state)
+            }.disposed(by: disposeBag)
 
         staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
 
@@ -305,6 +318,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         staticColorView.alpha = isStatic ? 1 : 0
         flipModeView.isHidden = isStatic
         flipModeView.alpha = isStatic ? 0 : 1
+        rotateModeView.isHidden = isStatic
+        rotateModeView.alpha = isStatic ? 0 : 1
         layoutIfNeeded()
         cellUpdated.accept(())
     }
@@ -353,16 +368,49 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBAction func overlaySliderGroupValueChanged(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        if overlaySliderView.color.hsba().brightness < 0.16 {
+            overlayLineView.layer.borderWidth = 0.5
+            overlayLineView.layer.borderColor = Asset.primary.color.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 1
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        } else {
+            overlayLineView.layer.borderWidth = 0
+            overlayLineView.layer.borderColor = UIColor.white.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 0
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        }
     }
 
     @IBAction func overlaySliderGroupTouchDown(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        if overlaySliderView.color.hsba().brightness < 0.16 {
+            overlayLineView.layer.borderWidth = 0.5
+            overlayLineView.layer.borderColor = Asset.primary.color.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 1
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        } else {
+            overlayLineView.layer.borderWidth = 0
+            overlayLineView.layer.borderColor = Asset.primary.color.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 0
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        }
     }
 
     @IBAction func overlaySliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        if overlaySliderView.color.hsba().brightness < 0.16 {
+            overlayLineView.layer.borderWidth = 0.5
+            overlayLineView.layer.borderColor = Asset.primary.color.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 1
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        } else {
+            overlayLineView.layer.borderWidth = 0
+            overlayLineView.layer.borderColor = Asset.primary.color.cgColor
+            overlayColorUpdatedView.layer.borderWidth = 0
+            overlayColorUpdatedView.layer.borderColor = Asset.primary.color.cgColor
+        }
     }
 
     func sendColor() {

@@ -57,6 +57,12 @@ class DeviceServiceImpl {
 
     let runningColor = BehaviorRelay<ColorModel?>(value: nil)
 
+    let currentTrackPosition = BehaviorRelay<Float>(value: 0)
+
+    var currentTrackIndex = 0
+
+    var currentTracks = [DisplayItem]()
+
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -135,7 +141,7 @@ class DeviceServiceImpl {
 
             do {
                 let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
-                print(" \(selectedPalette)")
+                print("\(selectedPalette)")
                 self.currentPlaylistName.accept(selectedPalette)
             } catch(let error) {
                 print(error.localizedDescription)
@@ -209,9 +215,54 @@ class DeviceServiceImpl {
 
             self.runningColor.accept(colorModel)
 
+            var resultFiles = ""
+            do {
+                try sandsaraBoard.writeAndListen(writeTo: FileService.readFileFlag, value: self.currentPlaylistName.value + ".playlist", listenTo: FileService.receiveFileRespone, completion: {
+                                                 (result: String) -> ListenAction in
+                                                 resultFiles = result
+                                                return .done
+                                                 })
+            }
+
+            if resultFiles == "ok" {
+                let bytes: String = try sandsaraBoard.read(from: FileService.readFiles)
+                let progress: String = try sandsaraBoard.read(from: PlaylistService.progressOfPath)
+                let index: String = try sandsaraBoard.read(from: PlaylistService.pathPosition)
+
+                self.currentTrackPosition.accept(Float(progress) ?? 0.0)
+                self.currentTrackIndex = Int(index) ?? 0 - 1
+                self.currentTracks = bytes.split(separator: "\r\n").map {
+                    String($0)
+                }.map {
+                    DataLayer.loadDownloadedTrack($0)
+                }
+            }
             return false
         } completionOnMainThread: { result in
-            debugPrint(result)
+            switch result {
+            case .success:
+                if !self.currentTracks.isEmpty {
+                    DispatchQueue.main.async {
+                        let player = PlayerViewController.shared
+                        player.modalPresentationStyle = .fullScreen
+                        player.index = self.currentTrackIndex
+                        player.tracks = self.currentTracks
+                        player.playlingState = .showOnly
+                        player.isReloaded = true
+                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: player.tracks[self.currentTrackIndex])
+                        player.progress.accept(self.currentTrackPosition.value)
+                        UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
+                        UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
+                        UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 
@@ -371,6 +422,8 @@ class DeviceServiceImpl {
         lightMode.accept(.cycle)
         currentPlaylistName.accept("")
         currentPath.accept("")
+        currentTrackIndex = 0
+        currentTracks = []
     }
 
     func readPlaylistValue() {

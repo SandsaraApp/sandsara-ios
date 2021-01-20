@@ -102,9 +102,6 @@ extension AppDelegate: BackgroundRestorer {
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
         DeviceServiceImpl.shared.readSensorValues()
-        DispatchQueue.main.async {
-            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
-        }
         return .continue
     }
 

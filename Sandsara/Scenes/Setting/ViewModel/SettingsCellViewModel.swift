@@ -304,6 +304,7 @@ enum LightModeVMContract {
         let type: SettingItemType
         let segmentsSelection: BehaviorRelay<LightMode>
         let flipDirection: BehaviorRelay<Bool>
+        let rotateToogle: BehaviorRelay<Bool>
     }
 
     struct Output: OutputType {
@@ -311,6 +312,7 @@ enum LightModeVMContract {
         let title: Driver<String>
         let datas: Driver<[PresetCellViewModel]>
         let flipDirection: Driver<Bool>
+        let rotateToogle: Driver<Bool>
         let preselectedColor: Driver<ColorModel?>
     }
 }
@@ -327,6 +329,14 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
                 self.sendCommand(command: stringValue)
             }.disposed(by: disposeBag)
 
+        inputs
+            .rotateToogle
+            .skip(1)
+            .subscribeNext { value in
+                let stringValue = value ? "0" : "1"
+                self.sendCommand(command: stringValue)
+            }.disposed(by: disposeBag)
+
         let images = Preferences.AppDomain.colors?.map {
             PresetCellViewModel(inputs: PresetCellVMContract.Input(color: $0))
         }.compactMap { $0 }
@@ -335,6 +345,7 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
                          title: Driver.just(inputs.type.title),
                          datas: Driver.just(images ?? []),
                          flipDirection: inputs.flipDirection.asDriver(),
+                         rotateToogle: inputs.rotateToogle.asDriver(),
                          preselectedColor: DeviceServiceImpl.shared.runningColor.asDriver()))
     }
 
@@ -417,8 +428,6 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
                         DeviceServiceImpl.shared.readDeviceStatus()
                     case .failure(let error):
                         print(error.localizedDescription)
-                  //      self.updateError.accept(error)
-
                         if error.localizedDescription == "" {
                             DeviceServiceImpl.shared.readDeviceStatus()
                         }

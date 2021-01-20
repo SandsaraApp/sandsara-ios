@@ -12,6 +12,22 @@ import CoreGraphics
 import SnapKit
 import UIKit.UIGestureRecognizerSubclass
 
+func hexStringToData(string: String) -> Data {
+    let stringArray = Array(string)
+    var data: Data = Data()
+    for i in stride(from: 0, to: string.count, by: 2) {
+        let pair: String = String(stringArray[i]) + String(stringArray[i+1])
+        if let byteNum = UInt8(pair, radix: 16) {
+            let byte = Data([byteNum])
+            data.append(byte)
+        }
+        else{
+            fatalError()
+        }
+    }
+    return data
+}
+
 extension Collection {
 
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
@@ -115,6 +131,19 @@ class ColorPointView: UIView {
         //backgroundColor = color
         lineView?.backgroundColor = color
         colorThumb?.backgroundColor = color
+
+        guard let color = color else { return }
+        if color.hsba().brightness < 0.16 {
+            lineView?.layer.borderWidth = 1
+            lineView?.layer.borderColor = UIColor.white.cgColor
+            colorThumb?.layer.borderWidth = 1
+            colorThumb?.layer.borderColor = Asset.primary.color.cgColor
+        } else {
+            lineView?.layer.borderWidth = 0
+            lineView?.layer.borderColor = UIColor.white.cgColor
+            colorThumb?.layer.borderWidth = 0
+            colorThumb?.layer.borderColor = UIColor.white.cgColor
+        }
     }
 
     override func layoutSubviews() {
@@ -463,7 +492,7 @@ class ColorGradientView: UIView {
 
             let minOffset: CGFloat = index == 0 ? 12 : 36
 
-           // gestureRecognizer.setTranslation(.zero, in: pointView.superview)
+            // gestureRecognizer.setTranslation(.zero, in: pointView.superview)
 
             if amount + maxOffset <= (pointView.maxPoint?.x ?? 0)  && amount - minOffset >= (pointView.minPoint?.x ?? 0) {
                 pointView.center = newCenter
@@ -548,42 +577,76 @@ class ColorGradientView: UIView {
     }
 
     func colorCommand() {
-        let position = locations.map { $0 * 255 }.map { Int($0) }.map { String(format:"%02X", $0) }.joined()
-
+        let position = locations.map { $0 * 255 }.map { Int($0) }.map { String($0) }.map {
+            Data($0.utf8)
+        }
         print(position)
 
         let red = cachedGradients.map {
             Int($0.rgba().red * 255)
-        }.map { String(format:"%02X", $0) }.joined()
+        }.map { String($0) }.map {
+            Data($0.utf8)
+        }
+
 
         print(red)
 
 
         let blue = cachedGradients.map {
             Int($0.rgba().blue * 255)
-        }.map { String(format:"%02X", $0) }.joined()
-
+        }.map { String($0) }.map {
+            Data($0.utf8)
+        }
         print(blue)
 
         let green = cachedGradients.map {
             Int($0.rgba().green * 255)
-        }.map { String(format:"%02X", $0) }.joined()
+        }.map { String($0) }.map {
+            Data($0.utf8)
+        }
 
         print(green)
 
-        let colorString = [String(format:"%02X", cachedGradients.count), position, red, green, blue].joined()
+        let amout = [String(cachedGradients.count)].map {
+            Data($0.utf8)
+        }
+
+        let colorString = [amout, position, red, green, blue]
 
         print(colorString)
 
-        bluejay.write(to: LedStripService.uploadCustomPalette, value: colorString) { result in
+        bluejay.run { sandsaraBoard -> Bool in
+            do {
+                for a in amout {
+                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: a)
+                }
+
+                for b in position {
+                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: b)
+                }
+
+                for c in red {
+                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: c)
+                }
+
+                for d in green {
+                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: d)
+                }
+
+                for e in blue {
+                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: e)
+                }
+
+            }
+            return false
+        }  completionOnMainThread: { result in
             switch result {
             case .success:
-                print("write success")
+                debugPrint("Send file success")
             case .failure(let error):
-                print(error.localizedDescription)
+                debugPrint("Send file error \(error.localizedDescription)")
             }
         }
-
 
         var colorModel = ColorModel()
         var reds = [Float]()

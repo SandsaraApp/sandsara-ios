@@ -486,6 +486,19 @@ class DataLayer {
         }
         return false
     }
+
+    static func loadDownloadedTrack(_ name: String) -> DisplayItem {
+        if let list = realm?.objects(DownloadedTracks.self).first {
+            for track in list.syncedTracks {
+                if track.fileName == name && !track.isInvalidated {
+                    return DisplayItem(track: track)
+                } else{
+                    continue
+                }
+            }
+        }
+        return DisplayItem(track: Track(id: 0, title: name, trackId: "", thumbnail: nil, author: name, file: nil))
+    }
 }
 
 

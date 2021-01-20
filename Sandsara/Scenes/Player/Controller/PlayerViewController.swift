@@ -14,6 +14,7 @@ import Bluejay
 enum PlayingState {
     case playlist
     case track
+    case showOnly
 }
 
 class PlayerViewController: BaseViewController<NoInputParam> {
@@ -48,6 +49,12 @@ class PlayerViewController: BaseViewController<NoInputParam> {
 
     var progress = BehaviorRelay<Float>(value: 0)
 
+    @IBOutlet weak var trackProgressSlider: UISlider!
+    @IBOutlet weak var prevBtn: UIButton!
+    @IBOutlet weak var playBtn: UIButton!
+    @IBOutlet weak var nextBtn: UIButton!
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -74,10 +81,40 @@ class PlayerViewController: BaseViewController<NoInputParam> {
         tableView.tableFooterView = UIView()
         tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         tableView.register(PlayerHeaderView.nib, forHeaderFooterViewReuseIdentifier: PlayerHeaderView.identifier)
-        tableView.register(PlayerFooterView.nib, forHeaderFooterViewReuseIdentifier: PlayerFooterView.identifier)
         tableView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+
+        nextBtn.addTarget(self, action: #selector(nextBtnTap), for: .touchUpInside)
+        prevBtn.addTarget(self, action: #selector(prevBtnTap), for: .touchUpInside)
+        trackProgressSlider.minimumValue = 0
+        trackProgressSlider.maximumValue = 100 // not sure
+
+        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+            trackProgressSlider.setThumbImage(Asset.thumbs.image, for: state)
+        }
+
+        trackProgressSlider.addTarget(self, action: #selector(sliderTouchValueChanged(_:)), for: .valueChanged)
+        trackProgressSlider.addTarget(self, action: #selector(sliderTouchBegan(_:)), for: .touchDown)
+        trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
+        trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
+
+        playBtn.rx.tap.asDriver().driveNext { [weak self] in
+            guard let self = self else { return }
+            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
+                DeviceServiceImpl.shared.resumeDevice()
+                self.readProgress()
+                self.playBtn.setImage(Asset.pause1.image, for: .normal)
+            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
+                DeviceServiceImpl.shared.pauseDevice()
+                self.playBtn.setImage(Asset.play.image, for: .normal)
+            }
+        }.disposed(by: disposeBag)
+
+        progress
+            .bind(to: trackProgressSlider.rx.value)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -94,10 +131,6 @@ extension PlayerViewController: UITableViewDelegate {
         return 400
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 184
-    }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlayerHeaderView.identifier) as! PlayerHeaderView
         headerView.reloadHeaderCell(trackDisplay: Driver.just(currentTrack),
@@ -108,37 +141,6 @@ extension PlayerViewController: UITableViewDelegate {
             .driveNext { [weak self] in
                 self?.popupPresentationContainer?.closePopup(animated: true, completion: nil)
         }.disposed(by: headerView.disposeBag)
-        return headerView
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlayerFooterView.identifier) as! PlayerFooterView
-        headerView.nextBtn.addTarget(self, action: #selector(nextBtnTap), for: .touchUpInside)
-        headerView.prevBtn.addTarget(self, action: #selector(prevBtnTap), for: .touchUpInside)
-        headerView.trackProgressSlider.minimumValue = 0
-        headerView.trackProgressSlider.maximumValue = 100 // not sure
-
-        headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchValueChanged(_:)), for: .valueChanged)
-        headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchBegan(_:)), for: .touchDown)
-        headerView.trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
-        headerView.trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
-
-        headerView.playBtn.rx.tap.asDriver().driveNext { [weak self] in
-            guard let self = self else { return }
-            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
-                DeviceServiceImpl.shared.resumeDevice()
-                self.readProgress()
-                headerView.playBtn.setImage(Asset.pause1.image, for: .normal)
-            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
-                DeviceServiceImpl.shared.pauseDevice()
-                headerView.playBtn.setImage(Asset.play.image, for: .normal)
-            }
-        }.disposed(by: disposeBag)
-
-        progress
-            .bind(to: headerView.trackProgressSlider.rx.value)
-            .disposed(by: headerView.disposeBag)
-
         return headerView
     }
 
@@ -180,7 +182,7 @@ extension PlayerViewController: UITableViewDataSource {
         else { return UITableViewCell() }
 
         cell.bind(to: TrackCellViewModel(inputs: TrackCellVMContract
-                                            .Input(track: queues[safe: indexPath.row] ?? DisplayItem())))
+                                            .Input(mode: .remote, track: queues[safe: indexPath.row] ?? DisplayItem())))
 
         return cell
     }
@@ -189,6 +191,14 @@ extension PlayerViewController: UITableViewDataSource {
 // MARK: - Player Method
 extension PlayerViewController {
     func createPlaylist() {
+        guard playlingState != .showOnly else {
+            if timer != nil {
+                timer?.invalidate()
+                timer = nil
+            }
+            timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
+            return
+        }
         let fileNames = tracks.map {
             $0.fileName
         }.joined(separator: "\r\n")
@@ -219,6 +229,7 @@ extension PlayerViewController {
     }
 
     func showTrack(at index: Int) {
+        DeviceServiceImpl.shared.currentTrackIndex = index
         sliderValue = 0
         queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
         currentTrack = tracks[index]
@@ -235,6 +246,7 @@ extension PlayerViewController {
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
+                self.progress.accept(0) // reset progress
                 self.readProgress()
                 DispatchQueue.main.async {
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: self.tracks[index])
@@ -248,6 +260,7 @@ extension PlayerViewController {
         if timer != nil {
             timer?.invalidate()
             timer = nil
+            self.progress.accept(0)
         }
         playTrack(at: index)
     }
@@ -319,7 +332,7 @@ extension PlayerViewController {
                 self.tableView.reloadData()
             }
         }
-
+        DeviceServiceImpl.shared.currentTracks = tracks
         createPlaylist()
     }
 

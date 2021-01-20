@@ -207,17 +207,12 @@ extension DownloadOperation: URLSessionDownloadDelegate {
             if item.isFile {
                 
             } else {
-                if item.isPlaylist {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    _ = DataLayer.addDownloadedTrack(self.item)
+                    if self.item.isPlaylist {
                         _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
-                        NotificationCenter.default.post(name: reloadNoti, object: self)
                     }
-                } else {
-                    DispatchQueue.main.async {
-                        print("track \(self.item.fileName) exist hihi")
-                        _ = DataLayer.addDownloadedTrack(self.item)
-                        NotificationCenter.default.post(name: reloadNoti, object: self)
-                    }
+                    NotificationCenter.default.post(name: reloadNoti, object: self)
                 }
             }
 

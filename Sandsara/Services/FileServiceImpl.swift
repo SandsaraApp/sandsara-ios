@@ -25,6 +25,49 @@ class FileServiceImpl {
 
     let disposeBag = DisposeBag()
 
+    func readFile(filename: String) {
+        fileExist.accept(false)
+        let start = CFAbsoluteTimeGetCurrent()
+        bluejay.run { sandsaraBoard -> Bool in
+            var resultFiles = ""
+            do {
+                try sandsaraBoard.write(to: FileService.readFileFlag, value: filename)
+                try sandsaraBoard.listen(to: FileService.receiveFileRespone, completion: {
+                    (result: String) -> ListenAction in
+                    resultFiles = result
+                    if result == "-1" || result == "-2" {
+                        self.fileExist.accept(false)
+                        return .done
+                    }
+                    if result == "done" {
+                        self.fileExist.accept(true)
+                        return .done
+                    }
+                    return .keepListening
+                })
+            }
+
+            if resultFiles == "ok" {
+                let bytes: String = try sandsaraBoard.read(from: FileService.readFiles)
+                let intBytes = Int(bytes) ?? 0
+                print("total bytes \(intBytes)")
+            }
+
+            return resultFiles == "-1" || resultFiles == "-2" || resultFiles == "done"
+        } completionOnMainThread: { result in
+            switch result {
+            case .success:
+                self.fileExist.subscribeNext {
+                    if $0 {
+                        debugPrint("File exist")
+                    }
+                }.disposed(by: self.disposeBag)
+            case .failure:
+                debugPrint("send error")
+            }
+        }
+    }
+
     func sendFiles(fileName: String,
                    extensionName: String, isPlaylist: Bool = false) {
         // reset value

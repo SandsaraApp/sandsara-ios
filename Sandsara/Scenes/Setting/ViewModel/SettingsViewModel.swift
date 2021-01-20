@@ -44,10 +44,9 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
         datas.append(.brightness(ProgressCellViewModel(inputs: ProgressCellVMContract.Input(type: .brightness,
                                                                                             progress: DeviceServiceImpl.shared.brightness))))
         datas.append(.lightMode(LightModeCellViewModel(inputs: LightModeVMContract.Input(type: .lightMode, segmentsSelection: inputs.lightMode,
-                                                                                         flipDirection: DeviceServiceImpl.shared.flipDirection))))
-
+                                                                                         flipDirection: DeviceServiceImpl.shared.flipDirection,
+                                                                                         rotateToogle: DeviceServiceImpl.shared.cycleMode))))
         datas.append(.toogle(ToogleCellViewModel(inputs: ToogleCellVMContract.Input(type: .sleep, toogle: DeviceServiceImpl.shared.sleepStatus))))
-        datas.append(.toogle(ToogleCellViewModel(inputs: ToogleCellVMContract.Input(type: .rotate, toogle: DeviceServiceImpl.shared.cycleMode))))
         return datas
     }
 }

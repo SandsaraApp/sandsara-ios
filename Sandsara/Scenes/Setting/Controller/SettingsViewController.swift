@@ -22,7 +22,6 @@ extension Array {
 class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputParam> {
 
     @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet weak var testButton: UIBarButtonItem!
 
     private let viewWillAppearTrigger = PublishRelay<()>()
     private let lightMode = BehaviorRelay<LightMode>(value: .cycle)
@@ -56,10 +55,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
             .map { [Section(model: "", items: $0)] }
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-
-        testButton.rx.tap.asDriver().driveNext {
-           self.readBinFile()
-        }.disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -112,13 +107,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
                 }
 
             })
-    }
-
-    private func readBinFile() {
-//        FileServiceImpl.shared.sendFiles(fileName: "proof", extensionName: "bin")
-//        FileServiceImpl.shared.seconds.subscribeNext {
-//            self.showAlertVC(message: "Took \($0) seconds")
-//        }.disposed(by: FileServiceImpl.shared.disposeBag)
     }
 }
 
