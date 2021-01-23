@@ -80,8 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func initPlayerBar() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
-        player.index = 0
-        player.tracks = []
         player.popupContentView.popupCloseButtonStyle = .none
 
         if UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController == nil {

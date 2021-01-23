@@ -577,77 +577,112 @@ class ColorGradientView: UIView {
     }
 
     func colorCommand() {
-        let position = locations.map { $0 * 255 }.map { Int($0) }.map { String($0) }.map {
-            Data($0.utf8)
-        }
+//        let position = locations.map { $0 * 255 }.map { Int($0) }.map { String($0) }.map {
+//            Data($0.utf8)
+//        }
+//        print(position)
+//
+//        let red = cachedGradients.map {
+//            Int($0.rgba().red * 255)
+//        }.map { String($0) }.map {
+//            Data($0.utf8)
+//        }
+//
+//
+//        print(red)
+//
+//
+//        let blue = cachedGradients.map {
+//            Int($0.rgba().blue * 255)
+//        }.map { String($0) }.map {
+//            Data($0.utf8)
+//        }
+//        print(blue)
+//
+//        let green = cachedGradients.map {
+//            Int($0.rgba().green * 255)
+//        }.map { String($0) }.map {
+//            Data($0.utf8)
+//        }
+//
+//        print(green)
+//
+//        let amout = [String(cachedGradients.count)].map {
+//            Data($0.utf8)
+//        }
+//
+//        let colorString = [amout, position, red, green, blue]
+//
+//        print(colorString)
+//
+//        bluejay.run { sandsaraBoard -> Bool in
+//            do {
+//                for a in amout {
+//                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: a)
+//                }
+//
+//                for b in position {
+//                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: b)
+//                }
+//
+//                for c in red {
+//                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: c)
+//                }
+//
+//                for d in green {
+//                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: d)
+//                }
+//
+//                for e in blue {
+//                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: e)
+//                }
+//
+//            }
+//            return false
+//        }  completionOnMainThread: { result in
+//            switch result {
+//            case .success:
+//                debugPrint("Send file success")
+//            case .failure(let error):
+//                debugPrint("Send file error \(error.localizedDescription)")
+//            }
+//        }
+
+        let position = locations.map { $0 * 255 }.map { Int($0) }.map { String($0).data }.combined
+
         print(position)
 
         let red = cachedGradients.map {
             Int($0.rgba().red * 255)
-        }.map { String($0) }.map {
-            Data($0.utf8)
-        }
-
+        }.map { String($0).data }.combined
 
         print(red)
 
 
         let blue = cachedGradients.map {
             Int($0.rgba().blue * 255)
-        }.map { String($0) }.map {
-            Data($0.utf8)
-        }
+        }.map { String($0).data }.combined
+
         print(blue)
 
         let green = cachedGradients.map {
             Int($0.rgba().green * 255)
-        }.map { String($0) }.map {
-            Data($0.utf8)
-        }
+        }.map { String($0).data }.combined
 
         print(green)
 
-        let amout = [String(cachedGradients.count)].map {
-            Data($0.utf8)
-        }
-
-        let colorString = [amout, position, red, green, blue]
+        let colorString = [String(cachedGradients.count).data, position, red, green, blue].combined
 
         print(colorString)
 
-        bluejay.run { sandsaraBoard -> Bool in
-            do {
-                for a in amout {
-                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: a)
-                }
-
-                for b in position {
-                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: b)
-                }
-
-                for c in red {
-                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: c)
-                }
-
-                for d in green {
-                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: d)
-                }
-
-                for e in blue {
-                    try sandsaraBoard.write(to: LedStripService.uploadCustomPalette, value: e)
-                }
-
-            }
-            return false
-        }  completionOnMainThread: { result in
+        bluejay.write(to: LedStripService.uploadCustomPalette, value: colorString) { result in
             switch result {
             case .success:
-                debugPrint("Send file success")
+                print("write success")
             case .failure(let error):
-                debugPrint("Send file error \(error.localizedDescription)")
+                print(error.localizedDescription)
             }
         }
-
         var colorModel = ColorModel()
         var reds = [Float]()
         var blues = [Float]()
@@ -703,5 +738,21 @@ class ColorGradientView: UIView {
             pointViews[0].maxPoint = CGPoint(x: secondPoint.x, y: 30)
             pointViews[0].minPoint = CGPoint(x: firstPoint.x, y: 30)
         }
+    }
+}
+
+//extension StringProtocol {
+//    var data: Data { .init(utf8) }
+//    var bytes: [UInt8] { .init(utf8) }
+//}
+
+extension Array where Element == Data {
+    /**
+     * Combines data
+     * ## Examples:
+     * [Data(),Data()].combined
+     */
+    var combined: Data {
+        reduce(.init(), +)
     }
 }

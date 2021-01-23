@@ -71,8 +71,24 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     }
 
     @objc func updateControllers() {
-        DispatchQueue.main.async {
-            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+        if !DeviceServiceImpl.shared.currentTracks.isEmpty {
+            DispatchQueue.main.async {
+                let player = PlayerViewController.shared
+                player.modalPresentationStyle = .fullScreen
+                player.index = DeviceServiceImpl.shared.currentTrackIndex
+                player.tracks = DeviceServiceImpl.shared.currentTracks
+                player.playlingState = .showOnly
+                player.isReloaded = true
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: player.tracks[DeviceServiceImpl.shared.currentTrackIndex])
+                player.progress.accept(DeviceServiceImpl.shared.currentTrackPosition.value)
+                UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
+                UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
+                UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
+            }
+        } else {
+            DispatchQueue.main.async {
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+            }
         }
     }
 

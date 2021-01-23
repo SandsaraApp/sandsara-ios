@@ -97,7 +97,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
             guard let self = self else { return }
             if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
                 DeviceServiceImpl.shared.resumeDevice()
-                PlayerViewController.shared.readProgress()
+                PlayerViewController.shared.updateProgressTimer()
                 self.pauseButton.setImage(Asset.pause.image, for: .normal)
             } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
                 DeviceServiceImpl.shared.pauseDevice()

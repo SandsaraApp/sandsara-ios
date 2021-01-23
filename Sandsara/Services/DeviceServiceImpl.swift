@@ -244,24 +244,8 @@ class DeviceServiceImpl {
                 self.currentTracks = self.tracks.map {
                     DataLayer.loadDownloadedTrack($0)
                 }
-                if !self.currentTracks.isEmpty {
-                    DispatchQueue.main.async {
-                        let player = PlayerViewController.shared
-                        player.modalPresentationStyle = .fullScreen
-                        player.index = self.currentTrackIndex
-                        player.tracks = self.currentTracks
-                        player.playlingState = .showOnly
-                        player.isReloaded = true
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: player.tracks[self.currentTrackIndex])
-                        player.progress.accept(self.currentTrackPosition.value)
-                        UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
-                        UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
-                        UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
-                    }
+                if UIApplication.topViewController()?.tabBarController != nil {
+                    NotificationCenter.default.post(name: reloadTab, object: nil)
                 }
             case .failure(let error):
                 print(error)

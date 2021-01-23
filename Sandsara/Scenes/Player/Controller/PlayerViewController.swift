@@ -102,9 +102,9 @@ class PlayerViewController: BaseViewController<NoInputParam> {
 
         playBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
-            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
+            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause  {
                 DeviceServiceImpl.shared.resumeDevice()
-                self.readProgress()
+                self.updateProgressTimer()
                 self.playBtn.setImage(Asset.pause1.image, for: .normal)
             } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
                 DeviceServiceImpl.shared.pauseDevice()
@@ -217,7 +217,7 @@ extension PlayerViewController {
                 if self.isReloaded {
                     self.isReloaded = false
                     FileServiceImpl.shared.updatePlaylist(fileName: filename,
-                                                          index: self.playlingState == .track ? self.queues.count - 1 : 0) { success in
+                                                          index: self.playlingState == .track ? self.queues.count - 1 : 1) { success in
                         if success {
                             print("Play playlist \(filename) success")
                             self.readProgress()
@@ -314,6 +314,9 @@ extension PlayerViewController {
         if self.index > 0 {
             let indexToPlay = self.index - 1
             self.triggerPlayAction(at: indexToPlay)
+        } else {
+            let indexToPlay = self.tracks.count - 1
+            self.triggerPlayAction(at: indexToPlay)
         }
     }
 
@@ -336,8 +339,7 @@ extension PlayerViewController {
         createPlaylist()
     }
 
-    func readProgress() {
-        progress.accept(0)
+    func updateProgressTimer() {
         if timer != nil {
             timer?.invalidate()
             timer = nil
@@ -345,8 +347,17 @@ extension PlayerViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
     }
 
+    func readProgress() {
+        progress.accept(0)
+        updateProgressTimer()
+    }
+
     @objc func updateTimer(_ timer: Timer) {
-        if progress.value == 100 || DeviceServiceImpl.shared.status.value == SandsaraStatus.pause {
+        if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause {
+            self.timer?.invalidate()
+            self.timer = nil
+        }
+        if progress.value == 100  {
             self.timer?.invalidate()
             self.timer = nil
             self.nextBtnTap()
