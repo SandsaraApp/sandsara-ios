@@ -232,21 +232,26 @@ class DeviceServiceImpl {
                 let index: String = try sandsaraBoard.read(from: PlaylistService.pathPosition)
 
                 self.currentTrackPosition.accept(Float(progress) ?? 0.0)
-                self.currentTrackIndex = Int(index) ?? 0 - 1
+                self.currentTrackIndex = (Int(index) ?? 0) - 1
                 self.tracks = bytes.split(separator: "\r\n").map {
                     String($0)
                 }
+            if self.currentTrackIndex > self.tracks.count {
+            self.currentTrackIndex = self.tracks.count - 1
             }
+            }
+       
             return false
         } completionOnMainThread: { result in
             switch result {
             case .success:
-                self.currentTracks = self.tracks.map {
-                    DataLayer.loadDownloadedTrack($0)
-                }
-                if UIApplication.topViewController()?.tabBarController != nil {
-                    NotificationCenter.default.post(name: reloadTab, object: nil)
-                }
+            self.currentTracks = self.tracks.map {
+            DataLayer.loadDownloadedTrack($0)
+            }
+            if UIApplication.topViewController()?.tabBarController != nil {
+            NotificationCenter.default.post(name: reloadTab, object: nil)
+            }
+               
             case .failure(let error):
                 print(error)
             }
@@ -304,14 +309,14 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 debugPrint("Resume Success")
-                self.readDeviceStatus()
+            //    self.readDeviceStatus()
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
 
-                if error.localizedDescription == "" {
-                    self.readDeviceStatus()
-                }
+//                if error.localizedDescription == "" {
+//                    self.readDeviceStatus()
+//                }
             }
         }
     }

@@ -54,6 +54,8 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
 
+var isPlaying = true
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,14 +104,18 @@ class PlayerViewController: BaseViewController<NoInputParam> {
 
         playBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
-            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause  {
-                DeviceServiceImpl.shared.resumeDevice()
-                self.updateProgressTimer()
-                self.playBtn.setImage(Asset.pause1.image, for: .normal)
-            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
-                DeviceServiceImpl.shared.pauseDevice()
-                self.playBtn.setImage(Asset.play.image, for: .normal)
-            }
+        if self.isPlaying {
+        self.isPlaying = false
+        DeviceServiceImpl.shared.pauseDevice()
+        self.pauseTimer()
+        self.playBtn.setImage(Asset.play.image, for: .normal)
+        } else {
+        self.isPlaying = true
+        DeviceServiceImpl.shared.resumeDevice()
+        self.updateProgressTimer()
+        self.playBtn.setImage(Asset.pause1.image, for: .normal)
+        }
+        self.popupBar.customBarViewController?.popupItemDidUpdate()
         }.disposed(by: disposeBag)
 
         progress
@@ -246,6 +252,7 @@ extension PlayerViewController {
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
+            self.isPlaying = true
                 self.progress.accept(0) // reset progress
                 self.readProgress()
                 DispatchQueue.main.async {
@@ -347,16 +354,20 @@ extension PlayerViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
     }
 
+func pauseTimer() {
+if timer != nil {
+timer?.invalidate()
+timer = nil
+}
+}
+
     func readProgress() {
         progress.accept(0)
         updateProgressTimer()
     }
 
     @objc func updateTimer(_ timer: Timer) {
-        if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause {
-            self.timer?.invalidate()
-            self.timer = nil
-        }
+        
         if progress.value == 100  {
             self.timer?.invalidate()
             self.timer = nil

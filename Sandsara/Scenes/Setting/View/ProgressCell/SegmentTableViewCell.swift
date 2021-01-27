@@ -444,6 +444,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             LedStripServiceImpl.shared.uploadCustomPalette(colorString: colorString)
         }
+
     }
 
     func resetValue(isColorTemp: Bool) {

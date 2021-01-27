@@ -95,12 +95,17 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
 
         pauseButton.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
-            if DeviceServiceImpl.shared.status.value == SandsaraStatus.pause || DeviceServiceImpl.shared.status.value == SandsaraStatus.sleep {
+        if !PlayerViewController.shared.isPlaying {
+        PlayerViewController.shared.isPlaying = true
                 DeviceServiceImpl.shared.resumeDevice()
                 PlayerViewController.shared.updateProgressTimer()
+        PlayerViewController.shared.playBtn.setImage(Asset.pause1.image, for: .normal)
                 self.pauseButton.setImage(Asset.pause.image, for: .normal)
-            } else if DeviceServiceImpl.shared.status.value == (SandsaraStatus.running) {
+            } else {
+            PlayerViewController.shared.isPlaying = false
                 DeviceServiceImpl.shared.pauseDevice()
+            PlayerViewController.shared.pauseTimer()
+            PlayerViewController.shared.playBtn.setImage(Asset.play.image, for: .normal)
                 self.pauseButton.setImage(Asset.play.image, for: .normal)
             }
         }.disposed(by: disposeBag)
@@ -113,7 +118,13 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     }
 
     override func popupItemDidUpdate() {
+    
         if connectionBar != nil {
+        if PlayerViewController.shared.isPlaying {
+        self.pauseButton.setImage(Asset.pause.image, for: .normal)
+        } else {
+        self.pauseButton.setImage(Asset.play.image, for: .normal)
+        }
             Driver.just(state)
                 .driveNext { state in
                     if !state.isConnection {

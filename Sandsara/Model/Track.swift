@@ -9,7 +9,9 @@ import Foundation
 import RealmSwift
 
 class Thumbnail: Codable {
+    var filename = ""
     var url = ""
+var size: Int64 = 0
 }
 
 class File: Codable {

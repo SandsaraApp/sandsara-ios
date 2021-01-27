@@ -29,7 +29,7 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
             SandsaraDataServices().getFirmwares(option: SandsaraDataServices().getServicesOption(for: .firmware)).subscribeNext { [weak self] firmwares in
                 guard let self = self else { return }
                 for firmware in firmwares {
-                    if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value && !DeviceServiceImpl.shared.firmwareVersion.value.isEmpty {
+                    if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value {
                         var values = self.buildCellVM()
                         values.insert(.updateFirmware(DownloadFirmwareViewModel(inputs: DownloadFirmwareVMContract.Input(latestVersion: firmware.version, file: firmware.file?.first))), at: 3)
                         self.datas.accept(values)

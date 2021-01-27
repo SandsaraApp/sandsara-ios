@@ -497,6 +497,15 @@ class DataLayer {
                 }
             }
         }
+    if let tracks = Preferences.PlaylistsDomain.allTracks {
+    for track in tracks {
+    if track.file?.first?.filename == name {
+    return DisplayItem(track: track)
+    } else {
+    continue
+    }
+    }
+    }
         return DisplayItem(track: Track(id: 0, title: name, trackId: "", thumbnail: nil, author: name, file: nil))
     }
 }

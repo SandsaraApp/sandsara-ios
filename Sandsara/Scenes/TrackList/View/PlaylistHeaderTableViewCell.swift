@@ -9,13 +9,36 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+struct Matrix<T> {
+let rows: Int, columns: Int
+var grid: [T]
+init(rows: Int, columns: Int,defaultValue: T) {
+self.rows = rows
+self.columns = columns
+grid = Array(repeating: defaultValue, count: rows * columns) as! [T]
+}
+func indexIsValid(row: Int, column: Int) -> Bool {
+return row >= 0 && row < rows && column >= 0 && column < columns
+}
+subscript(row: Int, column: Int) -> T {
+get {
+assert(indexIsValid(row: row, column: column), "Index out of range")
+return grid[(row * columns) + column]
+}
+set {
+assert(indexIsValid(row: row, column: column), "Index out of range")
+grid[(row * columns) + column] = newValue
+}
+}
+}
+
 class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewModel> {
 
     @IBOutlet weak var songTitleLabel: UILabel!
     @IBOutlet weak var songAuthorLabel: UILabel!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var backBtn: UIButton!
-    @IBOutlet weak var playlistCoverImage: UIImageView!
+    @IBOutlet weak var playlistCoverImage: ImageGridView!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var downloadButton: ProgressButtonUIView!
     @IBOutlet weak var syncButton: ProgressButtonUIView!
@@ -28,6 +51,10 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
 
     let playlistTrigger = PublishRelay<()>()
 
+var images = [UIImage]()
+
+var expectedImages = [UIImage]()
+
     var state: TrackState = .download {
         didSet {
             trackDetailUIConfig()
@@ -38,7 +65,10 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-
+    
+ playlistCoverImage.datasource = self
+    playlistCoverImage.maxCapacity = 12
+    
         songTitleLabel.textColor = Asset.primary.color
         songAuthorLabel.textColor = Asset.secondary.color
         songTitleLabel.font = FontFamily.Tinos.regular.font(size: 30)
@@ -77,9 +107,44 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
 
         deleteButton.rx.tap.bind(to: deleteAction).disposed(by: disposeBag)
 
-        playlistCoverImage.kf.indicatorType = .activity
-        playlistCoverImage.kf.setImage(with: viewModel.outputs.thumbnailUrl)
-
+    let completion = BlockOperation {
+    defer {
+    self.processHeaderImage()
+    }
+    for track in self.viewModel.inputs.track.tracks {
+    
+    guard let fileName = track.thumbnail?.first?.filename else { continue }
+    
+    do {
+    
+     if let imageURL = try? FileManager.default
+    .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent(fileName) {
+     if let data = try? Data(contentsOf: imageURL), let image = UIImage(data: data) {
+     self.images.append(image)
+     }
+     }
+    
+    
+    
+    }
+    
+    
+    catch {
+    
+    }
+   
+    }
+    }
+    for track in viewModel.inputs.track.tracks {
+    guard let name = track.thumbnail?.first?.filename, let size = track.thumbnail?.first?.size, let urlString = track.thumbnail?.first?.url, let url = URL(string: urlString) else { continue }
+    let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+    if resultCheck.0 == false || resultCheck.1 < size {
+    let operation = ImageDownloadManager.shared.queueDownload(url)
+    completion.addDependency(operation)
+    }
+    }
+    OperationQueue.main.addOperation(completion)
 
         downloadButton.touchEvent = { [weak self] in
             self?.downloadAction()
@@ -110,6 +175,21 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
                 OperationQueue.main.addOperation(completion)
             }
         } else {
+        let completion = BlockOperation {
+        print("all done")
+        }
+        
+        for track in self.viewModel.inputs.track.tracks {
+        guard let name = track.file?.first?.filename, let size = track.file?.first?.size, let urlString = track.file?.first?.url, let url = URL(string: urlString) else { continue }
+        let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+        if resultCheck.0 == false || resultCheck.1 < size {
+        let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(track: track))
+        completion.addDependency(operation)
+        } else {
+        _ = DataLayer.addDownloadedTrack(DisplayItem(track: track))
+        }
+        }
+        OperationQueue.main.addOperation(completion)
             self.playlistTrigger.accept(())
             _ = DataLayer.createDownloaedPlaylist(playlist: track)
             self.checkDownloaed()
@@ -180,4 +260,72 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
         downloadButton.isHidden = state != .download
         syncButton.isHidden = state != .downloaded
     }
+
+func processHeaderImage() {
+guard images.count > 0 else {
+print("No image")
+return
+}
+
+var matrix = Matrix<UIImage?>(rows: 3, columns: 4, defaultValue: nil)
+
+var firstRows = [UIImage]()
+var secondRows = [UIImage]()
+var thirdRows = [UIImage]()
+
+var expectedValues = [UIImage]()
+
+var dividedValue = 12 / images.count
+while (dividedValue > 0) {
+expectedValues.append(contentsOf: images)
+dividedValue -= 1
+}
+
+var remainder = fabs((12.0).remainder(dividingBy: Double(images.count)))
+
+if remainder == 2 {
+remainder = 5
+}
+
+if remainder > 0 {
+let array = Array(images.prefix(Int(remainder)))
+expectedValues.append(contentsOf: array)
+}
+
+firstRows = Array(expectedValues.prefix(4))
+
+secondRows = Array(expectedValues[5 ..< 9])
+
+thirdRows = Array(expectedValues[9 ..< 12])
+
+var expectedFirstRows = [UIImage?]()
+var expectedSecondRows = [UIImage?]()
+var expectedThirdRows = [UIImage?]()
+ 
+for image in firstRows {
+expectedFirstRows.append(image.splitedInFourParts.shuffled().first)
+}
+
+for image in secondRows {
+expectedSecondRows.append(image.splitedInFourParts.shuffled().first)
+}
+
+for image in thirdRows {
+expectedThirdRows.append(image.splitedInFourParts.shuffled().first)
+}
+
+expectedImages = expectedFirstRows.compactMap { $0 } + expectedSecondRows.compactMap { $0 } + expectedThirdRows.compactMap { $0 }
+
+DispatchQueue.main.async {
+self.playlistCoverImage.reload()
+}
+
+}
+
+}
+
+extension PlaylistHeaderTableViewCell: ImageGridViewDatasource {
+func imageGridViewImages(_ imageGridView: ImageGridView) -> [UIImage] {
+return expectedImages
+}
 }

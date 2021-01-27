@@ -94,14 +94,12 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
                 self.downloadBtn.setTitle(L10n.firmwareUpdateNow, for: .normal)
                 self.alertLabel.text = L10n.firmwareNotice
                 self.downloadBtn.isUserInteractionEnabled = true
-                self.progressBar.progress = 0
+                self.progressBar.setProgress(0, animated: true)
             case .syncing:
                 self.titleSyncLabel.text = L10n.firmwareSyncing(self.latestVersion.value)
                 self.downloadBtn.setTitle(L10n.syncing, for: .normal)
                 self.alertLabel.text = ""
-                //FileSyncManager.shared.
             case .synced:
-              //  DeviceServiceImpl.shared.restart()
                 self.updateFirmwareAlert.accept(())
             }
         }

@@ -130,7 +130,6 @@ class FileOperation: AsynchronousOperation {
 
     func startSendFile() {
         start()
-        let file = item.fileName.components(separatedBy: ".")
         let start = CFAbsoluteTimeGetCurrent()
         bluejay.run { sandsaraBoard -> Bool in
             if let bytes: [[UInt8]] = self.getFile(file: self.item.fileName) {
@@ -159,16 +158,17 @@ class FileOperation: AsynchronousOperation {
                 bluejay.write(to: FileService.sendFileFlag, value: self.item.fileName) { result in
                     switch result {
                     case .success:
-                        debugPrint("Send file success")
-                        let diff = CFAbsoluteTimeGetCurrent() - start
-                        self.seconds.accept(diff)
-                        print("Took \(diff) seconds")
-                        let track = self.item
-                        self.delegate?.updateTrack(item: track)
-                        self.finish()
+                    debugPrint("Send file success")
+                    let diff = CFAbsoluteTimeGetCurrent() - start
+                    self.seconds.accept(diff)
+                    print("Took \(diff) seconds")
+                    let track = self.item
+                    self.delegate?.updateTrack(item: track)
+                    self.finish()
                     case .failure(let error):
                         debugPrint("Send file error \(error.localizedDescription)")
                         self.finish()
+                    
                     }
                 }
             case .failure:

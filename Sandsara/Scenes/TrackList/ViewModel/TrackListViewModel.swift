@@ -53,6 +53,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
                     !DataLayer.loadDownloadedTrack(LocalTrack(track: $0)) ? TrackCellVMContract.Input(track: $0, downloadTrigger: BehaviorRelay<()>(value: ())) : TrackCellVMContract.Input(track: $0)
                     )}
                 .map { PlaylistDetailCellVM.track($0) }
+        
             self.datas.accept(
                 [PlaylistDetailCellVM.header(PlaylistDetailHeaderViewModel(inputs: PlaylistDetailHeaderVMContract.Input(track: self.inputs.playlistItem,
                                                                                                                         isFavlist: isFavlist)))] +

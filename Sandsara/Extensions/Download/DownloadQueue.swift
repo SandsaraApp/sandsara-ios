@@ -204,16 +204,33 @@ extension DownloadOperation: URLSessionDownloadDelegate {
 
             print("File URL \(destinationURL)")
             filePath = destinationURL
-            if item.isFile {
-                
+            if !item.isFile {
+            DispatchQueue.main.async {
+            if self.item.isPlaylist {
+            let completion = BlockOperation {
+            print("all done")
+            }
+            
+            DispatchQueue.main.async {
+            _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
+            }
+            
+            for track in self.item.tracks {
+            guard let name = track.file?.first?.filename, let size = track.file?.first?.size, let urlString = track.file?.first?.url, let url = URL(string: urlString) else { continue }
+            let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
+            if resultCheck.0 == false || resultCheck.1 < size {
+            let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(track: track))
+            completion.addDependency(operation)
             } else {
-                DispatchQueue.main.async {
-                    _ = DataLayer.addDownloadedTrack(self.item)
-                    if self.item.isPlaylist {
-                        _ = DataLayer.createDownloaedPlaylist(playlist: self.item)
-                    }
-                    NotificationCenter.default.post(name: reloadNoti, object: self)
-                }
+            _ = DataLayer.addDownloadedTrack(DisplayItem(track: track))
+            }
+            }
+            OperationQueue.main.addOperation(completion)
+            } else {
+            _ = DataLayer.addDownloadedTrack(self.item)
+            }
+            NotificationCenter.default.post(name: reloadNoti, object: self)
+            }
             }
 
         } catch {

@@ -46,6 +46,9 @@
 		9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */; };
 		9263F763256A655D004450CA /* PlaylistHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */; };
 		9266D10225A99E60007A4948 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9266D10125A99E60007A4948 /* GoogleService-Info.plist */; };
+		92670E2425C15D5700ECE055 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E2325C15D5700ECE055 /* ImageManager.swift */; };
+		92670E4325C1717400ECE055 /* ImageGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4125C1717400ECE055 /* ImageGridView.swift */; };
+		92670E4425C1717400ECE055 /* ImageGridItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4225C1717400ECE055 /* ImageGridItemView.swift */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -296,6 +299,9 @@
 		9263F760256A655D004450CA /* PlaylistHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		9263F761256A655D004450CA /* PlaylistHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistHeaderTableViewCell.xib; sourceTree = "<group>"; };
 		9266D10125A99E60007A4948 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		92670E2325C15D5700ECE055 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		92670E4125C1717400ECE055 /* ImageGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGridView.swift; sourceTree = "<group>"; };
+		92670E4225C1717400ECE055 /* ImageGridItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGridItemView.swift; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -597,6 +603,7 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92670E2125C15D4B00ECE055 /* Images */,
 				92E61D17258A7E40007464FF /* Download */,
 				925221F9257DFF11005F75DE /* Color */,
 				925221F6257DC216005F75DE /* Switch */,
@@ -774,6 +781,7 @@
 				65EF2C02DE236C8EB9FE28CB /* Pods */,
 				32648F1BF0834A9C969B467F /* Frameworks */,
 			);
+			indentWidth = 0;
 			sourceTree = "<group>";
 		};
 		924EDF4525565F850013CC71 /* Products */ = {
@@ -837,6 +845,16 @@
 				925221FA257DFF22005F75DE /* UIColor+Temperature.swift */,
 			);
 			path = Color;
+			sourceTree = "<group>";
+		};
+		92670E2125C15D4B00ECE055 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				92670E4225C1717400ECE055 /* ImageGridItemView.swift */,
+				92670E4125C1717400ECE055 /* ImageGridView.swift */,
+				92670E2325C15D5700ECE055 /* ImageManager.swift */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 		92698E87255FED95009F3A9F /* Network */ = {
@@ -1635,6 +1653,7 @@
 				92DFBEF22577D15200B1BFA9 /* ColorGradientView.swift in Sources */,
 				92DFBE9F2577BABE00B1BFA9 /* ImagePixelPicker.swift in Sources */,
 				92DFBE962577BABE00B1BFA9 /* VideoCaptureView.swift in Sources */,
+				92670E4325C1717400ECE055 /* ImageGridView.swift in Sources */,
 				92DFBEBE2577BABE00B1BFA9 /* Throttle.swift in Sources */,
 				9214E11D258E29CF006E43D2 /* ProgressButtonView.swift in Sources */,
 				9228C7092556A4A90092FBB6 /* NVActivityIndicatorView.swift in Sources */,
@@ -1655,6 +1674,7 @@
 				92DFBEAA2577BABE00B1BFA9 /* HSLSpectrumView.swift in Sources */,
 				92B0465F255BF9C00086FFFE /* BaseCellViewModel.swift in Sources */,
 				92BE9E7C2564995C00081EEE /* PlayerBarViewController.swift in Sources */,
+				92670E4425C1717400ECE055 /* ImageGridItemView.swift in Sources */,
 				92DFBEA72577BABE00B1BFA9 /* WheelView.swift in Sources */,
 				92DFBE872577BABE00B1BFA9 /* KnobView.swift in Sources */,
 				9263F762256A655D004450CA /* PlaylistHeaderTableViewCell.swift in Sources */,
@@ -1737,6 +1757,7 @@
 				92DFBE8F2577BABE00B1BFA9 /* GradientSliderView.swift in Sources */,
 				92C7D12A2572188A0062FC78 /* EmptyCell.swift in Sources */,
 				92DFBE932577BABE00B1BFA9 /* HSLASliderView.swift in Sources */,
+				92670E2425C15D5700ECE055 /* ImageManager.swift in Sources */,
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92B8C6FF2574D9190051C1CC /* LedStripServiceImpl.swift in Sources */,
@@ -1956,7 +1977,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1980,7 +2001,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

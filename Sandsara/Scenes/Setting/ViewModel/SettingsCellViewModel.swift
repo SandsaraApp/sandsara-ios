@@ -231,7 +231,11 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
             .progress
             .skip(1)
             .subscribeNext { value in
-                self.sendCommand(command: "\(value)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            print("Slider Value: \(value) ")
+            self.sendCommand(command: "\(value)")
+            }
+                
         }.disposed(by: disposeBag)
 
         setOutput(Output(title: Driver.just(inputs.type.title),
@@ -350,16 +354,19 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
     }
 
     func sendLightSpeed(value: Float) {
-        bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
-            switch result {
-            case .success:
-                debugPrint("Write to sensor location is successful.\(result)")
-                DeviceServiceImpl.shared.ledSpeed.accept(value)
-            case .failure(let error):
-                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-            }
-        }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+    bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
+    switch result {
+    case .success:
+    debugPrint("Write to sensor location is successful.\(result)")
+    DeviceServiceImpl.shared.ledSpeed.accept(value)
+    case .failure(let error):
+    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
     }
+    }
+    }
+    }
+        
 
     func sendCommand(command: String) {
         guard let toogle = SettingItemType.flipMode.toogleCharacteristic else { return }

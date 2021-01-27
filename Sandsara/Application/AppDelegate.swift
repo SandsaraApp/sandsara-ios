@@ -39,9 +39,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(options))
 
-        SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
-            print(colors)
-        }.disposed(by: disposeBag)
+    
+    SandsaraDataServices().getAllTracks(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext {
+    tracks in
+    print(tracks)
+    print(Preferences.PlaylistsDomain.allTracks)
+    SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
+    print(colors)
+    }.disposed(by: self.disposeBag)
+    }.disposed(by: disposeBag)
 
         FirebaseApp.configure()
 
