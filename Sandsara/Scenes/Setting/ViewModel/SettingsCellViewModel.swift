@@ -230,6 +230,7 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
         inputs
             .progress
             .skip(1)
+        .distinctUntilChanged()
             .subscribeNext { value in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             print("Slider Value: \(value) ")

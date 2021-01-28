@@ -11,17 +11,18 @@ import RxCocoa
 
 class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @IBOutlet private weak var progressNameLabel: UILabel!
-    @IBOutlet private weak var progressSlider: UISlider!
+    @IBOutlet private weak var progressSlider: Customslider!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
+    progressSlider.showTooltip = true
         progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 18)
         progressNameLabel.textColor = Asset.primary.color
 
-        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
-            progressSlider.setThumbImage(Asset.thumbs.image, for: state)
-        }
+//        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+//            progressSlider.setThumbImage(Asset.thumbs.image, for: state)
+//        }
     }
 
     override func bindViewModel() {
@@ -40,10 +41,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .drive(progressSlider.rx.value)
             .disposed(by: disposeBag)
 
-        progressSlider
-            .rx.value
-            .changed
-            .bind(to: viewModel.inputs.progress).disposed(by: disposeBag)
+    progressSlider.addTarget(self, action: #selector(sliderValueChanges(_:)), for: .valueChanged)
 
         progressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
     }
@@ -56,5 +54,13 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
         let newValue = ((pointTapped.x - positionOfSlider.x) * CGFloat(slider.maximumValue) / widthOfSlider)
         slider.setValue(Float(newValue), animated: true)
     }
+
+@objc func sliderValueChanges(_ slider: Customslider) {
+
+debugPrint(slider.value)
+
+viewModel.inputs.progress.accept(slider.value)
+
+}
 
 }

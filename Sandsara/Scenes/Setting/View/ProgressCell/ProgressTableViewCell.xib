@@ -24,7 +24,7 @@
                         <color key="textColor" name="UnselectedColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="g8j-sS-HBM">
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="g8j-sS-HBM" customClass="Customslider">
                         <rect key="frame" x="14" y="218" width="408" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="gJn-qd-c39"/>
