@@ -65,6 +65,7 @@ var expectedImages = [UIImage]()
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
     
  playlistCoverImage.datasource = self
     playlistCoverImage.maxCapacity = 12
@@ -265,6 +266,12 @@ func processHeaderImage() {
 guard images.count > 0 else {
 print("No image")
 return
+}
+
+var images = self.images
+
+if images.count > 12 {
+images = Array(images.prefix(12))
 }
 
 var matrix = Matrix<UIImage?>(rows: 3, columns: 4, defaultValue: nil)

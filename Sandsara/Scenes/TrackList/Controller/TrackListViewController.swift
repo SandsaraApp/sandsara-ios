@@ -126,6 +126,8 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         NotificationCenter.default.removeObserver(self)
+    tableView.dataSource = nil
+    tableView.reloadData()
     }
 
     @objc func reloadData() {

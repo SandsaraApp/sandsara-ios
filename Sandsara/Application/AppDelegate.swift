@@ -39,15 +39,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(options))
 
-    
-    SandsaraDataServices().getAllTracks(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext {
-    tracks in
-    print(tracks)
-    print(Preferences.PlaylistsDomain.allTracks)
-    SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
-    print(colors)
-    }.disposed(by: self.disposeBag)
-    }.disposed(by: disposeBag)
+        SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
+            print(colors)
+        }.disposed(by: disposeBag)
 
         FirebaseApp.configure()
 
@@ -105,7 +99,7 @@ extension AppDelegate: BackgroundRestorer {
     func didRestoreConnection(
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
         // Opportunity to perform syncing related logic here.
-        DeviceServiceImpl.shared.readSensorValues()
+        
         return .continue
     }
 

@@ -125,7 +125,7 @@ class SandsaraDataServices {
 
     private func getAllTracksFromServer() -> Observable<[Track]> {
         return api
-            .getAllTracks()
+        .getAllTracks().debug()
             .do(onSuccess: { [weak self] tracks in
                 guard let self = self else { return }
                 self.allTracks = tracks

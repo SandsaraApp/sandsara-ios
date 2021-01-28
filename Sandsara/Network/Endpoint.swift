@@ -7,7 +7,7 @@
 
 import Foundation
 import Moya
-fileprivate let token = "keysvlN7KOHqUBdGn"
+let token = "keysvlN7KOHqUBdGn"
 enum SandsaraAPI {
     case recommendedplaylist
     case recommendedtracks

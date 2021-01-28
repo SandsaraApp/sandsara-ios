@@ -49,6 +49,7 @@
 		92670E2425C15D5700ECE055 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E2325C15D5700ECE055 /* ImageManager.swift */; };
 		92670E4325C1717400ECE055 /* ImageGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4125C1717400ECE055 /* ImageGridView.swift */; };
 		92670E4425C1717400ECE055 /* ImageGridItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4225C1717400ECE055 /* ImageGridItemView.swift */; };
+		92670E4D25C2495D00ECE055 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4C25C2495D00ECE055 /* SplashViewController.swift */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -302,6 +303,7 @@
 		92670E2325C15D5700ECE055 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		92670E4125C1717400ECE055 /* ImageGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGridView.swift; sourceTree = "<group>"; };
 		92670E4225C1717400ECE055 /* ImageGridItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGridItemView.swift; sourceTree = "<group>"; };
+		92670E4C25C2495D00ECE055 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 		9228C6C225569D020092FBB6 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				92670E4B25C2493A00ECE055 /* Splash */,
 				929BA4132599E4F000ED73B0 /* ConnectionGuide */,
 				929BA4112599E4EB00ED73B0 /* Tabbar */,
 				9228C6FE2556A36B0092FBB6 /* Base */,
@@ -855,6 +858,14 @@
 				92670E2325C15D5700ECE055 /* ImageManager.swift */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		92670E4B25C2493A00ECE055 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				92670E4C25C2495D00ECE055 /* SplashViewController.swift */,
+			);
+			path = Splash;
 			sourceTree = "<group>";
 		};
 		92698E87255FED95009F3A9F /* Network */ = {
@@ -1758,6 +1769,7 @@
 				92C7D12A2572188A0062FC78 /* EmptyCell.swift in Sources */,
 				92DFBE932577BABE00B1BFA9 /* HSLASliderView.swift in Sources */,
 				92670E2425C15D5700ECE055 /* ImageManager.swift in Sources */,
+				92670E4D25C2495D00ECE055 /* SplashViewController.swift in Sources */,
 				9228C6DB25569F5D0092FBB6 /* Dictionary.swift in Sources */,
 				92BA99E72560B6EF00564782 /* DataLayer.swift in Sources */,
 				92B8C6FF2574D9190051C1CC /* LedStripServiceImpl.swift in Sources */,
