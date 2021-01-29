@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }.disposed(by: disposeBag)
 
         FirebaseApp.configure()
-
+    DataLayer.init()
         return true
     }
 

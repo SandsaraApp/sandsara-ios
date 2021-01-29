@@ -17,7 +17,7 @@ extension StringProtocol {
 class LedStripServiceImpl {
     static let shared = LedStripServiceImpl()
 
-    func uploadCustomPalette(colorString: String) {
+    func uploadCustomPalette(colorString: Data) {
         var step = 0
         bluejay.run { sandsaraBoard -> Bool in
             do {

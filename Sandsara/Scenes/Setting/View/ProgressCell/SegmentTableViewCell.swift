@@ -415,35 +415,45 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     func sendColor() {
         guard let staticColorViewColor = self.staticColorUpdateView.backgroundColor else { return }
-        let postions = [0, 255].map { String(format:"%02X", $0) }.joined()
-
-        print(postions)
-
-        let redColor = Int(staticColorViewColor.rgba().red * 255)
-        let red = [redColor, redColor].map { String(format:"%02X", $0) }.joined()
-
-        print(red)
-
-        let greenColor = Int(staticColorViewColor.rgba().green * 255)
-        let green = [greenColor, greenColor].map { String(format:"%02X", $0) }.joined()
-
-        print(green)
-
-        let blueColor = Int(staticColorViewColor.rgba().blue * 255)
-
-        let blue = [blueColor, blueColor].map { String(format:"%02X", $0) }.joined()
-
-        print(blue)
-
-        let amount = String(format:"%02X", 2)
-
-        let colorString = [amount, postions, red, green, blue].joined()
-
-        print(colorString)
+    let position = Data([0, 255].map { UInt8($0) })
+    print(position)
+    
+    let red = Data([UInt8(staticColorViewColor.rgba().red * 255), UInt8(staticColorViewColor.rgba().red * 255)])
+    print(red)
+    let blue = Data([UInt8(staticColorViewColor.rgba().blue * 255), UInt8(staticColorViewColor.rgba().blue * 255)])
+    print(blue)
+    let green = Data([UInt8(staticColorViewColor.rgba().green * 255), UInt8(staticColorViewColor.rgba().green * 255)])
+    print(green)
+    let colorString = [Data([UInt8(2)]), position, red, green, blue].combined
+    print(colorString)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             LedStripServiceImpl.shared.uploadCustomPalette(colorString: colorString)
         }
+    
+    var colorModel = ColorModel()
+    var reds = [Float]()
+    var blues = [Float]()
+    var greens = [Float]()
+    var positions = [Int]()
+    reds = [(Float(staticColorViewColor.rgba().red) * 255.0), (Float(staticColorViewColor.rgba().red) * 255.0)]
+    blues = [(Float(staticColorViewColor.rgba().blue) * 255.0), (Float(staticColorViewColor.rgba().blue) * 255.0)]
+    greens = [(Float(staticColorViewColor.rgba().green) * 255.0), (Float(staticColorViewColor.rgba().green) * 255.0)]
+    positions = [0, 255]
+    
+    let colorsTest = zip3(reds, greens, blues).map {
+    RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
+    }
+    if positions.count == 1 {
+    colorModel.position = [0, 255]
+    if let color = colorsTest.first {
+    colorModel.colors = [color, color]
+    }
+    } else {
+    colorModel.position = positions
+    colorModel.colors = colorsTest
+    }
+    DeviceServiceImpl.shared.runningColor.accept(colorModel)
 
     }
 
