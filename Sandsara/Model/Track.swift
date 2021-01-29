@@ -149,6 +149,9 @@ class LocalTrack: Object {
     @objc dynamic var fileName: String = ""
     @objc dynamic var fileSize: Int64 = 0
     @objc dynamic var trackId: String = ""
+@objc dynamic var thumbNailfileName: String = ""
+@objc dynamic var thumbNailfileSize: Int64 = 0
+
 
 
     required convenience init(track: Track) {
@@ -161,6 +164,9 @@ class LocalTrack: Object {
         self.fileName = track.file?.first?.filename ?? ""
         self.fileSize = track.file?.first?.size ?? 0
         self.trackId = track.trackId
+    self.thumbNailfileName = track.thumbnail?.first?.filename ?? ""
+    self.thumbNailfileSize = track.thumbnail?.first?.size ?? 0
+    
     }
 
     required convenience init(track: DisplayItem) {
@@ -173,5 +179,7 @@ class LocalTrack: Object {
         self.fileName = track.fileName
         self.trackId = track.trackId
         self.fileSize = track.fileSize
+    self.thumbNailfileName = track.thumbNailfileName
+    self.thumbNailfileSize = track.thumbNailfileSize
     }
 }

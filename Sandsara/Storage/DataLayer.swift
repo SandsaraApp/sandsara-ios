@@ -15,7 +15,7 @@ class DataLayer {
     static let realm = try? Realm()
 
 
-    private let schemaVersion: UInt64 = 5
+    private let schemaVersion: UInt64 = 6
 
     func config() {
         let config = Realm.Configuration(

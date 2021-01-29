@@ -35,6 +35,8 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                                        inputs: TrackListViewModelContract.Input(playlistItem: playlistItem ?? DisplayItem() ,
                                                                                 viewWillAppearTrigger: viewWillAppearTrigger,
                                                                                 downloadBtnTrigger: downloadBtnTrigger))
+    
+    viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {
@@ -118,7 +120,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        viewWillAppearTrigger.accept(())
+        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
@@ -126,8 +128,6 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         NotificationCenter.default.removeObserver(self)
-    tableView.dataSource = nil
-    tableView.reloadData()
     }
 
     @objc func reloadData() {

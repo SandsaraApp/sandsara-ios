@@ -48,7 +48,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
             guard let self = self else { return }
             let isFavlist = !self.inputs.playlistItem.isLocal
             let items = self.inputs.playlistItem.tracks
-                .map { DisplayItem(track: $0) }
+              
                 .map { TrackCellViewModel(inputs:
                     !DataLayer.loadDownloadedTrack(LocalTrack(track: $0)) ? TrackCellVMContract.Input(track: $0, downloadTrigger: BehaviorRelay<()>(value: ())) : TrackCellVMContract.Input(track: $0)
                     )}
@@ -93,7 +93,7 @@ final class TrackListViewModel: BaseViewModel<TrackListViewModelContract.Input, 
             } else {
                 let isFavlist = false
                 let items = inputs.playlistItem.tracks
-                    .map { DisplayItem(track: $0) }
+                   
                     .map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0)) }
                     .map { PlaylistDetailCellVM.track($0) }
                 self.datas.accept(

@@ -109,7 +109,7 @@ class ImageGridItemView: UIView {
     }
     
     @objc func didTapButton() {
-        datasource.imageGridItemViewImage(self) == nil ? delegate.imageGridItemViewDidTapAddImage(self) : delegate.imageGridItemViewDidTapDelete(self)
+        
     }
     
 }

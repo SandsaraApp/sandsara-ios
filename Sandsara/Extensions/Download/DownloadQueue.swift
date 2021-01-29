@@ -216,13 +216,14 @@ extension DownloadOperation: URLSessionDownloadDelegate {
             }
             
             for track in self.item.tracks {
-            guard let name = track.file?.first?.filename, let size = track.file?.first?.size, let urlString = track.file?.first?.url, let url = URL(string: urlString) else { continue }
+				let name = track.fileName; let size = track.fileSize; let urlString = track.fileURL;
+				guard let url = URL(string: urlString) else { continue }
             let resultCheck = FileServiceImpl.shared.existingFile(fileName: name)
             if resultCheck.0 == false || resultCheck.1 < size {
-            let operation = DownloadManager.shared.queueDownload(url, item: DisplayItem(track: track))
+            let operation = DownloadManager.shared.queueDownload(url, item: track)
             completion.addDependency(operation)
             } else {
-            _ = DataLayer.addDownloadedTrack(DisplayItem(track: track))
+            _ = DataLayer.addDownloadedTrack(track)
             }
             }
             OperationQueue.main.addOperation(completion)
