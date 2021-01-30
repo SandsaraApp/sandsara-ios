@@ -47,22 +47,22 @@ class ImageGridItemView: UIView {
 //            print("ImageGridItemView:detectPan() error: No delegate")
 //            return
 //        }
-        if imageView.image == nil {
-            return
-        }
-        
-        if recognizer.state == UIGestureRecognizer.State.began {
-            self.delegate.imageGridItemViewDidStartDragging(self)
-            return
-        }
-        
-        if recognizer.state == UIGestureRecognizer.State.ended {
-            self.delegate.imageGridItemViewDidEndDragging(self)
-            return
-        }
-        
-        let translation = recognizer.translation(in: self.superview!)
-        self.delegate.imageGridItemView(self, didDragBy: translation)
+//        if imageView.image == nil {
+//            return
+//        }
+//        
+//        if recognizer.state == UIGestureRecognizer.State.began {
+//            self.delegate.imageGridItemViewDidStartDragging(self)
+//            return
+//        }
+//        
+//        if recognizer.state == UIGestureRecognizer.State.ended {
+//            self.delegate.imageGridItemViewDidEndDragging(self)
+//            return
+//        }
+//        
+//        let translation = recognizer.translation(in: self.superview!)
+//        self.delegate.imageGridItemView(self, didDragBy: translation)
     }
     
     func reload() {

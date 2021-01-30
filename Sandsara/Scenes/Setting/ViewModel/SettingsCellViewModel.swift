@@ -158,6 +158,25 @@ enum SettingItemType {
             return (0, 0)
         }
     }
+    
+    var ranges: [Float] {
+        switch self {
+            case .lightCycleSpeed:
+                return [Int](1...100).map {
+                    Float($0)
+                }
+            case .speed:
+                return [Int](1...10).map {
+                    Float($0)
+                }
+            case .brightness:
+                return [Int](0...100).map {
+                    Float($0)
+                }
+            default:
+                return []
+        }
+    }
 
     var progressCharacteristic: CharacteristicIdentifier? {
         switch self {
@@ -355,17 +374,17 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
     }
 
     func sendLightSpeed(value: Float) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-    bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
-    switch result {
-    case .success:
-    debugPrint("Write to sensor location is successful.\(result)")
-    DeviceServiceImpl.shared.ledSpeed.accept(value)
-    case .failure(let error):
-    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
-    }
-    }
-    }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result)")
+                    DeviceServiceImpl.shared.ledSpeed.accept(value)
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
+            }
+        }
     }
         
 

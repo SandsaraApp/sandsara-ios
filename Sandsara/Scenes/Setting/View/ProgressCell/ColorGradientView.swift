@@ -29,7 +29,7 @@ func hexStringToData(string: String) -> Data {
 }
 
 extension Collection {
-
+    
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
@@ -42,26 +42,26 @@ enum PanDirection {
 }
 
 class PanDirectionGestureRecognizer: UIPanGestureRecognizer {
-
+    
     let direction: PanDirection
-
+    
     init(direction: PanDirection, target: AnyObject, action: Selector) {
         self.direction = direction
         super.init(target: target, action: action)
     }
-
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesMoved(touches, with: event)
-
+        
         if state == .began {
             let vel = velocity(in: view)
             switch direction {
-            case .horizontal where abs(vel.y) > abs(vel.x):
-                state = .cancelled
-            case .vertical where abs(vel.x) > abs(vel.y):
-                state = .cancelled
-            default:
-                break
+                case .horizontal where abs(vel.y) > abs(vel.x):
+                    state = .cancelled
+                case .vertical where abs(vel.x) > abs(vel.y):
+                    state = .cancelled
+                default:
+                    break
             }
         }
     }
@@ -79,23 +79,23 @@ class ColorPointView: UIView {
         }
     }
     var currentPoint: CGPoint?
-
+    
     var leadingConstraint: Constraint!
-
+    
     var minPoint: CGPoint?
-
+    
     var maxPoint: CGPoint?
-
+    
     var colorThumb: UIView?
     var lineView: UIView?
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         lineView = UIView()
         colorThumb = UIView()
         addSubview(lineView!)
@@ -105,7 +105,7 @@ class ColorPointView: UIView {
             $0.height.equalTo(14)
             $0.width.equalTo(2)
         }
-
+        
         addSubview(colorThumb!)
         colorThumb?.snp.makeConstraints {
             $0.width.height.equalTo(24)
@@ -113,25 +113,25 @@ class ColorPointView: UIView {
             $0.leading.trailing.equalTo(0)
             $0.bottom.equalTo(-6)
         }
-
-
+        
+        
         colorThumb?.clipsToBounds = true
-
+        
         updateColor()
     }
-
+    
     override func awakeFromNib() {
     }
-
+    
     override func draw(_ rect: CGRect) {
         colorThumb?.layer.cornerRadius = colorThumb!.bounds.size.width / 2
     }
-
+    
     func updateColor() {
         //backgroundColor = color
         lineView?.backgroundColor = color
         colorThumb?.backgroundColor = color
-
+        
         guard let color = color else { return }
         if color.hsba().brightness < 0.16 {
             lineView?.layer.borderWidth = 1
@@ -145,7 +145,7 @@ class ColorPointView: UIView {
             colorThumb?.layer.borderColor = UIColor.white.cgColor
         }
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         colorThumb?.layer.cornerRadius = colorThumb!.bounds.size.width / 2
@@ -159,7 +159,7 @@ protocol ColorGradientViewDelegate: class {
 }
 
 class ColorGradientView: UIView {
-
+    
     var color: ColorModel = ColorModel(position: PredifinedColor.one.posistion.map {
         Int($0)
     }, colors: PredifinedColor.one.colors.map {
@@ -169,63 +169,63 @@ class ColorGradientView: UIView {
             selectColor()
         }
     }
-
+    
     var colors: [UIColor] = [] {
         didSet {
             updateColor()
         }
     }
-
+    
     var cachedGradients: [UIColor] = []
-
+    
     var locations = [CGFloat]()
-
+    
     var showPoint: CGPoint = CGPoint.zero
-
+    
     var firstPoint: CGPoint = CGPoint(x: 24, y : 0)
-
+    
     var secondPoint: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width - 32 - 24, y: 0)
-
+    
     var isFirst: Bool = false
-
+    
     var isLast: Bool = false
-
+    
     var addCustomPoint = false
-
+    
     var updateCustomPoint = false
-
+    
     var deleteCustomPoint = false
-
+    
     var gradientView: GradientView?
-
+    
     var firstPointView: ColorPointView?
-
+    
     var secondPointView: ColorPointView?
-
+    
     var pointViews: [ColorPointView] = []
-
+    
     var pointConstraints: [Constraint] = []
-
+    
     weak var delegate: ColorGradientViewDelegate?
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         gradientView = GradientView()
         gradientView?.mode = .linear
         gradientView?.direction = .horizontal
-
+        
         addSubview(gradientView!)
-
+        
         gradientView?.snp.makeConstraints {
             $0.left.equalTo(11)
             $0.right.equalTo(-11)
             $0.top.equalToSuperview()
             $0.height.equalTo(43)
         }
-
+        
         firstPointView = ColorPointView()
         addSubview(firstPointView!)
-
+        
         firstPointView?.snp.makeConstraints {
             $0.top.equalTo(43)
             $0.leading.equalToSuperview()
@@ -233,10 +233,10 @@ class ColorGradientView: UIView {
             $0.height.equalTo(44)
             $0.bottom.equalToSuperview()
         }
-
+        
         secondPointView = ColorPointView()
         addSubview(secondPointView!)
-
+        
         secondPointView?.snp.makeConstraints {
             $0.top.equalTo(43)
             $0.trailing.equalToSuperview()
@@ -244,55 +244,55 @@ class ColorGradientView: UIView {
             $0.height.equalTo(44)
             $0.bottom.equalToSuperview()
         }
-
+        
         firstPointView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showFirstPoint)))
         secondPointView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showSecondPoint)))
         gradientView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGradientGesture(_:))))
     }
-
+    
     override func draw(_ rect: CGRect) {
         selectColor()
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         secondPoint.x = gradientView?.frame.size.width ?? 0
     }
-
+    
     func selectColor() {
         if addCustomPoint {
             return;
         }
-
+        
         if updateCustomPoint {
             return;
         }
-
+        
         gradientView?.locations = color.position.map {
             CGFloat($0) / 255.0
         }
-
+        
         locations = color.position.map {
             CGFloat($0) / 255.0
         }
-
+        
         for view in pointViews {
             view.removeFromSuperview()
         }
-
+        
         pointViews.removeAll()
-
-
+        
+        
         var drawColors = color.colors.map { UIColor(hexString: $0) }
         if drawColors.count > 2 {
             drawColors.removeFirst()
             drawColors.removeLast()
         }
-
+        
         var drawPositons = color.position.map {
             convertGradientPointToSystemPoint(x: CGFloat($0))
         }
-
+        
         if drawPositons.count > 2 {
             drawPositons.removeFirst()
             drawPositons.removeLast()
@@ -301,14 +301,14 @@ class ColorGradientView: UIView {
         for i in 0 ..< drawColors.count {
             addPoint(color: drawColors[i], xPoint: drawPositons[i])
         }
-
+        
         gradientView?.colors = color.colors.map { UIColor(hexString: $0) }
         gradientView?.locations = locations
         firstPointView?.color = color.colors.map { UIColor(hexString: $0) }.first
         secondPointView?.color = color.colors.map { UIColor(hexString: $0) }.last
         cachedGradients = color.colors.map { UIColor(hexString: $0) }
     }
-
+    
     func updateColor() {
         //colors = cachedGradients
         cachedGradients = colors
@@ -318,24 +318,24 @@ class ColorGradientView: UIView {
         secondPointView?.color = cachedGradients.last
         colorCommand()
     }
-
+    
     func showColorThumb(colorThumbView: ColorPointView, isShow: Bool) {
         colorThumbView.isHidden = !isShow
         colorThumbView.alpha = isShow ? 1: 0
     }
-
+    
     @objc func showFirstPoint() {
         cleanup(isShowAll: false)
         isFirst = true
         delegate?.firstPointTouch(color: cachedGradients.first ?? .clear)
     }
-
+    
     @objc func showSecondPoint() {
         cleanup(isShowAll: false)
         isLast = true
         delegate?.secondPointTouch(color: cachedGradients.last ?? .clear)
     }
-
+    
     @objc func showGradientGesture(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: gradientView)
         debugPrint("Touch point \(point.x), \(point.y)")
@@ -349,7 +349,7 @@ class ColorGradientView: UIView {
                 continue
             }
         }
-
+        
         if isAddAble {
             cleanup(isShowAll: false)
             showPoint = point
@@ -357,7 +357,7 @@ class ColorGradientView: UIView {
             delegate?.showGradient(atPoint: showPoint, color: getPixelColor(atPosition: showPoint))
         }
     }
-
+    
     func cleanup(isShowAll: Bool) {
         isFirst = false
         isLast = false
@@ -371,7 +371,7 @@ class ColorGradientView: UIView {
             }
         }
     }
-
+    
     func updateFirstColor(color: UIColor) {
         var colors = self.cachedGradients
         colors.removeFirst()
@@ -381,28 +381,28 @@ class ColorGradientView: UIView {
         cachedGradients = colors
         cleanup(isShowAll: true)
     }
-
+    
     func updateSecondColor(color: UIColor) {
         var colors = self.cachedGradients
         colors.removeLast()
         colors.insert(color, at: colors.count)
-
+        
         self.colors = colors
         secondPointView?.color = color
         cachedGradients = colors
         cleanup(isShowAll: true)
     }
-
+    
     func updateColor(color: UIColor) {
         cleanup(isShowAll: true)
     }
-
+    
     func addColor(color: UIColor) {
         addPoint(color: color, xPoint: showPoint.x)
         var updatedColors = cachedGradients
-
+        
         var index = 0
-
+        
         // update point after add
         for i in 0 ..< pointViews.count {
             if pointViews[i].currentPoint?.x == showPoint.x {
@@ -410,16 +410,16 @@ class ColorGradientView: UIView {
                 break
             }
         }
-
+        
         // update
         updatedColors.insert(color, at: index + 1)
         locations.insert(showPoint.x / secondPoint.x, at: index + 1)
-
+        
         colors = updatedColors
         cachedGradients = updatedColors
         cleanup(isShowAll: true)
     }
-
+    
     func updatePointColor(color: UIColor) {
         var updatedColors = cachedGradients
         for i in 0 ..< pointViews.count {
@@ -429,14 +429,14 @@ class ColorGradientView: UIView {
                 break
             }
         }
-
+        
         colors = updatedColors
-
+        
         cachedGradients = updatedColors
-
+        
         cleanup(isShowAll: true)
     }
-
+    
     func removeColor(color: UIColor) {
         var updatedColors = cachedGradients
         for i in 0 ..< pointViews.count {
@@ -448,29 +448,29 @@ class ColorGradientView: UIView {
                 break
             }
         }
-
+        
         colors = updatedColors
-
+        
         cachedGradients = updatedColors
-
+        
         cleanup(isShowAll: true)
     }
-
+    
     func getPixelColor(atPosition:CGPoint) -> UIColor{
         var pixel:[CUnsignedChar] = [0, 0, 0, 0];
         let colorSpace = CGColorSpaceCreateDeviceRGB();
         let bitmapInfo = CGBitmapInfo(rawValue:    CGImageAlphaInfo.premultipliedLast.rawValue);
         let context = CGContext(data: &pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue);
-
+        
         context!.translateBy(x: -atPosition.x, y: -atPosition.y);
         layer.render(in: context!);
         let color:UIColor = UIColor(red: CGFloat(pixel[0])/255.0,
                                     green: CGFloat(pixel[1])/255.0,
                                     blue: CGFloat(pixel[2])/255.0,
                                     alpha: CGFloat(pixel[3])/255.0);
-
+        
         return color;
-
+        
     }
     var initialPoint = CGPoint()
     @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
@@ -481,39 +481,39 @@ class ColorGradientView: UIView {
         if gestureRecognizer.state == .began {
             initialPoint = pointView.center
         }
-
+        
         if gestureRecognizer.state != .cancelled {
             let amount = initialPoint.x + translation.x
             let newCenter = CGPoint(x: amount, y: 65.0)
-
+            
             let index = pointViews.firstIndex(of: pointView) ?? 0
-
+            
             let maxOffset: CGFloat = 12
-
+            
             let minOffset: CGFloat = index == 0 ? 12 : 36
-
+            
             // gestureRecognizer.setTranslation(.zero, in: pointView.superview)
-
+            
             if amount + maxOffset <= (pointView.maxPoint?.x ?? 0)  && amount - minOffset >= (pointView.minPoint?.x ?? 0) {
                 pointView.center = newCenter
-
+                
                 for view in pointViews where currentPoint == view.currentPoint {
                     view.currentPoint = CGPoint(x: pointView.center.x - 12, y: pointView.center.y)
                 }
-
+                
                 recalculatePoint()
-
+                
                 locations = [
                     0
                 ] + self.pointViews.map {
                     CGFloat($0.currentPoint?.x ?? 0) / (self.secondPoint.x)
                 } + [1]
-
+                
                 gradientView?.colors = cachedGradients
                 gradientView?.locations = locations
                 firstPointView?.color = cachedGradients.first
                 secondPointView?.color = cachedGradients.last
-
+                
                 if gestureRecognizer.state == .ended {
                     colorCommand()
                 }
@@ -521,19 +521,19 @@ class ColorGradientView: UIView {
             }
         }
     }
-
+    
     func convertGradientPointToSystemPoint(x: CGFloat) -> CGFloat {
         return x * secondPoint.x / 255
     }
-
+    
     func convertSystemPointToGradientPoint(x: CGFloat) -> CGFloat {
         return x * 255 / secondPoint.x
     }
-
+    
     func pointToLocation(x: Float) -> Float {
         return x / 1.0
     }
-
+    
     private func addPoint(color: UIColor, xPoint: CGFloat) {
         let pointView = ColorPointView()
         addSubview(pointView)
@@ -548,53 +548,53 @@ class ColorGradientView: UIView {
         pointView.leadingConstraint = leadingConstraint
         pointView.currentPoint = CGPoint(x: xPoint, y: 30.0)
         pointView.color = color
-
+        
         pointViews.append(pointView)
         // TODO : check condtion here
         pointView.tag = pointViews.firstIndex(of: pointView) ?? 0
-
+        
         recalculatePoint()
-
-
+        
+        
         let panGestureRecognizer = PanDirectionGestureRecognizer(direction: .horizontal,
                                                                  target: self,
                                                                  action: #selector(handlePanGesture(_:)))
         panGestureRecognizer.cancelsTouchesInView = false
         pointView.addGestureRecognizer(panGestureRecognizer)
-
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                           action: #selector(handleTapGesture(_:)))
         pointView.addGestureRecognizer(tapGestureRecognizer)
     }
-
+    
     @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
         let point = (sender.view as? ColorPointView)?.currentPoint ?? .zero
         debugPrint("Touch point \(point.x), \(point.y)")
-
+        
         showPoint = point
         updateCustomPoint = true
         delegate?.showGradient(atPoint: showPoint, color: getPixelColor(atPosition: showPoint))
     }
-
+    
     func colorCommand() {
-
-    let position = Data(locations.map { $0 * 255 }.map { UInt8($0) })
-    print(position)
-    let red = Data(cachedGradients.map {
-    UInt8($0.rgba().red * 255)
-    })
-    print(red)
-    let blue = Data(cachedGradients.map {
-    UInt8($0.rgba().blue * 255)
-    })
-    print(blue)
-    let green = Data(cachedGradients.map {
-    UInt8($0.rgba().green * 255)
-    })
-    print(green)
-    let colorString = [Data([UInt8(cachedGradients.count)]), position, red, green, blue].combined
-    print(colorString)
-
+        
+        let position = Data(locations.map { $0 * 255 }.map { UInt8($0) })
+        print(position)
+        let red = Data(cachedGradients.map {
+            UInt8($0.rgba().red * 255)
+        })
+        print(red)
+        let blue = Data(cachedGradients.map {
+            UInt8($0.rgba().blue * 255)
+        })
+        print(blue)
+        let green = Data(cachedGradients.map {
+            UInt8($0.rgba().green * 255)
+        })
+        print(green)
+        let colorString = [Data([UInt8(cachedGradients.count)]), position, red, green, blue].combined
+        print(colorString)
+        
         bluejay.write(to: LedStripService.uploadCustomPalette, value: colorString) { result in
             switch result {
             case .success:
@@ -618,7 +618,7 @@ class ColorGradientView: UIView {
             $0.rgba().green * 255
         }.map { Float($0) }
         positions = locations.map { $0 * 255 }.map { Int($0) }
-
+        
         let colorsTest = zip3(reds, greens, blues).map {
             RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
         }
@@ -633,13 +633,11 @@ class ColorGradientView: UIView {
         }
         DeviceServiceImpl.shared.runningColor.accept(colorModel)
     }
-
+    
     private func recalculatePoint() {
         pointViews.sort(by: {
             ($0.currentPoint?.x ?? 0) < ($1.currentPoint?.x ?? 0)
         })
-
-
         if pointViews.count > 1 {
             for i in 0 ..< pointViews.count {
                 if i == 0 {

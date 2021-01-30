@@ -50,7 +50,6 @@
 		92670E4325C1717400ECE055 /* ImageGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4125C1717400ECE055 /* ImageGridView.swift */; };
 		92670E4425C1717400ECE055 /* ImageGridItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4225C1717400ECE055 /* ImageGridItemView.swift */; };
 		92670E4D25C2495D00ECE055 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92670E4C25C2495D00ECE055 /* SplashViewController.swift */; };
-		92670E5825C2506100ECE055 /* Customslider.m in Sources */ = {isa = PBXBuildFile; fileRef = 92670E5625C2506100ECE055 /* Customslider.m */; };
 		92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698E88255FEDA7009F3A9F /* Endpoint.swift */; };
 		92698E9D255FEEAC009F3A9F /* Localizeable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92698E9F255FEEAC009F3A9F /* Localizeable.strings */; };
 		92698EB0255FEFF1009F3A9F /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92698EA8255FEFF1009F3A9F /* Observable+Response.swift */; };
@@ -61,6 +60,8 @@
 		927C7F82255FF33A009F8898 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C7F81255FF33A009F8898 /* Playlist.swift */; };
 		927C7F87255FF360009F8898 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C7F86255FF360009F8898 /* Track.swift */; };
 		927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */; };
+		9290556625C416EE006A04F9 /* WOWMarkSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290556425C416ED006A04F9 /* WOWMarkSlider.swift */; };
+		9290556725C416EE006A04F9 /* WOWTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290556525C416ED006A04F9 /* WOWTooltipView.swift */; };
 		9299013825822F2200D0A199 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9299013725822F2200D0A199 /* UIApplication.swift */; };
 		929BA4172599E7BD00ED73B0 /* ConnectionGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BA4162599E7BD00ED73B0 /* ConnectionGuideViewController.swift */; };
 		929BA41B2599EDCB00ED73B0 /* BaseTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BA41A2599EDCB00ED73B0 /* BaseTabBarViewController.swift */; };
@@ -306,8 +307,6 @@
 		92670E4225C1717400ECE055 /* ImageGridItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGridItemView.swift; sourceTree = "<group>"; };
 		92670E4C25C2495D00ECE055 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		92670E5525C2506000ECE055 /* Sandsara-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sandsara-Bridging-Header.h"; sourceTree = "<group>"; };
-		92670E5625C2506100ECE055 /* Customslider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Customslider.m; sourceTree = "<group>"; };
-		92670E5725C2506100ECE055 /* Customslider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Customslider.h; sourceTree = "<group>"; };
 		92698E88255FEDA7009F3A9F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		92698E9E255FEEAC009F3A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizeable.strings; sourceTree = "<group>"; };
 		92698EA8255FEFF1009F3A9F /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
@@ -318,6 +317,8 @@
 		927C7F81255FF33A009F8898 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		927C7F86255FF360009F8898 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; usesTabs = 0; };
 		927CAC242567B4E900DA54EB /* ScanDevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanDevicesViewController.swift; sourceTree = "<group>"; };
+		9290556425C416ED006A04F9 /* WOWMarkSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOWMarkSlider.swift; sourceTree = "<group>"; };
+		9290556525C416ED006A04F9 /* WOWTooltipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOWTooltipView.swift; sourceTree = "<group>"; };
 		9299013725822F2200D0A199 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		929BA4162599E7BD00ED73B0 /* ConnectionGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionGuideViewController.swift; sourceTree = "<group>"; };
 		929BA41A2599EDCB00ED73B0 /* BaseTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarViewController.swift; sourceTree = "<group>"; };
@@ -610,8 +611,8 @@
 		9228C6C725569DEF0092FBB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				92670E5725C2506100ECE055 /* Customslider.h */,
-				92670E5625C2506100ECE055 /* Customslider.m */,
+				9290556425C416ED006A04F9 /* WOWMarkSlider.swift */,
+				9290556525C416ED006A04F9 /* WOWTooltipView.swift */,
 				92670E2125C15D4B00ECE055 /* Images */,
 				92E61D17258A7E40007464FF /* Download */,
 				925221F9257DFF11005F75DE /* Color */,
@@ -791,7 +792,7 @@
 				65EF2C02DE236C8EB9FE28CB /* Pods */,
 				32648F1BF0834A9C969B467F /* Frameworks */,
 			);
-			indentWidth = 0;
+			indentWidth = 4;
 			sourceTree = "<group>";
 		};
 		924EDF4525565F850013CC71 /* Products */ = {
@@ -1656,6 +1657,7 @@
 			files = (
 				92A0D086258FB965004F0C8F /* FileQueue.swift in Sources */,
 				9299013825822F2200D0A199 /* UIApplication.swift in Sources */,
+				9290556725C416EE006A04F9 /* WOWTooltipView.swift in Sources */,
 				92B8C7032574D9D20051C1CC /* FileServiceImpl.swift in Sources */,
 				92DFBE862577BABE00B1BFA9 /* RGBASliderGroup.swift in Sources */,
 				92DFBECD2577D06800B1BFA9 /* GradientView.swift in Sources */,
@@ -1726,7 +1728,6 @@
 				92DFBEB52577BABE00B1BFA9 /* Knob.swift in Sources */,
 				921A9F08256BB8920068AF22 /* AddPlaylistViewController.swift in Sources */,
 				9228C6CA25569E050092FBB6 /* UIAlertController.swift in Sources */,
-				92670E5825C2506100ECE055 /* Customslider.m in Sources */,
 				927C7F87255FF360009F8898 /* Track.swift in Sources */,
 				92698E89255FEDA7009F3A9F /* Endpoint.swift in Sources */,
 				92DFBE852577BABE00B1BFA9 /* HSBASliderView.swift in Sources */,
@@ -1745,6 +1746,7 @@
 				927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */,
 				92BA99EC2560B9F500564782 /* ApperanceService.swift in Sources */,
 				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,
+				9290556625C416EE006A04F9 /* WOWMarkSlider.swift in Sources */,
 				92DFBEA52577BABE00B1BFA9 /* AlphaSlider.swift in Sources */,
 				927C7F7D255FF294009F8898 /* APIService.swift in Sources */,
 				92DFBEAF2577BABE00B1BFA9 /* GradientData.swift in Sources */,
@@ -1999,7 +2001,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 46;
+				CURRENT_PROJECT_VERSION = 48;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2026,7 +2028,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 46;
+				CURRENT_PROJECT_VERSION = 48;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
