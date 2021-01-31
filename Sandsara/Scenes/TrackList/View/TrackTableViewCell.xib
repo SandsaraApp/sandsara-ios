@@ -25,30 +25,30 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="726-3v-ARn">
-                        <rect key="frame" x="113" y="23" width="245" height="50.5"/>
+                        <rect key="frame" x="113" y="23" width="291" height="50.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hw-m7-e4T">
-                                <rect key="frame" x="0.0" y="0.0" width="245" height="20.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="291" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3rR-h7-h65">
-                                <rect key="frame" x="0.0" y="24.5" width="245" height="20.5"/>
+                                <rect key="frame" x="0.0" y="24.5" width="291" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kxz-Gf-OeQ">
-                                <rect key="frame" x="0.0" y="49" width="245" height="2.5"/>
+                                <rect key="frame" x="0.0" y="49" width="291" height="2.5"/>
                                 <color key="progressTintColor" name="primary"/>
                             </progressView>
                         </subviews>
                     </stackView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-uX-j9F">
-                        <rect key="frame" x="368" y="34" width="30" height="28"/>
+                    <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-uX-j9F">
+                        <rect key="frame" x="414" y="34" width="0.0" height="28"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="30" id="hXY-7D-H8H"/>
+                            <constraint firstAttribute="width" id="hXY-7D-H8H"/>
                         </constraints>
                         <state key="normal" image="sync"/>
                     </button>
@@ -56,7 +56,7 @@
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="sA7-SV-nM9" secondAttribute="bottom" constant="10" id="7Lb-9A-CNr"/>
                     <constraint firstItem="sA7-SV-nM9" firstAttribute="top" secondItem="flQ-o7-x61" secondAttribute="top" constant="10" id="8pi-Qu-XlY"/>
-                    <constraint firstAttribute="trailing" secondItem="LdL-uX-j9F" secondAttribute="trailing" constant="16" id="Rbs-37-2nZ"/>
+                    <constraint firstAttribute="trailing" secondItem="LdL-uX-j9F" secondAttribute="trailing" id="Rbs-37-2nZ"/>
                     <constraint firstItem="sA7-SV-nM9" firstAttribute="leading" secondItem="flQ-o7-x61" secondAttribute="leading" constant="16" id="bUR-5L-Okz"/>
                     <constraint firstItem="LdL-uX-j9F" firstAttribute="leading" secondItem="726-3v-ARn" secondAttribute="trailing" constant="10" id="dSO-Rr-mKg"/>
                     <constraint firstItem="LdL-uX-j9F" firstAttribute="centerY" secondItem="726-3v-ARn" secondAttribute="centerY" id="eWa-fw-QWz"/>

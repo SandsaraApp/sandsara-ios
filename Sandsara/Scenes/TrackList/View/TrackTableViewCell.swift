@@ -110,13 +110,13 @@ class TrackTableViewCell: BaseTableViewCell<TrackCellViewModel> {
         DispatchQueue.main.async {
             self.state = downloaded ? .downloaded : .download
             if self.state == .downloaded {
-                self.checkSynced()
+                self.updateConstraints(isSynced: true)
             }
         }
     }
 
     private func trackDetailUIConfig() {
-        updateConstraints(isSynced: (state == .download || state == .synced))
+        updateConstraints(isSynced: true)
     }
 
     private func downloadAction() {

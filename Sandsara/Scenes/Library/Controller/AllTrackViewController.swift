@@ -118,9 +118,6 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
 extension AllTrackViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0  {
-            return mode == .local ? 50 : 96
-        }
         return 96.0
     }
 }

@@ -25,43 +25,43 @@ class PlayerViewController: BaseViewController<NoInputParam> {
             as! PlayerViewController
         return playerVC
     }()
-
+    
     @IBOutlet private weak var tableView: UITableView!
     var index: Int = 0
     var tracks = [DisplayItem]()
     var queues = [DisplayItem]()
-
+    
     var sliderValue: Float = 0.0
-
+    
     var currentTrack = DisplayItem()
-
+    
     var isReloaded = false
-
+    
     var playlingState: PlayingState = .playlist
-
+    
     var playingTrackCount = 0
-
+    
     var playlistItem: DisplayItem?
-
+    
     var firstPriorityTrack: DisplayItem?
-
+    
     var timer: Timer?
-
+    
     var progress = BehaviorRelay<Float>(value: 0)
-
+    
     @IBOutlet weak var trackProgressSlider: UISlider!
     @IBOutlet weak var prevBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
-
-var isPlaying = true
-
-
+    
+    var isPlaying = true
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if isReloaded {
@@ -76,7 +76,7 @@ var isPlaying = true
             }
         }
     }
-
+    
     private func setupTableView() {
         tableView.backgroundColor = Asset.background.color
         tableView.separatorStyle = .none
@@ -87,37 +87,37 @@ var isPlaying = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
-
+        
         nextBtn.addTarget(self, action: #selector(nextBtnTap), for: .touchUpInside)
         prevBtn.addTarget(self, action: #selector(prevBtnTap), for: .touchUpInside)
         trackProgressSlider.minimumValue = 0
         trackProgressSlider.maximumValue = 100 // not sure
-
+        
         for state: UIControl.State in [.normal, .selected, .application, .reserved] {
             trackProgressSlider.setThumbImage(Asset.thumbs.image, for: state)
         }
-
+        
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchValueChanged(_:)), for: .valueChanged)
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchBegan(_:)), for: .touchDown)
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
         trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
-
+        
         playBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
-        if self.isPlaying {
-        self.isPlaying = false
-        DeviceServiceImpl.shared.pauseDevice()
-        self.pauseTimer()
-        self.playBtn.setImage(Asset.play.image, for: .normal)
-        } else {
-        self.isPlaying = true
-        DeviceServiceImpl.shared.resumeDevice()
-        self.updateProgressTimer()
-        self.playBtn.setImage(Asset.pause1.image, for: .normal)
-        }
-        self.popupBar.customBarViewController?.popupItemDidUpdate()
+            if self.isPlaying {
+                self.isPlaying = false
+                DeviceServiceImpl.shared.pauseDevice()
+                self.pauseTimer()
+                self.playBtn.setImage(Asset.play.image, for: .normal)
+            } else {
+                self.isPlaying = true
+                DeviceServiceImpl.shared.resumeDevice()
+                self.updateProgressTimer()
+                self.playBtn.setImage(Asset.pause1.image, for: .normal)
+            }
+            self.popupBar.customBarViewController?.popupItemDidUpdate()
         }.disposed(by: disposeBag)
-
+        
         progress
             .bind(to: trackProgressSlider.rx.value)
             .disposed(by: disposeBag)
@@ -128,15 +128,15 @@ extension PlayerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return playingTrackCount > 0 ? 96.0 : 0.0
     }
-
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
-
+    
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 400
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlayerHeaderView.identifier) as! PlayerHeaderView
         headerView.reloadHeaderCell(trackDisplay: Driver.just(currentTrack),
@@ -146,23 +146,23 @@ extension PlayerViewController: UITableViewDelegate {
             .rx.tap.asDriver()
             .driveNext { [weak self] in
                 self?.popupPresentationContainer?.closePopup(animated: true, completion: nil)
-        }.disposed(by: headerView.disposeBag)
+            }.disposed(by: headerView.disposeBag)
         return headerView
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let trackInQueue = queues[safe: indexPath.row]
-
+        
         guard let index = tracks.firstIndex(where: {
             $0.trackId == trackInQueue?.trackId
         }) else { return }
         triggerPlayAction(at: index)
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         guard let headerView = tableView.tableHeaderView else {return}
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
@@ -177,19 +177,19 @@ extension PlayerViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return queues.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath) as? TrackTableViewCell,
               queues.count > 0
         else { return UITableViewCell() }
-
+        
         cell.bind(to: TrackCellViewModel(inputs: TrackCellVMContract
                                             .Input(mode: .remote, track: queues[safe: indexPath.row] ?? DisplayItem())))
-
+        
         return cell
     }
 }
@@ -207,16 +207,16 @@ extension PlayerViewController {
         }
         let fileNames = tracks.map {
             $0.fileName
-        }.joined(separator: "\r\n")
-
+        }.joined(separator: "\r\n") 
+        
         let filename = "temporal"
         let fileExtension = "playlist"
-
+        
         FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename + "." + fileExtension)
         if let handle = FileServiceImpl.shared.getHandleForFileInDocuments(filename: filename + "." + fileExtension) {
             FileServiceImpl.shared.writeString(string: fileNames, fileHandle: handle)
         }
-
+        
         FileServiceImpl.shared.sendFiles(fileName: filename, extensionName: fileExtension, isPlaylist: true)
         FileServiceImpl.shared.sendSuccess.subscribeNext {
             if $0 {
@@ -233,7 +233,7 @@ extension PlayerViewController {
             }
         }.disposed(by: disposeBag)
     }
-
+    
     func showTrack(at index: Int) {
         DeviceServiceImpl.shared.currentTrackIndex = index
         sliderValue = 0
@@ -248,11 +248,11 @@ extension PlayerViewController {
             }
         }
     }
-
+    
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
-            self.isPlaying = true
+                self.isPlaying = true
                 self.progress.accept(0) // reset progress
                 self.readProgress()
                 DispatchQueue.main.async {
@@ -261,7 +261,7 @@ extension PlayerViewController {
             }
         }
     }
-
+    
     func triggerPlayAction(at index: Int) {
         showTrack(at: index)
         if timer != nil {
@@ -271,10 +271,10 @@ extension PlayerViewController {
         }
         playTrack(at: index)
     }
-
+    
     @objc func sliderTouchBegan(_ sender: UISlider) {
     }
-
+    
     @objc func sliderTouchValueChanged(_ sender: UISlider) {
         let playTime = sender.value
         if playTime == sender.maximumValue {
@@ -284,17 +284,17 @@ extension PlayerViewController {
             }
         }
     }
-
+    
     @objc func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
         guard let slider = gestureRecognizer.view as? UISlider else { return }
         let pointTapped = gestureRecognizer.location(in: slider)
-
+        
         let positionOfSlider = slider.bounds.origin
         let widthOfSlider = slider.bounds.size.width
         let newValue = ((pointTapped.x - positionOfSlider.x) * CGFloat(slider.maximumValue) / widthOfSlider)
         slider.setValue(Float(newValue), animated: true)
     }
-
+    
     @objc func sliderTouchEnded(_ sender: UISlider) {
         let playTime = sender.value
         if playTime == sender.maximumValue {
@@ -304,7 +304,7 @@ extension PlayerViewController {
             }
         }
     }
-
+    
     @objc func nextBtnTap() {
         debugPrint("tapped next")
         if self.index < self.tracks.count - 1 {
@@ -315,7 +315,7 @@ extension PlayerViewController {
             self.triggerPlayAction(at: indexToPlay)
         }
     }
-
+    
     @objc func prevBtnTap() {
         debugPrint("tapped previous")
         if self.index > 0 {
@@ -326,11 +326,11 @@ extension PlayerViewController {
             self.triggerPlayAction(at: indexToPlay)
         }
     }
-
+    
     func addToQueue(track: DisplayItem) {
         tracks.append(track)
         queues.append(track)
-
+        
         if tracks.count > 1 {
             DispatchQueue.main.async {
                 self.tableView.beginUpdates()
@@ -345,7 +345,7 @@ extension PlayerViewController {
         DeviceServiceImpl.shared.currentTracks = tracks
         createPlaylist()
     }
-
+    
     func updateProgressTimer() {
         if timer != nil {
             timer?.invalidate()
@@ -353,19 +353,19 @@ extension PlayerViewController {
         }
         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
     }
-
-func pauseTimer() {
-if timer != nil {
-timer?.invalidate()
-timer = nil
-}
-}
-
+    
+    func pauseTimer() {
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
     func readProgress() {
         progress.accept(0)
         updateProgressTimer()
     }
-
+    
     @objc func updateTimer(_ timer: Timer) {
         
         if progress.value == 100  {

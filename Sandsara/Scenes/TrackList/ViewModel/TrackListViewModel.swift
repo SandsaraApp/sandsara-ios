@@ -142,12 +142,7 @@ class TrackCellViewModel: BaseCellViewModel<TrackCellVMContract.Input,
                                                TrackCellVMContract.Output> {
     override func transform() {
         let url = URL(string: inputs.track.thumbnail)
-        let saved = BehaviorRelay<Bool>(value: false)
-        if inputs.mode == .remote {
-            saved.accept(true)
-        } else {
-            saved.accept(DataLayer.checkTrackIsSynced(inputs.track))
-        }
+        let saved = BehaviorRelay<Bool>(value: true)
         setOutput(Output(title: Driver.just(inputs.track.title),
                          authorTitle: Driver.just(L10n.authorBy(inputs.track.author)),
                          thumbnailUrl: url,

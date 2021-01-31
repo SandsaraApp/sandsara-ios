@@ -84,9 +84,9 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
     }
 
     private func trackDetailUIConfig() {
-        addToQueueBtn.isHidden = (state == .download || state == .downloaded)
-        playBtn.isHidden = (state == .download || state == .downloaded)
-        downloadBtn.isHidden = state != .download
+        addToQueueBtn.isHidden = state == .download 
+        playBtn.isHidden = state == .download 
+        downloadBtn.isHidden = state == .downloaded
         addToPlaylistBtn.isHidden = state == .download
         favBtn.isHidden = state == .download
         sycnButton.isHidden = state != .downloaded
@@ -110,7 +110,6 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
             DispatchQueue.main.async {
                 self.state = downloaded ? .downloaded : .download
                 if self.state == .downloaded {
-                    self.checkSynced()
                     self.checkFavorite()
                 }
             }
