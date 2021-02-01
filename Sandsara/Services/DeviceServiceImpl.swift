@@ -281,7 +281,6 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 debugPrint("Sleep Success")
-            //   self.readDeviceStatus()
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)

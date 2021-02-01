@@ -89,7 +89,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
         downloadBtn.isHidden = state == .downloaded
         addToPlaylistBtn.isHidden = state == .download
         favBtn.isHidden = state == .download
-        sycnButton.isHidden = state != .downloaded
+        sycnButton.isHidden = true
     }
 
     private func checkFavorite() {

@@ -245,7 +245,7 @@ class FileServiceImpl {
         } completionOnMainThread: { result in
             switch result {
             case .success:
-                DeviceServiceImpl.shared.readPlaylistValue()
+             //   DeviceServiceImpl.shared.readPlaylistValue()
                 completionHandler(true)
             case .failure(let error):
                 debugPrint(error.localizedDescription)
@@ -260,7 +260,7 @@ class FileServiceImpl {
             switch result {
             case .success:
                 debugPrint("Play success")
-                DeviceServiceImpl.shared.readPlaylistValue()
+               // DeviceServiceImpl.shared.readPlaylistValue()
                 completionHandler(true)
             case .failure(let error):
                 debugPrint("Play update track error")
@@ -274,8 +274,6 @@ class FileServiceImpl {
             switch result {
             case .success:
                 debugPrint("Play success")
-              //  DeviceServiceImpl.shared.resumeDevice()
-               // DeviceServiceImpl.shared.readPlaylistValue()
             case .failure(let error):
                 debugPrint("Play update position error")
             }
@@ -306,7 +304,6 @@ class FileServiceImpl {
             switch result {
             case .success:
                 debugPrint("Play success")
-                DeviceServiceImpl.shared.readPlaylistValue()
                 completionHandler(true)
             case .failure(let error):
                 debugPrint("Play update track error")

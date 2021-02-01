@@ -367,11 +367,17 @@ extension PlayerViewController {
     }
     
     @objc func updateTimer(_ timer: Timer) {
-        
         if progress.value == 100  {
             self.timer?.invalidate()
             self.timer = nil
-            self.nextBtnTap()
+            if self.index < self.tracks.count - 1 {
+                let indexToPlay = self.index + 1
+                self.showTrack(at: indexToPlay)
+            } else {
+                let indexToPlay = 0
+                self.showTrack(at: indexToPlay)
+            }
+            readProgress()
         } else {
             bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
                 switch result {

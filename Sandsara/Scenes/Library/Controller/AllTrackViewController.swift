@@ -57,13 +57,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
 
         tableView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
-            if self.mode == .local {
-                if indexPath.row != 0 {
-                    self.openTrackDetail(index: indexPath.row)
-                }
-            } else {
-                self.openTrackDetail(index: indexPath.row)
-            }
+            self.openTrackDetail(index: indexPath.row)
         }.disposed(by: disposeBag)
 
         viewModel.isLoading
@@ -110,8 +104,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
         default:
             break
         }
-
-        trackList.selecledIndex = index - 1
+        trackList.selecledIndex = index
         self.navigationController?.pushViewController(trackList, animated: true)
     }
 }
