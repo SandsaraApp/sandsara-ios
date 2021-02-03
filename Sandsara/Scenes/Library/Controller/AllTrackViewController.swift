@@ -36,7 +36,7 @@ class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputPa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
+      //  NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     @objc func reloadData() {

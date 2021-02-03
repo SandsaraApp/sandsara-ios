@@ -201,6 +201,8 @@ enum SettingItemType {
             return DeviceService.factoryReset
         case .flipMode:
             return LedStripService.ledStripDirection
+        case .rotate:
+            return LedStripService.ledStripCycleEnable
         default:
             return nil
         }
@@ -358,7 +360,7 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
             .skip(1)
             .subscribeNext { value in
                 let stringValue = value ? "0" : "1"
-                self.sendCommand(command: stringValue)
+                self.sendRotateCommand(command: stringValue)
             }.disposed(by: disposeBag)
 
         let images = Preferences.AppDomain.colors?.map {
@@ -389,11 +391,21 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
         
 
     func sendCommand(command: String) {
-        guard let toogle = SettingItemType.flipMode.toogleCharacteristic else { return }
-        bluejay.write(to: toogle, value: command) { result in
+        bluejay.write(to: LedStripService.ledStripDirection, value: command) { result in
             switch result {
             case .success:
-                debugPrint("Write to sensor location is successful.\(result)")
+                debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripDirection.service)")
+            case .failure(let error):
+                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendRotateCommand(command: String) {
+        bluejay.write(to: LedStripService.ledStripCycleEnable, value: command) { result in
+            switch result {
+            case .success:
+                debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripCycleEnable.service)")
             case .failure(let error):
                 debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
             }

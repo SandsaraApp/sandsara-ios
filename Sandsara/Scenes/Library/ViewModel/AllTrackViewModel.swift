@@ -87,9 +87,6 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
                 AllTrackCellVM.track($0)
             }
-//            if items.count > 0 {
-//                datas.append(.header(DownloadCellViewModel(inputs: DownloadCellVMContract.Input(notSyncedTrack: .init(value: DataLayer.loadDownloadedTracks().count - DataLayer.loadSyncedTracks().count), timeRemaining: FileSyncManager.shared.getCurrentTimeRunning(), syncAllTrigger: inputs.syncAll))))
-//            }
             datas.append(contentsOf: items)
             self.datas.accept(datas)
             self.emitEventLoading(false)

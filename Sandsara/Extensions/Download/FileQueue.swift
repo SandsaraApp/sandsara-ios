@@ -17,7 +17,7 @@ class FileSyncManager: NSObject {
     private let disposeBag = DisposeBag()
 
     /// Dictionary of operations, keyed by the `taskIdentifier` of the `URLSessionTask`
-    fileprivate var operations = [String: FileOperation]()
+    var operations = [String: FileOperation]()
     /// Serial OperationQueue for downloads
 
     static let shared = FileSyncManager()
@@ -66,15 +66,13 @@ class FileSyncManager: NSObject {
     func triggerOperation(id: String) {
         guard let currentOperation = operations[id] else { return }
         FileServiceImpl.shared.checkFileExistOnSDCard(name: currentOperation.item.fileName) { isExisted in
-            if isExisted && !currentOperation.item.isFile {
+            if isExisted {
                 self.queue.cancelAllOperations()
                 self.updateTrack(item: currentOperation.item)
             } else {
-                if self.queue.operations.isEmpty {
-                    DispatchQueue.main.async {
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
-                    }
+                if self.queue.operations.isEmpty || self.queue.operations.first?.isCancelled ?? false {
                     self.queue.addOperation(currentOperation)
+                    NotificationCenter.default.post(name: reloadNoti, object: ["item" : currentOperation.item])
                     currentOperation.startSendFile()
                 }
             }
@@ -84,12 +82,21 @@ class FileSyncManager: NSObject {
 
 extension FileSyncManager: RemoveTask {
     func removeTask(id: String) {
-        operations.removeValue(forKey: id)
+        if operations.count > 0 {
+            operations.removeValue(forKey: id)
+        }
         if operations.isEmpty {
             print("Queue is empty")
+            queue.operations.first?.cancel()
+            DispatchQueue.main.async {
+                self.queue.operations.first?.cancel()
+                NotificationCenter.default.post(name: reloadNoti, object: nil)
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
+            }
         } else {
             guard let nextTask = operations.first?.value else { return }
             queue.addOperation(nextTask)
+            NotificationCenter.default.post(name: reloadNoti, object: ["item" : nextTask.item])
             nextTask.startSendFile()
         }
     }
@@ -98,14 +105,13 @@ extension FileSyncManager: RemoveTask {
         if !item.isFile {
             if item.isPlaylist {
                 if DataLayer.createSyncedPlaylist(playlist: item) {
-                    self.removeTask(id: item.trackId)
                 }
+                self.removeTask(id: item.trackId)
             } else {
                 if !DataLayer.addSyncedTrack(item) {
-                    self.removeTask(id: item.trackId)
                 }
+                self.removeTask(id: item.trackId)
             }
-            NotificationCenter.default.post(name: reloadNoti, object: nil)
         }
     }
 }
@@ -164,10 +170,10 @@ class FileOperation: AsynchronousOperation {
                     print("Took \(diff) seconds")
                     let track = self.item
                     self.delegate?.updateTrack(item: track)
-                    self.finish()
+                    self.cancel()
                     case .failure(let error):
                         debugPrint("Send file error \(error.localizedDescription)")
-                        self.finish()
+                        self.cancel()
                     
                     }
                 }

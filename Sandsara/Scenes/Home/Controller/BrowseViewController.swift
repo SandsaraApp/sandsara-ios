@@ -77,8 +77,10 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
                 player.modalPresentationStyle = .fullScreen
                 player.index = DeviceServiceImpl.shared.currentTrackIndex
                 player.tracks = DeviceServiceImpl.shared.currentTracks
+                player.queues = Array(player.tracks[player.index + 1 ..< player.tracks.count]) + Array(player.tracks[0 ..< player.index])
                 player.playlingState = .showOnly
                 player.isReloaded = true
+                player.showTrack(at: player.index)
                 (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: player.tracks[DeviceServiceImpl.shared.currentTrackIndex])
                 player.progress.accept(DeviceServiceImpl.shared.currentTrackPosition.value)
                 UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false

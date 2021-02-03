@@ -48,7 +48,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
+      //  NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func bindViewModel() {

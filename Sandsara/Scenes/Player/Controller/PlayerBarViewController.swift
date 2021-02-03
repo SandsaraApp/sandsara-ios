@@ -16,7 +16,7 @@ enum PlayerState {
     case connected
     case busy
     case haveTrack(displayItem: DisplayItem?)
-
+    
     var isConnection: Bool {
         return self == .connected || self == .busy || self == .noConnect
     }
@@ -38,7 +38,7 @@ class PlayerBarView: UIView {
 
 
 class PlayerBarViewController: LNPopupCustomBarViewController {
-
+    
     @IBOutlet weak var connectionBar: UIView!
     @IBOutlet weak var playerBar: UIView!
     @IBOutlet weak var connectionTitleLabel: UILabel!
@@ -48,33 +48,33 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var subTitleLabel: UILabel!
-
+    
     @IBOutlet weak var playerContentView: UIView!
-
+    
     private let disposeBag = DisposeBag()
-
+    
     var state: PlayerState = .connected {
         didSet {
             popupItemDidUpdate()
         }
     }
-
+    
     @IBOutlet var heightConstraint: NSLayoutConstraint!
-
+    
     override var wantsDefaultTapGestureRecognizer: Bool {
         return false
     }
-
+    
     override var wantsDefaultPanGestureRecognizer: Bool {
         return false
     }
-
-
+    
+    
     fileprivate func updateConstraint() {
         heightConstraint.constant = 60
         self.preferredContentSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         connectionTitleLabel.font = FontFamily.OpenSans.bold.font(size: 12)
@@ -82,53 +82,54 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
         authorLabel.font = FontFamily.OpenSans.light.font(size: 12)
         subTitleLabel.font = FontFamily.OpenSans.light.font(size: 12)
         retryBtn.titleLabel?.font = FontFamily.OpenSans.regular.font(size: 12)
-
+        
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         updateConstraint()
-
+        
         retryBtn.rx.tap.asDriver().driveNext { [weak self] in
             self?.showConnectionVC()
         }.disposed(by: disposeBag)
-
+        
         retryBtn.sizeToFit()
-
+        
         pauseButton.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
-        if !PlayerViewController.shared.isPlaying {
-        PlayerViewController.shared.isPlaying = true
+            if !PlayerViewController.shared.isPlaying {
+                PlayerViewController.shared.isPlaying = true
                 DeviceServiceImpl.shared.resumeDevice()
                 PlayerViewController.shared.updateProgressTimer()
-        PlayerViewController.shared.playBtn.setImage(Asset.pause1.image, for: .normal)
+                PlayerViewController.shared.playBtn.setImage(Asset.pause1.image, for: .normal)
                 self.pauseButton.setImage(Asset.pause.image, for: .normal)
             } else {
-            PlayerViewController.shared.isPlaying = false
+                PlayerViewController.shared.isPlaying = false
                 DeviceServiceImpl.shared.pauseDevice()
-            PlayerViewController.shared.pauseTimer()
-            PlayerViewController.shared.playBtn.setImage(Asset.play.image, for: .normal)
+                PlayerViewController.shared.pauseTimer()
+                PlayerViewController.shared.playBtn.setImage(Asset.play.image, for: .normal)
                 self.pauseButton.setImage(Asset.play.image, for: .normal)
             }
         }.disposed(by: disposeBag)
-
+        
         playerContentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openPlayer)))
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-
-    override func popupItemDidUpdate() {
     
+    override func popupItemDidUpdate() {
         if connectionBar != nil {
-        if PlayerViewController.shared.isPlaying {
-        self.pauseButton.setImage(Asset.pause.image, for: .normal)
-        } else {
-        self.pauseButton.setImage(Asset.play.image, for: .normal)
-        }
+            if PlayerViewController.shared.isPlaying {
+                self.pauseButton.setImage(Asset.pause.image, for: .normal)
+            } else {
+                self.pauseButton.setImage(Asset.play.image, for: .normal)
+            }
             Driver.just(state)
                 .driveNext { state in
                     if !state.isConnection {
                         self.view.addGestureRecognizer(self.popupContentView.popupInteractionGestureRecognizer)
+                    } else {
+                        self.view.removeGestureRecognizer(self.popupContentView.popupInteractionGestureRecognizer)
                     }
                     switch state {
                     case .busy:
@@ -160,25 +161,25 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.songLabel.text = item?.title
                         self.authorLabel.text = L10n.authorBy(item?.author ?? "")
                     }
-            }.disposed(by: disposeBag)
+                }.disposed(by: disposeBag)
         }
     }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
+        
         coordinator.animate(alongsideTransition: { [unowned self] context in
             updateConstraint()
         }, completion: nil)
     }
-
+    
     private func showConnectionVC() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
         let navVC = UINavigationController(rootViewController: vc)
         self.present(navVC, animated: true, completion: nil)
     }
-
-
+    
+    
     @objc func openPlayer() {
         UIApplication.topViewController()?.tabBarController?.openPopup(animated: true, completion: nil)
     }

@@ -837,24 +837,67 @@ try another one.  </string>
                                     <constraint firstItem="ZiR-bP-F2c" firstAttribute="top" secondItem="edo-0s-3jS" secondAttribute="top" constant="16" id="lAc-Q5-ttI"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldm-Kl-t3n">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cPf-iH-UZd">
+                                        <rect key="frame" x="16" y="291" width="382" height="4"/>
+                                        <color key="progressTintColor" name="primary"/>
+                                        <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </progressView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBD-x6-XVM">
+                                        <rect key="frame" x="16" y="240" width="382" height="35"/>
+                                        <fontDescription key="fontDescription" name="Tinos-Regular" family="Tinos" pointSize="30"/>
+                                        <color key="textColor" name="primary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nv8-ij-M3W">
+                                        <rect key="frame" x="16" y="311" width="382" height="16.5"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                        <color key="textColor" name="primary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.7494720666586947" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="nBD-x6-XVM" firstAttribute="leading" secondItem="ldm-Kl-t3n" secondAttribute="leading" constant="16" id="AiZ-tb-Gsb"/>
+                                    <constraint firstItem="cPf-iH-UZd" firstAttribute="leading" secondItem="ldm-Kl-t3n" secondAttribute="leading" constant="16" id="DYf-NX-EhU"/>
+                                    <constraint firstAttribute="trailing" secondItem="cPf-iH-UZd" secondAttribute="trailing" constant="16" id="MVE-z2-3u9"/>
+                                    <constraint firstItem="nv8-ij-M3W" firstAttribute="top" secondItem="cPf-iH-UZd" secondAttribute="bottom" constant="16" id="Npq-zu-SuA"/>
+                                    <constraint firstItem="nBD-x6-XVM" firstAttribute="top" secondItem="ldm-Kl-t3n" secondAttribute="top" constant="240" id="TzE-nd-wUw"/>
+                                    <constraint firstAttribute="trailing" secondItem="nBD-x6-XVM" secondAttribute="trailing" constant="16" id="amM-b0-It5"/>
+                                    <constraint firstItem="cPf-iH-UZd" firstAttribute="top" secondItem="nBD-x6-XVM" secondAttribute="bottom" constant="16" id="bhV-Bk-nbM"/>
+                                    <constraint firstItem="nv8-ij-M3W" firstAttribute="leading" secondItem="ldm-Kl-t3n" secondAttribute="leading" constant="16" id="t3J-cb-9Gk"/>
+                                    <constraint firstAttribute="trailing" secondItem="nv8-ij-M3W" secondAttribute="trailing" constant="16" id="zT3-MA-3Ho"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="p2n-hO-li0"/>
                         <color key="backgroundColor" name="background"/>
                         <constraints>
                             <constraint firstItem="p7N-BU-CtH" firstAttribute="leading" secondItem="p2n-hO-li0" secondAttribute="leading" id="BjH-4A-Ni8"/>
+                            <constraint firstItem="ldm-Kl-t3n" firstAttribute="top" secondItem="p2n-hO-li0" secondAttribute="top" id="Hdl-8G-mMU"/>
                             <constraint firstItem="p2n-hO-li0" firstAttribute="trailing" secondItem="p7N-BU-CtH" secondAttribute="trailing" id="J0j-g0-hwX"/>
                             <constraint firstItem="p2n-hO-li0" firstAttribute="bottom" secondItem="edo-0s-3jS" secondAttribute="bottom" id="KAN-nE-R1s"/>
+                            <constraint firstItem="p2n-hO-li0" firstAttribute="trailing" secondItem="ldm-Kl-t3n" secondAttribute="trailing" id="TaH-As-51q"/>
                             <constraint firstItem="edo-0s-3jS" firstAttribute="leading" secondItem="p2n-hO-li0" secondAttribute="leading" id="Xwi-Iu-VLu"/>
+                            <constraint firstItem="ldm-Kl-t3n" firstAttribute="leading" secondItem="p2n-hO-li0" secondAttribute="leading" id="YtC-gt-McB"/>
+                            <constraint firstItem="p2n-hO-li0" firstAttribute="bottom" secondItem="ldm-Kl-t3n" secondAttribute="bottom" id="ZI7-Jf-e5I"/>
                             <constraint firstItem="edo-0s-3jS" firstAttribute="top" secondItem="p7N-BU-CtH" secondAttribute="bottom" id="iqF-ad-soo"/>
+                            <constraint firstItem="edo-0s-3jS" firstAttribute="top" secondItem="p2n-hO-li0" secondAttribute="bottom" constant="-145" id="jXK-tA-i96"/>
                             <constraint firstItem="edo-0s-3jS" firstAttribute="trailing" secondItem="p2n-hO-li0" secondAttribute="trailing" id="oLx-AZ-EKW"/>
                             <constraint firstItem="p7N-BU-CtH" firstAttribute="top" secondItem="p2n-hO-li0" secondAttribute="top" id="u1b-fz-D5n"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="nextBtn" destination="PeS-mC-NB8" id="hK8-AU-e6A"/>
+                        <outlet property="overlayView" destination="ldm-Kl-t3n" id="8pb-CK-dod"/>
                         <outlet property="playBtn" destination="JZ6-mY-f0k" id="vwL-VV-f88"/>
                         <outlet property="prevBtn" destination="y92-TB-t8T" id="mcd-Cu-ie7"/>
+                        <outlet property="remainTrackCountLabel" destination="nv8-ij-M3W" id="3ee-qc-XBe"/>
+                        <outlet property="syncProgressBar" destination="cPf-iH-UZd" id="IU2-p7-bvb"/>
                         <outlet property="tableView" destination="p7N-BU-CtH" id="DdJ-tx-c6b"/>
+                        <outlet property="trackNameLabel" destination="nBD-x6-XVM" id="7bT-Ms-M8r"/>
                         <outlet property="trackProgressSlider" destination="ZiR-bP-F2c" id="BIx-od-Dd4"/>
                     </connections>
                 </viewController>

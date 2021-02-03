@@ -47,15 +47,22 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     
     var timer: Timer?
     
+    var lastProgress = 0.0
+    
+    @IBOutlet weak var overlayView: UIView!
     var progress = BehaviorRelay<Float>(value: 0)
     
     @IBOutlet weak var trackProgressSlider: UISlider!
     @IBOutlet weak var prevBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
+    @IBOutlet weak var trackNameLabel: UILabel!
+    @IBOutlet weak var syncProgressBar: UIProgressView!
+    @IBOutlet weak var remainTrackCountLabel: UILabel!
+    
+    var notSyncedTracks = [DisplayItem]()
     
     var isPlaying = true
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,9 +79,14 @@ class PlayerViewController: BaseViewController<NoInputParam> {
                 }
             } else {
                 showTrack(at: index)
-                createPlaylist()
+                if playlingState == .playlist {
+                    checkMultipleTracks()
+                } else {
+                    createPlaylist()
+                }
             }
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: reloadNoti, object: nil)
     }
     
     private func setupTableView() {
@@ -329,21 +341,125 @@ extension PlayerViewController {
     
     func addToQueue(track: DisplayItem) {
         tracks.append(track)
-        queues.append(track)
-        
-        if tracks.count > 1 {
-            DispatchQueue.main.async {
-                self.tableView.beginUpdates()
-                self.tableView.insertRows(at: [IndexPath(row: self.queues.count - 1, section: 0)], with: .automatic)
-                self.tableView.endUpdates()
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+        queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
         DeviceServiceImpl.shared.currentTracks = tracks
-        createPlaylist()
+        
+        checkTrackExist(track: track)
+    }
+    
+    // MARK: - check single track
+    func checkTrackExist(track: DisplayItem) {
+        FileServiceImpl.shared.checkFileExistOnSDCard(name: track.fileName) { isExisted in
+            if isExisted { 
+                DispatchQueue.main.async {
+                    self.overlayView.isHidden = true
+                    self.createPlaylist()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                    self.view.isUserInteractionEnabled = false
+                    self.overlayView.isHidden = false
+                    self.trackNameLabel.text = track.title
+                    self.remainTrackCountLabel.text = "1 track is syncing now"
+                    let completion = BlockOperation {
+                        print("Synced \(track.fileName) is done")
+                    }
+                    
+                    let operation = FileSyncManager.shared.queueDownload(item: track)
+                    operation.progress
+                        .bind(to: self.syncProgressBar.rx.progress)
+                        .disposed(by: operation.disposeBag)
+                    
+                    
+                    FileSyncManager.shared.triggerOperation(id: track.trackId)
+                    completion.addDependency(operation)
+                    OperationQueue.main.addOperation(completion)
+                    
+                    completion.cancel()
+                }
+            }
+        }
+    }
+    
+    @objc func reloadData(_ noti: Notification) {
+        func getCurrentSyncTask(item: DisplayItem) {
+            if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
+                self.syncProgressBar.isHidden = false
+                self.trackNameLabel.text = item.title
+                self.remainTrackCountLabel.text = "\(FileSyncManager.shared.operations.count) tracks are syncing now"
+                task.progress
+                    .bind(to: self.syncProgressBar.rx.progress)
+                    .disposed(by: task.disposeBag)
+            } else {
+                syncProgressBar.isHidden = true
+            }
+        }
+        
+        if let noti = noti.object as? [String: Any], let item = noti["item"] as? DisplayItem {
+            getCurrentSyncTask(item: item)
+        } else {
+            self.progress.accept(0)
+            self.updateProgressTimer()
+            DispatchQueue.main.async {
+                defer {
+                    self.createPlaylist()
+                }
+                self.overlayView.isHidden = true
+                self.view.isUserInteractionEnabled = true
+            }
+        }
+    }
+    
+    // MARK: - check multiple tracks 
+    func checkMultipleTracks() {
+        notSyncedTracks = []
+        bluejay.run { sandsaraBoard -> Bool in
+            for track in self.tracks {
+                do {
+                    let value: String = try sandsaraBoard.writeAndRead(writeTo: FileService.checkFileExist, value: track.fileName, readFrom: FileService.receiveFileRespone)
+                    if value == "1" {
+                        continue
+                    } else {
+                        self.notSyncedTracks.append(track)
+                    }
+                }
+            }
+            return false
+        } completionOnMainThread: { result in
+            switch result {
+            case .success:
+                print("checked all")
+                if self.notSyncedTracks.isEmpty {
+                    self.overlayView.isHidden = true
+                    self.createPlaylist()
+                } else {
+                    self.progress.accept(0)
+                    self.pauseTimer()
+                    DispatchQueue.main.async {
+                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                        self.overlayView.isHidden = false
+                        self.view.isUserInteractionEnabled = false
+                    }
+                    let completion = BlockOperation {
+                        print("All track synced is done")
+                    }
+                    
+                    for track in self.notSyncedTracks {
+                        let operation = FileSyncManager.shared.queueDownload(item: track)
+                        FileSyncManager.shared.triggerOperation(id: track.trackId)
+                        completion.addDependency(operation)
+                    }
+                    completion.cancel()
+                    OperationQueue.main.addOperation(completion)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     func updateProgressTimer() {
@@ -351,7 +467,9 @@ extension PlayerViewController {
             timer?.invalidate()
             timer = nil
         }
-        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
+        if timer == nil {
+            timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
+        }
     }
     
     func pauseTimer() {
@@ -368,16 +486,22 @@ extension PlayerViewController {
     
     @objc func updateTimer(_ timer: Timer) {
         if progress.value == 100  {
-            self.timer?.invalidate()
-            self.timer = nil
+            defer {
+                readProgress()
+            }
+            if self.timer != nil {
+                self.timer?.invalidate()
+                self.timer = nil
+            }
             if self.index < self.tracks.count - 1 {
                 let indexToPlay = self.index + 1
+                print("auto play \(indexToPlay)")
                 self.showTrack(at: indexToPlay)
             } else {
                 let indexToPlay = 0
                 self.showTrack(at: indexToPlay)
             }
-            readProgress()
+            
         } else {
             bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
                 switch result {
@@ -385,6 +509,7 @@ extension PlayerViewController {
                     let float = Float(value) ?? 0
                     print("Progress \(float)")
                     self.progress.accept(float)
+                    self.lastProgress = Double(value) ?? 0
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
