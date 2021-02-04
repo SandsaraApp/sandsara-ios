@@ -40,7 +40,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBOutlet private weak var presetLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var lightSpeedLabel: UILabel!
-    @IBOutlet weak var lightSpeedSlider: UISlider!
+    @IBOutlet weak var lightSpeedSlider: CustomSlider!
     @IBOutlet weak var hsbView: UIView!
     @IBOutlet weak var staticColorView: UIView!
     @IBOutlet weak var staticColorSegmentControl: CustomSegmentControl!

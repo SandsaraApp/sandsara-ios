@@ -251,7 +251,7 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
         inputs
             .progress
             .skip(1)
-        .distinctUntilChanged()
+            .distinctUntilChanged()
             .subscribeNext { value in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             print("Slider Value: \(value) ")
@@ -452,8 +452,6 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
                         DeviceServiceImpl.shared.readDeviceStatus()
                     case .failure(let error):
                         print(error.localizedDescription)
-
-
                         if error.localizedDescription == "" {
                             DeviceServiceImpl.shared.readDeviceStatus()
                         }

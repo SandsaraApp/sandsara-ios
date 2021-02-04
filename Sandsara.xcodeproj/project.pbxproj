@@ -29,6 +29,7 @@
 		9228C7DB255817A60092FBB6 /* Prefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7DA255817A60092FBB6 /* Prefrences.swift */; };
 		9228C7E62558185C0092FBB6 /* BrowseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */; };
 		9228C84525581BF20092FBB6 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9228C84425581BF20092FBB6 /* UIViewController.swift */; };
+		922EEFF625CB797900A46224 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922EEFF525CB797900A46224 /* CustomSlider.swift */; };
 		924EDF4825565F850013CC71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924EDF4725565F850013CC71 /* AppDelegate.swift */; };
 		924EDF4F25565F850013CC71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF4D25565F850013CC71 /* Main.storyboard */; };
 		924EDF5125565F880013CC71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 924EDF5025565F880013CC71 /* Assets.xcassets */; };
@@ -282,6 +283,7 @@
 		9228C7DA255817A60092FBB6 /* Prefrences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefrences.swift; sourceTree = "<group>"; };
 		9228C7E52558185C0092FBB6 /* BrowseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewModel.swift; sourceTree = "<group>"; };
 		9228C84425581BF20092FBB6 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		922EEFF525CB797900A46224 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		924EDF4425565F850013CC71 /* Sandsara.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandsara.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		924EDF4725565F850013CC71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		924EDF5025565F880013CC71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				9228C6C825569DF60092FBB6 /* View */,
 				9228C84325581BE80092FBB6 /* ViewController */,
 				92670E5525C2506000ECE055 /* Sandsara-Bridging-Header.h */,
+				922EEFF525CB797900A46224 /* CustomSlider.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1746,6 +1749,7 @@
 				927CAC252567B4E900DA54EB /* ScanDevicesViewController.swift in Sources */,
 				92BA99EC2560B9F500564782 /* ApperanceService.swift in Sources */,
 				9228C71C2556AFA10092FBB6 /* AppError.swift in Sources */,
+				922EEFF625CB797900A46224 /* CustomSlider.swift in Sources */,
 				9290556625C416EE006A04F9 /* WOWMarkSlider.swift in Sources */,
 				92DFBEA52577BABE00B1BFA9 /* AlphaSlider.swift in Sources */,
 				927C7F7D255FF294009F8898 /* APIService.swift in Sources */,
@@ -2001,7 +2005,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2028,7 +2032,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sandsara/Sandsara.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = AY63F88W3R;
 				INFOPLIST_FILE = "$(SRCROOT)/Sandsara/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

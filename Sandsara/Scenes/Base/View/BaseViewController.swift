@@ -61,7 +61,24 @@ class BaseViewController<Input: InputParamView>: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         ReachabilityManager.shared.addListener(listener: self)
-
+        
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIScene.willDeactivateNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        }
+    }
+    
+    @objc func willResignActive(_ notification: Notification) {
+        // code to execute
+        if (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .busy {
+            // start to restore state there 
+            
+        } else {
+            (UIApplication.shared.delegate as! AppDelegate).isFromBackgroundResume = true
+            bluejay.disconnect()
+        }
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {

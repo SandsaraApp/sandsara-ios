@@ -20,32 +20,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let disposeBag = DisposeBag()
     
     var startOption = StartOptions.default
+    
+    var lauchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    
+    var isFromBackgroundResume: Bool = false
 
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         DataLayer.shareInstance.config()
         AppApperance.setTheme()
-        let backgroundRestoreConfig = BackgroundRestoreConfig(
-            restoreIdentifier: "com.ios.sandsara",
-            backgroundRestorer: self,
-            listenRestorer: self,
-            launchOptions: launchOptions)
-
-        let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
-
-        startOption = StartOptions(
-            enableBluetoothAlert: true,
-            backgroundRestore: backgroundRestoreMode)
-
-        bluejay.registerDisconnectHandler(handler: self)
-        
-        bluejay.start(mode: .new(startOption))
-        
+        self.lauchOptions = launchOptions
         SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
             print(colors)
         }.disposed(by: disposeBag)
-
+        restart()
         FirebaseApp.configure()
         _ = DataLayer.init()
         return true
@@ -63,9 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // observe connection
 
         ReachabilityManager.shared.stopMonitoring()
-//        if DeviceServiceImpl.shared.status.value != .busy {
-//            bluejay.disconnect()
-//        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -76,12 +62,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         ReachabilityManager.shared.startMonitoring()
-    //    bluejay.start(mode: .new(startOption))
+        if isFromBackgroundResume {
+            restart()
+        }
+    }
+    
+    func restart() {
+        let backgroundRestoreConfig = BackgroundRestoreConfig(
+            restoreIdentifier: "com.ios.sandsara.ble",
+            backgroundRestorer: self,
+            listenRestorer: self,
+            launchOptions: lauchOptions)
+        
+        let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
+        
+        startOption = StartOptions(
+            enableBluetoothAlert: true,
+            backgroundRestore: backgroundRestoreMode)
+        bluejay.registerDisconnectHandler(handler: self)
+        bluejay.start(mode: .new(self.startOption))
+        
+        if !bluejay.isBluetoothAvailable {
+            DispatchQueue.main.async { 
+                bluejay.start(mode: .new(self.startOption))
+            }
+        }
+        
+//        while (true) {
+//            bluejay.start(mode: .new(self.startOption))
+//            if bluejay.isBluetoothAvailable {
+//                break
+//            }
+//        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         ReachabilityManager.shared.stopMonitoring()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        restart()
     }
 
     func initPlayerBar() {
@@ -105,7 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: BackgroundRestorer {
     func didRestoreConnection(
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
-        return .continue
+        return .callback(checkStatus)
     }
 
     func didFailToRestoreConnection(
@@ -117,6 +135,10 @@ extension AppDelegate: BackgroundRestorer {
     
     private func checkStatus() {
         DeviceServiceImpl.shared.readSensorValues()
+    }
+    
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return true
     }
 }
 
@@ -132,9 +154,9 @@ extension AppDelegate: ListenRestorer {
 
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-        DispatchQueue.main.async {
-            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
-        }
+//        DispatchQueue.main.async {
+//            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
+//        }
         DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: true)
     }

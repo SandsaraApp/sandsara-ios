@@ -11,24 +11,27 @@ import RxCocoa
 
 class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @IBOutlet private weak var progressNameLabel: UILabel!
-    @IBOutlet private weak var progressSlider: WOWMarkSlider!
+    @IBOutlet private weak var progressSlider: CustomSlider!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
         progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 18)
         progressNameLabel.textColor = Asset.primary.color
-        progressSlider.handlerImage = Asset.thumbs.image
-        progressSlider.height = 2
-        progressSlider.markWidth = 0
+//        progressSlider.handlerImage = Asset.thumbs.image
+//        progressSlider.height = 2
+//        progressSlider.markWidth = 0
         progressSlider.isContinuous = false
+        for state: UIControl.State in [.normal, .selected, .application, .reserved] {
+            progressSlider.setThumbImage(Asset.thumbs.image, for: state)
+        }
     }
 
     override func bindViewModel() {
         progressSlider.maximumValue = viewModel.inputs.type.sliderValue.1
         progressSlider.minimumValue = viewModel.inputs.type.sliderValue.0
         
-        progressSlider.markPositions = viewModel.inputs.type.ranges
+    //    progressSlider.markPositions = viewModel.inputs.type.ranges
 
         viewModel
             .outputs

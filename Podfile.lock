@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.9.1)
+  - Alamofire (5.4.1)
   - BetterSegmentedControl (2.0.1)
   - Bluejay (0.8.8)
   - Differentiator (4.0.1)
@@ -69,14 +69,13 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.1.1):
     - GoogleUtilities/Logger
-  - Kingfisher (5.15.7):
-    - Kingfisher/Core (= 5.15.7)
-  - Kingfisher/Core (5.15.7)
-  - Moya (13.0.1):
-    - Moya/Core (= 13.0.1)
-  - Moya/Core (13.0.1):
-    - Alamofire (~> 4.1)
-    - Result (~> 4.1)
+  - Kingfisher (5.15.8):
+    - Kingfisher/Core (= 5.15.8)
+  - Kingfisher/Core (5.15.8)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
     - nanopb/encode (= 2.30906.0)
@@ -92,7 +91,6 @@ PODS:
   - Realm/Headers (5.5.0)
   - RealmSwift (5.5.0):
     - Realm (= 5.5.0)
-  - Result (4.1.0)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -151,7 +149,6 @@ SPEC REPOS:
     - ReachabilitySwift
     - Realm
     - RealmSwift
-    - Result
     - RxCocoa
     - RxDataSources
     - RxReachability
@@ -162,7 +159,7 @@ SPEC REPOS:
     - SwiftGen
 
 SPEC CHECKSUMS:
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
   Bluejay: c8c8d544aed264d7cfb2142660e6fdb9430d70b4
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
@@ -175,15 +172,14 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: 3dc4ff0d5e4840e2fa8eef0889620e8c33d4218c
-  Kingfisher: 6e1a13523fcb1c86924ce53affe4ac957e544d59
-  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
+  Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
   Realm: fb399d76f44042e5cdfc630f33828fdb4d077345
   RealmSwift: 3b7e62356207ef16d34de4e55d475163bd2062bb
-  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxReachability: 21d3e96f39bc166a21c357e923f47dec148ca97b

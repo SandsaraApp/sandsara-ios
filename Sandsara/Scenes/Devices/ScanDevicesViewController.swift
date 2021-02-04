@@ -128,6 +128,11 @@ extension ScanViewController: ConnectionObserver {
         debugPrint("ScanViewController - Bluetooth available: \(available)")
         if available {
             viewWillAppearTrigger.accept(())
+        } else {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                delegate.restart()
+                viewWillAppearTrigger.accept(())
+            }
         }
     }
 

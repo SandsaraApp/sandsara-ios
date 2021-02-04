@@ -95,7 +95,7 @@
                                         <color key="textColor" name="primary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NE1-B5-wlu">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NE1-B5-wlu" customClass="CustomSlider" customModule="Sandsara" customModuleProvider="target">
                                         <rect key="frame" x="-2" y="286" width="292" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="5wU-Y9-VFd"/>
