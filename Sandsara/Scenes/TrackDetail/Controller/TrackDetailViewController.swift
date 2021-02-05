@@ -16,7 +16,7 @@ enum TrackState {
     case synced
 }
 
-class TrackDetailViewController: BaseViewController<NoInputParam> {
+class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
 
     @IBOutlet weak var songTitleLabel: UILabel!
     @IBOutlet weak var songAuthorLabel: UILabel!
@@ -199,7 +199,23 @@ class TrackDetailViewController: BaseViewController<NoInputParam> {
 
         addToQueueBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self, let item = self.track else { return }
-            PlayerViewController.shared.addToQueue(track: item)
+            PlayerViewController.shared.playlingState = .track
+            PlayerViewController.shared.addToQueue1(track: item)
+            FileServiceImpl.shared.checkFileExistOnSDCard(name: item.fileName) { isExisted in
+                if isExisted { 
+                    DispatchQueue.main.async {
+                        PlayerViewController.shared.createPlaylist()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
+                        vc.modalPresentationStyle = .overFullScreen
+                        vc.notSyncedTracks = [item]
+                        self.present(vc, animated: false)
+                    }
+                }
+            }
         }.disposed(by: disposeBag)
 
         downloadBtn.touchEvent = { [weak self] in

@@ -905,6 +905,68 @@ try another one.  </string>
             </objects>
             <point key="canvasLocation" x="2063.768115942029" y="-557.14285714285711"/>
         </scene>
+        <!--Overlay Send File View Controller-->
+        <scene sceneID="gUW-xH-Tr1">
+            <objects>
+                <viewController storyboardIdentifier="OverlaySendFileViewController" id="kGz-C6-Y5G" customClass="OverlaySendFileViewController" customModule="Sandsara" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9J9-9F-dBV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ywl-Fj-zbk">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="HZh-2T-lSM">
+                                        <rect key="frame" x="16" y="291" width="382" height="4"/>
+                                        <color key="progressTintColor" name="primary"/>
+                                        <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </progressView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SPZ-bX-a1L">
+                                        <rect key="frame" x="16" y="240" width="382" height="35"/>
+                                        <fontDescription key="fontDescription" name="Tinos-Regular" family="Tinos" pointSize="30"/>
+                                        <color key="textColor" name="primary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ISl-0z-TaV">
+                                        <rect key="frame" x="16" y="311" width="382" height="16.5"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                        <color key="textColor" name="primary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.74947206669999999" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ISl-0z-TaV" secondAttribute="trailing" constant="16" id="3jU-qq-orl"/>
+                                    <constraint firstItem="ISl-0z-TaV" firstAttribute="leading" secondItem="Ywl-Fj-zbk" secondAttribute="leading" constant="16" id="5tl-ct-lhX"/>
+                                    <constraint firstItem="ISl-0z-TaV" firstAttribute="top" secondItem="HZh-2T-lSM" secondAttribute="bottom" constant="16" id="Bpv-UW-9ec"/>
+                                    <constraint firstItem="HZh-2T-lSM" firstAttribute="top" secondItem="SPZ-bX-a1L" secondAttribute="bottom" constant="16" id="Opg-jK-8TK"/>
+                                    <constraint firstItem="SPZ-bX-a1L" firstAttribute="leading" secondItem="Ywl-Fj-zbk" secondAttribute="leading" constant="16" id="P6e-Xq-Urg"/>
+                                    <constraint firstAttribute="trailing" secondItem="SPZ-bX-a1L" secondAttribute="trailing" constant="16" id="WT2-b3-sFO"/>
+                                    <constraint firstItem="HZh-2T-lSM" firstAttribute="leading" secondItem="Ywl-Fj-zbk" secondAttribute="leading" constant="16" id="keR-Rv-M7s"/>
+                                    <constraint firstAttribute="trailing" secondItem="HZh-2T-lSM" secondAttribute="trailing" constant="16" id="uq4-iY-US5"/>
+                                    <constraint firstItem="SPZ-bX-a1L" firstAttribute="top" secondItem="Ywl-Fj-zbk" secondAttribute="top" constant="240" id="zwR-e5-yXu"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="tMJ-2X-sqt"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="tMJ-2X-sqt" firstAttribute="bottom" secondItem="Ywl-Fj-zbk" secondAttribute="bottom" id="cv9-hV-wFA"/>
+                            <constraint firstItem="Ywl-Fj-zbk" firstAttribute="trailing" secondItem="tMJ-2X-sqt" secondAttribute="trailing" id="l75-Y9-Kfu"/>
+                            <constraint firstItem="Ywl-Fj-zbk" firstAttribute="leading" secondItem="tMJ-2X-sqt" secondAttribute="leading" id="pcf-Bw-VYj"/>
+                            <constraint firstItem="Ywl-Fj-zbk" firstAttribute="top" secondItem="tMJ-2X-sqt" secondAttribute="top" id="uCx-P8-SNx"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="remainTrackCountLabel" destination="ISl-0z-TaV" id="dSh-Nt-QPm"/>
+                        <outlet property="syncProgressBar" destination="HZh-2T-lSM" id="AFk-Lz-Aa2"/>
+                        <outlet property="trackNameLabel" destination="SPZ-bX-a1L" id="50p-QE-vlZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IeQ-eQ-SXv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2737" y="-559"/>
+        </scene>
         <!--All Track View Controller-->
         <scene sceneID="y5B-Ez-gHJ">
             <objects>

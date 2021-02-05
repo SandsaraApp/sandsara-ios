@@ -75,7 +75,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
             if playlingState == .track {
                 if let firstPriority = firstPriorityTrack {
                     addToQueue(track: firstPriority)
-                    showTrack(at: self.queues.count - 1)
+                    showTrack(at: self.tracks.count - 1)
                 }
             } else {
                 showTrack(at: index)
@@ -86,7 +86,6 @@ class PlayerViewController: BaseViewController<NoInputParam> {
                 }
             }
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: reloadNoti, object: nil)
     }
     
     private func setupTableView() {
@@ -235,7 +234,7 @@ extension PlayerViewController {
                 if self.isReloaded {
                     self.isReloaded = false
                     FileServiceImpl.shared.updatePlaylist(fileName: filename,
-                                                          index: self.playlingState == .track ? self.queues.count - 1 : 1) { success in
+                                                          index: self.playlingState == .track ? self.tracks.count - 1 : 1) { success in
                         if success {
                             print("Play playlist \(filename) success")
                             self.readProgress()
@@ -339,9 +338,26 @@ extension PlayerViewController {
         }
     }
     
+    func addToQueue1(track: DisplayItem) {
+        tracks.append(track)
+        if tracks.count > 1 {
+            queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
+        } else {
+            queues = tracks
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        DeviceServiceImpl.shared.currentTracks = tracks
+    }
+    
     func addToQueue(track: DisplayItem) {
         tracks.append(track)
-        queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
+        if tracks.count > 1 {
+            queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
+        } else {
+            queues = tracks
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -355,65 +371,23 @@ extension PlayerViewController {
         FileServiceImpl.shared.checkFileExistOnSDCard(name: track.fileName) { isExisted in
             if isExisted { 
                 DispatchQueue.main.async {
-                    self.overlayView.isHidden = true
+                   // self.overlayView.isHidden = true
                     self.createPlaylist()
                 }
             } else {
                 DispatchQueue.main.async {
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
-                    self.view.isUserInteractionEnabled = false
-                    self.overlayView.isHidden = false
-                    self.trackNameLabel.text = track.title
-                    self.remainTrackCountLabel.text = "1 track is syncing now"
-                    let completion = BlockOperation {
-                        print("Synced \(track.fileName) is done")
-                    }
-                    
-                    let operation = FileSyncManager.shared.queueDownload(item: track)
-                    operation.progress
-                        .bind(to: self.syncProgressBar.rx.progress)
-                        .disposed(by: operation.disposeBag)
-                    
-                    
-                    FileSyncManager.shared.triggerOperation(id: track.trackId)
-                    completion.addDependency(operation)
-                    OperationQueue.main.addOperation(completion)
-                    
-                    completion.cancel()
+                  //  self.view.isUserInteractionEnabled = false
+                    //self.overlayView.isHidden = false
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.notSyncedTracks = [track]
+                    self.present(vc, animated: false)
                 }
             }
         }
     }
-    
-    @objc func reloadData(_ noti: Notification) {
-        func getCurrentSyncTask(item: DisplayItem) {
-            if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
-                self.syncProgressBar.isHidden = false
-                self.trackNameLabel.text = item.title
-                self.remainTrackCountLabel.text = "\(FileSyncManager.shared.operations.count) tracks are syncing now"
-                task.progress
-                    .bind(to: self.syncProgressBar.rx.progress)
-                    .disposed(by: task.disposeBag)
-            } else {
-                syncProgressBar.isHidden = true
-            }
-        }
         
-        if let noti = noti.object as? [String: Any], let item = noti["item"] as? DisplayItem {
-            getCurrentSyncTask(item: item)
-        } else {
-            self.progress.accept(0)
-            self.updateProgressTimer()
-            DispatchQueue.main.async {
-                defer {
-                    self.createPlaylist()
-                }
-                self.overlayView.isHidden = true
-                self.view.isUserInteractionEnabled = true
-            }
-        }
-    }
-    
     // MARK: - check multiple tracks 
     func checkMultipleTracks() {
         notSyncedTracks = []
@@ -434,27 +408,18 @@ extension PlayerViewController {
             case .success:
                 print("checked all")
                 if self.notSyncedTracks.isEmpty {
-                    self.overlayView.isHidden = true
+                   // self.overlayView.isHidden = true
                     self.createPlaylist()
                 } else {
                     self.progress.accept(0)
                     self.pauseTimer()
                     DispatchQueue.main.async {
                         (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
-                        self.overlayView.isHidden = false
-                        self.view.isUserInteractionEnabled = false
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
+                        vc.modalPresentationStyle = .overFullScreen
+                        vc.notSyncedTracks = self.notSyncedTracks
+                        self.present(vc, animated: false)
                     }
-                    let completion = BlockOperation {
-                        print("All track synced is done")
-                    }
-                    
-                    for track in self.notSyncedTracks {
-                        let operation = FileSyncManager.shared.queueDownload(item: track)
-                        FileSyncManager.shared.triggerOperation(id: track.trackId)
-                        completion.addDependency(operation)
-                    }
-                    completion.cancel()
-                    OperationQueue.main.addOperation(completion)
                 }
             case .failure(let error):
                 print(error)

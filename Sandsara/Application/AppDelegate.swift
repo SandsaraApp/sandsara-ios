@@ -34,7 +34,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
             print(colors)
         }.disposed(by: disposeBag)
-        restart()
+        let backgroundRestoreConfig = BackgroundRestoreConfig(
+            restoreIdentifier: "com.ios.sandsara.ble",
+            backgroundRestorer: self,
+            listenRestorer: self,
+            launchOptions: lauchOptions)
+        
+        let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
+        
+        startOption = StartOptions(
+            enableBluetoothAlert: true,
+            backgroundRestore: backgroundRestoreMode)
+        bluejay.registerDisconnectHandler(handler: self)
+        bluejay.start(mode: .new(self.startOption))
         FirebaseApp.configure()
         _ = DataLayer.init()
         return true
