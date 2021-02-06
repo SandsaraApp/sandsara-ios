@@ -51,6 +51,7 @@ class OverlaySendFileViewController: UIViewController {
             DispatchQueue.main.async {
                 self.dismiss(animated: false, completion: {
                     PlayerViewController.shared.createPlaylist()
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
                 })
             }
         }
