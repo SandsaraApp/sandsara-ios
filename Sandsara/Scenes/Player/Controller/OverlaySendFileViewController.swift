@@ -18,6 +18,9 @@ class OverlaySendFileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: reloadNoti, object: nil)
+        let completion = BlockOperation {
+            print("All track synced is done")
+        }
         for track in self.notSyncedTracks {
             let operation = FileSyncManager.shared.queueDownload(item: track)
             FileSyncManager.shared.triggerOperation(id: track.trackId)
