@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>com.ios.sandsara</string>
+		<string>com.ios.sandsara.ble</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -30,7 +30,9 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Test app</string>
+	<string>We need to allow bluetooth connection to connect to Sandsara board</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need to allow bluetooth connection to connect to Sandsara board</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Test app</string>
 	<key>UIBackgroundModes</key>
