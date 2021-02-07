@@ -287,7 +287,7 @@ class FileServiceImpl {
                 bluejay.read(from: FileService.receiveFileRespone) { (result: ReadResult<String>) in
                     switch result {
                     case .success(let value):
-                        completionHandler(false)
+                        completionHandler(value == "1")
                         print("Status \(value.debugDescription)")
                     case .failure(let error):
                         print(error.localizedDescription)
