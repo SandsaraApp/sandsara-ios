@@ -199,21 +199,14 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
 
         addToQueueBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self, let item = self.track else { return }
-            PlayerViewController.shared.playlingState = .track
             PlayerViewController.shared.addToQueue1(track: item)
             FileServiceImpl.shared.checkFileExistOnSDCard(name: item.fileName) { isExisted in
-                if isExisted { 
-                    DispatchQueue.main.async {
-                        PlayerViewController.shared.createPlaylist()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
-                        let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
-                        vc.modalPresentationStyle = .overFullScreen
-                        vc.notSyncedTracks = [item]
-                        self.present(vc, animated: false)
-                    }
+                DispatchQueue.main.async {
+                    (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.notSyncedTracks = [item]
+                    self.present(vc, animated: false)
                 }
             }
         }.disposed(by: disposeBag)

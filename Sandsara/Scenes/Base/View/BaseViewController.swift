@@ -71,7 +71,7 @@ class BaseViewController<Input: InputParamView>: UIViewController {
     
     @objc func willResignActive(_ notification: Notification) {
         // code to execute
-        if (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .busy {
+        if ((UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .busy || (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .noConnect) {
             // start to restore state there 
             
         } else {

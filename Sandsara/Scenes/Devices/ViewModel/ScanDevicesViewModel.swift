@@ -30,6 +30,9 @@ final class ScanDevicesViewModel: BaseViewModel<ScanDevicesContract.Input, ScanD
     override func transform() {
         inputs.viewWillAppearTrigger
             .subscribeNext { [weak self] in
+                if bluejay.isScanning {
+                    self?.stopScanning()
+                }
                 self?.scanning()
         }.disposed(by: disposeBag)
 

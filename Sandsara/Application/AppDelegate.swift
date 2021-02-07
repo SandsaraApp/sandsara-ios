@@ -11,6 +11,8 @@ import Bluejay
 import Firebase
 
 let bluejay = Bluejay()
+
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -29,6 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         DataLayer.shareInstance.config()
+        
+        let centralManagerIdentifiers = launchOptions?[UIApplication.LaunchOptionsKey.bluetoothCentrals]
+        print(centralManagerIdentifiers)
         AppApperance.setTheme()
         self.lauchOptions = launchOptions
         SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
@@ -45,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         startOption = StartOptions(
             enableBluetoothAlert: true,
             backgroundRestore: backgroundRestoreMode)
+        
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(self.startOption))
         FirebaseApp.configure()
@@ -88,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func restart() {
+    func reinitStack() {
         let backgroundRestoreConfig = BackgroundRestoreConfig(
             restoreIdentifier: "com.ios.sandsara.ble",
             backgroundRestorer: self,
@@ -102,25 +108,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             backgroundRestore: backgroundRestoreMode)
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(self.startOption))
-        
-        if !bluejay.isBluetoothAvailable {
-            DispatchQueue.main.async { 
-                bluejay.start(mode: .new(self.startOption))
-            }
+    }
+    
+    func restart() {
+        reinitStack()
+        if !bluejay.isBluetoothAvailable || !bluejay.isConnected {
+            bluejay.start(mode: .new(self.startOption))
         }
-        
-//        while (true) {
-//            bluejay.start(mode: .new(self.startOption))
-//            if bluejay.isBluetoothAvailable {
-//                break
-//            }
-//        }
+    
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         ReachabilityManager.shared.stopMonitoring()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        restart()
+        //restart()
     }
 
     func initPlayerBar() {
@@ -144,6 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: BackgroundRestorer {
     func didRestoreConnection(
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
+        Preferences.AppDomain.connectedBoard = ConnectedPeripheralIdentifier(uuid: peripheral.uuid, name: peripheral.name)
         return .callback(checkStatus)
     }
 
@@ -175,9 +177,6 @@ extension AppDelegate: ListenRestorer {
 
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-//        DispatchQueue.main.async {
-//            (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
-//        }
         DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: true)
     }

@@ -44,6 +44,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
         sc.searchBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goSearchVC)))
         sc.searchBar.isUserInteractionEnabled = true
         sc.searchBar.delegate = self
+        DeviceServiceImpl.shared.readSensorValues()
     }
 
     override func viewWillAppear(_ animated: Bool) {

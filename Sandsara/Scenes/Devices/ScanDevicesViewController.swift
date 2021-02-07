@@ -11,6 +11,8 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+
+
 class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputParam> {
 
     @IBOutlet weak var tableView: UITableView! {
@@ -130,7 +132,7 @@ extension ScanViewController: ConnectionObserver {
             viewWillAppearTrigger.accept(())
         } else {
             if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.restart()
+                delegate.reinitStack()
                 viewWillAppearTrigger.accept(())
             }
         }
@@ -148,6 +150,7 @@ extension ScanViewController: ConnectionObserver {
                         NotificationCenter.default.post(name: connectedd, object: nil)
                     })
                 }))
+                Preferences.AppDomain.connectedBoard = ConnectedPeripheralIdentifier(uuid: peripheral.uuid, name: peripheral.name)
                 UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
                 DeviceServiceImpl.shared.readSensorValues()
             case .failure(let error):

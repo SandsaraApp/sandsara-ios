@@ -71,7 +71,10 @@ struct Preferences {
 
         @UserDefault(Keys.firmware.key, defaultValue: nil)
         static var firmware: [Firmware]?
-
+        
+        
+        @UserDefault(Keys.connectedBoard.key, defaultValue: nil)
+        static var connectedBoard: ConnectedPeripheralIdentifier?
 
         enum Keys: String {
             case currentAppLanguage
@@ -79,6 +82,7 @@ struct Preferences {
             case colors
             case firmwareVersion
             case firmware
+            case connectedBoard
 
             var key: String {
                 return Preferences.prefixDomain + self.rawValue
@@ -118,3 +122,21 @@ struct Preferences {
 }
 
 
+public struct ConnectedPeripheralIdentifier: Codable {
+    /// The UUID of the peripheral.
+    public let uuid: UUID
+    
+    /// The name of the peripheral.
+    public let name: String
+    
+    /// Returns both the name and uuid of the peripheral.
+    public var description: String {
+        return "Peripheral: \(name), UUID: \(uuid)"
+    }
+    
+    /// Create a PeripheralIdentifier using a UUID.
+    public init(uuid: UUID, name: String?) {
+        self.uuid = uuid
+        self.name = name ?? "No Name"
+    }
+}
