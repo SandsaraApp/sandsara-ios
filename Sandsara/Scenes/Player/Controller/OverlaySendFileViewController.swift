@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OverlaySendFileViewController: UIViewController {
+class OverlaySendFileViewController: BaseViewController<NoInputParam> {
     
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var syncProgressBar: UIProgressView!
@@ -50,6 +50,10 @@ class OverlaySendFileViewController: UIViewController {
         } else {
             DispatchQueue.main.async {
                 self.dismiss(animated: false, completion: {
+                    if PlayerViewController.shared.playlingState == .showOnly {
+                        PlayerViewController.shared.playlingState = .track
+                        self.showSuccessHUD(message: "Track \(DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex].title) was added")
+                    }
                     PlayerViewController.shared.createPlaylist()
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
                 })

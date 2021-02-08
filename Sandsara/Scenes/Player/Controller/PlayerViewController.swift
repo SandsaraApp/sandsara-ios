@@ -226,7 +226,7 @@ extension PlayerViewController {
             $0.fileName
         }.joined(separator: "\r\n") 
         
-        let filename = "temporal"
+        let filename = playlistItem?.title ?? "temporal"
         let fileExtension = "playlist"
         
         FileServiceImpl.shared.createOrOverwriteEmptyFileInDocuments(filename: filename + "." + fileExtension)
