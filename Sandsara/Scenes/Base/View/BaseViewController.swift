@@ -73,7 +73,7 @@ class BaseViewController<Input: InputParamView>: UIViewController {
         // code to execute
         if ((UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .busy || (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .noConnect) {
             // start to restore state there 
-            
+            (UIApplication.shared.delegate as! AppDelegate).isFromBackgroundResume = false
         } else {
             (UIApplication.shared.delegate as! AppDelegate).isFromBackgroundResume = true
             bluejay.disconnect()

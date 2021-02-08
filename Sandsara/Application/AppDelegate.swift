@@ -63,10 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
         if (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state == .busy {
-            
+            isFromBackgroundResume = false
         } else {
             isFromBackgroundResume = true
-            bluejay.disconnect()
+            bluejay.disconnect(immediate: true)
         }
     }
 
@@ -110,12 +110,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bluejay.start(mode: .new(self.startOption))
     }
     
-    func restart() {
-        reinitStack()
-        if !bluejay.isBluetoothAvailable || !bluejay.isConnected {
-            bluejay.start(mode: .new(self.startOption))
+    func restart() {        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { 
+            if let board = Preferences.AppDomain.connectedBoard {
+                bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name)) { result in
+                    switch result {
+                    case .success:
+                        DeviceServiceImpl.shared.readSensorValues()
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name)) { result in
+                            switch result {
+                            case .success:
+                                DeviceServiceImpl.shared.readSensorValues()
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+            }
         }
-    
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -137,8 +152,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false
         UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
         UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
-
-
     }
 }
 
@@ -178,6 +191,6 @@ extension AppDelegate: ListenRestorer {
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
         DeviceServiceImpl.shared.cleanup()
-        return .change(shouldAutoReconnect: true)
+        return .change(shouldAutoReconnect: false)
     }
 }
