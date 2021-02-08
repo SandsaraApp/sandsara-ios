@@ -74,6 +74,12 @@ class PlayerViewController: BaseViewController<NoInputParam> {
         if isReloaded {
             if playlingState == .track {
                 if let firstPriority = firstPriorityTrack {
+                    tracks.append(firstPriority)
+                    if tracks.count > 1 {
+                        queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
+                    } else {
+                        queues = tracks
+                    }
                     addToQueue(track: firstPriority)
                     showTrack(at: self.tracks.count - 1)
                 }
@@ -234,7 +240,7 @@ extension PlayerViewController {
                 if self.isReloaded {
                     self.isReloaded = false
                     FileServiceImpl.shared.updatePlaylist(fileName: filename,
-                                                          index: self.playlingState == .track ? self.tracks.count - 1 : 1) { success in
+                                                          index: self.playlingState == .track ? self.tracks.count : 1) { success in
                         if success {
                             print("Play playlist \(filename) success")
                             self.readProgress()
@@ -352,12 +358,6 @@ extension PlayerViewController {
     }
     
     func addToQueue(track: DisplayItem) {
-        tracks.append(track)
-        if tracks.count > 1 {
-            queues = Array(tracks[index + 1 ..< tracks.count]) + Array(tracks[0 ..< index])
-        } else {
-            queues = tracks
-        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

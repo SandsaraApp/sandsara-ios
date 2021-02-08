@@ -26,12 +26,14 @@ final class SettingViewModel: BaseViewModel<SettingViewModelContract.Input, Sett
     var status = BehaviorRelay<SandsaraStatus?>(value: nil)
 
     var sleepMode = BehaviorRelay<Bool>(value: false)
+    
+    let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
 
     override func transform() {
-        let datas = BehaviorRelay<[SettingItemCellType]>(value: [])
+        
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
-            datas.accept(self.buildCellVM())
+            self.datas.accept(self.buildCellVM())
         }.disposed(by: disposeBag)
 
         setOutput(Output(datasources: datas.asDriver()))

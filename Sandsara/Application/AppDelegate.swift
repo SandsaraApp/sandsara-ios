@@ -190,7 +190,7 @@ extension AppDelegate: ListenRestorer {
 
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-        DeviceServiceImpl.shared.cleanup()
+      //  DeviceServiceImpl.shared.cleanup()
         return .change(shouldAutoReconnect: false)
     }
 }

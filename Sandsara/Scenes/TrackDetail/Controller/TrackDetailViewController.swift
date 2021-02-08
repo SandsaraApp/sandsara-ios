@@ -200,6 +200,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
         addToQueueBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self, let item = self.track else { return }
             PlayerViewController.shared.playlingState = .track
+            PlayerViewController.shared.isReloaded = false
             PlayerViewController.shared.addToQueue1(track: item)
             FileServiceImpl.shared.checkFileExistOnSDCard(name: item.fileName) { isExisted in
                 if isExisted { 
