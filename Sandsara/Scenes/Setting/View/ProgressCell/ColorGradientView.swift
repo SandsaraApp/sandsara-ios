@@ -312,7 +312,6 @@ class ColorGradientView: UIView {
     }
     
     func updateColor() {
-        //colors = cachedGradients
         cachedGradients = colors
         gradientView?.colors = cachedGradients
         gradientView?.locations = locations
@@ -417,6 +416,12 @@ class ColorGradientView: UIView {
         updatedColors.insert(color, at: index + 1)
         locations.insert(showPoint.x / secondPoint.x, at: index + 1)
         
+        locations = [
+            0
+        ] + self.pointViews.map {
+            CGFloat($0.currentPoint?.x ?? 0) / (self.secondPoint.x)
+        } + [1]
+        
         colors = updatedColors
         cachedGradients = updatedColors
         cleanup(isShowAll: true)
@@ -450,6 +455,8 @@ class ColorGradientView: UIView {
                 break
             }
         }
+        
+        recalculatePoint()
         
         colors = updatedColors
         
@@ -504,17 +511,6 @@ class ColorGradientView: UIView {
                 }
                 
                 recalculatePoint()
-                
-                locations = [
-                    0
-                ] + self.pointViews.map {
-                    CGFloat($0.currentPoint?.x ?? 0) / (self.secondPoint.x)
-                } + [1]
-                
-                gradientView?.colors = cachedGradients
-                gradientView?.locations = locations
-                firstPointView?.color = cachedGradients.first
-                secondPointView?.color = cachedGradients.last
                 
                 if gestureRecognizer.state == .ended {
                     colorCommand()
@@ -658,6 +654,18 @@ class ColorGradientView: UIView {
             pointViews[0].maxPoint = CGPoint(x: secondPoint.x, y: 30)
             pointViews[0].minPoint = CGPoint(x: firstPoint.x, y: 30)
         }
+        
+        locations = [
+            0
+        ] + self.pointViews.map {
+            CGFloat($0.currentPoint?.x ?? 0) / (self.secondPoint.x)
+        } + [1]
+        
+        gradientView?.colors = cachedGradients
+        gradientView?.locations = locations
+        firstPointView?.color = cachedGradients.first
+        secondPointView?.color = cachedGradients.last
+        
     }
 }
 

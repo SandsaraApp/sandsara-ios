@@ -157,6 +157,11 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 defer {
                     if value == .staticMode {
                         self.resetValue(isColorTemp: self.staticColorSegmentControl.segmentSelected.value == 0)
+                    } else {
+                        if let color = DeviceServiceImpl.shared.runningColor.value {
+                            self.colorGradientView.color = color
+                            self.colorGradientView.colorCommand()
+                        }
                     }
                 }
                 self.contraints(value)
