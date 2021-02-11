@@ -430,31 +430,6 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             LedStripServiceImpl.shared.uploadCustomPalette(colorString: colorString)
         }
-        
-        var colorModel = ColorModel()
-        var reds = [Float]()
-        var blues = [Float]()
-        var greens = [Float]()
-        var positions = [Int]()
-        reds = [(Float(staticColorViewColor.rgba().red) * 255.0), (Float(staticColorViewColor.rgba().red) * 255.0)]
-        blues = [(Float(staticColorViewColor.rgba().blue) * 255.0), (Float(staticColorViewColor.rgba().blue) * 255.0)]
-        greens = [(Float(staticColorViewColor.rgba().green) * 255.0), (Float(staticColorViewColor.rgba().green) * 255.0)]
-        positions = [0, 255]
-        
-        let colorsTest = zip3(reds, greens, blues).map {
-            RGBA(red: CGFloat($0.0) / 255, green: CGFloat($0.1) / 255, blue: CGFloat($0.2) / 255).color().hexString()
-        }
-        if positions.count == 1 {
-            colorModel.position = [0, 255]
-            if let color = colorsTest.first {
-                colorModel.colors = [color, color]
-            }
-        } else {
-            colorModel.position = positions
-            colorModel.colors = colorsTest
-        }
-        DeviceServiceImpl.shared.runningColor.accept(colorModel)
-
     }
 
     func resetValue(isColorTemp: Bool) {

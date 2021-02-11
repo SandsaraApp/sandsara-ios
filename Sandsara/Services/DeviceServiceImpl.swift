@@ -318,10 +318,6 @@ class DeviceServiceImpl {
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
-                
-            //                if error.localizedDescription == "" {
-            //                    self.readDeviceStatus()
-            //                }
             }
         }
     }
@@ -344,16 +340,17 @@ class DeviceServiceImpl {
         bluejay.write(to: LedStripService.ledStripCycleEnable, value: mode) { result in
             switch result {
             case .success:
-                self.cycleMode.accept(mode == "0" ? true: false)
-                self.lightModeInt.accept(mode == "1" ? 0 : 2)
+                print("update cycle done")
+//                self.cycleMode.accept(mode == "0" ? true: false)
+//                self.lightModeInt.accept(mode == "1" ? 0 : 2)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
                 
-                if error.localizedDescription == "" {
-                    self.cycleMode.accept(mode == "0" ? true: false)
-                    self.lightModeInt.accept(mode == "1" ? 0 : 2)
-                }
+//                if error.localizedDescription == "" {
+//                    self.cycleMode.accept(mode == "0" ? true: false)
+//                    self.lightModeInt.accept(mode == "1" ? 0 : 2)
+//                }
             }
         }
     }
@@ -362,14 +359,15 @@ class DeviceServiceImpl {
         bluejay.write(to: LedStripService.ledStripDirection, value: direction) { result in
             switch result {
             case .success:
-                self.flipDirection.accept(direction == "0" ? true: false)
+                print("update direction done")
+              //  self.flipDirection.accept(direction == "0" ? true: false)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
                 
-                if error.localizedDescription == "" {
-                    self.flipDirection.accept(direction == "0" ? true: false)
-                }
+//                if error.localizedDescription == "" {
+//                    self.flipDirection.accept(direction == "0" ? true: false)
+//                }
             }
         }
     }

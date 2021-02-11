@@ -284,23 +284,25 @@ class ColorGradientView: UIView {
         
         
         var drawColors = color.colors.map { UIColor(hexString: $0) }
+        var drawPositons = color.position.map {
+            convertGradientPointToSystemPoint(x: CGFloat($0))
+        }
+        
         if drawColors.count > 2 {
             drawColors.removeFirst()
             drawColors.removeLast()
         }
         
-        var drawPositons = color.position.map {
-            convertGradientPointToSystemPoint(x: CGFloat($0))
-        }
-        
         if drawPositons.count > 2 {
             drawPositons.removeFirst()
             drawPositons.removeLast()
+            
+            guard drawColors.count == drawPositons.count else { return }
+            for i in 0 ..< drawColors.count {
+                addPoint(color: drawColors[i], xPoint: drawPositons[i])
+            }
         }
-        guard drawColors.count == drawPositons.count else { return }
-        for i in 0 ..< drawColors.count {
-            addPoint(color: drawColors[i], xPoint: drawPositons[i])
-        }
+       
         
         gradientView?.colors = color.colors.map { UIColor(hexString: $0) }
         gradientView?.locations = locations

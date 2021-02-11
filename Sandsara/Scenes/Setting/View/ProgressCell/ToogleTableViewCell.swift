@@ -24,8 +24,7 @@ class ToogleTableViewCell: BaseTableViewCell<ToogleCellViewModel> {
         viewModel.outputs.title.drive(titleLabel.rx.text).disposed(by: disposeBag)
 
         toogleSwitch
-            .rx.isOn
-            .changed
+            .rx.value
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .asObservable()

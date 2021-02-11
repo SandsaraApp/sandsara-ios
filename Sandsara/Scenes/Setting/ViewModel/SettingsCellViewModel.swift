@@ -435,7 +435,6 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
         // Skip initial value
         inputs
             .toogle
-            .distinctUntilChanged()
             .subscribeNext { value in
                 self.sendCommand(command: "\(value)")
             }.disposed(by: disposeBag)

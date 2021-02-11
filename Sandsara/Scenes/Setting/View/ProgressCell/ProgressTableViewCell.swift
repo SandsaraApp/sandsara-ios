@@ -18,9 +18,6 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
         selectionStyle = .none
         progressNameLabel.font = FontFamily.OpenSans.regular.font(size: 18)
         progressNameLabel.textColor = Asset.primary.color
-//        progressSlider.handlerImage = Asset.thumbs.image
-//        progressSlider.height = 2
-//        progressSlider.markWidth = 0
         progressSlider.isContinuous = false
         for state: UIControl.State in [.normal, .selected, .application, .reserved] {
             progressSlider.setThumbImage(Asset.thumbs.image, for: state)
@@ -30,9 +27,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     override func bindViewModel() {
         progressSlider.maximumValue = viewModel.inputs.type.sliderValue.1
         progressSlider.minimumValue = viewModel.inputs.type.sliderValue.0
-        
-    //    progressSlider.markPositions = viewModel.inputs.type.ranges
-
+ 
         viewModel
             .outputs
             .title
@@ -84,10 +79,4 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @objc func sliderTouchUpInside() {
         print("drag ended")
     }
-    
-
-//    @objc func sliderValueChanges(_ slider: WOWMarkSlider) {
-//        debugPrint(slider.value)
-//        viewModel.inputs.progress.accept(slider.value)
-//    }
 }

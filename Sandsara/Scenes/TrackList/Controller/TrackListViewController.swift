@@ -36,7 +36,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
                                                                                 viewWillAppearTrigger: viewWillAppearTrigger,
                                                                                 downloadBtnTrigger: downloadBtnTrigger))
     
-    viewWillAppearTrigger.accept(())
+        viewWillAppearTrigger.accept(())
     }
 
     override func bindViewModel() {

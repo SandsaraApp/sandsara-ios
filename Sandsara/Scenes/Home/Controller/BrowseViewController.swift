@@ -78,6 +78,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
                 player.modalPresentationStyle = .fullScreen
                 player.index = DeviceServiceImpl.shared.currentTrackIndex
                 player.tracks = DeviceServiceImpl.shared.currentTracks
+                player.playlistItem = DisplayItem(playlist: Playlist(id: "1", title: DeviceServiceImpl.shared.currentPlaylistName.value, thumbnail: [], author: ""))
                 player.queues = Array(player.tracks[player.index + 1 ..< player.tracks.count]) + Array(player.tracks[0 ..< player.index])
                 player.playlingState = .showOnly
                 player.isReloaded = true
