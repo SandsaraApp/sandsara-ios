@@ -650,7 +650,7 @@ class ColorGradientView: UIView {
                     pointViews[i].minPoint = CGPoint(x: (pointViews[i - 1].currentPoint?.x ?? 0 + 24), y: 30)
                 }
             }
-        } else {
+        } else if !pointViews.isEmpty {
             pointViews[0].maxPoint = CGPoint(x: secondPoint.x, y: 30)
             pointViews[0].minPoint = CGPoint(x: firstPoint.x, y: 30)
         }
