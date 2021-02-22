@@ -15,19 +15,35 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
     
     var notSyncedTracks = [DisplayItem]()
     
+    var isFirmwareUpdate = false
+    
+    var version = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: reloadNoti, object: nil)
         let completion = BlockOperation {
             print("All track synced is done")
         }
-        for track in self.notSyncedTracks {
-            let operation = FileSyncManager.shared.queueDownload(item: track)
-            FileSyncManager.shared.triggerOperation(id: track.trackId)
+        if isFirmwareUpdate {
+            let item = notSyncedTracks.first ?? DisplayItem()
+            let operation = FileSyncManager.shared.queueDownload(item: item)
+            FileSyncManager.shared.triggerOperation(id: item.trackId)
             completion.addDependency(operation)
+            completion.cancel()
+            OperationQueue.main.addOperation(completion)
+            
+        } else {
+            for track in self.notSyncedTracks {
+                let operation = FileSyncManager.shared.queueDownload(item: track)
+                FileSyncManager.shared.triggerOperation(id: track.trackId)
+                completion.addDependency(operation)
+            }
+            
+            completion.cancel()
+            OperationQueue.main.addOperation(completion)
         }
-        completion.cancel()
-        OperationQueue.main.addOperation(completion)
+        
     }
     
 
@@ -35,8 +51,8 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
         func getCurrentSyncTask(item: DisplayItem) {
             if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
                 self.syncProgressBar.isHidden = false
-                self.trackNameLabel.text = item.title
-                self.remainTrackCountLabel.text = "\(FileSyncManager.shared.operations.count) tracks are syncing now"
+                self.trackNameLabel.text = self.isFirmwareUpdate ? item.fileName : item.title
+                self.remainTrackCountLabel.text = self.isFirmwareUpdate ? "Firmware is updating" :  "\(FileSyncManager.shared.operations.count) tracks are syncing now"
                 task.progress
                     .bind(to: self.syncProgressBar.rx.progress)
                     .disposed(by: task.disposeBag)
@@ -52,9 +68,16 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
                 self.dismiss(animated: false, completion: {
                     if PlayerViewController.shared.playlingState == .showOnly {
                         PlayerViewController.shared.playlingState = .track
-                        self.showSuccessHUD(message: "Track \(DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex].title) was added")
+                        if !self.isFirmwareUpdate {
+                            self.showSuccessHUD(message: "Track \(DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex].title) was added")
+                        } else {
+                            self.showSuccessHUD(message: "Firmware update successful. The board is restarting ")
+                            DeviceServiceImpl.shared.restart()
+                        }
                     }
-                    PlayerViewController.shared.createPlaylist()
+                    if !self.isFirmwareUpdate {
+                        PlayerViewController.shared.createPlaylist()
+                    }
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])
                 })
             }

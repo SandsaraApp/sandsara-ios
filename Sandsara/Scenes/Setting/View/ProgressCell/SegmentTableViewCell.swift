@@ -271,20 +271,38 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
         toogleSwitch.rx.isOn
             .changed
+           // .skip(1)
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .asObservable()
-            .subscribeNext { [weak self] state in
-                self?.viewModel.inputs.flipDirection.accept(state)
+            .subscribeNext { state in
+                let stringValue = state ? "1" : "0"
+                bluejay.write(to: LedStripService.ledStripDirection, value: stringValue) { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripDirection.service)")
+                    case .failure(let error):
+                        debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                    }
+                }
         }.disposed(by: disposeBag)
 
         rotateSwitch.rx.isOn
             .changed
+           // .skip(1)
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .asObservable()
-            .subscribeNext { [weak self] state in
-                self?.viewModel.inputs.rotateToogle.accept(state)
+            .subscribeNext { state in
+                let stringValue = state ? "0" : "1"
+                bluejay.write(to: LedStripService.ledStripCycleEnable, value: stringValue) { result in
+                    switch result {
+                    case .success:
+                        debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripDirection.service)")
+                    case .failure(let error):
+                        debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                    }
+                }
             }.disposed(by: disposeBag)
 
         staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)

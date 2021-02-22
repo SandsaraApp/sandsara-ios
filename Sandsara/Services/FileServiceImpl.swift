@@ -233,10 +233,12 @@ class FileServiceImpl {
         }
     }
 
-    func updatePlaylist(fileName: String, index: Int, completionHandler: @escaping ((Bool) -> ())) {
+    func updatePlaylist(fileName: String, index: Int, mode: PlayingState = .playlist, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.run { sandsaraBoard -> Bool in
             do {
-                try sandsaraBoard.write(to: PlaylistService.playlistName, value: fileName)
+                if mode == .playlist {
+                    try sandsaraBoard.write(to: PlaylistService.playlistName, value: fileName)
+                }
                 try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "\(index)")
             } catch(let error) {
                 print(error.localizedDescription)

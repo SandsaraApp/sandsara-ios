@@ -34,18 +34,19 @@ class SplashViewController: BaseViewController<NoInputParam> {
                
                 if let board = Preferences.AppDomain.connectedBoard {
                     if !bluejay.isConnected {
-                        bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name)) { result in
+                        bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name), 
+                                        timeout: .seconds(20.0)) { result in
                             switch result {
                             case.success:
                                 guard let delegate = UIApplication.shared.delegate as? AppDelegate else { return }
                                 let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "tabbarVC") as! BaseTabBarViewController
                                 delegate.window?.rootViewController = tabbarVC
-                                
                             case .failure(let error):
                                 guard let delegate = UIApplication.shared.delegate as? AppDelegate else { return }
                                 let tabbarVC = self.storyboard?.instantiateViewController(withIdentifier: "tabbarVC") as! BaseTabBarViewController
                                 delegate.window?.rootViewController = tabbarVC
                                 print("\(error.localizedDescription)")
+                                bluejay.cancelEverything()
                             }
                         }
                     } else {

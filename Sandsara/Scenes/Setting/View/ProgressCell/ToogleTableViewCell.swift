@@ -24,12 +24,49 @@ class ToogleTableViewCell: BaseTableViewCell<ToogleCellViewModel> {
         viewModel.outputs.title.drive(titleLabel.rx.text).disposed(by: disposeBag)
 
         toogleSwitch
-            .rx.value
+            .rx.isOn
+            .changed
+           // .skip(1)
             .debounce(.milliseconds(200), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .asObservable()
-            .subscribeNext { [weak self] state in
-                self?.viewModel.inputs.toogle.accept(state)
+            .subscribeNext { [weak self] value in
+                guard let self = self else { return }
+                let viewModel = self.viewModel
+                switch viewModel?.inputs.type {
+                case .sleep:
+                    if value {
+                        bluejay.write(to: DeviceService.sleep, value: "1") { result in
+                            switch result {
+                            case .success:
+                                debugPrint("Sleep Success")
+                            //DeviceServiceImpl.shared.readDeviceStatus()
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                                if error.localizedDescription == "" {
+                                    //  DeviceServiceImpl.shared.readDeviceStatus()
+                                }
+                            }
+                        }
+                    } else {
+                        bluejay.write(to: DeviceService.play, value: "1") { result in
+                            switch result {
+                            case .success:
+                                debugPrint("Resume Success")
+                            //DeviceServiceImpl.shared.readDeviceStatus()
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                                if error.localizedDescription == "" {
+                                    //  DeviceServiceImpl.shared.readDeviceStatus()
+                                }
+                            }
+                        }
+                    }
+                case .rotate:
+                    DeviceServiceImpl.shared.updateCycleMode(mode: value ? "0" : "1")
+                default:
+                    break
+                }
         }.disposed(by: disposeBag)
     }
 }

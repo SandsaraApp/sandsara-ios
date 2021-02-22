@@ -102,17 +102,19 @@ extension FileSyncManager: RemoveTask {
     }
 
     func updateTrack(item: DisplayItem) {
+        defer {
+            self.removeTask(id: item.trackId)
+        }
         if !item.isFile {
             if item.isPlaylist {
                 if DataLayer.createSyncedPlaylist(playlist: item) {
                 }
-                self.removeTask(id: item.trackId)
             } else {
                 if !DataLayer.addSyncedTrack(item) {
                 }
-                self.removeTask(id: item.trackId)
             }
         }
+        
     }
 }
 

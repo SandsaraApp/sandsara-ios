@@ -47,7 +47,7 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
     @IBOutlet weak var alertLabel: UILabel!
 
     let cellUpdate = PublishRelay<()>()
-    let updateFirmwareAlert = PublishRelay<()>()
+    let updateFirmwareAlert = PublishRelay<DisplayItem>()
 
     let latestVersion = BehaviorRelay<String>(value: "")
 
@@ -95,12 +95,13 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
                 self.alertLabel.text = L10n.firmwareNotice
                 self.downloadBtn.isUserInteractionEnabled = true
                 self.progressBar.setProgress(0, animated: true)
+                self.progressBar.isHidden = true
             case .syncing:
                 self.titleSyncLabel.text = L10n.firmwareSyncing(self.latestVersion.value)
                 self.downloadBtn.setTitle(L10n.syncing, for: .normal)
                 self.alertLabel.text = ""
             case .synced:
-                self.updateFirmwareAlert.accept(())
+                break
             }
         }
 
@@ -127,18 +128,6 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
     }
 
     func triggerSync() {
-        guard let file = viewModel.inputs.file else { return }
-        let item = DisplayItem(file: file)
-
-        let operation = FileSyncManager.shared.queueDownload(item: item)
-        let completion = BlockOperation {
-            self.state = .synced
-        }
-
-        operation.startSendFile()
-
-        operation.addDependency(completion)
-        OperationQueue.main.addOperation(completion)
-        operation.progress.bind(to: self.progressBar.rx.progress).disposed(by: disposeBag)
+        self.updateFirmwareAlert.accept(DisplayItem(file: self.viewModel.inputs.file ?? File()))
     }
 }

@@ -136,7 +136,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         ReachabilityManager.shared.stopMonitoring()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        //restart()
     }
 
     func initPlayerBar() {
@@ -191,6 +190,9 @@ extension AppDelegate: ListenRestorer {
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
       //  DeviceServiceImpl.shared.cleanup()
-        return .change(shouldAutoReconnect: false)
+        if isFromBackgroundResume {
+            return .change(shouldAutoReconnect: false)
+        }
+        return .noChange
     }
 }

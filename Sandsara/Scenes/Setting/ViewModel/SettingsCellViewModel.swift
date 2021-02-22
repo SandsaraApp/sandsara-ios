@@ -349,18 +349,18 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
     override func transform() {
         inputs
             .flipDirection
-            .skip(1)
+          //  .skip(1)
             .subscribeNext { value in
-                let stringValue = value ? "1" : "0"
-                self.sendCommand(command: stringValue)
+//                let stringValue = value ? "1" : "0"
+//                self.sendCommand(command: stringValue)
             }.disposed(by: disposeBag)
         
         inputs
             .rotateToogle
-            .skip(1)
+         //   .skip(1)
             .subscribeNext { value in
-                let stringValue = value ? "0" : "1"
-                self.sendRotateCommand(command: stringValue)
+//                let stringValue = value ? "0" : "1"
+//                self.sendRotateCommand(command: stringValue)
             }.disposed(by: disposeBag)
         
         let images = Preferences.AppDomain.colors?.map {
@@ -436,7 +436,7 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
         inputs
             .toogle
             .subscribeNext { value in
-                self.sendCommand(command: "\(value)")
+//                self.sendCommand(command: "\(value)")
             }.disposed(by: disposeBag)
         
         setOutput(Output(title: Driver.just(inputs.type.title),
@@ -444,42 +444,5 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
     }
     
     func sendCommand(command: String) {
-        DispatchQueue.main.async {
-       
-        switch self.inputs.type {
-        case .sleep:
-            if self.inputs.toogle.value {
-                bluejay.write(to: DeviceService.sleep, value: "1") { result in
-                    switch result {
-                    case .success:
-                        debugPrint("Sleep Success")
-                        DeviceServiceImpl.shared.readDeviceStatus()
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                        if error.localizedDescription == "" {
-                            DeviceServiceImpl.shared.readDeviceStatus()
-                        }
-                    }
-                }
-            } else {
-                bluejay.write(to: DeviceService.play, value: "1") { result in
-                    switch result {
-                    case .success:
-                        debugPrint("Resume Success")
-                        DeviceServiceImpl.shared.readDeviceStatus()
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                        if error.localizedDescription == "" {
-                            DeviceServiceImpl.shared.readDeviceStatus()
-                        }
-                    }
-                }
-            }
-        case .rotate:
-            DeviceServiceImpl.shared.updateCycleMode(mode: self.inputs.toogle.value ? "0" : "1")
-        default:
-            break
-        }
-        }
     }
 }

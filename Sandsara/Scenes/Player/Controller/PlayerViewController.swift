@@ -240,7 +240,8 @@ extension PlayerViewController {
                 if self.isReloaded {
                     self.isReloaded = false
                     FileServiceImpl.shared.updatePlaylist(fileName: filename,
-                                                          index: self.playlingState == .track ? self.tracks.count : 1) { success in
+                                                          index: self.playlingState == .track ? self.tracks.count : 1,
+                                                          mode: self.playlingState) { success in
                         if success {
                             print("Play playlist \(filename) success")
                             self.readProgress()
@@ -270,9 +271,9 @@ extension PlayerViewController {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
                 self.isPlaying = true
-                self.progress.accept(0) // reset progress
-                self.readProgress()
+                DeviceServiceImpl.shared.currentTrackPosition.accept(0)
                 DispatchQueue.main.async {
+                    self.readProgress()
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: self.tracks[index])
                 }
             }
@@ -280,13 +281,11 @@ extension PlayerViewController {
     }
     
     func triggerPlayAction(at index: Int) {
-        showTrack(at: index)
-        if timer != nil {
-            timer?.invalidate()
-            timer = nil
-            self.progress.accept(0)
+        defer {
+            showTrack(at: index)
+            playTrack(at: index)
         }
-        playTrack(at: index)
+        pauseTimer()
     }
     
     @objc func sliderTouchBegan(_ sender: UISlider) {
@@ -408,7 +407,6 @@ extension PlayerViewController {
             case .success:
                 print("checked all")
                 if self.notSyncedTracks.isEmpty {
-                   // self.overlayView.isHidden = true
                     self.createPlaylist()
                 } else {
                     self.progress.accept(0)
@@ -446,6 +444,7 @@ extension PlayerViewController {
     
     func readProgress() {
         progress.accept(0)
+        trackProgressSlider.setValue(0, animated: false)
         updateProgressTimer()
     }
     

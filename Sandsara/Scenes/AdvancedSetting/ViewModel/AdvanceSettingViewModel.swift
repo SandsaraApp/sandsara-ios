@@ -30,6 +30,7 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
                 guard let self = self else { return }
                 for firmware in firmwares {
                     if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value {
+                        Preferences.AppDomain.firmwareVersion = firmware.version
                         var values = self.buildCellVM()
                         values.insert(.updateFirmware(DownloadFirmwareViewModel(inputs: DownloadFirmwareVMContract.Input(latestVersion: firmware.version, file: firmware.file?.first))), at: 3)
                         self.datas.accept(values)

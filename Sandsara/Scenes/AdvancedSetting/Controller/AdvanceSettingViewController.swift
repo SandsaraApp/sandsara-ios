@@ -27,12 +27,20 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
         super.viewWillAppear(animated)
 
         configureNavigationBar(largeTitleColor: Asset.primary.color, backgoundColor: Asset.background.color, tintColor: Asset.primary.color, title: L10n.advanceSetting, preferredLargeTitle: true)
+        viewWillAppearTrigger.accept(())
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: reloadNoti, object: nil)
+    }
+    
+    @objc func reloadData(_ noti: Notification) {
+        DeviceServiceImpl.shared.firmwareVersion.accept(Preferences.AppDomain.firmwareVersion ?? "")
+        self.viewWillAppearTrigger.accept(())
     }
 
     override func setupViewModel() {
         setupTableView()
         viewModel = AdvanceSettingViewModel(inputs: AdvanceSettingViewModelContract.Input(viewWillAppearTrigger: viewWillAppearTrigger))
-        viewWillAppearTrigger.accept(())
+        
     }
 
     override func bindViewModel() {
@@ -128,8 +136,15 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                             tableView.endUpdates()
                         }.disposed(by: cell.disposeBag)
                     cell.updateFirmwareAlert
-                        .subscribeNext {
-                            self.showSuccessHUD(message: "Firmware update successful. The board is restarting ")
+                        .subscribeNext { item in
+                            DispatchQueue.main.async {
+                                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+                                let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
+                                vc.modalPresentationStyle = .overFullScreen
+                                vc.isFirmwareUpdate = true
+                                vc.notSyncedTracks = [item]
+                                self.present(vc, animated: false)
+                            }
                         }.disposed(by: cell.disposeBag)
                     return cell
                 default: return UITableViewCell()

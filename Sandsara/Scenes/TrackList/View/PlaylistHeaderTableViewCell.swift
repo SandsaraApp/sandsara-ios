@@ -115,7 +115,6 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
             for track in self.viewModel.inputs.track.tracks {
                 let fileName = track.thumbNailfileName
                 do {
-                    
                     if let imageURL = try? FileManager.default
                         .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
                         .appendingPathComponent(fileName) {
@@ -221,17 +220,8 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
     }
     
     private func checkSynced() {
-        let item = viewModel.inputs.track
-        guard !item.isLocal else {
-            self.state = .synced
-            return
-        }
-        let synced = DataLayer.loadSyncedList(name: item.title)
         DispatchQueue.main.async {
-            self.state = synced ? .synced : .downloaded
-            if !synced {
-                self.getCurrentSyncTask(item: item)
-            }
+            self.state = .downloaded
         }
     }
     
@@ -264,8 +254,6 @@ class PlaylistHeaderTableViewCell: BaseTableViewCell<PlaylistDetailHeaderViewMod
         if images.count > 12 {
             images = Array(images.prefix(12))
         }
-        
-        var matrix = Matrix<UIImage?>(rows: 3, columns: 4, defaultValue: nil)
         
         var firstRows = [UIImage]()
         var secondRows = [UIImage]()

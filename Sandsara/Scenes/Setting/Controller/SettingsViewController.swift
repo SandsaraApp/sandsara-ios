@@ -36,7 +36,6 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(largeTitleColor: Asset.primary.color, backgoundColor: Asset.background.color, tintColor: Asset.primary.color, title: L10n.settings, preferredLargeTitle: true)
-        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillDisappear(_ animated: Bool) {
