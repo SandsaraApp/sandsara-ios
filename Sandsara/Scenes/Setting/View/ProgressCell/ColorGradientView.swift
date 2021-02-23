@@ -351,6 +351,10 @@ class ColorGradientView: UIView {
             }
         }
         
+        if pointViews.isEmpty {
+            isAddAble = true
+        }
+        
         if isAddAble {
             cleanup(isShowAll: false)
             showPoint = point

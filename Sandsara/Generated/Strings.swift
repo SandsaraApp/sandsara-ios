@@ -100,7 +100,7 @@ internal enum L10n {
   internal static func firmwareVersion(_ p1: Any) -> String {
     return L10n.tr("Localizeable", "firmware_version", String(describing: p1))
   }
-  /// Flip Mode
+  /// Flip Direction
   internal static let flipMode = L10n.tr("Localizeable", "flip_mode")
   /// Help
   internal static let help = L10n.tr("Localizeable", "help")

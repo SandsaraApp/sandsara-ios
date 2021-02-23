@@ -255,7 +255,8 @@ class ProgressCellViewModel: BaseCellViewModel<ProgressCellVMContract.Input,
             .subscribeNext { value in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     print("Slider Value: \(value) ")
-                    self.sendCommand(command: "\(value)")
+                    let intValue = Int(value)
+                    self.sendCommand(command: "\(intValue)")
                 }
                 
             }.disposed(by: disposeBag)
@@ -377,7 +378,7 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
     
     func sendLightSpeed(value: Float) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            bluejay.write(to: LedStripService.ledStripSpeed, value: "\(value)") { result in
+            bluejay.write(to: LedStripService.ledStripSpeed, value: "\(Int(value))") { result in
                 switch result {
                 case .success:
                     debugPrint("Write to sensor location is successful.\(result)")
@@ -392,27 +393,27 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
     
     func sendCommand(command: String) {
         DispatchQueue.main.async {
-        bluejay.write(to: LedStripService.ledStripDirection, value: command) { result in
-            switch result {
-            case .success:
-                debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripDirection.service)")
-            case .failure(let error):
-                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            bluejay.write(to: LedStripService.ledStripDirection, value: command) { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripDirection.service)")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
             }
-        }
         }
     }
     
     func sendRotateCommand(command: String) {
         DispatchQueue.main.async {
-        bluejay.write(to: LedStripService.ledStripCycleEnable, value: command) { result in
-            switch result {
-            case .success:
-                debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripCycleEnable.service)")
-            case .failure(let error):
-                debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+            bluejay.write(to: LedStripService.ledStripCycleEnable, value: command) { result in
+                switch result {
+                case .success:
+                    debugPrint("Write to sensor location is successful.\(result), \(LedStripService.ledStripCycleEnable.service)")
+                case .failure(let error):
+                    debugPrint("Failed to write sensor location with error: \(error.localizedDescription)")
+                }
             }
-        }
         }
     }
 }

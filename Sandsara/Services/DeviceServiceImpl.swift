@@ -341,16 +341,9 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 print("update cycle done")
-//                self.cycleMode.accept(mode == "0" ? true: false)
-//                self.lightModeInt.accept(mode == "1" ? 0 : 2)
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
-                
-//                if error.localizedDescription == "" {
-//                    self.cycleMode.accept(mode == "0" ? true: false)
-//                    self.lightModeInt.accept(mode == "1" ? 0 : 2)
-//                }
             }
         }
     }
@@ -360,14 +353,10 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 print("update direction done")
-              //  self.flipDirection.accept(direction == "0" ? true: false)
+         
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
-                
-//                if error.localizedDescription == "" {
-//                    self.flipDirection.accept(direction == "0" ? true: false)
-//                }
             }
         }
     }
@@ -431,7 +420,6 @@ class DeviceServiceImpl {
                 print(error.localizedDescription)
             }
             
-            
             do {
                 let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathName)
                 print("Current track \(selectedPalette)")
@@ -439,14 +427,14 @@ class DeviceServiceImpl {
             } catch(let error) {
                 print(error.localizedDescription)
             }
-            //
-            //            do {
-            //                try sandsaraBoard.write(to: PlaylistService.pathPosition, value: "1")
-            //            }
-            //
-            //            do {
-            //                try sandsaraBoard.write(to: DeviceService.play, value: "1")
-            //            }
+            
+            do {
+                let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.pathPosition)
+                print("Current position \(selectedPalette)")
+                self.currentPath.accept(selectedPalette)
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
             return false
         } completionOnMainThread: { result in
             debugPrint(result)

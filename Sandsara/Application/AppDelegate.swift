@@ -66,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             isFromBackgroundResume = false
         } else {
             isFromBackgroundResume = true
+            bluejay.cancelEverything()
             bluejay.disconnect(immediate: true)
         }
     }

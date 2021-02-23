@@ -243,6 +243,7 @@ extension PlayerViewController {
                                                           index: self.playlingState == .track ? self.tracks.count : 1,
                                                           mode: self.playlingState) { success in
                         if success {
+                            DeviceServiceImpl.shared.readPlaylistValue()
                             print("Play playlist \(filename) success")
                             self.readProgress()
                         }
@@ -270,6 +271,8 @@ extension PlayerViewController {
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
+//                DeviceServiceImpl.shared.readDeviceStatus()
+//                DeviceServiceImpl.shared.readPlaylistValue()
                 self.isPlaying = true
                 DeviceServiceImpl.shared.currentTrackPosition.accept(0)
                 DispatchQueue.main.async {
@@ -285,6 +288,7 @@ extension PlayerViewController {
             showTrack(at: index)
             playTrack(at: index)
         }
+       // DeviceServiceImpl.shared.readDeviceStatus()
         pauseTimer()
     }
     
@@ -370,14 +374,12 @@ extension PlayerViewController {
         FileServiceImpl.shared.checkFileExistOnSDCard(name: track.fileName) { isExisted in
             if isExisted { 
                 DispatchQueue.main.async {
-                   // self.overlayView.isHidden = true
+                    // self.overlayView.isHidden = true
                     self.createPlaylist()
                 }
             } else {
                 DispatchQueue.main.async {
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
-                  //  self.view.isUserInteractionEnabled = false
-                    //self.overlayView.isHidden = false
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
                     vc.modalPresentationStyle = .overFullScreen
                     vc.notSyncedTracks = [track]
@@ -453,6 +455,7 @@ extension PlayerViewController {
             defer {
                 readProgress()
             }
+            self.progress.accept(0)
             if self.timer != nil {
                 self.timer?.invalidate()
                 self.timer = nil

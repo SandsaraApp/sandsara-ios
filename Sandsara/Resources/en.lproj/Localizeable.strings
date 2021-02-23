@@ -49,7 +49,7 @@
 "color_temp" = "Color Temperature";
 "custom_color" = "Custom Color";
 
-"flip_mode" = "Flip Mode";
+"flip_mode" = "Flip Direction";
 "sleep" = "Sleep";
 "restart" = "Restart";
 "download" = "Download to Library";
