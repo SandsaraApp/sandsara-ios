@@ -14,6 +14,10 @@ class ConnectionGuideViewController: BaseViewController<NoInputParam> {
     @IBOutlet weak var connectionHeaderLabel: UILabel!
     @IBOutlet weak var connectionDescLabel: UILabel!
     @IBOutlet weak var connectNowBtn: UIButton!
+    @IBOutlet weak var aligmentConstraint: NSLayoutConstraint!
+    
+    var isFromAdvanceSetting: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -31,9 +35,14 @@ class ConnectionGuideViewController: BaseViewController<NoInputParam> {
     }
 
     @objc func connectedSuccess() {
-        self.dismiss(animated: true, completion: {
+        if isFromAdvanceSetting {
             NotificationCenter.default.post(name: reloadTab, object: nil)
-        })
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: {
+                NotificationCenter.default.post(name: reloadTab, object: nil)
+            })
+        }
     }
 
     private func setupUI() {
@@ -41,6 +50,10 @@ class ConnectionGuideViewController: BaseViewController<NoInputParam> {
         connectionDescLabel.text = L10n.connectDesc
         connectNowBtn.setTitle(L10n.connectNow, for: .normal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: Asset.close.image, style: .done, target: self, action: #selector(dismissVC))
+        
+        DispatchQueue.main.async {
+            self.aligmentConstraint.constant = self.isFromAdvanceSetting ? 80 : 213
+        }
     }
 
     private func bindings() {
@@ -52,12 +65,32 @@ class ConnectionGuideViewController: BaseViewController<NoInputParam> {
     }
 
     private func goToScanDevices() {
-        let scanVC: ScanViewController = self.storyboard?.instantiateViewController(withIdentifier: ScanViewController.identifier) as! ScanViewController
-        let navVC = UINavigationController(rootViewController: scanVC)
-        self.present(navVC, animated: true, completion: nil)
+        func openVC() {
+            let scanVC: ScanViewController = self.storyboard?.instantiateViewController(withIdentifier: ScanViewController.identifier) as! ScanViewController
+            let navVC = UINavigationController(rootViewController: scanVC)
+            self.present(navVC, animated: true, completion: nil)
+        }
+        if isFromAdvanceSetting {
+            bluejay.cancelEverything()
+            bluejay.disconnect(immediate: true) { result in
+                switch result {
+                case .disconnected:
+                    openVC()
+                case .failure(let error):
+                    bluejay.cancelEverything()
+                    openVC()
+                }
+            }
+        } else {
+            openVC()
+        }
     }
 
     @objc func dismissVC() {
-        self.dismiss(animated: true)
+        if !isFromAdvanceSetting {
+            self.dismiss(animated: true)
+            return
+        }
+        self.navigationController?.popViewController(animated: true)
     }
 }

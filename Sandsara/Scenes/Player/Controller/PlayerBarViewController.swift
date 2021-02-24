@@ -14,11 +14,12 @@ import RxCocoa
 enum PlayerState {
     case noConnect
     case connected
+    case calibrating
     case busy
     case haveTrack(displayItem: DisplayItem?)
     
     var isConnection: Bool {
-        return self == .connected || self == .busy || self == .noConnect
+        return self == .connected || self == .busy || self == .noConnect || self == .calibrating
     }
 }
 
@@ -137,6 +138,14 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.syncNoti
                         self.retryBtn.isHidden = true
+                        self.subTitleLabel.text = ""
+                        self.retryBtn.alpha = 0
+                    case .calibrating:
+                        self.playerBar.isHidden = true
+                        self.connectionBar.isHidden = false
+                        self.connectionTitleLabel.text = L10n.sandsaraCalibrating
+                        self.retryBtn.isHidden = true
+                        self.subTitleLabel.text = ""
                         self.retryBtn.alpha = 0
                     case .connected:
                         self.playerBar.isHidden = true

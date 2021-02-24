@@ -91,7 +91,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             }
         } else {
             DispatchQueue.main.async {
-                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = DeviceServiceImpl.shared.status.value == .calibrating ? .calibrating : .connected
             }
         }
     }

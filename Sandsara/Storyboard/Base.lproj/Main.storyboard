@@ -1082,6 +1082,7 @@ try another one.  </string>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="aligmentConstraint" destination="jLD-Mr-TGa" id="GKa-yM-oxw"/>
                         <outlet property="connectNowBtn" destination="H6D-wX-yHs" id="Nqm-NP-XfP"/>
                         <outlet property="connectionDescLabel" destination="CHk-4h-YSw" id="IVz-kQ-1KS"/>
                         <outlet property="connectionHeaderLabel" destination="Wir-2z-XFF" id="fVH-h1-COp"/>

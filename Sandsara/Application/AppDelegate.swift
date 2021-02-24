@@ -146,7 +146,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController == nil {
             let customBar = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: PlayerBarViewController.identifier) as! PlayerBarViewController
-            customBar.state = bluejay.isConnected ? (DeviceServiceImpl.shared.status.value == .busy ? .busy : .connected ) : .noConnect
+            if bluejay.isConnected {
+                switch DeviceServiceImpl.shared.status.value {
+                case .busy:
+                    customBar.state = .busy
+                case .calibrating:
+                    customBar.state = .calibrating
+                default:
+                    customBar.state = .connected
+                }
+            } else {
+                customBar.state = .noConnect
+            }
             UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController = customBar
         }
         UIApplication.topViewController()?.tabBarController?.popupBar.isHidden = false

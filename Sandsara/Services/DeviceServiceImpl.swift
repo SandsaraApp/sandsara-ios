@@ -91,18 +91,6 @@ class DeviceServiceImpl {
             }
             
             do {
-                let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
-                let intValue = Int(deviceStatus) ?? 0
-                let status = SandsaraStatus(rawValue: intValue) ?? .unknown
-                self.status.accept(status)
-                self.sleepStatus.accept(status == .sleep)
-                print("Device status \(status)")
-            } catch(let error) {
-                self.status.accept(.unknown)
-                print(error.localizedDescription)
-            }
-            
-            do {
                 let ledSpeed: String = try sandsaraBoard.read(from: LedStripService.ledStripSpeed)
                 print("Led speed \(ledSpeed)")
                 self.ledSpeed.accept(Float(ledSpeed) ?? 0)
@@ -225,6 +213,24 @@ class DeviceServiceImpl {
                     return .done
                 })
             }
+            
+            do {
+                while(true) {
+                    let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
+                    let intValue = Int(deviceStatus) ?? 0
+                    let status = SandsaraStatus(rawValue: intValue) ?? .unknown
+                    self.sleepStatus.accept(status == .sleep)
+                    self.status.accept(status)
+                    if intValue != 1 {
+                        break
+                    }
+                }
+                
+            } catch(let error) {
+                self.status.accept(.unknown)
+                print(error.localizedDescription)
+            }
+            
             
             if resultFiles == "ok" {
                 var bytes = ""

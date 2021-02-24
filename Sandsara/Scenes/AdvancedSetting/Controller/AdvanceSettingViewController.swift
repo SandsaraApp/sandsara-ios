@@ -110,6 +110,7 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                         self.present(alert, animated: true, completion: nil)
                     case .connectNew:
                         let connectVC = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
+                        connectVC.isFromAdvanceSetting = true
                         self.navigationController?.pushViewController(connectVC, animated: true)
                     default: break
                     }

@@ -31,6 +31,8 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
     typealias Section = SectionModel<String, DeviceCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
+    
+    var isFromAdvanceSetting: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,9 +50,24 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
-
         backBtn.rx.tap.asDriver().driveNext {
-            self.dismiss(animated: true, completion: nil)
+            if self.isFromAdvanceSetting {
+                if let board = Preferences.AppDomain.connectedBoard {
+                    if !bluejay.isConnected {
+                        bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name), 
+                                        timeout: .seconds(20.0)) { result in
+                            switch result {
+                            case.success:
+                                DeviceServiceImpl.shared.readSensorValues()
+                            case .failure(let error):
+                                print("\(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
         }.disposed(by: disposeBag)
     }
 
