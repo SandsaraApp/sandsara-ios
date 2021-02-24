@@ -239,12 +239,12 @@ extension PlayerViewController {
             if $0 {
                 if self.isReloaded {
                     self.isReloaded = false
-                    FileServiceImpl.shared.updatePlaylist(fileName: filename,
+                    FileServiceImpl.shared.updatePlaylist(fileName: self.playlistItem?.title ?? "temporal",
                                                           index: self.playlingState == .track ? self.tracks.count : 1,
                                                           mode: self.playlingState) { success in
                         if success {
                             DeviceServiceImpl.shared.readPlaylistValue()
-                            print("Play playlist \(filename) success")
+                            print("Play playlist \(self.playlistItem?.title ?? "temporal") success")
                             self.readProgress()
                         }
                     }
