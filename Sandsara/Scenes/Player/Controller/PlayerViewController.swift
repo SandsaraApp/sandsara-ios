@@ -47,7 +47,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     
     var timer: Timer?
     
-    var lastProgress = 0.0
+    var lastProgress: Float = 0.0
     
     @IBOutlet weak var overlayView: UIView!
     var progress = BehaviorRelay<Float>(value: 0)
@@ -451,6 +451,45 @@ extension PlayerViewController {
     }
     
     @objc func updateTimer(_ timer: Timer) {
+        bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
+            switch result {
+            case .success(let value):
+                let float = Float(value) ?? 0
+                print("Progress \(float)")
+                
+                if float == 100 {
+                    self.lastProgress = 100
+                }
+                if float < self.lastProgress {
+                    // value is resetted
+                    if self.lastProgress == 100 && float == 0 {
+                        defer {
+                            self.readProgress()
+                        }
+                        self.progress.accept(0)
+                        self.lastProgress = 0
+                        if self.timer != nil {
+                            self.timer?.invalidate()
+                            self.timer = nil
+                        }
+                        if self.index < self.tracks.count - 1 {
+                            let indexToPlay = self.index + 1
+                            print("auto play \(indexToPlay)")
+                            self.showTrack(at: indexToPlay)
+                        } else {
+                            let indexToPlay = 0
+                            self.showTrack(at: indexToPlay)
+                        }
+                    } else {
+                        self.lastProgress = float
+                    }
+                    
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
         if progress.value == 100  {
             defer {
                 readProgress()
@@ -470,17 +509,7 @@ extension PlayerViewController {
             }
             
         } else {
-            bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
-                switch result {
-                case .success(let value):
-                    let float = Float(value) ?? 0
-                    print("Progress \(float)")
-                    self.progress.accept(float)
-                    self.lastProgress = Double(value) ?? 0
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            
         }
     }
 }
