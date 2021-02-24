@@ -456,7 +456,7 @@ extension PlayerViewController {
             case .success(let value):
                 let float = Float(value) ?? 0
                 print("Progress \(float)")
-                
+                self.progress.accept(float)
                 if float == 100 {
                     self.lastProgress = 100
                 }
@@ -481,6 +481,7 @@ extension PlayerViewController {
                             self.showTrack(at: indexToPlay)
                         }
                     } else {
+                        
                         self.lastProgress = float
                     }
                     
@@ -488,28 +489,6 @@ extension PlayerViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-        
-        if progress.value == 100  {
-            defer {
-                readProgress()
-            }
-            self.progress.accept(0)
-            if self.timer != nil {
-                self.timer?.invalidate()
-                self.timer = nil
-            }
-            if self.index < self.tracks.count - 1 {
-                let indexToPlay = self.index + 1
-                print("auto play \(indexToPlay)")
-                self.showTrack(at: indexToPlay)
-            } else {
-                let indexToPlay = 0
-                self.showTrack(at: indexToPlay)
-            }
-            
-        } else {
-            
         }
     }
 }
