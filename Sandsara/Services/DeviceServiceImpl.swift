@@ -205,23 +205,24 @@ class DeviceServiceImpl {
             
             self.runningColor.accept(colorModel)
             
-            var resultFiles = ""
-            do {
-                try sandsaraBoard.writeAndListen(writeTo: FileService.readFileFlag, value: self.currentPlaylistName.value + ".playlist", listenTo: FileService.receiveFileRespone, completion: {
-                    (result: String) -> ListenAction in
-                    resultFiles = result
-                    return .done
-                })
-            }
-            
+            var updated = false
+        
             do {
                 while(true) {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
                     let intValue = Int(deviceStatus) ?? 0
-                    let status = SandsaraStatus(rawValue: intValue) ?? .unknown
+                    let status = SandsaraStatus.unknown
                     self.sleepStatus.accept(status == .sleep)
                     self.status.accept(status)
-                    if intValue != 1 {
+                    if !updated && (status == .busy || status == .calibrating) {
+                        updated = true
+                        DispatchQueue.main.async {
+                            if UIApplication.topViewController()?.tabBarController != nil {
+                                NotificationCenter.default.post(name: reloadTab, object: nil)
+                            }
+                        }
+                    }
+                    if status == .running || status == .pause {
                         break
                     }
                 }
@@ -230,8 +231,33 @@ class DeviceServiceImpl {
                 self.status.accept(.unknown)
                 print(error.localizedDescription)
             }
-            
-            
+            return false
+        } completionOnMainThread: { result in
+            switch result {
+            case .success:
+                self.currentTracks = self.tracks.map {
+                    DataLayer.loadDownloadedTrack($0)
+                }
+                if UIApplication.topViewController()?.tabBarController != nil {
+                    NotificationCenter.default.post(name: reloadTab, object: nil)
+                }
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func readPlaylist() {
+        bluejay.run { sandsaraBoard -> Bool in
+            var resultFiles = ""
+            do {
+                try sandsaraBoard.writeAndListen(writeTo: FileService.readFileFlag, value: self.currentPlaylistName.value + ".playlist", listenTo: FileService.receiveFileRespone, completion: {
+                    (result: String) -> ListenAction in
+                    resultFiles = result
+                    return .done
+                })
+            }
             if resultFiles == "ok" {
                 var bytes = ""
                 while(true) {
@@ -252,7 +278,6 @@ class DeviceServiceImpl {
                     self.currentTrackIndex = self.tracks.count - 1
                 }
             }
-            
             return false
         } completionOnMainThread: { result in
             switch result {
@@ -261,13 +286,14 @@ class DeviceServiceImpl {
                     DataLayer.loadDownloadedTrack($0)
                 }
                 if UIApplication.topViewController()?.tabBarController != nil {
-                    NotificationCenter.default.post(name: reloadTab, object: nil)
+                    NotificationCenter.default.post(name: reloadPlaylist, object: nil)
                 }
                 
             case .failure(let error):
                 print(error)
             }
         }
+
     }
     
     func updateDeviceName(name: String) {

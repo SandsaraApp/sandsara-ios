@@ -232,23 +232,30 @@ try another one.  </string>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zLh-tL-Osd">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="7qk-Ef-b3c">
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="7qk-Ef-b3c">
                                                 <rect key="frame" x="16" y="0.0" width="343" height="60"/>
                                                 <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="notFound" translatesAutoresizingMaskIntoConstraints="NO" id="QUS-1f-EQ6">
+                                                        <rect key="frame" x="0.0" y="16" width="28" height="28"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="28" id="GOJ-K1-719"/>
+                                                            <constraint firstAttribute="width" secondItem="QUS-1f-EQ6" secondAttribute="height" id="RLL-pV-OyZ"/>
+                                                        </constraints>
+                                                    </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQa-VU-tGm">
-                                                        <rect key="frame" x="0.0" y="0.0" width="41.5" height="60"/>
+                                                        <rect key="frame" x="52" y="20" width="41.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xkg-uA-8Eb">
-                                                        <rect key="frame" x="301.5" y="0.0" width="41.5" height="60"/>
+                                                        <rect key="frame" x="117.5" y="20" width="225.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKN-LJ-sYn">
-                                                        <rect key="frame" x="343" y="0.0" width="69" height="60"/>
+                                                        <rect key="frame" x="343" y="21" width="69" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="69" id="Nsg-wp-XMQ"/>
                                                         </constraints>
@@ -361,6 +368,7 @@ try another one.  </string>
                         <outlet property="playerContentView" destination="haS-yy-ZOR" id="1PW-Ct-Deq"/>
                         <outlet property="retryBtn" destination="nKN-LJ-sYn" id="XpM-Eg-2pu"/>
                         <outlet property="songLabel" destination="aQe-Mp-U9h" id="suS-sG-cCh"/>
+                        <outlet property="stackView" destination="7qk-Ef-b3c" id="MsD-KS-tdg"/>
                         <outlet property="subTitleLabel" destination="Xkg-uA-8Eb" id="1J4-gJ-Y9q"/>
                         <outlet property="trackImageView" destination="cRF-5H-ovZ" id="mdu-0B-4nb"/>
                     </connections>
@@ -1186,6 +1194,7 @@ try another one.  </string>
         <image name="favorite" width="19.5" height="19"/>
         <image name="library" width="20" height="21"/>
         <image name="next" width="34" height="34"/>
+        <image name="notFound" width="28" height="28"/>
         <image name="pause" width="16" height="22"/>
         <image name="pause-1" width="64" height="64"/>
         <image name="play" width="16" height="19"/>

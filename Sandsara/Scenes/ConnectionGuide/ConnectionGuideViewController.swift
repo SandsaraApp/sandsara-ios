@@ -63,7 +63,8 @@ class ConnectionGuideViewController: BaseViewController<NoInputParam> {
             self.goToScanDevices()
         }.disposed(by: disposeBag)
     }
-
+    
+    /// <#Description#>
     private func goToScanDevices() {
         func openVC() {
             let scanVC: ScanViewController = self.storyboard?.instantiateViewController(withIdentifier: ScanViewController.identifier) as! ScanViewController

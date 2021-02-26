@@ -8,6 +8,7 @@
 import UIKit
 
 let reloadTab = Notification.Name(rawValue: "reloadTab")
+let reloadPlaylist = Notification.Name(rawValue: "reloadPlaylist")
 
 class BaseTabBarViewController: UITabBarController {
 

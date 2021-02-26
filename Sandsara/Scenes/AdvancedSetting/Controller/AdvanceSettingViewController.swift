@@ -156,6 +156,11 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
 }
 
 extension AdvanceSettingViewController: UITableViewDelegate {
+    /// <#Description#>
+    /// - Parameters:
+    ///   - tableView: <#tableView description#>
+    ///   - cell: <#cell description#>
+    ///   - indexPath: <#indexPath description#>
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellHeightsDictionary[indexPath] = cell.frame.size.height
     }

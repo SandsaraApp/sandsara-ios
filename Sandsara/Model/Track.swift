@@ -149,8 +149,8 @@ class LocalTrack: Object {
     @objc dynamic var fileName: String = ""
     @objc dynamic var fileSize: Int64 = 0
     @objc dynamic var trackId: String = ""
-@objc dynamic var thumbNailfileName: String = ""
-@objc dynamic var thumbNailfileSize: Int64 = 0
+    @objc dynamic var thumbNailfileName: String = ""
+    @objc dynamic var thumbNailfileSize: Int64 = 0
 
 
 

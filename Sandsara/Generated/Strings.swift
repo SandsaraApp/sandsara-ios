@@ -138,6 +138,8 @@ internal enum L10n {
   internal static let sandsaraCalibrating = L10n.tr("Localizeable", "sandsara_calibrating")
   /// Sandsara detected.
   internal static let sandsaraDetected = L10n.tr("Localizeable", "sandsara_detected")
+  /// Sandsara is asleep
+  internal static let sandsaraSleep = L10n.tr("Localizeable", "sandsara_sleep")
   /// Settings
   internal static let settings = L10n.tr("Localizeable", "settings")
   /// Sleep

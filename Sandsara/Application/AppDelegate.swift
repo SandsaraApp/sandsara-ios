@@ -152,6 +152,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     customBar.state = .busy
                 case .calibrating:
                     customBar.state = .calibrating
+                case .sleep:
+                    customBar.state = .sleep
                 default:
                     customBar.state = .connected
                 }

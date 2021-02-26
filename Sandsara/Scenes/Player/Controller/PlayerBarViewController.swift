@@ -16,10 +16,11 @@ enum PlayerState {
     case connected
     case calibrating
     case busy
+    case sleep
     case haveTrack(displayItem: DisplayItem?)
     
     var isConnection: Bool {
-        return self == .connected || self == .busy || self == .noConnect || self == .calibrating
+        return self == .connected || self == .busy || self == .noConnect || self == .calibrating || self == .sleep
     }
 }
 
@@ -49,6 +50,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var subTitleLabel: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
     
     @IBOutlet weak var playerContentView: UIView!
     
@@ -99,15 +101,11 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
             if !PlayerViewController.shared.isPlaying {
                 PlayerViewController.shared.isPlaying = true
                 DeviceServiceImpl.shared.resumeDevice()
-                PlayerViewController.shared.updateProgressTimer()
-                PlayerViewController.shared.playBtn.setImage(Asset.pause1.image, for: .normal)
-                self.pauseButton.setImage(Asset.pause.image, for: .normal)
+                self.updateBtnState(isPlaying: true)
             } else {
                 PlayerViewController.shared.isPlaying = false
                 DeviceServiceImpl.shared.pauseDevice()
-                PlayerViewController.shared.pauseTimer()
-                PlayerViewController.shared.playBtn.setImage(Asset.play.image, for: .normal)
-                self.pauseButton.setImage(Asset.play.image, for: .normal)
+                self.updateBtnState(isPlaying: false)
             }
         }.disposed(by: disposeBag)
         
@@ -116,6 +114,18 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    private func updateBtnState(isPlaying: Bool) {
+        if isPlaying {
+            PlayerViewController.shared.updateProgressTimer()
+            PlayerViewController.shared.playBtn.setImage(Asset.pause1.image, for: .normal)
+            self.pauseButton.setImage(Asset.pause.image, for: .normal)
+        } else {
+            PlayerViewController.shared.pauseTimer()
+            PlayerViewController.shared.playBtn.setImage(Asset.play.image, for: .normal)
+            self.pauseButton.setImage(Asset.play.image, for: .normal)
+        }
     }
     
     override func popupItemDidUpdate() {
@@ -134,20 +144,34 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                     }
                     switch state {
                     case .busy:
+                        self.stackView.spacing = 14
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.syncNoti
                         self.retryBtn.isHidden = true
-                        self.subTitleLabel.text = ""
+                        self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 0
+//                        self.subTitleLabel.isHidden = true
                     case .calibrating:
+                        self.stackView.spacing = 14
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.sandsaraCalibrating
                         self.retryBtn.isHidden = true
-                        self.subTitleLabel.text = ""
+                        self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 0
+                     //   self.subTitleLabel.isHidden = true
+                    case .sleep:
+                        self.stackView.spacing = 14
+                        self.playerBar.isHidden = true
+                        self.connectionBar.isHidden = false
+                        self.connectionTitleLabel.text = L10n.sandsaraSleep
+                        self.retryBtn.isHidden = true
+                        self.subTitleLabel.alpha = 0
+                        self.retryBtn.alpha = 0
+                      //  self.subTitleLabel.isHidden = true
                     case .connected:
+                        self.stackView.spacing = 14
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         DeviceServiceImpl.shared.deviceName
@@ -156,12 +180,16 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.subTitleLabel.text = "Connected"
                         self.retryBtn.isHidden = true
                         self.retryBtn.alpha = 0
+                        self.subTitleLabel.alpha = 1
+                       // self.subTitleLabel.isHidden = false
                     case .noConnect:
+                        self.stackView.spacing = 14
                         self.playerBar.isHidden = true
                         self.connectionBar.isHidden = false
                         self.connectionTitleLabel.text = L10n.noSandsaraDetected
                         self.retryBtn.isHidden = false
                         self.subTitleLabel.text = nil
+                        self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 1
                     case .haveTrack(let item):
                         self.playerBar.isHidden = false
@@ -169,6 +197,11 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.trackImageView.kf.setImage(with: URL(string: item?.thumbnail ?? ""))
                         self.songLabel.text = item?.title
                         self.authorLabel.text = L10n.authorBy(item?.author ?? "")
+                        if DeviceServiceImpl.shared.status.value == .pause {
+                            self.updateBtnState(isPlaying: false)
+                        } else {
+                            self.updateBtnState(isPlaying: true)
+                        }
                     }
                 }.disposed(by: disposeBag)
         }

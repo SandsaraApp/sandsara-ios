@@ -182,7 +182,7 @@ class DataLayer {
     static func loadFavTracks() -> [LocalTrack] {
         var tracks = [LocalTrack]()
         if let list = realm?.objects(FavoritePlaylist.self).first {
-            let sortedTracks = list.tracks.sorted(byKeyPath: "dateModified", ascending: false)
+            let sortedTracks = list.tracks.sorted(byKeyPath: "id", ascending: true)
             for track in sortedTracks {
                 if !track.isInvalidated {
                     tracks.append(track)
@@ -381,7 +381,7 @@ class DataLayer {
     static func loadDownloadedTracks() -> [LocalTrack] {
         var tracks = [LocalTrack]()
         if let list = realm?.objects(DownloadedTracks.self).first {
-            let sortedTracks = list.syncedTracks.sorted(byKeyPath: "dateModified", ascending: false)
+            let sortedTracks = list.syncedTracks.sorted(byKeyPath: "id", ascending: true)
             for track in sortedTracks {
                 if !track.isInvalidated {
                     tracks.append(track)
@@ -394,7 +394,7 @@ class DataLayer {
     static func loadSyncedTracks() -> [LocalTrack] {
         var tracks = [LocalTrack]()
         if let list = realm?.objects(SyncedTracks.self).first {
-            let sortedTracks = list.syncedTracks.sorted(byKeyPath: "dateModified", ascending: false)
+            let sortedTracks = list.syncedTracks.sorted(byKeyPath: "id", ascending: true)
             for track in sortedTracks {
                 if !track.isInvalidated {
                     tracks.append(track)
@@ -417,7 +417,7 @@ class DataLayer {
     static func loadDownloadedDetailList(name: String) -> [LocalTrack] {
         var tracks = [LocalTrack]()
         if let list = realm?.objects(DownloadedPlaylist.self).filter("playlistName == '\(name)'").first {
-            let sortedTracks = list.tracks.sorted(byKeyPath: "dateModified", ascending: false)
+            let sortedTracks = list.tracks.sorted(byKeyPath: "id", ascending: true)
             for track in sortedTracks {
                 if !track.isInvalidated {
                     tracks.append(track)

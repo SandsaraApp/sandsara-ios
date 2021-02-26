@@ -50,6 +50,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(updateControllers), name: reloadTab, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadPlayer), name: reloadPlaylist, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -70,8 +71,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
         let vc = storyboard?.instantiateViewController(withIdentifier: SearchViewController.identifier) as! SearchViewController
         navigationController?.pushViewController(vc, animated: true)
     }
-
-    @objc func updateControllers() {
+    
+    @objc func reloadPlayer() {
         if !DeviceServiceImpl.shared.currentTracks.isEmpty {
             DispatchQueue.main.async {
                 let player = PlayerViewController.shared
@@ -92,6 +93,32 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
         } else {
             DispatchQueue.main.async {
                 (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = DeviceServiceImpl.shared.status.value == .calibrating ? .calibrating : .connected
+            }
+        }
+    }
+
+    @objc func updateControllers() {
+        if !bluejay.isConnected {
+            DeviceServiceImpl.shared.cleanup()
+        }
+        switch DeviceServiceImpl.shared.status.value {
+        case .unknown: 
+            DispatchQueue.main.async {
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .connected
+            }
+        case .pause, .running, .sleep:
+            DeviceServiceImpl.shared.readPlaylist()
+        case .busy:
+            DispatchQueue.main.async {
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
+            }
+        case .calibrating:
+            DispatchQueue.main.async {
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .calibrating
+            }
+        case .none:
+            DispatchQueue.main.async {
+                (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .noConnect
             }
         }
     }
