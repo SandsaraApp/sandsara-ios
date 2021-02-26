@@ -69,7 +69,7 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
                     if PlayerViewController.shared.playlingState == .showOnly {
                         PlayerViewController.shared.playlingState = .track
                         if !self.isFirmwareUpdate {
-                            self.showSuccessHUD(message: "Track \(DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex].title) was added")
+                            self.showSuccessHUD(message: "Track \(self.notSyncedTracks.first?.title ?? "") was added")
                         } else {
                             self.showSuccessHUD(message: "Firmware update successful. The board is restarting ")
                             DeviceServiceImpl.shared.restart()

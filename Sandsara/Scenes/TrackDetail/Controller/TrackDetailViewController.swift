@@ -206,6 +206,7 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
                 if isExisted { 
                     DispatchQueue.main.async {
                         PlayerViewController.shared.playlingState = .track
+                        self.showSuccessHUD(message: "Track \(item.title) was added")
                         PlayerViewController.shared.createPlaylist()
                     }
                 } else {
