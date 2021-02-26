@@ -249,6 +249,14 @@ class DeviceServiceImpl {
     
     func readPlaylist() {
         bluejay.run { sandsaraBoard -> Bool in
+            do {
+                let selectedPalette: String = try sandsaraBoard.read(from: PlaylistService.playlistName)
+                print("\(selectedPalette)")
+                self.currentPlaylistName.accept(selectedPalette)
+            } catch(let error) {
+                print(error.localizedDescription)
+            }
+            
             var resultFiles = ""
             do {
                 try sandsaraBoard.writeAndListen(writeTo: FileService.readFileFlag, value: self.currentPlaylistName.value + ".playlist", listenTo: FileService.receiveFileRespone, completion: {
