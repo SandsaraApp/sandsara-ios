@@ -211,18 +211,17 @@ class DeviceServiceImpl {
                 while(true) {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
                     let intValue = Int(deviceStatus) ?? 0
-                    let status = SandsaraStatus.unknown
+                    let status = SandsaraStatus(rawValue: intValue) ?? .unknown
                     self.sleepStatus.accept(status == .sleep)
                     self.status.accept(status)
-                    if !updated && (status == .busy || status == .calibrating) {
-                        updated = true
+                    if (status == .busy || status == .calibrating || status == .sleep) {
                         DispatchQueue.main.async {
                             if UIApplication.topViewController()?.tabBarController != nil {
                                 NotificationCenter.default.post(name: reloadTab, object: nil)
                             }
                         }
                     }
-                    if status == .running || status == .pause {
+                    if status == .running || status == .pause || status == .sleep {
                         break
                     }
                 }
