@@ -126,9 +126,9 @@ internal enum L10n {
   internal static let playlists = L10n.tr("Localizeable", "playlists")
   /// Presets
   internal static let presets = L10n.tr("Localizeable", "presets")
-  /// Recomended Playlists
+  /// Recommended Playlists
   internal static let recommendedPlaylists = L10n.tr("Localizeable", "recommended_playlists")
-  /// Recomended Tracks
+  /// Recommended Tracks
   internal static let recommendedTracks = L10n.tr("Localizeable", "recommended_tracks")
   /// Restart
   internal static let restart = L10n.tr("Localizeable", "restart")

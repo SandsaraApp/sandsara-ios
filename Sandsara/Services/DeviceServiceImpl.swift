@@ -65,6 +65,8 @@ class DeviceServiceImpl {
     
     var tracks = [String]()
     
+    weak var timer: Timer?
+    
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -204,11 +206,10 @@ class DeviceServiceImpl {
             }
             
             self.runningColor.accept(colorModel)
-            
-            var updated = false
-        
-            do {
-                while(true) {
+
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] timer in
+                guard let self = self else { return }
+                do {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
                     let intValue = Int(deviceStatus) ?? 0
                     let status = SandsaraStatus(rawValue: intValue) ?? .unknown
@@ -222,14 +223,17 @@ class DeviceServiceImpl {
                         }
                     }
                     if status == .running || status == .pause || status == .sleep {
-                        break
+                        timer.invalidate()
+                        return
                     }
                 }
-                
-            } catch(let error) {
-                self.status.accept(.unknown)
-                print(error.localizedDescription)
-            }
+                catch(let error) {
+                    self.status.accept(.unknown)
+                    print(error.localizedDescription)
+                }
+            })
+            
+            
             return false
         } completionOnMainThread: { result in
             switch result {
@@ -300,7 +304,7 @@ class DeviceServiceImpl {
                 print(error)
             }
         }
-
+        
     }
     
     func updateDeviceName(name: String) {
@@ -392,7 +396,7 @@ class DeviceServiceImpl {
             switch result {
             case .success:
                 print("update direction done")
-         
+                
             case .failure(let error):
                 print(error.localizedDescription)
                 self.updateError.accept(error)
