@@ -207,7 +207,7 @@ class DeviceServiceImpl {
             
             self.runningColor.accept(colorModel)
 
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] timer in
+            _ = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] timer in
                 guard let self = self else { return }
                 do {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
