@@ -126,6 +126,8 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
                 case .failure(let error):
                     let alertVC = UIAlertController(title: "Alert", message: "Failed to connect with error: \(error.localizedDescription)", preferredStyle: .alert)
                     alertVC.addAction(UIAlertAction(title: "Try again", style: .default, handler: { _ in
+                        bluejay.cancelEverything()
+                        bluejay.disconnect()
                     }))
                     UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
                 }
@@ -174,6 +176,7 @@ extension ScanViewController: ConnectionObserver {
                 let alertVC = UIAlertController(title: "Alert", message: "Failed to read sensor location with error: \(error.localizedDescription)", preferredStyle: .alert)
                 alertVC.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
                     bluejay.cancelEverything()
+                    bluejay.disconnect()
                 }))
                 UIApplication.topViewController()?.present(alertVC, animated: true, completion: nil)
                 debugPrint("Failed to read sensor location with error: \(error.localizedDescription)")
