@@ -207,9 +207,10 @@ class DeviceServiceImpl {
             
             self.runningColor.accept(colorModel)
 
-            _ = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] timer in
-                guard let self = self else { return }
-                do {
+            var updated = false
+            
+            do {
+                while(true) {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
                     let intValue = Int(deviceStatus) ?? 0
                     let status = SandsaraStatus(rawValue: intValue) ?? .unknown
@@ -223,15 +224,14 @@ class DeviceServiceImpl {
                         }
                     }
                     if status == .running || status == .pause || status == .sleep {
-                        timer.invalidate()
-                        return
+                        break
                     }
                 }
-                catch(let error) {
-                    self.status.accept(.unknown)
-                    print(error.localizedDescription)
-                }
-            })
+                
+            } catch(let error) {
+                self.status.accept(.unknown)
+                print(error.localizedDescription)
+            }
             
             
             return false
