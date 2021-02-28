@@ -209,6 +209,7 @@ class DeviceServiceImpl {
 
             var updated = false
             
+            
             do {
                 while(true) {
                     let deviceStatus: String = try sandsaraBoard.read(from: DeviceService.deviceStatus)
@@ -226,13 +227,14 @@ class DeviceServiceImpl {
                     if status == .running || status == .pause || status == .sleep {
                         break
                     }
+                    
+                    sleep(1)
                 }
                 
             } catch(let error) {
                 self.status.accept(.unknown)
                 print(error.localizedDescription)
             }
-            
             
             return false
         } completionOnMainThread: { result in
@@ -249,6 +251,11 @@ class DeviceServiceImpl {
                 print(error)
             }
         }
+    }
+    
+    func delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
     func readPlaylist() {

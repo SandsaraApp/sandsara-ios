@@ -83,7 +83,7 @@ final class ScanDevicesViewModel: BaseViewModel<ScanDevicesContract.Input, ScanD
                 return .continue
             },
             stopped: { _, error in
-                if let error = error {
+                if let error = error as? BluejayError {
                     debugPrint("Scan stopped with error: \(error.localizedDescription)")
                 } else {
                     debugPrint("Scan stopped without error")
