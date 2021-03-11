@@ -30,9 +30,9 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>We need to allow bluetooth connection to connect to Sandsara board</string>
+	<string>Bluetooth connection is required to connect to Sandsara</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>We need to allow bluetooth connection to connect to Sandsara board</string>
+	<string>Bluetooth connection is required to connect to Sandsara</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
