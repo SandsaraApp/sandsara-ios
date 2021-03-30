@@ -53,17 +53,12 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-       // NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc func reloadData() {
-        checkSynced()
     }
 
     private func setButtonStyle(button: UIButton?, title: String) {
@@ -111,18 +106,6 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
                 self.state = downloaded ? .downloaded : .download
                 if self.state == .downloaded {
                     self.checkFavorite()
-                }
-            }
-        }
-    }
-
-    private func checkSynced() {
-        if let item = track {
-            let synced = DataLayer.checkTrackIsSynced(item)
-            DispatchQueue.main.async {
-                self.state = synced ? .synced : .downloaded
-                if !synced {
-                    self.getCurrentSyncTask(item: item)
                 }
             }
         }
@@ -224,10 +207,6 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
         downloadBtn.touchEvent = { [weak self] in
             self?.downloadAction()
         }
-
-        sycnButton.touchEvent = { [weak self] in
-            self?.syncAction()
-        }
     }
 
     private func downloadAction() {
@@ -249,34 +228,5 @@ class TrackDetailViewController: BaseViewController<NoInputParam>, OverlayHost {
         } else {
             _ = DataLayer.addDownloadedTrack(track)
         }
-    }
-
-    private func getCurrentSyncTask(item: DisplayItem) {
-        if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
-            DispatchQueue.main.async {
-                self.sycnButton.isTaskRunning = true
-            }
-            task.progress
-                .bind(to: self.sycnButton.progressBar.rx.progress)
-                .disposed(by: task.disposeBag)
-        }
-    }
-
-    private func syncAction() {
-        guard let track = track else { return }
-        let completion = BlockOperation {
-            self.checkSynced()
-        }
-
-        let operation = FileSyncManager.shared.queueDownload(item: track)
-        operation.progress
-            .bind(to: self.sycnButton.progressBar.rx.progress)
-            .disposed(by: operation.disposeBag)
-
-        FileSyncManager.shared.triggerOperation(id: track.trackId)
-
-        completion.addDependency(operation)
-
-        OperationQueue.main.addOperation(completion)
     }
 }

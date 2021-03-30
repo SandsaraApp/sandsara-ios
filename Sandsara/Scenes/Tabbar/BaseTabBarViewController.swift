@@ -10,6 +10,7 @@ import UIKit
 let reloadTab = Notification.Name(rawValue: "reloadTab")
 let reloadPlaylist = Notification.Name(rawValue: "reloadPlaylist")
 
+// MARK: Custom tabbar controller
 class BaseTabBarViewController: UITabBarController {
 
     private let once = Once()

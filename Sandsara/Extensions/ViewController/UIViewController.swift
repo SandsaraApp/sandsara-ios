@@ -35,7 +35,15 @@ extension UIViewController {
             return String(describing: self)
         }
     }
-
+    
+    
+    /// Configure navigation bar
+    /// - Parameters:
+    ///   - largeTitleColor: Color of title
+    ///   - backgoundColor: Color of navigation bar background
+    ///   - tintColor: Color of navigation bar button
+    ///   - title: title of navigation bar
+    ///   - preferredLargeTitle: show large nav bar or not
     func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, tintColor: UIColor, title: String, preferredLargeTitle: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = preferredLargeTitle
         navigationController?.navigationBar.isTranslucent = false

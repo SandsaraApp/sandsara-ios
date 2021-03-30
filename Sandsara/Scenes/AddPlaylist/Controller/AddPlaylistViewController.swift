@@ -12,6 +12,7 @@ import RxDataSources
 import SVProgressHUD
 
 class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoInputParam> {
+    // MARK: Outlet connections
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.separatorStyle = .none
@@ -20,14 +21,12 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
                                forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         }
     }
-
     @IBOutlet private weak var backBtn: UIBarButtonItem!
     @IBOutlet private weak var addBtn: UIBarButtonItem!
 
+    // MARK: - Properties
     var item: DisplayItem?
-
     let viewWillAppearTrigger = PublishRelay<()>()
-
     typealias Section = SectionModel<String, PlaylistCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -48,7 +47,7 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-
+        // MARK: Tableview selection handle
         Observable
             .zip(
                 tableView.rx.itemSelected,
@@ -92,7 +91,8 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
             })
     }
 
-
+    
+    /// Show alert to input and create a new playlist
     private func showAlertAddItem() {
         guard let itemToAdd = item else { return }
         let alert = UIAlertController(title: nil, message: "Create new playlist", preferredStyle: .alert)
@@ -128,7 +128,10 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
 
         present(alert, animated: true, completion: nil)
     }
-
+    
+    
+    /// Add track to playlist action
+    /// - Parameter model: a track user want to add
     private func addPlaylistItem(model: PlaylistCellViewModel) {
         guard let itemToAdd = item else { return }
         let localTrack = LocalTrack(track: itemToAdd)
@@ -150,6 +153,7 @@ class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoIn
     }
 }
 
+// MARK: UITableViewDelegate, calculate height for cell and header, footer
 extension AddPlaylistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0

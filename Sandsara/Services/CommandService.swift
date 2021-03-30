@@ -8,7 +8,6 @@
 import Bluejay
 
 // MARK: Led Strip Service
-
 struct LedStripService {
     private static let ledStripService = ServiceIdentifier(uuid: "fd31a2be-22e7-11eb-adc1-0242ac120002")
 
@@ -50,7 +49,6 @@ struct LedStripService {
 }
 
 // MARK: File Service
-
 struct FileService {
     private static let fileService = ServiceIdentifier(uuid: "fd31abc4-22e7-11eb-adc1-0242ac120002")
 
@@ -101,6 +99,7 @@ struct DeviceService {
     static let notifyError = CharacteristicIdentifier(uuid: "9b12aa02-2c6e-11eb-adc1-0242ac120002", service: deviceService)
 }
 
+// MARK: Playlist Service
 struct PlaylistService {
     private static let playlistService = ServiceIdentifier(uuid: "fd31a778-22e7-11eb-adc1-0242ac120002")
 

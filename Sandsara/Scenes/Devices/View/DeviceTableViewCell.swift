@@ -11,6 +11,8 @@ import RxSwift
 import RxCocoa
 
 extension ScanDiscovery {
+    
+    /// Rssi Image base on RSSI value
     var rssiImage: UIImage? {
         switch labs(rssi) {
         case 0 ..< 23:
@@ -25,8 +27,9 @@ extension ScanDiscovery {
         }
     }
 }
-
+// MARK: Device Cell
 class DeviceTableViewCell: BaseTableViewCell<DeviceCellViewModel> {
+    //MARK: Outlet connections
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var indicatorButton: LoadingButton!
 
@@ -50,9 +53,8 @@ class DeviceTableViewCell: BaseTableViewCell<DeviceCellViewModel> {
             }.disposed(by: disposeBag)
     }
 
-
 }
-
+// MARK: Device Cell VM Contract
 enum DeviceCellVMContract {
     struct Input: InputType {
         var device: ScanDiscovery

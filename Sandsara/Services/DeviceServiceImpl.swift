@@ -67,6 +67,8 @@ class DeviceServiceImpl {
     
     weak var timer: Timer?
     
+    
+    /// Read all the value of Sandsara board when connect to a new board or reconnect
     func readSensorValues() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -206,9 +208,6 @@ class DeviceServiceImpl {
             }
             
             self.runningColor.accept(colorModel)
-
-            var updated = false
-            
             
             do {
                 while(true) {
@@ -258,6 +257,8 @@ class DeviceServiceImpl {
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
+    
+    /// Read current Sandsara playing playlist
     func readPlaylist() {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -314,6 +315,9 @@ class DeviceServiceImpl {
         
     }
     
+    
+    /// Update Sandsara device's name
+    /// - Parameter name: the name you want to update for the board, example like abc123
     func updateDeviceName(name: String) {
         bluejay.write(to: DeviceService.deviceName, value: name) { result in
             switch result {
@@ -326,6 +330,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Sleep Function
     func sleepDevice() {
         bluejay.write(to: DeviceService.sleep, value: "1") { result in
             switch result {
@@ -342,6 +348,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Resume function
     func resumeDevice() {
         bluejay.write(to: DeviceService.play, value: "1") { result in
             switch result {
@@ -359,6 +367,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Pause function
     func pauseDevice() {
         bluejay.write(to: DeviceService.pause, value: "1") { result in
             switch result {
@@ -372,6 +382,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Device Status checking function
     func readDeviceStatus() {
         bluejay.read(from: DeviceService.deviceStatus) { (result: ReadResult<String>) in
             switch result {
@@ -386,6 +398,9 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Update Sandsara led mode
+    /// - Parameter mode: if mode is 1, then the board's led strip is cycled, else the board's led strip is stayed
     func updateCycleMode(mode: String) {
         bluejay.write(to: LedStripService.ledStripCycleEnable, value: mode) { result in
             switch result {
@@ -398,6 +413,8 @@ class DeviceServiceImpl {
         }
     }
     
+    /// Update Sandsara led direction mode
+    /// - Parameter direction: if mode is 1, clockwise, else counter clockwise
     func updateDirection(direction: String) {
         bluejay.write(to: LedStripService.ledStripDirection, value: direction) { result in
             switch result {
@@ -411,6 +428,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Factory reset function
     func factoryReset() {
         bluejay.write(to: DeviceService.factoryReset, value: "1") { result in
             switch result {
@@ -427,6 +446,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Restart function
     func restart() {
         bluejay.write(to: DeviceService.restart, value: "1") { result in
             switch result {
@@ -443,6 +464,8 @@ class DeviceServiceImpl {
         }
     }
     
+    
+    /// Cleanup function when Sandsara is disconnected
     func cleanup() {
         deviceName.accept("")
         firmwareVersion.accept("")
@@ -460,6 +483,8 @@ class DeviceServiceImpl {
         currentTracks = []
     }
     
+    
+    /// Read playlist name, current track, current path position
     func readPlaylistValue() {
         bluejay.run { sandsaraBoard -> Bool in
             do {

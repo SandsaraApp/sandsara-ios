@@ -10,6 +10,8 @@ import RxSwift
 import RxCocoa
 import SVProgressHUD
 
+
+/// State of Download firmware
 private enum DownloadFirmwareState {
     case notDownloaded
     case downloading
@@ -18,6 +20,8 @@ private enum DownloadFirmwareState {
     case synced
 }
 
+
+/// Contract of DownloadFirmwareVM
 enum DownloadFirmwareVMContract {
     struct Input: InputType {
         var latestVersion: String
@@ -29,30 +33,36 @@ enum DownloadFirmwareVMContract {
     }
 }
 
+
+/// DownloadFirmwareViewModel, indicate the state of a firmware
 class DownloadFirmwareViewModel: BaseCellViewModel<DownloadFirmwareVMContract.Input, DownloadFirmwareVMContract.Output> {
     override func transform() {
         setOutput(Output(latestVersion: Driver.just(inputs.latestVersion)))
     }
 }
 
+
+/// Firmware Cell , show full state of downloaded or not downloaded , etc
 class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel> {
     private var state: DownloadFirmwareState = .notDownloaded {
         didSet {
             updateUIState()
         }
     }
+    
+    // MARK: - UI Outlet Connections
     @IBOutlet weak var titleSyncLabel: UILabel!
     @IBOutlet weak var downloadBtn: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var alertLabel: UILabel!
 
+    // MARK: - Properties
     let cellUpdate = PublishRelay<()>()
     let updateFirmwareAlert = PublishRelay<DisplayItem>()
-
     let latestVersion = BehaviorRelay<String>(value: "")
-
     var filePath: URL?
 
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         progressBar.progress = 0
@@ -76,7 +86,9 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
             }
         }.disposed(by: disposeBag)
     }
-
+    
+    
+    /// Update cell UI Trigger by state
     func updateUIState() {
         DispatchQueue.main.async {
             switch self.state {
@@ -107,7 +119,9 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
 
         cellUpdate.accept(())
     }
-
+    
+    
+    /// Download button action
     func triggerDownload() {
         guard let file = viewModel.inputs.file else { return }
 
@@ -127,6 +141,7 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
         operation.progress.bind(to: self.progressBar.rx.progress).disposed(by: disposeBag)
     }
 
+    /// Sync button action
     func triggerSync() {
         self.updateFirmwareAlert.accept(DisplayItem(file: self.viewModel.inputs.file ?? File()))
     }

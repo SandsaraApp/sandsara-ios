@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: UI Display Item for track, playlist with different layout
 struct DisplayItem {
     let title: String
     let author: String
@@ -28,6 +29,8 @@ struct DisplayItem {
     
     var trackId: String = ""
     
+    
+    /// Dummy initial
     init() {
         title = ""
         author = ""
@@ -37,6 +40,7 @@ struct DisplayItem {
         isLocal = false
     }
     
+    /// Show track from API
     init(track: Track, isPlaylist: Bool = false) {
         self.title = track.title
         self.author = track.author
@@ -51,6 +55,7 @@ struct DisplayItem {
         self.thumbNailfileSize = track.thumbnail?.first?.size ?? 0
     }
     
+    /// Show playlist from API
     init(playlist: Playlist, isPlaylist: Bool = true, isTestPlaylist: Bool = false) {
         self.title = playlist.title
         self.author = playlist.author
@@ -68,6 +73,7 @@ struct DisplayItem {
         
     }
     
+    /// Show track from Realm DB
     init(track: LocalTrack, isPlaylist: Bool = false, isLocal: Bool = true) {
         self.title = track.title
         self.author = track.author
@@ -82,6 +88,7 @@ struct DisplayItem {
         self.thumbNailfileSize = track.thumbNailfileSize
     }
     
+    /// Show playlist from Realm DB
     init(playlist: LocalPlaylist, isPlaylist: Bool = true, isLocal: Bool = true) {
         self.title = playlist.playlistName
         self.author = playlist.author
@@ -94,6 +101,7 @@ struct DisplayItem {
         }
     }
     
+    /// Show Favorite playlist
     init(playlist: FavoritePlaylist, isPlaylist: Bool = true, isLocal: Bool = true) {
         self.title = L10n.favorite
         self.author = playlist.author
@@ -106,6 +114,7 @@ struct DisplayItem {
         }
     }
     
+    /// Show Downloaded playlist
     init(playlist: DownloadedPlaylist, isPlaylist: Bool = true, isLocal: Bool = false) {
         self.title = playlist.playlistName
         self.author = playlist.author
@@ -119,10 +128,11 @@ struct DisplayItem {
         }
     }
     
+    /// Data from a TrackCellVM
     init(trackCellViewModel: TrackCellViewModel) {
         self = trackCellViewModel.inputs.track
     }
-    
+    /// Show data from File object
     init(file: File) {
         self.init()
         self.fileURL = file.url

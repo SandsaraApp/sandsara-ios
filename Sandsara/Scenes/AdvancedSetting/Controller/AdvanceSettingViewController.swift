@@ -12,10 +12,11 @@ import RxDataSources
 
 class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel, NoInputParam> {
 
+    // MARK: - Outlet connection
     @IBOutlet private weak var tableView: UITableView!
 
+    // MARK: - Properties
     private let viewWillAppearTrigger = PublishRelay<()>()
-
     typealias Section = SectionModel<String, SettingItemCellType>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
@@ -50,7 +51,9 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
-
+    
+    
+    /// TableView setup
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
@@ -65,7 +68,8 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
         tableView.estimatedSectionHeaderHeight = 73
 
         tableView.register(SettingHeaderView.nib, forHeaderFooterViewReuseIdentifier: SettingHeaderView.identifier)
-
+        
+        // MARK: Tableview selection handle
         Observable
             .zip(
                 tableView.rx.itemSelected,
@@ -90,6 +94,7 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                                             if error == nil {
                                                 DeviceServiceImpl.shared.deviceName.accept(text)
                                                 self.showSuccessHUD(message: "Name \(text) was updated successfully")
+                                                /// trigger reload data after update name
                                                 self.viewWillAppearTrigger.accept(())
                                             } else {
                                                 self.showErrorHUD(message: "\(error?.localizedDescription ?? "")")
@@ -130,12 +135,14 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
                 case .updateFirmware(let viewModel):
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: DownloadFirmwareTableViewCell.identifier, for: indexPath) as? DownloadFirmwareTableViewCell else { return UITableViewCell()}
                     cell.bind(to: viewModel)
+                    /// the update trigger for the state of this cell, if the new firmware is downloading the cell need to be reloaded and recalculated the height
                     cell.cellUpdate
                         .observeOn(MainScheduler.asyncInstance)
                         .subscribeNext {
                             tableView.beginUpdates()
                             tableView.endUpdates()
                         }.disposed(by: cell.disposeBag)
+                    /// if the action is triggered, the overlay screen will show to update the firmware for user
                     cell.updateFirmwareAlert
                         .subscribeNext { item in
                             DispatchQueue.main.async {
@@ -155,12 +162,8 @@ class AdvanceSettingViewController: BaseVMViewController<AdvanceSettingViewModel
     }
 }
 
+// MARK: UITableViewDelegate, calculate height for cell and header, footer
 extension AdvanceSettingViewController: UITableViewDelegate {
-    /// <#Description#>
-    /// - Parameters:
-    ///   - tableView: <#tableView description#>
-    ///   - cell: <#cell description#>
-    ///   - indexPath: <#indexPath description#>
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellHeightsDictionary[indexPath] = cell.frame.size.height
     }

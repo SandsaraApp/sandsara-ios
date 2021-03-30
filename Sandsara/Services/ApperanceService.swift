@@ -7,13 +7,17 @@
 
 import UIKit
 
+// MARK: App Apperance Handler for nav bar and tab bar
 struct AppApperance {
-
+    
+    
+    /// Set theme function
     static func setTheme() {
         setNavApperrance()
         setTabBarAppearance()
     }
-
+    
+    /// Set tabbar appearance
     private static func setTabBarAppearance() {
         if #available(iOS 13, *) {
             let appearance = UITabBarAppearance()
@@ -44,7 +48,8 @@ struct AppApperance {
             UITabBar.appearance().unselectedItemTintColor = Asset.secondary.color
         }
     }
-
+    
+    /// Set navbar appearance
     private static func setNavApperrance() {
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
         UINavigationBar.appearance().tintColor = Asset.primary.color

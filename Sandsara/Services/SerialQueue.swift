@@ -30,13 +30,16 @@ final class ServiceSerialQueue {
     private var callbackDict = [ServiceSerialQueueUseCase: Bool]()
 
     // MARK: - Initialization
-
     init() {
         self.queue = DispatchQueue(label: "_\(String(describing: ServiceSerialQueue.self))")
     }
 
     // MARK: - Public Methods
-
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - useCase: add use case to use
+    ///   - task:Put closure after the task is completed
     func addTask(_ useCase: ServiceSerialQueueUseCase,
                  task: @escaping ServiceSerialQueueTask) {
         queue.async { [weak self] in

@@ -12,6 +12,7 @@ class SplashViewController: BaseViewController<NoInputParam> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        /// Get all the track here so when we complete read data from the Sandsara, we always have the full data of the now playing tracks
         AF.request("https://api.airtable.com/v0/apph4ADJ06dIfpZ3C/tracks", method: .get, parameters: ["view": "all",
                                                                                                       "sort[0][field]" : "name"], encoding: URLEncoding.default, headers: [
                                                                                                         "Authorization": "Bearer \(token)"
@@ -31,7 +32,8 @@ class SplashViewController: BaseViewController<NoInputParam> {
                 Preferences.PlaylistsDomain.allTracks = info.tracks.map {
                     $0.playlist
                 }
-               
+                
+                // Reconnection here to make sure things work correctly before the app get to home screen
                 if let board = Preferences.AppDomain.connectedBoard {
                     if !bluejay.isConnected {
                         bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name), 
@@ -71,15 +73,4 @@ class SplashViewController: BaseViewController<NoInputParam> {
             }
           }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }

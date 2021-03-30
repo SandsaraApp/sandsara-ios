@@ -50,8 +50,10 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
+        
         backBtn.rx.tap.asDriver().driveNext {
             if self.isFromAdvanceSetting {
+                /// Reconnect if we didnt connect to a new board from the advance setting flow
                 if let board = Preferences.AppDomain.connectedBoard {
                     if !bluejay.isConnected {
                         bluejay.connect(PeripheralIdentifier(uuid: board.uuid, name: board.name), 
@@ -104,6 +106,7 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
+        // MARK: Tableview selection handle
         Observable
             .zip(
                 tableView.rx.itemSelected,
@@ -115,6 +118,7 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
                 self.selectConnect.accept(indexPath.row)
             }.disposed(by: disposeBag)
 
+        // MARK: Connection result output
         viewModel
             .outputs
             .connectionResult
@@ -144,6 +148,7 @@ class ScanViewController: BaseVMViewController<ScanDevicesViewModel, NoInputPara
     }
 }
 
+// MARK: Connectionn Handler
 extension ScanViewController: ConnectionObserver {
     func bluetoothAvailable(_ available: Bool) {
         debugPrint("ScanViewController - Bluetooth available: \(available)")
@@ -162,6 +167,7 @@ extension ScanViewController: ConnectionObserver {
         bluejay.read(from: LedStripService.ledStripSpeed) { [weak self] (result: ReadResult<String>) in
             switch result {
             case .success(let location):
+                /// If the board is connected successfully, trigger a notification to go back to ConnectionGuideVC and trigger read Sandsara board data immediately
                 debugPrint("Read from sensor location is successful: \(location)")
                 let alertVC = UIAlertController(title: "Alert", message: "Connection attempt to: \(peripheral.name) is successful", preferredStyle: .alert)
                 alertVC.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in

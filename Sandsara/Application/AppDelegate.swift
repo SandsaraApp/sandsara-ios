@@ -10,14 +10,13 @@ import RxSwift
 import Bluejay
 import Firebase
 
+// MARK: - Bluejay initial
 let bluejay = Bluejay()
 
-
+// MARK: - AppDelegate, handle application state and cycle
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-    var discoveredDevice: ScanDiscovery?
 
     let disposeBag = DisposeBag()
     
@@ -25,36 +24,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var lauchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     
+    /// Variable to restore bluetooth from background
     var isFromBackgroundResume: Bool = false
 
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        DataLayer.shareInstance.config()
-        
-        let centralManagerIdentifiers = launchOptions?[UIApplication.LaunchOptionsKey.bluetoothCentrals]
-        print(centralManagerIdentifiers)
         AppApperance.setTheme()
+        dataLayerInit()
+        /// Set launch option for core bluetooth
+        let centralManagerIdentifiers = launchOptions?[UIApplication.LaunchOptionsKey.bluetoothCentrals]
         self.lauchOptions = launchOptions
-        SandsaraDataServices().getColorPalettes(option: SandsaraDataServices().getServicesOption(for: .colorPalette)).subscribeNext { colors in
+        SandsaraDataServices()
+            .getColorPalettes(option: SandsaraDataServices()
+                                .getServicesOption(for: .colorPalette))
+            .subscribeNext { colors in
             print(colors)
         }.disposed(by: disposeBag)
+        
+        /// Init BLE Stack
         let backgroundRestoreConfig = BackgroundRestoreConfig(
             restoreIdentifier: "com.ios.sandsara.ble",
             backgroundRestorer: self,
             listenRestorer: self,
             launchOptions: lauchOptions)
-        
         let backgroundRestoreMode = BackgroundRestoreMode.enable(backgroundRestoreConfig)
-        
         startOption = StartOptions(
             enableBluetoothAlert: true,
             backgroundRestore: backgroundRestoreMode)
-        
         bluejay.registerDisconnectHandler(handler: self)
         bluejay.start(mode: .new(self.startOption))
+        
+        /// Firebae initial
         FirebaseApp.configure()
-        _ = DataLayer.init()
+        
         return true
     }
 
@@ -62,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
+        /// If the overlay is presentiing, we can't disconnect the board
         if (UIApplication.topViewController() is OverlaySendFileViewController) {
             isFromBackgroundResume = false
         } else {
@@ -76,10 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
         // observe connection
-
         ReachabilityManager.shared.stopMonitoring()
-        
-        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -95,6 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    // MARK: Reinit BLE Stack if stuff is not working correctly
     func reinitStack() {
         let backgroundRestoreConfig = BackgroundRestoreConfig(
             restoreIdentifier: "com.ios.sandsara.ble",
@@ -111,6 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bluejay.start(mode: .new(self.startOption))
     }
     
+    // MARK: - Reconnect again from background if the state is running
     func restart() {        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { 
             if let board = Preferences.AppDomain.connectedBoard {
@@ -138,7 +141,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ReachabilityManager.shared.stopMonitoring()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
+    // MARK: Init miniplayer bar
     func initPlayerBar() {
         let player = PlayerViewController.shared
         player.modalPresentationStyle = .fullScreen
@@ -166,8 +170,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.topViewController()?.tabBarController?.popupContentView.popupCloseButton.isHidden = true
         UIApplication.topViewController()?.tabBarController?.presentPopupBar(withContentViewController: player, openPopup: false, animated: false, completion: nil)
     }
+    
+    private func dataLayerInit() {
+        DataLayer.shareInstance.config()
+        _ = DataLayer.init()
+    }
 }
 
+//MARK: - Bluetooth background restore handler
 extension AppDelegate: BackgroundRestorer {
     func didRestoreConnection(
         to peripheral: PeripheralIdentifier) -> BackgroundRestoreCompletion {
@@ -191,6 +201,7 @@ extension AppDelegate: BackgroundRestorer {
     }
 }
 
+//MARK: - Bluetooth listen handler
 extension AppDelegate: ListenRestorer {
     func didReceiveUnhandledListen(
         from peripheral: PeripheralIdentifier,
@@ -201,10 +212,11 @@ extension AppDelegate: ListenRestorer {
     }
 }
 
+//MARK: - Bluetooth Disconnection handler
 extension AppDelegate: DisconnectHandler {
     func didDisconnect(from peripheral: PeripheralIdentifier, with error: Error?, willReconnect autoReconnect: Bool) -> AutoReconnectMode {
-      //  DeviceServiceImpl.shared.cleanup()
         if isFromBackgroundResume {
+            /// if isBackgroundResume is true, need to disable bluejay auto reconnect behavior to prevent auto connect issue
             return .change(shouldAutoReconnect: false)
         }
         return .noChange

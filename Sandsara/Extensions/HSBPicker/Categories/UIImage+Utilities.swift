@@ -9,23 +9,21 @@
 import UIKit
 
 extension UIImage {
-    
-    
-    
     // MARK: Public class functions
     public class func pixelColorOf(image: UIImage, at point: CGPoint) -> UIColor? {
         return image.pixelColorAt(point: point)
     }
-    
     public class func pixelBufferOf(image: UIImage) -> CVPixelBuffer? {
         return image.pixelBuffer()
     }
     
+    /// get pixel buffer of UIImage
     public class func pixelBufferPropertiesOf(image: UIImage) -> (pixelBuffer: CVPixelBuffer?, size:CGSize, bytesPerRow: Int) {
         return image.pixelBufferProperties()
     }
     
     
+    /// get size of pixel
     public class func getSizeOf(pixelBuffer: CVPixelBuffer) -> CGSize {
         CVPixelBufferLockBaseAddress(pixelBuffer, [])
         let width = CVPixelBufferGetWidth(pixelBuffer)
@@ -45,10 +43,10 @@ extension UIImage {
     
     // MARK: Public methods
     
-    // Creates a pixel buffer and gets the color of the specified point
-    // Creating the pixel buffer is resource intensive, so if you are repeatedly calling
-    // this method, it would be best to instead call pixelBuffer(), store it, and then
-    // call UIImage.getColorAt(point: point, in: pixelBuffer)
+    /// Creates a pixel buffer and gets the color of the specified point
+    /// Creating the pixel buffer is resource intensive, so if you are repeatedly calling
+    /// this method, it would be best to instead call pixelBuffer(), store it, and then
+    /// call UIImage.getColorAt(point: point, in: pixelBuffer)
     public func pixelColorAt(point: CGPoint) -> UIColor? {
         guard let pixelBuffer = self.pixelBuffer() else {
             print("Failed to convert image to pixelBuffer")
@@ -58,7 +56,7 @@ extension UIImage {
         return UIImage.getColorAt(point: point, in: pixelBuffer)
     }
     
-    // Draw self.cgImage into a pixel buffer
+    /// Draw self.cgImage into a pixel buffer
     public func pixelBuffer() -> CVPixelBuffer? {
         
         guard let cgImage = self.cgImage else {

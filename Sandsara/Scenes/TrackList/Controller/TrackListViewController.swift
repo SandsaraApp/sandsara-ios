@@ -120,8 +120,6 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
-       // NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -191,6 +189,7 @@ class TrackListViewController: BaseVMViewController<TrackListViewModel, NoInputP
         present(alert, animated: true, completion: nil)
     }
 }
+
 
 extension TrackListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

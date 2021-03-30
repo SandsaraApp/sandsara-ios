@@ -16,6 +16,9 @@ import UIKit
 
 extension UIColor
 {
+    
+    /// Generate color from color temp
+    /// - Parameter temperature: Tempature to generate color
     convenience init(temperature : CGFloat)
     {
         let red, green, blue : CGFloat

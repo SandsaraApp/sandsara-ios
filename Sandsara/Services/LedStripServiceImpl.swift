@@ -14,9 +14,13 @@ extension StringProtocol {
     var bytes: [UInt8] { .init(utf8) }
 }
 
+// MARK: Impl of Led strip service
 class LedStripServiceImpl {
     static let shared = LedStripServiceImpl()
-
+    
+    
+    /// Update custom palettte
+    /// - Parameter colorString: Encoded data of color
     func uploadCustomPalette(colorString: Data) {
         var step = 0
         bluejay.run { sandsaraBoard -> Bool in

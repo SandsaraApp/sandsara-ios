@@ -9,6 +9,7 @@ protocol CellModelType {
     var outputs: Output! { get }
 }
 
+// MARK: BaseTableViewCell support ViewModel Binding
 class BaseTableViewCell<ViewModel: CellModelType>: UITableViewCell, ViewModelBindable {
 
     private(set) var disposeBag = DisposeBag()

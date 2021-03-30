@@ -271,8 +271,6 @@ extension PlayerViewController {
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
-//                DeviceServiceImpl.shared.readDeviceStatus()
-//                DeviceServiceImpl.shared.readPlaylistValue()
                 self.isPlaying = true
                 DeviceServiceImpl.shared.currentTrackPosition.accept(0)
                 DispatchQueue.main.async {

@@ -125,12 +125,17 @@ class BaseViewController<Input: InputParamView>: UIViewController {
         SVProgressHUD.setBackgroundColor(Asset.primary.color)
         SVProgressHUD.setForegroundColor(Asset.background.color)
     }
-
+    
+    
+    /// Show HUD Error
+    /// - Parameter message: error message
     func showErrorHUD(message: String) {
         setHUDStyle()
         SVProgressHUD.showError(withStatus: message)
     }
 
+    /// Show HUD Success
+    /// - Parameter message: success message
     func showSuccessHUD(message: String) {
         setHUDStyle()
         SVProgressHUD.showSuccess(withStatus: message)

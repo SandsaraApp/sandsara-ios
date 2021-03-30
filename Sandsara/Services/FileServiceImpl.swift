@@ -25,6 +25,9 @@ class FileServiceImpl {
 
     let disposeBag = DisposeBag()
 
+    
+    /// Read file function
+    /// - Parameter filename: name of file want to read for example, Sandsara001.bin
     func readFile(filename: String) {
         fileExist.accept(false)
         let start = CFAbsoluteTimeGetCurrent()
@@ -68,6 +71,12 @@ class FileServiceImpl {
         }
     }
 
+    
+    /// Send file function
+    /// - Parameters:
+    ///   - fileName: fileName , for example the name is Sandsara001
+    ///   - extensionName: fileExtension, for example the extension is bin
+    ///   - isPlaylist: can put by false or skip
     func sendFiles(fileName: String,
                    extensionName: String, isPlaylist: Bool = false) {
         // reset value
@@ -120,7 +129,14 @@ class FileServiceImpl {
             }
         }
     }
-
+    
+    
+    /// Convert file to array of 512 chunk of bytes
+    /// - Parameters:
+    ///   - resource: fileName , for example the name is Sandsara001
+    ///   - fileExt: fileExtension, for example the extension is bin
+    ///   - isPlaylist: can put by false or skip
+    /// - Returns: array of 512 chunk of bytes
     func getFile(forResource resource: String,
                  withExtension fileExt: String?, isPlaylist: Bool = false) -> [[UInt8]]? {
         var chunks = [[UInt8]]()
@@ -147,6 +163,7 @@ class FileServiceImpl {
         return chunks
     }
 
+    /// Create a file to send to SD Card
     func createOrOverwriteEmptyFileInDocuments(filename: String) {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             debugPrint("ERROR IN createOrOverwriteEmptyFileInDocuments")
@@ -161,7 +178,8 @@ class FileServiceImpl {
         }
         debugPrint("FILE CREATED: " + fileURL.absoluteString)
     }
-
+    
+    /// Write string line by line to a file
     func writeString(string: String, fileHandle: FileHandle){
         let data = string.data(using: String.Encoding.utf8)
         guard let dataU = data else {
@@ -172,7 +190,7 @@ class FileServiceImpl {
         fileHandle.write(dataU)
     }
 
-
+    /// Read file by fileName
     private func readFile(filename: String) -> String? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             debugPrint("ERROR OPENING FILE")
@@ -182,7 +200,8 @@ class FileServiceImpl {
 
         return fileURL.absoluteString
     }
-
+    
+    /// Check if file is on Document Directory or not
     func existingFile(fileName: String) -> (Bool, UInt64) {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let url = NSURL(fileURLWithPath: path)
@@ -202,7 +221,8 @@ class FileServiceImpl {
 
         }
     }
-
+    
+    /// Get file size
     private func getSizeOfFile(withPath path:String) -> UInt64? {
         do {
             let fileAttributes = try FileManager.default.attributesOfItem(atPath: path)
@@ -232,7 +252,13 @@ class FileServiceImpl {
             return nil
         }
     }
-
+    
+    
+    /// Update playlist playing behavior
+    /// - Parameters:
+    ///   - fileName: playlistName
+    ///   - index: index of a track in playlist
+    ///   - mode: if mode is .playlist, will overwrite current playing playlist to the new playlist, else update the path position
     func updatePlaylist(fileName: String, index: Int, mode: PlayingState = .playlist, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.run { sandsaraBoard -> Bool in
             do {
@@ -255,33 +281,13 @@ class FileServiceImpl {
             }
         }
     }
-
-
-    func updateTrack(name: String, completionHandler: @escaping ((Bool) -> ())) {
-        bluejay.write(to: PlaylistService.pathName, value: name) { result in
-            switch result {
-            case .success:
-                debugPrint("Play success")
-               // DeviceServiceImpl.shared.readPlaylistValue()
-                completionHandler(true)
-            case .failure(let error):
-                debugPrint("Play update track error")
-                completionHandler(false)
-            }
-        }
-    }
-
-    func updatePosition() {
-        bluejay.write(to: PlaylistService.pathPosition, value: "1") { result in
-            switch result {
-            case .success:
-                debugPrint("Play success")
-            case .failure(let error):
-                debugPrint("Play update position error")
-            }
-        }
-    }
-
+    
+    
+    /// Check if file is existed on SD Card
+    /// - Parameters:
+    ///   - name: fileName
+    ///   - completionHandler:
+    /// - Returns: true if file is existed
     func checkFileExistOnSDCard(name: String, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.write(to: FileService.checkFileExist, value: name) { result in
             switch result {
@@ -301,6 +307,10 @@ class FileServiceImpl {
         }
     }
 
+    
+    /// Update track by index
+    /// - Parameters:
+    ///   - index: pass the index of track you want to play
     func updatePositionIndex(index: Int, completionHandler: @escaping ((Bool) -> ())) {
         bluejay.write(to: PlaylistService.pathPosition, value: "\(index)") { result in
             switch result {

@@ -30,6 +30,7 @@ final class ScanDevicesViewModel: BaseViewModel<ScanDevicesContract.Input, ScanD
     override func transform() {
         inputs.viewWillAppearTrigger
             .subscribeNext { [weak self] in
+                /// if bluejay is scanning, need to stop immediately then start a new scanning session
                 if bluejay.isScanning {
                     self?.stopScanning()
                 }
@@ -58,6 +59,7 @@ final class ScanDevicesViewModel: BaseViewModel<ScanDevicesContract.Input, ScanD
                             .asDriver(onErrorJustReturn: nil)))
     }
 
+    //MARK: Scan function
     private func scanning() {
         bluejay.scan(
             duration: 30,
@@ -91,6 +93,10 @@ final class ScanDevicesViewModel: BaseViewModel<ScanDevicesContract.Input, ScanD
             })
     }
 
+    // MARK: Pairing function
+    
+    /// Pairing function
+    /// - Parameter identifier: the selected BLE identifier
     private func pairing(identifier: PeripheralIdentifier) {
         bluejay
             .connect(identifier,

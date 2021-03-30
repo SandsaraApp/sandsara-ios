@@ -26,9 +26,12 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
             // Placeholder data
             let values = self.buildCellVM()
             self.datas.accept(values)
-            SandsaraDataServices().getFirmwares(option: SandsaraDataServices().getServicesOption(for: .firmware)).subscribeNext { [weak self] firmwares in
+            SandsaraDataServices().getFirmwares(option: SandsaraDataServices()
+                                                    .getServicesOption(for: .firmware))
+                .subscribeNext { [weak self] firmwares in
                 guard let self = self else { return }
                 for firmware in firmwares {
+                    /// Compare logic here, if the API's firmware is greater than current Sandsara firmware version, show the download button for user to update firmware
                     if firmware.version > DeviceServiceImpl.shared.firmwareVersion.value {
                         Preferences.AppDomain.firmwareVersion = firmware.version
                         var values = self.buildCellVM()
@@ -43,6 +46,9 @@ final class AdvanceSettingViewModel: BaseViewModel<AdvanceSettingViewModelContra
         setOutput(Output(datasources: datas.asDriver()))
     }
 
+    
+    /// Build Advance Setting Data
+    /// - Returns: Array of SettingItemCellType
     private func buildCellVM() -> [SettingItemCellType] {
         var datas = [SettingItemCellType]()
         datas.append(.menu(MenuCellViewModel(inputs: MenuCellVMContract.Input(type: .deviceName(DeviceServiceImpl.shared.deviceName.value.isEmpty ? "N/A" : DeviceServiceImpl.shared.deviceName.value), color: Asset.secondary.color))))

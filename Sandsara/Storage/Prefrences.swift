@@ -8,12 +8,14 @@
 import Foundation
 
 @propertyWrapper
+/// User default initial
 final class UserDefault<T> where T: Codable {
     private(set) var key: String
     let defaultValue: T?
 
     private var userDefault: UserDefaults
-
+    
+    
     init(_ key: String,
          defaultValue: T?,
          userDefault: UserDefaults = UserDefaults.standard,
@@ -55,25 +57,27 @@ struct Preferences {
     static var prefixDomain: String {
         return "user_defaults.mobytelab_"
     }
-
+    
+    /// App Domain
     struct AppDomain {
         @UserDefault(Keys.currentAppLanguage.key, defaultValue: nil)
+        /// app lang
         static var currentAppLanguage: String?
-
-        @UserDefault(Keys.connectedSandasa.key, defaultValue: nil)
-        static var connectedSandasa: [String]?
-
+        
         @UserDefault(Keys.firmwareVersion.key, defaultValue: nil)
+        /// Current firmware version
         static var firmwareVersion: String?
 
         @UserDefault(Keys.colors.key, defaultValue: nil)
+        /// colors array stored
         static var colors: [ColorModel]?
 
         @UserDefault(Keys.firmware.key, defaultValue: nil)
+        /// avaiable firmware stored
         static var firmware: [Firmware]?
         
-        
         @UserDefault(Keys.connectedBoard.key, defaultValue: nil)
+        /// Connected device identifier
         static var connectedBoard: ConnectedPeripheralIdentifier?
 
         enum Keys: String {
@@ -89,7 +93,8 @@ struct Preferences {
             }
         }
     }
-
+    
+    /// Playlist Domain
     struct PlaylistsDomain {
         @UserDefault(Keys.recommendedTracks.key, defaultValue: nil)
         static var recommendTracks: [Track]?

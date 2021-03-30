@@ -20,6 +20,8 @@ final class AddPlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input,
         setOutput(Output(datasources: datas.asDriver()))
     }
 
+    
+    /// Load latest data of local playlist, favorite playlist, downloaded playlist
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
         if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
