@@ -544,6 +544,23 @@ class DataLayer {
         }
         return DisplayItem(track: Track(id: 0, title: name, trackId: "", thumbnail: nil, author: name, file: nil))
     }
+    
+    static func createSyncedPlaylist(playlist: DisplayItem) -> Bool {
+        guard let realm = realm else { return false }
+        let playlistToAdd = SyncedPlaylist(track: playlist)
+        let tracks = playlist.tracks.map {
+            LocalTrack(track: $0)
+        }
+        write(realm: realm, writeClosure: {
+            realm.add(playlistToAdd)
+        })
+
+        write(realm: realm, writeClosure: {
+            playlistToAdd.tracks.append(objectsIn: tracks)
+        })
+
+        return true
+    }
 }
 
 

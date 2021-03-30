@@ -172,55 +172,7 @@ class SandsaraDataServices {
         }
     }
 
-    private func getPlaylistDetailFromServer() -> Observable<[Track]> {
-        return api
-            .playlistDetail()
-            .do(onSuccess: { [weak self] tracks in
-                guard let self = self else { return }
-                self.playlistDetail = tracks
-            })
-            .asObservable()
-            .flatMap { [weak self] result -> Observable<([Track], Bool)> in
-                guard let self = self else { return Observable.just((result, false)) }
-                return Observable.combineLatest(Observable.just(result), self.dataAccess.savePlaylistDetail(tracks: result)) { ($0, $1) }
-            }
-            .map { (cards, _) -> [Track] in
-                return cards
-            }
-    }
-
-    func getPlaylistDetail(option: ServiceOption) -> Observable<[Track]> {
-        // avoid duplicate playlist detail cache
-        let serverObservable = getPlaylistDetailFromServer()
-        let localObservable = dataAccess
-            .getLocalAllTracks()
-            .compactMap { $0 }
-            .doOnNext({ [weak self] cache in
-                guard let self = self else { return }
-                self.playlistDetail = cache
-            })
-
-        switch option {
-        case .server:
-            return serverObservable
-                .subscribeOn(ConcurrentDispatchQueueScheduler(queue: backgroundQueue))
-        case .cache:
-            if let cardList = self.playlistDetail {
-                return Observable.of(cardList)
-            } else {
-                return localObservable
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            }
-        default:
-            if let cardList = self.playlistDetail {
-                return Observable.concat(Observable.of(cardList), serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            } else {
-                return Observable.concat(localObservable, serverObservable)
-                    .subscribeOn(ConcurrentDispatchQueueScheduler.init(queue: backgroundQueue))
-            }
-        }
-    }
+    
 
     private func getAllPlaylistFromServer() -> Observable<[Playlist]> {
         return api
