@@ -36,11 +36,13 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
 
     override func transform() {
         emitEventLoading(true)
+        //MARK: API or local database fetch trigger
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
             self.buildCellVM()
         }.disposed(by: disposeBag)
 
+        //MARK: Search input trigger
         inputs.searchTrigger?.subscribeNext { [weak self] text in
             guard let self = self else { return }
             var items = [PlaylistCellViewModel]()
@@ -55,12 +57,12 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
 
     private func buildCellVM()  {
         var items = [PlaylistCellViewModel]()
+        // MARK: Local Playlists fetch, fetch favlist, then user's local playlist. then user's downloaded playlist
         if inputs.mode == .local {
             if let favList = DataLayer.loadFavList(), !favList.tracks.isEmpty {
                 items.append(PlaylistCellViewModel(inputs: PlaylistCellVMContract.Input(track: DisplayItem(playlist: favList),
                                                                                         isFavorite: true)))
             }
-
             if DataLayer.loadPlaylists().count > 0 {
                 let localList = DataLayer.loadPlaylists().map {
                     DisplayItem(playlist: $0)
@@ -80,7 +82,9 @@ final class PlaylistViewModel: BaseViewModel<PlaylistViewModelContract.Input, Pl
             }
             isEmpty = items.isEmpty
             datas.accept(items)
-        } else {
+        }
+        // MARK: Get all playlist from airtable
+        else {
             apiService.getAllPlaylist(option: .both).subscribeNext { values in
                 let items = values.map { DisplayItem(playlist: $0) }.map { PlaylistCellViewModel(inputs: PlaylistCellViewModel.Input(track: $0, isFavorite: false)) }
                 self.datas.accept(items)

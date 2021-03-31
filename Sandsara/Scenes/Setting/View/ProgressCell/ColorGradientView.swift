@@ -29,7 +29,6 @@ func hexStringToData(string: String) -> Data {
 }
 
 extension Collection {
-    
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
@@ -40,7 +39,7 @@ enum PanDirection {
     case vertical
     case horizontal
 }
-
+// MARK: Pan gesture handler
 class PanDirectionGestureRecognizer: UIPanGestureRecognizer {
     
     let direction: PanDirection
@@ -486,6 +485,8 @@ class ColorGradientView: UIView {
         
     }
     var initialPoint = CGPoint()
+    
+    // MARK: Drag gesture handler
     @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         guard let pointView = gestureRecognizer.view as? ColorPointView, let currentPoint = pointView.currentPoint else { return }
         let translation = gestureRecognizer.translation(in: pointView.superview)
@@ -524,6 +525,7 @@ class ColorGradientView: UIView {
         }
     }
     
+    // MARK: Color mapping function
     func convertGradientPointToSystemPoint(x: CGFloat) -> CGFloat {
         return x * secondPoint.x / 255
     }
@@ -536,6 +538,12 @@ class ColorGradientView: UIView {
         return x / 1.0
     }
     
+    // MARK: Add point function
+    
+    /// Add point function
+    /// - Parameters:
+    ///   - color: color want to add
+    ///   - xPoint: the positon to add , by x coordinate
     private func addPoint(color: UIColor, xPoint: CGFloat) {
         let pointView = ColorPointView()
         addSubview(pointView)
@@ -569,6 +577,7 @@ class ColorGradientView: UIView {
         pointView.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    // MARK: Handle tap gesture to edit a point
     @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
         let point = (sender.view as? ColorPointView)?.currentPoint ?? .zero
         debugPrint("Touch point \(point.x), \(point.y)")
@@ -578,6 +587,7 @@ class ColorGradientView: UIView {
         delegate?.showGradient(atPoint: showPoint, color: getPixelColor(atPosition: showPoint))
     }
     
+    // MARK: Send color patteles function
     func colorCommand() {
         
         let position = Data(locations.map { $0 * 255 }.map { UInt8($0) })
@@ -636,6 +646,7 @@ class ColorGradientView: UIView {
         DeviceServiceImpl.shared.runningColor.accept(colorModel)
     }
     
+    // MARK: Recalculate function after the Color point is dragged / removed or added to Color points array
     private func recalculatePoint() {
         pointViews.sort(by: {
             ($0.currentPoint?.x ?? 0) < ($1.currentPoint?.x ?? 0)

@@ -40,11 +40,14 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             .drive(progressSlider.rx.value)
             .disposed(by: disposeBag)
 
+        // MARK: Slider gestures function
         progressSlider.addTarget(self, action: #selector(onSliderValChanged(slider:event:)), for: .valueChanged)
         progressSlider.addTarget(self, action: #selector(sliderTouchUpInside), for: [.touchUpInside])
         progressSlider.addTarget(self, action: #selector(sliderTouchUpInside), for: [.touchUpOutside])
         progressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
     }
+    
+    
     @objc func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
         guard let slider = gestureRecognizer.view as? UISlider else { return }
         let pointTapped = gestureRecognizer.location(in: slider)

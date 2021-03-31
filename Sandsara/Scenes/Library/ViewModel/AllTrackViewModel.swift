@@ -42,31 +42,14 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
 
     override func transform() {
         emitEventLoading(true)
+        
+        //MARK: API or local database fetch trigger
         inputs.viewWillAppearTrigger.subscribeNext { [weak self] in
             guard let self = self else { return }
             self.buildCellVM()
         }.disposed(by: disposeBag)
 
-        let completion = BlockOperation {
-            self.inputs.viewWillAppearTrigger.accept(())
-        }
-
-        inputs.syncAll.subscribeNext { [weak self] in
-            guard let self = self else { return }
-            var allTrackCellVM = [AllTrackCellVM]()
-            allTrackCellVM.append(self.datas.value.first!)
-            for data in self.datas.value {
-                switch data {
-                case .track(let vm):
-                    let trackVM = AllTrackCellVM.track(TrackCellViewModel(inputs: TrackCellVMContract.Input(track: vm.inputs.track, syncTrigger: BehaviorRelay<()>(value: ()))))
-                    allTrackCellVM.append(trackVM)
-                default:
-                    continue
-                }
-            }
-            self.datas.accept(allTrackCellVM)
-        }.disposed(by: disposeBag)
-
+        //MARK: Search input trigger
         inputs.searchTrigger?.subscribeNext { [weak self] text in
             guard let self = self else { return }
             self.apiService.queryTracks(word: text).subscribeNext { values in
@@ -82,6 +65,7 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
 
     private func buildCellVM()  {
         var datas = [AllTrackCellVM]()
+        // MARK: Fetch all user's downloaded tracks
         if inputs.mode == .local {
             let list = DataLayer.loadDownloadedTracks()
             let items = list.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(track: $0, saved: DataLayer.checkTrackIsSynced($0))) }.map {
@@ -90,7 +74,9 @@ final class AllTracksViewModel: BaseViewModel<AllTracksViewModelContract.Input, 
             datas.append(contentsOf: items)
             self.datas.accept(datas)
             self.emitEventLoading(false)
-        } else {
+        }
+        // MARK: Get all tracks from airtable
+        else {
             apiService.getAllTracks(option: .both).asObservable().subscribeNext { values in
                 let items = values.map { DisplayItem(track: $0) }.map { TrackCellViewModel(inputs: TrackCellVMContract.Input(mode: .remote, track: $0, saved: true)) }.map {
                     AllTrackCellVM.track($0)

@@ -11,12 +11,15 @@ import RxCocoa
 import RxDataSources
 
 class SearchViewController: BaseViewController<NoInputParam>, UISearchControllerDelegate {
-
+    
+    //MARK: Outlet connection
     @IBOutlet weak var segmentControl: CustomSegmentControl!
     @IBOutlet weak var containerView: UIView!
 
+    //MARK: Properties
     private let sc = UISearchController(searchResultsController: nil)
-
+    
+    //MARK: Subcontrollers for tracks and playlist
     private var allTrackVC: BrowseTrackViewController?
     private var playlistsVC: BrowsePlaylistViewController?
 
@@ -43,7 +46,9 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
         sc.dimsBackgroundDuringPresentation = false
         searchBarStyle(sc.searchBar)
         navigationItem.searchController = sc
-
+        
+        
+        // MARK: Search bar text changed handler
         sc.searchBar
             .rx
             .text
@@ -61,7 +66,6 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
                 }
             }
             .disposed(by: disposeBag)
-
         sc
             .searchBar.rx.cancelButtonClicked
             .subscribeNext {
@@ -74,7 +78,9 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
         sc.searchBar.endEditing(true)
         sc.isActive = false
     }
-
+    
+    /// Setup SearchBar Style
+    /// - Parameter searchBar: searchBar you want to modify
     private func searchBarStyle(_ searchBar: UISearchBar) {
         searchBar.placeholder = "Search"
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
@@ -93,6 +99,8 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
 
+    
+    /// Segment tab init for track and playlist
     private func setupSegment() {
         segmentControl.setStyle(font: FontFamily.Tinos.regular.font(size: 30), titles:  [L10n.tracks, L10n.playlists])
 
@@ -104,13 +112,16 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
             }
             .disposed(by: disposeBag)
     }
-
+    
+    /// Init subcontrollers
     private func initControllers() {
         allTrackVC = storyboard?.instantiateViewController(withIdentifier: BrowseTrackViewController.identifier) as? BrowseTrackViewController
         playlistsVC = storyboard?.instantiateViewController(withIdentifier: BrowsePlaylistViewController.identifier) as? BrowsePlaylistViewController
         addChildViewController(controller: allTrackVC!, containerView: containerView, byConstraints: true)
     }
-
+    
+    /// Update controller when press on segment
+    /// - Parameter i: User's selected controller index
     func updateControllersByIndex(i: Int) {
         self.removeAllChildViewController()
         if i == 0 {
@@ -142,5 +153,4 @@ class SearchViewController: BaseViewController<NoInputParam>, UISearchController
     func didPresentSearchController(_ searchController: UISearchController) {
         sc.searchBar.becomeFirstResponder()
     }
-    
 }

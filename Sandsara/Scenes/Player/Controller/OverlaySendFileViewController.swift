@@ -25,6 +25,8 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
         let completion = BlockOperation {
             print("All track synced is done")
         }
+        
+        // MARK: Firmware update mode
         if isFirmwareUpdate {
             let item = notSyncedTracks.first ?? DisplayItem()
             let operation = FileSyncManager.shared.queueDownload(item: item)
@@ -34,6 +36,7 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
             OperationQueue.main.addOperation(completion)
             
         } else {
+            // MARK: Sync track mode
             for track in self.notSyncedTracks {
                 let operation = FileSyncManager.shared.queueDownload(item: track)
                 FileSyncManager.shared.triggerOperation(id: track.trackId)
@@ -48,6 +51,7 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
     
 
     @objc func reloadData(_ noti: Notification) {
+        // MARK: Get current sync item in queue and update it on UI
         func getCurrentSyncTask(item: DisplayItem) {
             if let task = FileSyncManager.shared.findCurrentQueue(item: item) {
                 self.syncProgressBar.isHidden = false
@@ -66,16 +70,21 @@ class OverlaySendFileViewController: BaseViewController<NoInputParam> {
         } else {
             DispatchQueue.main.async {
                 self.dismiss(animated: false, completion: {
+                    
                     if PlayerViewController.shared.playlingState == .showOnly {
+                        /// if user want to add track to queue only, just need to show the success popup for user
+                        /// This state need to be reset to .track to keep the correct playling sequence
                         PlayerViewController.shared.playlingState = .track
                         if !self.isFirmwareUpdate {
                             self.showSuccessHUD(message: "Track \(self.notSyncedTracks.first?.title ?? "") was added")
                         } else {
+                            /// Action after firmware update is success
                             self.showSuccessHUD(message: "Firmware update successful. The board is restarting ")
                             DeviceServiceImpl.shared.restart()
                         }
                     }
                     if !self.isFirmwareUpdate {
+                        // if user want to add track to queue and then play the new track, please call createPlaylist
                         PlayerViewController.shared.createPlaylist()
                     }
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .haveTrack(displayItem: DeviceServiceImpl.shared.currentTracks[DeviceServiceImpl.shared.currentTrackIndex])

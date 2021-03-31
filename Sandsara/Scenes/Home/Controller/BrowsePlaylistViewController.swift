@@ -12,28 +12,23 @@ import RxCocoa
 
 class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
+    // MARK: Outlet connections
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noResultView: UIStackView!
-
+    
+    // MARK: Properties
+    /// API Trigger
     let viewWillAppearTrigger = PublishRelay<()>()
-
+    /// ControllerMode to indicate the API and Data display
     var mode: ControllerMode = .search
-
     typealias Section = SectionModel<String, PlaylistCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
-
-
-    private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
-
     let searchTrigger = PublishRelay<String>()
 
     override func setupViewModel() {
         setupTableView()
         viewModel = PlaylistViewModel(apiService: SandsaraDataServices(), inputs: PlaylistViewModelContract.Input(mode: mode, viewWillAppearTrigger: viewWillAppearTrigger, searchTrigger: searchTrigger))
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
 
     override func bindViewModel() {
@@ -47,7 +42,7 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-
+        /// Table view selection handler
         Observable
             .zip(
                 tableView.rx.itemSelected,
@@ -64,15 +59,9 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
         viewModel.isLoading
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
-
-        tableView.rx.itemDeleted
-            .filter { $0.row != 0 && !self.viewModel.isEmpty }
-            .subscribeNext { [weak self] indexPath in
-                guard let self = self else { return }
-                self.viewModel.deletePlaylist(index: indexPath.row)
-            }.disposed(by: disposeBag)
     }
 
+    // MARK: Tableview setup
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
@@ -82,10 +71,6 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
         tableView
             .rx.setDelegate(self)
             .disposed(by: disposeBag)
-
-        dataSource.canEditRowAtIndexPath = { (ds, ip) in
-            return self.viewModel.canDeletePlaylist(index: ip.row)
-        }
     }
 
     private func makeDataSource() -> DataSource {
@@ -99,6 +84,7 @@ class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoIn
 
 }
 
+// MARK: UITableViewDelegate, calculate height for cell and header, footer
 extension BrowsePlaylistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0

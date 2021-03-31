@@ -30,7 +30,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
-
+    /// Dictionary to store cell height
     private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func viewWillAppear(_ animated: Bool) {
@@ -110,6 +110,7 @@ class SettingsViewController: BaseVMViewController<SettingViewModel, NoInputPara
     }
 }
 
+// MARK: UITableViewDelegate
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellHeightsDictionary[indexPath] = cell.frame.size.height

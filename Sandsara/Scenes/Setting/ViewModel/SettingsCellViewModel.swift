@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import Bluejay
 
+@available(*, deprecated, message: "Please use color model from Airtable")
 enum PredifinedColor: Int, CaseIterable {
     case one
     case two
@@ -68,16 +69,19 @@ enum PredifinedColor: Int, CaseIterable {
     }
 }
 
+// MARK: user static color mode
 enum StaticMode: Int {
     case colorTemp
     case customColor
 }
 
+// MARK: user lighting mode (cycle of colors or single color)
 enum LightMode: Int {
     case cycle = 0
     case staticMode
 }
 
+// MARK: Setting Item Cell Type
 enum SettingItemCellType {
     case speed(ProgressCellViewModel)
     case brightness(ProgressCellViewModel)
@@ -88,6 +92,7 @@ enum SettingItemCellType {
     case updateFirmware(DownloadFirmwareViewModel)
 }
 
+// MARK: Setting Item Type
 enum SettingItemType {
     case speed
     case brightness
@@ -102,13 +107,13 @@ enum SettingItemType {
     case deviceName(String)
     case firmwareVersion(String)
     case flipMode
-    
     case sleep
     case restart
     case connectNew
-    
     case rotate
     
+    
+    /// Title of setting item
     var title: String {
         switch self {
         case .speed:
@@ -146,6 +151,7 @@ enum SettingItemType {
         }
     }
     
+    /// Min and Max value of Slider range
     var sliderValue: (Float, Float) {
         switch self {
         case .lightCycleSpeed:
@@ -159,6 +165,7 @@ enum SettingItemType {
         }
     }
     
+    /// Slider ranges
     var ranges: [Float] {
         switch self {
         case .lightCycleSpeed:
@@ -178,6 +185,7 @@ enum SettingItemType {
         }
     }
     
+    /// Characteristic identifer for slider item
     var progressCharacteristic: CharacteristicIdentifier? {
         switch self {
         case .speed:
@@ -191,6 +199,7 @@ enum SettingItemType {
         }
     }
     
+    /// Characteristic identifer for toogle item
     var toogleCharacteristic: CharacteristicIdentifier? {
         switch self {
         case .sleep:
@@ -209,6 +218,7 @@ enum SettingItemType {
     }
 }
 
+/// Compare method
 extension SettingItemType: Equatable {
     static func ==(lhs: SettingItemType, rhs: SettingItemType) -> Bool {
         switch (lhs, rhs) {
@@ -352,16 +362,12 @@ class LightModeCellViewModel: BaseCellViewModel<LightModeVMContract.Input,
             .flipDirection
           //  .skip(1)
             .subscribeNext { value in
-//                let stringValue = value ? "1" : "0"
-//                self.sendCommand(command: stringValue)
             }.disposed(by: disposeBag)
         
         inputs
             .rotateToogle
          //   .skip(1)
             .subscribeNext { value in
-//                let stringValue = value ? "0" : "1"
-//                self.sendRotateCommand(command: stringValue)
             }.disposed(by: disposeBag)
         
         let images = Preferences.AppDomain.colors?.map {
@@ -437,7 +443,6 @@ class ToogleCellViewModel: BaseCellViewModel<ToogleCellVMContract.Input,
         inputs
             .toogle
             .subscribeNext { value in
-//                self.sendCommand(command: "\(value)")
             }.disposed(by: disposeBag)
         
         setOutput(Output(title: Driver.just(inputs.type.title),

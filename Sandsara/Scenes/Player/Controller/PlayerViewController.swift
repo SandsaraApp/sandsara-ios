@@ -18,6 +18,8 @@ enum PlayingState {
 }
 
 class PlayerViewController: BaseViewController<NoInputParam> {
+    
+    // MARK: Player shared instance to use all the place in the app. Just need to create player one time only
     static var shared: PlayerViewController = {
         let playerVC = UIStoryboard(name: "Main",
                                     bundle: nil)
@@ -30,25 +32,23 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     var index: Int = 0
     var tracks = [DisplayItem]()
     var queues = [DisplayItem]()
-    
     var sliderValue: Float = 0.0
-    
     var currentTrack = DisplayItem()
-    
+    /// Variable to trigger reload UI when user play a new playlist or play a new track
     var isReloaded = false
-    
+    /// Playing mode for play a whole playlist or play a track and add it to current playlist
     var playlingState: PlayingState = .playlist
-    
     var playingTrackCount = 0
     
+    /// Playlist item indicate playlist name, playlist tracks
     var playlistItem: DisplayItem?
     
+    /// A track is selected by user in TrackDetail
     var firstPriorityTrack: DisplayItem?
     
+    /// Timer for progress tracking
     var timer: Timer?
-    
     var lastProgress: Float = 0.0
-    
     @IBOutlet weak var overlayView: UIView!
     var progress = BehaviorRelay<Float>(value: 0)
     
@@ -61,7 +61,6 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     @IBOutlet weak var remainTrackCountLabel: UILabel!
     
     var notSyncedTracks = [DisplayItem]()
-    
     var isPlaying = true
     
     override func viewDidLoad() {
@@ -71,7 +70,9 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // MARK: Reload logic when user play a new playlist or play a new track
         if isReloaded {
+            /// if user want to play a track, pass playingState is track and pass a firstPriorityTrack
             if playlingState == .track {
                 if let firstPriority = firstPriorityTrack {
                     tracks.append(firstPriority)
@@ -84,6 +85,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
                     showTrack(at: self.tracks.count - 1)
                 }
             } else {
+                /// if user want to play a playlist, pass playingState is playlist
                 showTrack(at: index)
                 if playlingState == .playlist {
                     checkMultipleTracks()
@@ -94,6 +96,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
         }
     }
     
+    // MARK: Tableview and UI Setup
     private func setupTableView() {
         tableView.backgroundColor = Asset.background.color
         tableView.separatorStyle = .none
@@ -141,6 +144,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
     }
 }
 
+// MARK: UITableViewDelegate
 extension PlayerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return playingTrackCount > 0 ? 96.0 : 0.0
@@ -158,6 +162,7 @@ extension PlayerViewController: UITableViewDelegate {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlayerHeaderView.identifier) as! PlayerHeaderView
         headerView.reloadHeaderCell(trackDisplay: Driver.just(currentTrack),
                                     trackCount: Driver.just(playingTrackCount))
+        /// Header back button action
         headerView
             .backBtn
             .rx.tap.asDriver()
@@ -167,6 +172,7 @@ extension PlayerViewController: UITableViewDelegate {
         return headerView
     }
     
+    // MARK: Cell selection handler
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let trackInQueue = queues[safe: indexPath.row]
@@ -179,7 +185,7 @@ extension PlayerViewController: UITableViewDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        /// Recalculate header height
         guard let headerView = tableView.tableHeaderView else {return}
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
@@ -190,6 +196,7 @@ extension PlayerViewController: UITableViewDelegate {
     }
 }
 
+// MARK: UITableViewDataSource
 extension PlayerViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -213,6 +220,10 @@ extension PlayerViewController: UITableViewDataSource {
 
 // MARK: - Player Method
 extension PlayerViewController {
+    
+    // MARK: Create playlist function
+    
+    /// Create a playlist file then send to Sandsara
     func createPlaylist() {
         guard playlingState != .showOnly else {
             if timer != nil {
@@ -253,6 +264,7 @@ extension PlayerViewController {
         }.disposed(by: disposeBag)
     }
     
+    // MARK: update UI for user selected track or next track has been played automatically by Sandsara
     func showTrack(at index: Int) {
         DeviceServiceImpl.shared.currentTrackIndex = index
         sliderValue = 0
@@ -268,6 +280,7 @@ extension PlayerViewController {
         }
     }
     
+    // MARK: play user selected track immediately
     func playTrack(at index: Int) {
         FileServiceImpl.shared.updatePositionIndex(index: index + 1) { success in
             if success {
@@ -281,15 +294,16 @@ extension PlayerViewController {
         }
     }
     
+    // MARK: trigger update UI and play action
     func triggerPlayAction(at index: Int) {
         defer {
             showTrack(at: index)
             playTrack(at: index)
         }
-       // DeviceServiceImpl.shared.readDeviceStatus()
         pauseTimer()
     }
     
+    // MARK: Slider touch handle
     @objc func sliderTouchBegan(_ sender: UISlider) {
     }
     
@@ -323,6 +337,7 @@ extension PlayerViewController {
         }
     }
     
+    // MARk: Next btn action
     @objc func nextBtnTap() {
         debugPrint("tapped next")
         if self.index < self.tracks.count - 1 {
@@ -334,6 +349,7 @@ extension PlayerViewController {
         }
     }
     
+    // MARk: Previous btn action
     @objc func prevBtnTap() {
         debugPrint("tapped previous")
         if self.index > 0 {
@@ -345,6 +361,7 @@ extension PlayerViewController {
         }
     }
     
+    // MARK: Add track to queue silently but not play
     func addToQueue1(track: DisplayItem) {
         tracks.append(track)
         if tracks.count > 1 {
@@ -358,6 +375,10 @@ extension PlayerViewController {
         DeviceServiceImpl.shared.currentTracks = tracks
     }
     
+    // MARK: Add track to queue, then
+    
+    /// check if track exist, if exist we will play it immediately, else we will sync to SD Card and play it after the sync progress is completed
+    /// - Parameter track: track need to be check
     func addToQueue(track: DisplayItem) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -425,6 +446,7 @@ extension PlayerViewController {
         }
     }
     
+    // MARK: Reinitial timer after track selection
     func updateProgressTimer() {
         if timer != nil {
             timer?.invalidate()
@@ -448,6 +470,7 @@ extension PlayerViewController {
         updateProgressTimer()
     }
     
+    // MARK: Read progress continously until value is 100
     @objc func updateTimer(_ timer: Timer) {
         bluejay.read(from: PlaylistService.progressOfPath) { (result: ReadResult<String>) in
             switch result {

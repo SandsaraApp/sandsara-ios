@@ -10,6 +10,7 @@ import BetterSegmentedControl
 import RxSwift
 import RxCocoa
 
+// MARK: Custom segment to adapt Figma Design
 class CustomSegmentControl: BetterSegmentedControl {
     private(set) var segmentSelected = BehaviorRelay<Int>(value: 0)
 
@@ -29,11 +30,15 @@ class CustomSegmentControl: BetterSegmentedControl {
     }
 }
 
+// MARK: Library tab
 class LibraryViewController: BaseViewController<NoInputParam> {
-
+    
+    // MARK: Outlet connections
     @IBOutlet weak var segmentControl: CustomSegmentControl!
     @IBOutlet weak var containerView: UIView!
-
+    
+    
+    // MARK: Properties
     private let segmentIndexTrigger = BehaviorRelay<Int>(value: 0)
     private var allTrackVC: AllTrackViewController?
     private var playlistsVC: PlaylistViewController?
@@ -54,6 +59,7 @@ class LibraryViewController: BaseViewController<NoInputParam> {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
+    /// Segment tab init for track and playlist
     private func setupSegment() {
         segmentControl.setStyle(font: FontFamily.Tinos.regular.font(size: 30), titles:  [L10n.tracks, L10n.playlists])
 
@@ -65,7 +71,8 @@ class LibraryViewController: BaseViewController<NoInputParam> {
             }
             .disposed(by: disposeBag)
     }
-
+    
+    /// Init subcontrollers
     private func initControllers() {
         allTrackVC = storyboard?.instantiateViewController(withIdentifier: AllTrackViewController.identifier) as? AllTrackViewController
 
@@ -74,7 +81,10 @@ class LibraryViewController: BaseViewController<NoInputParam> {
         addChildViewController(controller: allTrackVC!, containerView: containerView, byConstraints: true)
 
     }
-
+    
+    
+    /// Update controller when press on segment
+    /// - Parameter i: User's selected controller index
     func updateControllersByIndex(i: Int) {
         self.removeAllChildViewController()
         if i == 0 {
@@ -85,7 +95,8 @@ class LibraryViewController: BaseViewController<NoInputParam> {
             playlistsVC?.viewWillAppearTrigger.accept(())
         }
     }
-
+    
+    /// Show Alert for user to retry API call again
     override func triggerAPIAgain() {
         self.showAlert(title: "Alert", message: "No Internet Connection", preferredStyle: .alert, actions:
                         UIAlertAction(title: "Try Again", style: .default, handler: { _ in

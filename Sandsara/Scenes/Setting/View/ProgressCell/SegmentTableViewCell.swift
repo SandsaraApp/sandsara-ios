@@ -10,11 +10,13 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 
+// MARK: Constants for cell
 private struct Constants {
     static let cellHeight: CGFloat = 29.0
     static let cellWidth: CGFloat = 29.0
 }
 
+// MARK: Constraints for components in cell
 private struct Constraints {
     static let labelHeight = 25.0
     static let commonSpacing = 16.0
@@ -32,6 +34,7 @@ private struct Constraints {
 
 class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
+    // MARK: UI Properties
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var segmentControl: CustomSegmentControl!
     @IBOutlet weak var mainContentViewHeightConstraint: NSLayoutConstraint!
@@ -60,14 +63,12 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBOutlet weak var acceptBtn: UIButton!
     @IBOutlet weak var overlayLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var colorTempSlider: UISlider!
-
     @IBOutlet weak var flipModeTitleLabel: UILabel!
     @IBOutlet weak var toogleSwitch: UISwitch!
     @IBOutlet weak var flipModeView: UIView!
     @IBOutlet weak var rotateModeView: UIView!
     @IBOutlet weak var rotateTitleLabel: UILabel!
     @IBOutlet weak var rotateSwitch: UISwitch!
-
     @IBOutlet var sliderTempHeightConstraint: NSLayoutConstraint!
     
     let cellUpdated = PublishRelay<()>()
@@ -81,6 +82,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
 
     var selectedCell = PublishRelay<(Int, PresetCellViewModel)>()
 
+    // MARK: UI Style and Constraint setup
     override func awakeFromNib() {
         super.awakeFromNib()
         let font = FontFamily.OpenSans.regular.font(size: 18)
@@ -145,12 +147,14 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         colorTempSlider.minimumValue = Constraints.minColorTemp
     }
 
+    // MARK: Binding data and action here
     override func bindViewModel() {
         viewModel.outputs
             .title
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
 
+        // MARK: User selection of Cycle/ Static output
         viewModel.outputs
             .segmentsSelection
             .driveNext { value in
@@ -168,6 +172,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             }
             .disposed(by: disposeBag)
 
+        // MARK: Output of selection for color palette
         viewModel
             .outputs
             .preselectedColor
@@ -178,6 +183,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.colorGradientView.color = $0
             }.disposed(by: disposeBag)
 
+        // MARK: Output of Color palettes response from API
         viewModel.outputs
             .datas
             .map { [Section(model: "", items: $0)] }
@@ -187,6 +193,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             .drive(collectionView.rx.items(dataSource: makeDatasource()))
             .disposed(by: disposeBag)
 
+        // MARK: User selection of cycle /static mode
         segmentControl.segmentSelected
             .map { LightMode(rawValue: $0) ?? .cycle }
             .subscribeNext {
@@ -194,6 +201,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             }
             .disposed(by: disposeBag)
 
+        // MARK: Light speed slider value change event
         lightSpeedSlider
             .rx.value
             .changed
@@ -203,10 +211,12 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.viewModel.sendLightSpeed(value: $0)
             }.disposed(by: disposeBag)
 
+        // MARK: Advanced Setting Navigation
         advanceInfoLabel
             .rx.tap.bind(to: advancedBtnTap)
             .disposed(by: disposeBag)
 
+        // MARK: Open website action
         sandsaraWebLabel.rx.tap.subscribeNext {
             UIApplication.shared
                 .open(URL(string: "https://www.kickstarter.com/projects/edcano/sandsara")!,
@@ -214,7 +224,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                       completionHandler: nil)
         }.disposed(by: disposeBag)
 
-
+        // MARK: User segment selection handle after user select Static on self.segmentControl
         staticColorSegmentControl
             .segmentSelected
             .map { StaticMode(rawValue: $0) }
@@ -236,7 +246,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.layoutIfNeeded()
                 self.cellUpdated.accept(())
         }.disposed(by: disposeBag)
-
+        
+        // MARK: User's color palette selection handler
         collectionView.rx.itemSelected.subscribeNext { [weak self] indexPath in
             guard let self = self else { return }
             defer {
@@ -244,7 +255,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             }
             self.colorGradientView?.color = Preferences.AppDomain.colors?[indexPath.item] ?? ColorModel()
         }.disposed(by: disposeBag)
-
+        
+        // MARK: Accept btn to edit or add new color to user's gradient view
         acceptBtn.rx.tap.subscribeNext {
             self.hideOverlayView()
             if self.colorGradientView.isFirst {
@@ -257,7 +269,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                 self.colorGradientView.updatePointColor(color: self.overlaySliderView.color)
             }
         }.disposed(by: disposeBag)
-
+        
+        // MARK: Delete btn to delete color from user's gradient view
         deleteBtn.rx.tap.subscribeNext {
             self.hideOverlayView()
             if self.colorGradientView.updateCustomPoint {
@@ -268,7 +281,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         viewModel.outputs.flipDirection.drive(toogleSwitch.rx.isOn).disposed(by: disposeBag)
 
         viewModel.outputs.rotateToogle.drive(rotateSwitch.rx.isOn).disposed(by: disposeBag)
-
+        
+        // MARK: Led strip direction toogle
         toogleSwitch.rx.isOn
             .changed
            // .skip(1)
@@ -286,7 +300,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
                     }
                 }
         }.disposed(by: disposeBag)
-
+        
+        // MARK: Rotate mode toogle
         rotateSwitch.rx.isOn
             .changed
            // .skip(1)
@@ -306,7 +321,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             }.disposed(by: disposeBag)
 
         staticColorUpdateView.backgroundColor = UIColor(temperature: 2000.0)
-
+        
+        // MARK: Color temp slider value change
         colorTempSlider
             .rx.value.changed
             .subscribeNext { temperature in
@@ -331,6 +347,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             })
     }
 
+    // MARK: Update contraints for user cycle/ static mode and trigger controller to update layout correctly
     private func contraints(_ mode: LightMode) {
         let isStatic = mode == .staticMode
         mainContentViewHeightConstraint.constant = self.lightModeHeight(isStatic: isStatic)
@@ -347,6 +364,10 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         cellUpdated.accept(())
     }
 
+    
+    /// Update contraints for user cycle/ static mode and trigger controller to update layout correctly
+    /// - Parameter isStatic: if isStatic is true, then show a view contain Static Segment control and color temp / Static color HSB layer
+    /// - Returns: height of view
     private func lightModeHeight(isStatic: Bool) -> CGFloat {
         if isStatic {
             let height = Constraints.segmentHeight +
@@ -368,7 +389,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
             return customColorView.intrinsicContentSize.height + 30.0
         }
     }
-
+    
+    // MARK: Static HSB Layer view handler
     @IBAction func hsbaSliderGroupValueChanged(_ sender: HSBASliderGroup) {
         updateBackgroundColor()
         sendColor()
@@ -387,7 +409,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         staticColorUpdateView.backgroundColor = customColorView.color
         print(customColorView.colorFromSliders().hexString())
     }
-
+    
+    // MARK: User's gradient HSB Layer handler
     @IBAction func overlaySliderGroupValueChanged(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
@@ -436,6 +459,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         }
     }
 
+    // MARK: Upload custom palette for static color
     func sendColor() {
         guard let staticColorViewColor = self.staticColorUpdateView.backgroundColor else { return }
         let position = Data([0, 255].map { UInt8($0) })
@@ -455,6 +479,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
         }
     }
 
+    // MARK: Reset value of Static color UI
     func resetValue(isColorTemp: Bool) {
         if isColorTemp {
             colorTempSlider.value = Constraints.minColorTemp
@@ -476,6 +501,7 @@ extension SegmentTableViewCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: Color gradient view Delegate
 extension SegmentTableViewCell: ColorGradientViewDelegate {
     func firstPointTouch(color: UIColor) {
         showOverlayView(at: 27.0, by: color)

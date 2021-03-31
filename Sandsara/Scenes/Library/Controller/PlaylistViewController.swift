@@ -17,18 +17,18 @@ enum ControllerMode {
 
 class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
+    // MARK: Outlet connections
     @IBOutlet private weak var tableView: UITableView!
-
+    
+    // MARK: Properties
+    /// API trigger, on this case we will fetch from local DB
     let viewWillAppearTrigger = PublishRelay<()>()
-
+    /// ControllerMode to indicate the API and Data display
     var mode: ControllerMode = .local
-
     typealias Section = SectionModel<String, PlaylistCellViewModel>
     typealias DataSource = RxTableViewSectionedReloadDataSource<Section>
     private lazy var dataSource: DataSource = self.makeDataSource()
 
-
-    private var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
 
     override func setupViewModel() {
         setupTableView()
@@ -36,19 +36,9 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         viewWillAppearTrigger.accept(())
     }
 
-    @objc func reloadData() {
-        viewWillAppearTrigger.accept(())
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewWillAppearTrigger.accept(())
-      //  NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: reloadNoti, object: nil)
     }
 
     override func bindViewModel() {
@@ -58,7 +48,8 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
             
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-
+        
+        // MARK: Tableview selection handler
         Observable
             .zip(
                 tableView.rx.itemSelected,
@@ -75,7 +66,8 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         viewModel.isLoading
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
-
+        
+        // MARK: Tableview delete cell handler
         tableView.rx.itemDeleted
             .filter { $0.row != 0 && !self.viewModel.isEmpty }
             .subscribeNext { [weak self] indexPath in
@@ -84,10 +76,10 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
         }.disposed(by: disposeBag)
     }
 
+    // MARK: Tableview setup
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
-
         tableView.register(PlaylistTableViewCell.nib, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         tableView.backgroundColor = Asset.background.color
         tableView
@@ -110,6 +102,7 @@ class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputPar
 
 }
 
+// MARK: UITableViewDelegate, calculate height for cell and header, footer
 extension PlaylistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0

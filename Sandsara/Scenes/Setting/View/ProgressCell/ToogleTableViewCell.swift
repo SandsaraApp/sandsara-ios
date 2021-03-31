@@ -23,6 +23,7 @@ class ToogleTableViewCell: BaseTableViewCell<ToogleCellViewModel> {
         viewModel.outputs.toogle.drive(toogleSwitch.rx.isOn).disposed(by: disposeBag)
         viewModel.outputs.title.drive(titleLabel.rx.text).disposed(by: disposeBag)
 
+        // MARK: Toogle switch handle logic
         toogleSwitch
             .rx.isOn
             .changed

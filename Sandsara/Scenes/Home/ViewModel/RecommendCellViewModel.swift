@@ -19,6 +19,7 @@ enum RecommendCellVMContract {
     }
 }
 
+// MARK: Recommended Cell Item
 class RecommendCellViewModel: BaseCellViewModel<RecommendCellVMContract.Input,
                                                 RecommendCellVMContract.Output> {
     override func transform() {
@@ -39,6 +40,7 @@ enum RecommendTableViewCellVMContract {
     }
 }
 
+// MARK: Recommended TableViewCell VM, can show recommended playlist or recommended track, for more detail please read on BrowserViewModel and DisplayItem
 class RecommendTableViewCellViewModel: BaseCellViewModel<RecommendTableViewCellVMContract.Input,
                                                          RecommendTableViewCellVMContract.Output> {
 

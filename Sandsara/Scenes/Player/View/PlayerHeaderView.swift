@@ -33,7 +33,8 @@ class PlayerHeaderView: UITableViewHeaderFooterView {
         nextByLabel.font = FontFamily.OpenSans.regular.font(size: 14)
         nowPlayingLabel.text = L10n.nowPlaying
     }
-
+    
+    // MARK: Reload function when now playing track is changed
     func reloadHeaderCell(trackDisplay: Driver<DisplayItem>, trackCount: Driver<Int>) {
         trackDisplay.driveNext { [weak self] track in
             self?.songTitleLabel.text = track.title
@@ -45,7 +46,8 @@ class PlayerHeaderView: UITableViewHeaderFooterView {
             self.updateConstraints(condition: $0 > 0)
         }.disposed(by: disposeBag)
     }
-
+    
+    // MARK: if the track is empty then the condition is false
     func updateConstraints(condition: Bool) {
         nextByLabel.isHidden = !condition
         nextByLabelTopConstraint.constant = condition ? 41.0 : 0.0

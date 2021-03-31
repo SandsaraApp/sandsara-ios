@@ -10,8 +10,10 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 
+// MARK: Browse tab / Home Tab
 class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>, UISearchBarDelegate {
-
+    
+    // MARK: Outlet connections
     @IBOutlet private weak var tableView: UITableView!  {
         didSet {
             tableView.tableFooterView = UIView()
@@ -25,8 +27,9 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             tableView.separatorStyle = .none
         }
     }
-
     @IBOutlet weak var searchView: UIView!
+    
+    // MARK: Properites
     private let sc = UISearchController(searchResultsController: nil)
     private var viewWillAppearTrigger = PublishRelay<()>()
     private var inputTrigger = BehaviorRelay<String?>(value: nil)
@@ -40,21 +43,29 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSearchBar()
-        viewWillAppearTrigger.accept(())
+        /// Search bar action after press on search bar
         sc.searchBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goSearchVC)))
         sc.searchBar.isUserInteractionEnabled = true
         sc.searchBar.delegate = self
         DeviceServiceImpl.shared.readSensorValues()
+        
+        /// API Trigger Call
+        viewWillAppearTrigger.accept(())
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        /// Reload miniplayer after the board is connect or disconnect
         NotificationCenter.default.addObserver(self, selector: #selector(updateControllers), name: reloadTab, object: nil)
+        
+        /// Reload miniplayer after finish read all the track are playing on Sandsara
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPlayer), name: reloadPlaylist, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        /// Block to show the ConnectionGuide if the phone hasn't connected to Sandsara
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
             once.run {
                 defer {
@@ -66,12 +77,14 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             }
         }
     }
-
+    
+    // MARK: Action when press on searchbar
     @objc func goSearchVC() {
         let vc = storyboard?.instantiateViewController(withIdentifier: SearchViewController.identifier) as! SearchViewController
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    // MARK: Reload player with the current playlist read from Sandsara
     @objc func reloadPlayer() {
         if !DeviceServiceImpl.shared.currentTracks.isEmpty {
             DispatchQueue.main.async {
@@ -96,7 +109,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             }
         }
     }
-
+    
+    // MARK: Update miniplayer bar if the state is busy or connected
     @objc func updateControllers() {
         if !bluejay.isConnected {
             DeviceServiceImpl.shared.cleanup()
@@ -142,7 +156,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             .drive(loadingActivity.rx.isAnimating)
             .disposed(by: disposeBag)
     }
-
+    
+    // MARK: Search Bar Setup and Handle Method
     private func setUpSearchBar() {
         sc.dimsBackgroundDuringPresentation = false
         searchBarStyle(sc.searchBar)
@@ -153,7 +168,10 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
         sc.searchBar.endEditing(true)
         sc.isActive = false
     }
-
+    
+    
+    /// Setup SearchBar Style
+    /// - Parameter searchBar: searchBar you want to modify
     private func searchBarStyle(_ searchBar: UISearchBar) {
         searchBar.placeholder = "Search"
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
@@ -184,6 +202,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
             })
     }
 
+    //MARK: Action after press on a cell on Playlist Section or Track Section
     private func goDetail(item: DisplayItem, index: Int, viewModel: RecommendTableViewCellViewModel) {
         if item.isPlaylist {
             let trackList = self.storyboard?.instantiateViewController(withIdentifier: TrackListViewController.identifier) as! TrackListViewController
@@ -205,7 +224,8 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
                        UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         )
     }
-
+    
+    //MARK: Show connection guide VC from the block called in viewDidAppear
     private func showConnectionVC() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: ConnectionGuideViewController.identifier) as! ConnectionGuideViewController
         let navVC = UINavigationController(rootViewController: vc)
@@ -225,6 +245,7 @@ class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>,
     }
 }
 
+// MARK: UITableViewDelegate, calculate height for cell and header, footer
 extension BrowseViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellHeightsDictionary[indexPath] = cell.frame.size.height

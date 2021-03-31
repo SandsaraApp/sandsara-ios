@@ -41,6 +41,7 @@ class PlayerBarView: UIView {
 
 class PlayerBarViewController: LNPopupCustomBarViewController {
     
+    // MARK: Outlet connections
     @IBOutlet weak var connectionBar: UIView!
     @IBOutlet weak var playerBar: UIView!
     @IBOutlet weak var connectionTitleLabel: UILabel!
@@ -51,7 +52,6 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
-    
     @IBOutlet weak var playerContentView: UIView!
     
     private let disposeBag = DisposeBag()
@@ -77,7 +77,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
         heightConstraint.constant = 60
         self.preferredContentSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
-    
+    // MARK: UI Style and Constraint setup
     override func viewDidLoad() {
         super.viewDidLoad()
         connectionTitleLabel.font = FontFamily.OpenSans.bold.font(size: 12)
@@ -85,11 +85,8 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
         authorLabel.font = FontFamily.OpenSans.light.font(size: 12)
         subTitleLabel.font = FontFamily.OpenSans.light.font(size: 12)
         retryBtn.titleLabel?.font = FontFamily.OpenSans.regular.font(size: 12)
-        
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         updateConstraint()
-        
         retryBtn.rx.tap.asDriver().driveNext { [weak self] in
             self?.showConnectionVC()
         }.disposed(by: disposeBag)
@@ -127,7 +124,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
             self.pauseButton.setImage(Asset.play.image, for: .normal)
         }
     }
-    
+    // MARK: update content for miniplayer bar by state
     override func popupItemDidUpdate() {
         if connectionBar != nil {
             if PlayerViewController.shared.isPlaying {
@@ -151,7 +148,6 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.retryBtn.isHidden = true
                         self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 0
-//                        self.subTitleLabel.isHidden = true
                     case .calibrating:
                         self.stackView.spacing = 14
                         self.playerBar.isHidden = true
@@ -160,7 +156,6 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.retryBtn.isHidden = true
                         self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 0
-                     //   self.subTitleLabel.isHidden = true
                     case .sleep:
                         self.stackView.spacing = 14
                         self.playerBar.isHidden = true
@@ -169,7 +164,6 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.retryBtn.isHidden = true
                         self.subTitleLabel.alpha = 0
                         self.retryBtn.alpha = 0
-                      //  self.subTitleLabel.isHidden = true
                     case .connected:
                         self.stackView.spacing = 14
                         self.playerBar.isHidden = true
@@ -181,7 +175,6 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
                         self.retryBtn.isHidden = true
                         self.retryBtn.alpha = 0
                         self.subTitleLabel.alpha = 1
-                       // self.subTitleLabel.isHidden = false
                     case .noConnect:
                         self.stackView.spacing = 14
                         self.playerBar.isHidden = true

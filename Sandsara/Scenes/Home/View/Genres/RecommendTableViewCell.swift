@@ -17,13 +17,14 @@ private struct Constants {
 }
 
 class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel> {
-
+    
+    // MARK: Outlet Connections
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var titleLabel: UILabel!
 
+    // MARK: Properties
     typealias Section = SectionModel<String, RecommendCellViewModel>
     typealias DataSource = RxCollectionViewSectionedReloadDataSource<Section>
-
     var selectedCell = PublishRelay<(Int, DisplayItem)>()
 
     override func awakeFromNib() {
@@ -36,7 +37,10 @@ class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel>
         collectionView.register(RecommendCell.nib, forCellWithReuseIdentifier: RecommendCell.identifier)
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
     }
+    
     override func bindViewModel() {
+        
+        /// Binding Recommended tracks or Recommended Playlist result here
         viewModel.outputs
             .dataSources
             .map { [Section(model: "", items: $0)] }
@@ -47,7 +51,8 @@ class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel>
             .outputs.title
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
-
+        
+        /// Cell section handler and trigger back to controller when a cell is selected
         Observable
             .zip(
                 collectionView.rx.itemSelected,
@@ -74,6 +79,7 @@ class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel>
     }
 }
 
+// MARK: UICollectionViewFlowLayout, Cell size calculation
 extension RecommendTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: Constants.cellWidth, height: Constants.cellHeight)

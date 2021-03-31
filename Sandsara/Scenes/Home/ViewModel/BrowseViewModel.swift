@@ -10,10 +10,13 @@ import RxSwift
 import RxCocoa
 import UIKit
 
+// MARK: DiscoverSection for recommended playlists/ tracks
 enum DiscoverSection: CaseIterable {
     case recommendedPlaylists
     case recommendedTracks
 
+    
+    /// Title of section
     var title: String {
         switch self {
         case .recommendedPlaylists:
@@ -22,7 +25,9 @@ enum DiscoverSection: CaseIterable {
             return L10n.recommendedTracks
         }
     }
-
+    
+    
+    /// Section height
     var sectionHeight: CGFloat {
         return 54.0
     }
@@ -43,19 +48,17 @@ enum BrowseVMContract {
 class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output> {
 
     private let apiService: SandsaraDataServices
-
     private let playlists = BehaviorRelay<[DisplayItem]>(value: [])
     private let tracks = BehaviorRelay<[DisplayItem]>(value: [])
-
     private let cachedPlaylists = BehaviorRelay<[DisplayItem]>(value: [])
     private let cachedTracks = BehaviorRelay<[DisplayItem]>(value: [])
-    
     private var datasources: [RecommendTableViewCellViewModel]
 
-    let completion = BlockOperation {
-        print("all done")
-    }
-
+    
+    /// ViiewModel custom initial function
+    /// - Parameters:
+    ///   - apiService: put data services here
+    ///   - inputs: init the input for viewmodel, for example BrowseVMContract.Input(searchText: inputTrigger, cancelSearch: cancelSearchTrigger, viewWillAppearTrigger: viewWillAppearTrigger)
     init(apiService: SandsaraDataServices, inputs: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Output>.Input) {
         self.apiService = apiService
         self.datasources = [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract
@@ -66,22 +69,12 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
     }
 
     override func transform() {
-        inputs
-            .searchText
-            .subscribeNext { title in
-                self.handleSearch(title: title ?? "")
-            }.disposed(by: disposeBag)
-
-        inputs
-            .cancelSearch
-            .subscribeNext { [weak self] in
-                self?.resetSearch()
-        }.disposed(by: disposeBag)
-
+        // MARK: API trigger functon
         inputs.viewWillAppearTrigger
             .subscribeNext { [weak self] in
             guard let self = self else { return }
             self.emitEventLoading(true)
+            /// Get recommended playlist first then do cache in local, and then call recommended tracks
             self.apiService
                 .getRecommendedPlaylists(option: self.apiService.getServicesOption(for: .recommendedplaylist))
                 .asObservable()
@@ -101,34 +94,11 @@ class BrowseViewModel: BaseViewModel<BrowseVMContract.Input, BrowseVMContract.Ou
                 }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
 
+        /// Datasource combine the latest data of recommended playlists and recommended tracks
         let datasources = Driver.combineLatest(self.playlists.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendedPlaylists ?? []).map { DisplayItem(playlist: $0)}), self.tracks.asDriver(onErrorJustReturn: (Preferences.PlaylistsDomain.recommendTracks ?? []).map { DisplayItem(track: $0)})).map {
             return [RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: $0)), RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedTracks, items: $1))]
         }
 
         setOutput(Output(datasources: datasources))
-    }
-
-    private func handleSearch(title: String) {
-        emitEventLoading(false)
-        self.playlists.accept(self.cachedPlaylists.value.filter { $0.title.contains(title) })
-        let playlistVM = RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedPlaylists, items: self.playlists.value))
-        self.tracks.accept(self.cachedTracks.value.filter { $0.title.contains(title) })
-        let trackVM = RecommendTableViewCellViewModel(inputs: RecommendTableViewCellVMContract.Input(section: .recommendedTracks, items: self.tracks.value))
-        self.datasources = [playlistVM, trackVM]
-    }
-
-    private func handleDatas(response1: [Playlist], response2: [Track]) {
-        let playlists = response1.map { DisplayItem(playlist: $0)}
-        self.playlists.accept(playlists)
-        let tracks = response2.map { DisplayItem(track: $0) }
-        self.tracks.accept(tracks)
-        self.cachedPlaylists.accept(playlists)
-        self.cachedTracks.accept(tracks)
-        emitEventLoading(false)
-    }
-
-    private func resetSearch() {
-        self.playlists.accept(self.cachedPlaylists.value)
-        self.tracks.accept(self.cachedTracks.value)
     }
 }
