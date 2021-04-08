@@ -17,7 +17,7 @@ enum ControllerMode {
 
 class PlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: Properties

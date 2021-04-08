@@ -13,7 +13,7 @@ import RxDataSources
 // MARK: Browse tab / Home Tab
 class BrowseViewController: BaseVMViewController<BrowseViewModel, NoInputParam>, UISearchBarDelegate {
     
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var tableView: UITableView!  {
         didSet {
             tableView.tableFooterView = UIView()

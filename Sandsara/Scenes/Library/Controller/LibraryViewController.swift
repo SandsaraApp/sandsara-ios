@@ -33,7 +33,7 @@ class CustomSegmentControl: BetterSegmentedControl {
 // MARK: Library tab
 class LibraryViewController: BaseViewController<NoInputParam> {
     
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet weak var segmentControl: CustomSegmentControl!
     @IBOutlet weak var containerView: UIView!
     

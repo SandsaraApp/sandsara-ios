@@ -207,6 +207,7 @@ class ColorGradientView: UIView {
     
     weak var delegate: ColorGradientViewDelegate?
     
+    // MARK: UI Setup and Constraints
     override func awakeFromNib() {
         super.awakeFromNib()
         gradientView = GradientView()
@@ -258,6 +259,7 @@ class ColorGradientView: UIView {
         secondPoint.x = gradientView?.frame.size.width ?? 0
     }
     
+    // MARK: Function to execute after user select a color on Color grid view
     func selectColor() {
         if addCustomPoint {
             return;
@@ -324,18 +326,21 @@ class ColorGradientView: UIView {
         colorThumbView.alpha = isShow ? 1: 0
     }
     
+    // MARK: First point of gradient view touch
     @objc func showFirstPoint() {
         cleanup(isShowAll: false)
         isFirst = true
         delegate?.firstPointTouch(color: cachedGradients.first ?? .clear)
     }
     
+    // MARK: Second point of gradient view touch
     @objc func showSecondPoint() {
         cleanup(isShowAll: false)
         isLast = true
         delegate?.secondPointTouch(color: cachedGradients.last ?? .clear)
     }
     
+    // MARK: Gradient point touch gesture
     @objc func showGradientGesture(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: gradientView)
         debugPrint("Touch point \(point.x), \(point.y)")
@@ -362,6 +367,7 @@ class ColorGradientView: UIView {
         }
     }
     
+    // MARK: Function to reset all the flags after user edit an old color or add new color point
     func cleanup(isShowAll: Bool) {
         isFirst = false
         isLast = false
@@ -376,6 +382,7 @@ class ColorGradientView: UIView {
         }
     }
     
+    // MARK: Update first point color after user edit a color on First point
     func updateFirstColor(color: UIColor) {
         var colors = self.cachedGradients
         colors.removeFirst()
@@ -386,6 +393,7 @@ class ColorGradientView: UIView {
         cleanup(isShowAll: true)
     }
     
+    // MARK: Update second point color after user edit a color on First point
     func updateSecondColor(color: UIColor) {
         var colors = self.cachedGradients
         colors.removeLast()
@@ -397,10 +405,7 @@ class ColorGradientView: UIView {
         cleanup(isShowAll: true)
     }
     
-    func updateColor(color: UIColor) {
-        cleanup(isShowAll: true)
-    }
-    
+    // MARK: Calculate point arrays and locations of gradient after we add the new color to our gradients
     func addColor(color: UIColor) {
         addPoint(color: color, xPoint: showPoint.x)
         var updatedColors = cachedGradients
@@ -430,6 +435,7 @@ class ColorGradientView: UIView {
         cleanup(isShowAll: true)
     }
     
+    // MARK: Update user's selected color point ( except First and Second point)
     func updatePointColor(color: UIColor) {
         var updatedColors = cachedGradients
         for i in 0 ..< pointViews.count {
@@ -447,8 +453,10 @@ class ColorGradientView: UIView {
         cleanup(isShowAll: true)
     }
     
+    // MARK: Remove user's selected color point ( except First and Second point)
     func removeColor(color: UIColor) {
         var updatedColors = cachedGradients
+        /// Recalculate locations and colors on gradients
         for i in 0 ..< pointViews.count {
             if pointViews[i].currentPoint?.x == showPoint.x {
                 pointViews[i].removeFromSuperview()

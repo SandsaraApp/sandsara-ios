@@ -29,7 +29,7 @@ extension ScanDiscovery {
 }
 // MARK: Device Cell
 class DeviceTableViewCell: BaseTableViewCell<DeviceCellViewModel> {
-    //MARK: Outlet connections
+    //MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var indicatorButton: LoadingButton!
 

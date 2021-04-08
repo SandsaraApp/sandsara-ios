@@ -12,7 +12,7 @@ import RxCocoa
 
 class AllTrackViewController: BaseVMViewController<AllTracksViewModel, NoInputParam> {
 
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var tableView: UITableView!
 
     // MARK: Properties

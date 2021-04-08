@@ -50,7 +50,7 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
         }
     }
     
-    // MARK: - UI Outlet Connections
+    // MARK: - UI Outlet connections between swift file and xib/ storyboard file
     @IBOutlet weak var titleSyncLabel: UILabel!
     @IBOutlet weak var downloadBtn: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
@@ -124,8 +124,6 @@ class DownloadFirmwareTableViewCell: BaseTableViewCell<DownloadFirmwareViewModel
     /// Download button action
     func triggerDownload() {
         guard let file = viewModel.inputs.file else { return }
-
-
         let item = DisplayItem(file: file)
 
         guard let url = URL(string: item.fileURL) else { return }

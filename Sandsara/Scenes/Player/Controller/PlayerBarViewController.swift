@@ -10,7 +10,7 @@ import LNPopupController
 import RxSwift
 import RxCocoa
 
-
+// MARK: Player Bar UI State for every case we have in the app ( sync file, calibrating, ...)
 enum PlayerState {
     case noConnect
     case connected
@@ -41,7 +41,7 @@ class PlayerBarView: UIView {
 
 class PlayerBarViewController: LNPopupCustomBarViewController {
     
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet weak var connectionBar: UIView!
     @IBOutlet weak var playerBar: UIView!
     @IBOutlet weak var connectionTitleLabel: UILabel!
@@ -124,7 +124,7 @@ class PlayerBarViewController: LNPopupCustomBarViewController {
             self.pauseButton.setImage(Asset.play.image, for: .normal)
         }
     }
-    // MARK: update content for miniplayer bar by state
+    // MARK: update content for miniplayer bar by state. For the state, can read more on PlayerState enum
     override func popupItemDidUpdate() {
         if connectionBar != nil {
             if PlayerViewController.shared.isPlaying {

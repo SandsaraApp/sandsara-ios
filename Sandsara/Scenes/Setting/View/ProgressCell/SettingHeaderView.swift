@@ -11,7 +11,8 @@ import UIKit
 
 class SettingHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var titleLabel: UILabel!
-
+    
+    // MARK: UI Setup
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundView(color: Asset.background.color)

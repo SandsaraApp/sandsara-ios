@@ -108,6 +108,7 @@ class PlayerViewController: BaseViewController<NoInputParam> {
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         
+        // MARK: Player control action
         nextBtn.addTarget(self, action: #selector(nextBtnTap), for: .touchUpInside)
         prevBtn.addTarget(self, action: #selector(prevBtnTap), for: .touchUpInside)
         trackProgressSlider.minimumValue = 0
@@ -117,11 +118,13 @@ class PlayerViewController: BaseViewController<NoInputParam> {
             trackProgressSlider.setThumbImage(Asset.thumbs.image, for: state)
         }
         
+        // MARK: Track progress slider gesture
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchValueChanged(_:)), for: .valueChanged)
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchBegan(_:)), for: .touchDown)
         trackProgressSlider.addTarget(self, action: #selector(sliderTouchEnded(_:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
         trackProgressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
         
+        // MARK: Play btn action trigger
         playBtn.rx.tap.asDriver().driveNext { [weak self] in
             guard let self = self else { return }
             if self.isPlaying {
@@ -226,6 +229,8 @@ extension PlayerViewController {
     /// Create a playlist file then send to Sandsara
     func createPlaylist() {
         guard playlingState != .showOnly else {
+            /// If we add to queue only, we need to resume the timer to read progress again, to achieve the correct UI State for player, for the case we first open the app and we go to the player
+            /// The Default mode we open the player by tap the miniplayer first time is showOnly
             if timer != nil {
                 timer?.invalidate()
                 timer = nil
@@ -233,6 +238,10 @@ extension PlayerViewController {
             timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateTimer(_:)), userInfo: nil, repeats: true)
             return
         }
+        
+        /*
+         Line 245 to 255, create playlist file by playlist name
+         */
         let fileNames = tracks.map {
             $0.fileName
         }.joined(separator: "\r\n") 
@@ -245,7 +254,11 @@ extension PlayerViewController {
             FileServiceImpl.shared.writeString(string: fileNames, fileHandle: handle)
         }
         
+        /// Trigger send file playlist file
         FileServiceImpl.shared.sendFiles(fileName: filename, extensionName: fileExtension, isPlaylist: true)
+        /// After the send playlist is executed complety, sendSuccess will emit true, then we can trigger the playing behavior for Sandsara
+        /// If we play a single track, a selected path will be a last track's index we add into the array
+        /// If we play a playlist, a selected path will be a first index of the array
         FileServiceImpl.shared.sendSuccess.subscribeNext {
             if $0 {
                 if self.isReloaded {
@@ -393,10 +406,11 @@ extension PlayerViewController {
         FileServiceImpl.shared.checkFileExistOnSDCard(name: track.fileName) { isExisted in
             if isExisted { 
                 DispatchQueue.main.async {
-                    // self.overlayView.isHidden = true
+                    /// if all the tracks is synced to Sd card of sandsara, call createPlaylist immediately to trigger playing behavior
                     self.createPlaylist()
                 }
             } else {
+                /// show overlay for sync files
                 DispatchQueue.main.async {
                     (UIApplication.topViewController()?.tabBarController?.popupBar.customBarViewController as? PlayerBarViewController)?.state = .busy
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: OverlaySendFileViewController.identifier) as! OverlaySendFileViewController
@@ -427,9 +441,11 @@ extension PlayerViewController {
             switch result {
             case .success:
                 print("checked all")
+                /// if all the tracks is synced to Sd card of sandsara, call createPlaylist immediately to trigger playing behavior
                 if self.notSyncedTracks.isEmpty {
                     self.createPlaylist()
                 } else {
+                    /// Stop reading progress and after that show overlay for sync files
                     self.progress.accept(0)
                     self.pauseTimer()
                     DispatchQueue.main.async {
@@ -482,9 +498,10 @@ extension PlayerViewController {
                     self.lastProgress = 100
                 }
                 if float < self.lastProgress {
-                    // value is resetted
+                    /// value is resetted
                     if self.lastProgress == 100 && float == 0 {
                         defer {
+                            /// call after we update the UI completely ( change track , reset to play track number 1)
                             self.readProgress()
                         }
                         self.progress.accept(0)

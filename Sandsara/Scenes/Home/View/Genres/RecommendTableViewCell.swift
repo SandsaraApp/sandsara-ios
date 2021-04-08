@@ -18,7 +18,7 @@ private struct Constants {
 
 class RecommendTableViewCell: BaseTableViewCell<RecommendTableViewCellViewModel> {
     
-    // MARK: Outlet Connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var titleLabel: UILabel!
 

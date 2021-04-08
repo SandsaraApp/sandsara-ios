@@ -13,6 +13,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
     @IBOutlet private weak var progressNameLabel: UILabel!
     @IBOutlet private weak var progressSlider: CustomSlider!
 
+    // MARK: UI Setup
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
@@ -23,11 +24,17 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
             progressSlider.setThumbImage(Asset.thumbs.image, for: state)
         }
     }
-
+    
+    // MARK: UI Binding function with ProgressCellViewModel
     override func bindViewModel() {
+        
+        // MARK: Max and Min value setup for different kind of Slider type. For the type, please look at SettingItemType -> sliderValue
+        /// sliderValue.0 stand for min range, sliderValue.1 stand for max range
         progressSlider.maximumValue = viewModel.inputs.type.sliderValue.1
         progressSlider.minimumValue = viewModel.inputs.type.sliderValue.0
  
+        
+        /// Cell Title base on SettingItemType
         viewModel
             .outputs
             .title
@@ -47,7 +54,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
         progressSlider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sliderTapped(_:))))
     }
     
-    
+    // MARK: User tap gesture on slider . After the touch gesture is ended, we will send the latest value to Sandsara
     @objc func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
         guard let slider = gestureRecognizer.view as? UISlider else { return }
         let pointTapped = gestureRecognizer.location(in: slider)
@@ -59,6 +66,7 @@ class ProgressTableViewCell: BaseTableViewCell<ProgressCellViewModel> {
         viewModel.inputs.progress.accept(Float(newValue).rounded())
     }
     
+    // MARK: User touch gesture tracking. After the finger drag is end, we will send the latest value to Sandsara
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {

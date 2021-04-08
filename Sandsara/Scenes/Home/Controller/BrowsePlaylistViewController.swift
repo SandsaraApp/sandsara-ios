@@ -12,7 +12,7 @@ import RxCocoa
 
 class BrowsePlaylistViewController: BaseVMViewController<PlaylistViewModel, NoInputParam> {
 
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noResultView: UIStackView!
     

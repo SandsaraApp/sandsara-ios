@@ -414,6 +414,8 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBAction func overlaySliderGroupValueChanged(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        
+        /// if brightness is lower than 0.16, the color is black, so we need to set a border for user to see the color
         if overlaySliderView.color.hsba().brightness < 0.16 {
             overlayLineView.layer.borderWidth = 0.5
             overlayLineView.layer.borderColor = Asset.primary.color.cgColor
@@ -430,6 +432,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBAction func overlaySliderGroupTouchDown(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        /// if brightness is lower than 0.16, the color is black, so we need to set a border for user to see the color
         if overlaySliderView.color.hsba().brightness < 0.16 {
             overlayLineView.layer.borderWidth = 0.5
             overlayLineView.layer.borderColor = Asset.primary.color.cgColor
@@ -446,6 +449,7 @@ class SegmentTableViewCell: BaseTableViewCell<LightModeCellViewModel> {
     @IBAction func overlaySliderGroupTouchUpInside(_ sender: HSBASliderGroup) {
         overlayColorUpdatedView.backgroundColor = overlaySliderView.color
         overlayLineView.backgroundColor = overlaySliderView.color
+        /// if brightness is lower than 0.16, the color is black, so we need to set a border for user to see the color
         if overlaySliderView.color.hsba().brightness < 0.16 {
             overlayLineView.layer.borderWidth = 0.5
             overlayLineView.layer.borderColor = Asset.primary.color.cgColor

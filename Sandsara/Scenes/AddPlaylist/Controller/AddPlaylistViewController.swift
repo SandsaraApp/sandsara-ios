@@ -12,7 +12,7 @@ import RxDataSources
 import SVProgressHUD
 
 class AddPlaylistViewController: BaseVMViewController<AddPlaylistViewModel, NoInputParam> {
-    // MARK: Outlet connections
+    // MARK: Outlet connections between swift file and xib/ storyboard file
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.separatorStyle = .none
