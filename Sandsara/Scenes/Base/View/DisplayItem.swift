@@ -140,5 +140,16 @@ struct DisplayItem {
         self.fileName = file.filename
         self.trackId = file.id
     }
+    
+    /// SD Card Track
+    init(name: String) {
+        self.title = name
+        self.author = ""
+        self.thumbnail = ""
+        self.id = 0
+        self.isPlaylist = false
+        self.fileName = name
+        
+    }
 }
 

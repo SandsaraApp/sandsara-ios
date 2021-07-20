@@ -542,7 +542,7 @@ class DataLayer {
                 }
             }
         }
-        return DisplayItem(track: Track(id: 0, title: name, trackId: "", thumbnail: nil, author: name, file: nil))
+        return DisplayItem(name: name)
     }
     
     static func createSyncedPlaylist(playlist: DisplayItem) -> Bool {
