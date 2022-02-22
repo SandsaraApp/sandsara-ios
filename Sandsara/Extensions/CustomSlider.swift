@@ -1,15 +1,8 @@
-//
-//  CustomSlider.swift
-//  Sandsara
-//
-//  Created by Tín Phan on 04/02/2021.
-//
-
 import UIKit
 
 class CustomSlider: UISlider {
-    
-    private var toolTip: ToolTipPopupView?
+
+    private var tool_tip: ToolTipPopupView?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,10 +11,10 @@ class CustomSlider: UISlider {
     }
     
     private func initToolTip() {
-        toolTip = ToolTipPopupView.init(frame: CGRect.zero)
-        toolTip?.backgroundColor = UIColor.clear
-        toolTip?.draw(CGRect.zero)
-        self.addSubview(toolTip!)
+        tool_tip = ToolTipPopupView.init(frame: CGRect.zero)
+        tool_tip?.backgroundColor = UIColor.clear
+        tool_tip?.draw(CGRect.zero)
+        self.addSubview(tool_tip!)
     }
     
     override func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
@@ -29,8 +22,8 @@ class CustomSlider: UISlider {
         let knobRect = super.thumbRect(forBounds: bounds, trackRect: rect, value: value)
         
         let popupRect = knobRect.offsetBy(dx: 0, dy: -(knobRect.size.height))
-        toolTip?.frame = popupRect.offsetBy(dx: 0, dy: 0)
-        toolTip?.setValue(value: self.value)
+        tool_tip?.frame = popupRect.offsetBy(dx: 0, dy: 0)
+        tool_tip?.setValue(value: self.value)
         
         return knobRect
     }
@@ -48,14 +41,14 @@ class ToolTipPopupView: UIView {
             paraStyle.lineBreakMode = .byWordWrapping
             paraStyle.alignment = .center
             
-            let textAttributes = [NSAttributedString.Key.font: FontFamily.OpenSans.regular.font(size: 12), NSAttributedString.Key.paragraphStyle: paraStyle, NSAttributedString.Key.foregroundColor: UIColor.white]
+            let textAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica", size: 10), NSAttributedString.Key.paragraphStyle: paraStyle, NSAttributedString.Key.foregroundColor: UIColor.white]
             
-            if let s: CGSize = toolTipValue?.size(withAttributes: textAttributes) {
-                let yOffset = s.height + 5
+            if let s: CGSize = toolTipValue?.size(withAttributes: textAttributes as [NSAttributedString.Key : Any]) {
+                let yOffset = s.height
                 let textRect = CGRect.init(x: self.bounds.origin.x, y: yOffset, width: self.bounds.size.width, height: s.height)
                 
-                
-                toolTipValue?.draw(in: textRect, withAttributes: textAttributes)
+
+                toolTipValue?.draw(in: textRect, withAttributes: textAttributes as [NSAttributedString.Key : Any])
             }
         }
     }

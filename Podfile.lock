@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.4.1)
   - BetterSegmentedControl (2.0.1)
-  - Bluejay (0.8.8)
+  - Bluejay (0.8.9)
   - Differentiator (4.0.1)
   - Firebase/Analytics (7.3.0):
     - Firebase/Core
@@ -86,11 +86,11 @@ PODS:
   - NVActivityIndicatorView/Base (5.1.1)
   - PromisesObjC (1.2.12)
   - ReachabilitySwift (4.3.1)
-  - Realm (5.5.0):
-    - Realm/Headers (= 5.5.0)
-  - Realm/Headers (5.5.0)
-  - RealmSwift (5.5.0):
-    - Realm (= 5.5.0)
+  - Realm (10.15.1):
+    - Realm/Headers (= 10.15.1)
+  - Realm/Headers (10.15.1)
+  - RealmSwift (10.15.1):
+    - Realm (= 10.15.1)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -111,13 +111,13 @@ PODS:
 
 DEPENDENCIES:
   - BetterSegmentedControl (~> 2.0)
-  - Bluejay (~> 0.8)
+  - Bluejay (~> 0.8.9)
   - Firebase/Analytics
   - Firebase/Crashlytics
   - Kingfisher (~> 5.0)
   - Moya
   - NVActivityIndicatorView
-  - RealmSwift (~> 5.5.0)
+  - RealmSwift (~> 10.15.0)
   - RxCocoa (~> 5)
   - RxDataSources (~> 4.0)
   - RxReachability
@@ -161,7 +161,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
-  Bluejay: c8c8d544aed264d7cfb2142660e6fdb9430d70b4
+  Bluejay: 2dd1e38c0b3bb02c931c0c10d380887230b09a33
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseAnalytics: 2580c2d62535ae7b644143d48941fcc239ea897a
@@ -178,8 +178,8 @@ SPEC CHECKSUMS:
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
-  Realm: fb399d76f44042e5cdfc630f33828fdb4d077345
-  RealmSwift: 3b7e62356207ef16d34de4e55d475163bd2062bb
+  Realm: fbcbde2620d51623cc5b18e28f5b165c39abef52
+  RealmSwift: e4bea8e42efad3d543aea23b56504069c6faaea2
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxReachability: 21d3e96f39bc166a21c357e923f47dec148ca97b
@@ -189,6 +189,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftGen: 67860cc7c3cfc2ed25b9b74cfd55495fc89f9108
 
-PODFILE CHECKSUM: 5946be4e12596ccb3c20d5720e033e1c5acf0679
+PODFILE CHECKSUM: 9b3e85c3e7865df13cb21d98d16133f202fb9e11
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.2

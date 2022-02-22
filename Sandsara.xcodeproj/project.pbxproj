@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		079CA583D823FD43851E404B /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3689B706D53C770354254BCF /* Pods_Sandsara.framework */; };
-		6393035317C27CD4DBF43569 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B5C60617C3D5057580BCC9 /* Pods_Sandsara_SandsaraUITests.framework */; };
+		02282AEE021DE331F64FBF19 /* Pods_Sandsara.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB439ECC9EAB4498296F5BC /* Pods_Sandsara.framework */; };
+		8CA33AFB20DAEDB703C2EC79 /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECAE2B60DC94E6EA0E40740 /* Pods_SandsaraTests.framework */; };
 		92068651257B3D9700D8CC89 /* ToogleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */; };
 		92068652257B3D9700D8CC89 /* ToogleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */; };
 		920B865C259D2CBF00193F6A /* Firmware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920B865B259D2CBF00193F6A /* Firmware.swift */; };
@@ -210,7 +210,7 @@
 		92FA3EEE25707F6500D05326 /* SegmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */; };
 		92FA3EF32570805300D05326 /* PlayerHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FA3EF22570805300D05326 /* PlayerHeaderView.xib */; };
 		92FA3EF72570806700D05326 /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3EF62570806700D05326 /* PlayerHeaderView.swift */; };
-		B870FC92DA0560693A96883C /* Pods_SandsaraTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6679F57B8AED4475282D25 /* Pods_SandsaraTests.framework */; };
+		9DD38A3B55CAD9EC10A051FA /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605E8AF350D56D314230C002 /* Pods_Sandsara_SandsaraUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,11 +252,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0391AEE1B5A3A171B49FDA57 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.release.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.release.xcconfig"; sourceTree = "<group>"; };
-		2438CB563DC9567AA0E0F15A /* Pods-Sandsara.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.debug.xcconfig"; sourceTree = "<group>"; };
-		3689B706D53C770354254BCF /* Pods_Sandsara.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		56C1AD15565F15BF96FACDB8 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		6649534920845191FFDAADEC /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
+		3F5FEA32D5B37913773C71C4 /* Pods-Sandsara.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.debug.xcconfig"; sourceTree = "<group>"; };
+		605E8AF350D56D314230C002 /* Pods_Sandsara_SandsaraUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara_SandsaraUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C1855A73F6A0A12B838302D /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		6ECAE2B60DC94E6EA0E40740 /* Pods_SandsaraTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SandsaraTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9206864F257B3D9700D8CC89 /* ToogleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToogleTableViewCell.swift; sourceTree = "<group>"; };
 		92068650257B3D9700D8CC89 /* ToogleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToogleTableViewCell.xib; sourceTree = "<group>"; };
 		920B865B259D2CBF00193F6A /* Firmware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firmware.swift; sourceTree = "<group>"; };
@@ -465,10 +464,11 @@
 		92FA3EEC25707F6500D05326 /* SegmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableViewCell.xib; sourceTree = "<group>"; };
 		92FA3EF22570805300D05326 /* PlayerHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerHeaderView.xib; sourceTree = "<group>"; };
 		92FA3EF62570806700D05326 /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
-		BE6679F57B8AED4475282D25 /* Pods_SandsaraTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SandsaraTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C39BBE5B8719D2E936DADC82 /* Pods-SandsaraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.debug.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D1B5C60617C3D5057580BCC9 /* Pods_Sandsara_SandsaraUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara_SandsaraUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E6CA741F7377448055AD0AC6 /* Pods-SandsaraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.release.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.release.xcconfig"; sourceTree = "<group>"; };
+		962014CBB40F8BA9A0507511 /* Pods-SandsaraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.release.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.release.xcconfig"; sourceTree = "<group>"; };
+		ACB439ECC9EAB4498296F5BC /* Pods_Sandsara.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandsara.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B379BA3021D00A9A2BD43F1F /* Pods-SandsaraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SandsaraTests.debug.xcconfig"; path = "Target Support Files/Pods-SandsaraTests/Pods-SandsaraTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BD11E3A5EC76F210BB7F3716 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara-SandsaraUITests.release.xcconfig"; path = "Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests.release.xcconfig"; sourceTree = "<group>"; };
+		E23F8E1682BC324D43D9517A /* Pods-Sandsara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandsara.release.xcconfig"; path = "Target Support Files/Pods-Sandsara/Pods-Sandsara.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,7 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92BE9E722564965600081EEE /* LNPopupController.framework in Frameworks */,
-				079CA583D823FD43851E404B /* Pods_Sandsara.framework in Frameworks */,
+				02282AEE021DE331F64FBF19 /* Pods_Sandsara.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,7 +485,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B870FC92DA0560693A96883C /* Pods_SandsaraTests.framework in Frameworks */,
+				8CA33AFB20DAEDB703C2EC79 /* Pods_SandsaraTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6393035317C27CD4DBF43569 /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */,
+				9DD38A3B55CAD9EC10A051FA /* Pods_Sandsara_SandsaraUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,12 +503,12 @@
 		65EF2C02DE236C8EB9FE28CB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2438CB563DC9567AA0E0F15A /* Pods-Sandsara.debug.xcconfig */,
-				6649534920845191FFDAADEC /* Pods-Sandsara.release.xcconfig */,
-				56C1AD15565F15BF96FACDB8 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */,
-				0391AEE1B5A3A171B49FDA57 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */,
-				C39BBE5B8719D2E936DADC82 /* Pods-SandsaraTests.debug.xcconfig */,
-				E6CA741F7377448055AD0AC6 /* Pods-SandsaraTests.release.xcconfig */,
+				3F5FEA32D5B37913773C71C4 /* Pods-Sandsara.debug.xcconfig */,
+				E23F8E1682BC324D43D9517A /* Pods-Sandsara.release.xcconfig */,
+				6C1855A73F6A0A12B838302D /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */,
+				BD11E3A5EC76F210BB7F3716 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */,
+				B379BA3021D00A9A2BD43F1F /* Pods-SandsaraTests.debug.xcconfig */,
+				962014CBB40F8BA9A0507511 /* Pods-SandsaraTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -780,7 +780,7 @@
 				924EDF6825565F880013CC71 /* SandsaraUITests */,
 				924EDF4525565F850013CC71 /* Products */,
 				65EF2C02DE236C8EB9FE28CB /* Pods */,
-				EC5D72EDBC1437757F451A1C /* Frameworks */,
+				E0FE5C6DF8FB2E371E54FCA7 /* Frameworks */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -1313,12 +1313,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		EC5D72EDBC1437757F451A1C /* Frameworks */ = {
+		E0FE5C6DF8FB2E371E54FCA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3689B706D53C770354254BCF /* Pods_Sandsara.framework */,
-				D1B5C60617C3D5057580BCC9 /* Pods_Sandsara_SandsaraUITests.framework */,
-				BE6679F57B8AED4475282D25 /* Pods_SandsaraTests.framework */,
+				ACB439ECC9EAB4498296F5BC /* Pods_Sandsara.framework */,
+				605E8AF350D56D314230C002 /* Pods_Sandsara_SandsaraUITests.framework */,
+				6ECAE2B60DC94E6EA0E40740 /* Pods_SandsaraTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1330,14 +1330,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF6E25565F880013CC71 /* Build configuration list for PBXNativeTarget "Sandsara" */;
 			buildPhases = (
-				D912128EFBE60FA00E109948 /* [CP] Check Pods Manifest.lock */,
+				016B574109C4E7F059100BDF /* [CP] Check Pods Manifest.lock */,
 				924EDF4025565F850013CC71 /* Sources */,
 				924EDF4125565F850013CC71 /* Frameworks */,
 				924EDF4225565F850013CC71 /* Resources */,
 				92BA99F02560D45B00564782 /* ShellScript */,
 				92BE9E0E256495A900081EEE /* Embed Frameworks */,
 				9266D12A25A99F05007A4948 /* ShellScript */,
-				F06E3FEE0DC73E5E78699555 /* [CP] Embed Pods Frameworks */,
+				12CD0A4FFA882C82EA1ADBD9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1352,7 +1352,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF7125565F880013CC71 /* Build configuration list for PBXNativeTarget "SandsaraTests" */;
 			buildPhases = (
-				A36AF45E9806A6095D5CF1B8 /* [CP] Check Pods Manifest.lock */,
+				F5DD57F25609A1B6E550318E /* [CP] Check Pods Manifest.lock */,
 				924EDF5625565F880013CC71 /* Sources */,
 				924EDF5725565F880013CC71 /* Frameworks */,
 				924EDF5825565F880013CC71 /* Resources */,
@@ -1371,11 +1371,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 924EDF7425565F880013CC71 /* Build configuration list for PBXNativeTarget "SandsaraUITests" */;
 			buildPhases = (
-				3E4BD25F4483C9110C5C99A1 /* [CP] Check Pods Manifest.lock */,
+				438CCECEBC5C3ACA15BEE00D /* [CP] Check Pods Manifest.lock */,
 				924EDF6125565F880013CC71 /* Sources */,
 				924EDF6225565F880013CC71 /* Frameworks */,
 				924EDF6325565F880013CC71 /* Resources */,
-				190307D3DBDE2EB8B18C8E3E /* [CP] Embed Pods Frameworks */,
+				9F7F7CF69B89F5AE48555FF3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1510,24 +1510,46 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		190307D3DBDE2EB8B18C8E3E /* [CP] Embed Pods Frameworks */ = {
+		016B574109C4E7F059100BDF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sandsara-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3E4BD25F4483C9110C5C99A1 /* [CP] Check Pods Manifest.lock */ = {
+		12CD0A4FFA882C82EA1ADBD9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		438CCECEBC5C3ACA15BEE00D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1583,7 +1605,24 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
 		};
-		A36AF45E9806A6095D5CF1B8 /* [CP] Check Pods Manifest.lock */ = {
+		9F7F7CF69B89F5AE48555FF3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara-SandsaraUITests/Pods-Sandsara-SandsaraUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F5DD57F25609A1B6E550318E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1603,45 +1642,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D912128EFBE60FA00E109948 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Sandsara-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F06E3FEE0DC73E5E78699555 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sandsara/Pods-Sandsara-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1990,7 +1990,7 @@
 		};
 		924EDF6F25565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2438CB563DC9567AA0E0F15A /* Pods-Sandsara.debug.xcconfig */;
+			baseConfigurationReference = 3F5FEA32D5B37913773C71C4 /* Pods-Sandsara.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2017,7 +2017,7 @@
 		};
 		924EDF7025565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6649534920845191FFDAADEC /* Pods-Sandsara.release.xcconfig */;
+			baseConfigurationReference = E23F8E1682BC324D43D9517A /* Pods-Sandsara.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2043,7 +2043,7 @@
 		};
 		924EDF7225565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C39BBE5B8719D2E936DADC82 /* Pods-SandsaraTests.debug.xcconfig */;
+			baseConfigurationReference = B379BA3021D00A9A2BD43F1F /* Pods-SandsaraTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2065,7 +2065,7 @@
 		};
 		924EDF7325565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6CA741F7377448055AD0AC6 /* Pods-SandsaraTests.release.xcconfig */;
+			baseConfigurationReference = 962014CBB40F8BA9A0507511 /* Pods-SandsaraTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2087,7 +2087,7 @@
 		};
 		924EDF7525565F880013CC71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 56C1AD15565F15BF96FACDB8 /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */;
+			baseConfigurationReference = 6C1855A73F6A0A12B838302D /* Pods-Sandsara-SandsaraUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2107,7 +2107,7 @@
 		};
 		924EDF7625565F880013CC71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0391AEE1B5A3A171B49FDA57 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */;
+			baseConfigurationReference = BD11E3A5EC76F210BB7F3716 /* Pods-Sandsara-SandsaraUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

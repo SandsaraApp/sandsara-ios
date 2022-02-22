@@ -14,10 +14,10 @@ target 'Sandsara' do
   pod 'Moya'
   pod 'SwiftGen', '~> 6.0'
   pod 'BetterSegmentedControl', '~> 2.0'
-  pod 'Bluejay', '~> 0.8'
+  pod 'Bluejay', '~> 0.8.9'
   pod 'RxReachability'
   pod 'SVProgressHUD'
-  pod 'RealmSwift', '~> 5.5.0'
+  pod 'RealmSwift', '~> 10.15.0'
   pod 'SnapKit', '~> 5.0.0'
 
   pod 'Firebase/Crashlytics'
